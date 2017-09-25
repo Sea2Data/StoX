@@ -1,0 +1,94 @@
+////////////////////////////////////////////////////////
+// RAW DATA 
+
+BioticData
+Java type: List<FishStationBO>
+
+LandingData
+Java type: List<SluttSeddel>
+
+AcousticData
+Java type: List<DistanceBO>
+
+/////////////////////////////
+Enumerations
+
+Resolution:
+    SampleUnitType
+    LayerType
+    ObservationType
+    LengthInterval
+
+Observation:
+    Station
+    AssignmentID
+
+LayerType:
+    PChannel
+    DepthLayer
+    WaterColumn
+    EstLayer
+
+SampleUnitType:
+    EDSU
+    PSU
+    Stratum
+
+/////////////////////////////
+Enumeration values
+
+Depth layer values:
+    PEL
+    BOT
+    
+Water column values:
+    PELBOT
+
+
+/////////////////////////////
+Datatype LengthDist 
+Data:       Matrix[GROUP~Species / ROW~Observation / CELL~LengthGroup / VAR~WeightedCount]
+Resolution: Matrix[ROW~Variable / VAR~Value] (Variable: Observation and LengthInterval)
+
+/////////////////////////////
+Datatype NASC
+Data:       Matrix[ROW~SampleUnit / COL~Layer / VAR~NASC]
+Resolution: Matrix[ROW~Variable / VAR~Value] (Variable: Variable=SampleUnitType and Layertype)
+SampleSize: Matrix[ROW~SampleUnit / VAR~Value] (Value=SampleSize)
+Distance:   Matrix[ROW~SampleUnit / VAR~Value] (Value=Distance)
+
+/////////////////////////////
+Datatype Density
+Data:       Matrix[GROUP~Species / ROW~SampleUnit / COL~Layer / CELL~LengthGroup / VAR~Density]
+Resolution: Matrix[ROW~Variable / VAR~Value] (Variable: Layertype, SampleUnitType and LengthInterval)
+SampleSize: Matrix[ROW~SampleUnit / VAR~Value] (Value=SampleSize)
+Distance:   Matrix[ROW~SampleUnit / VAR~Value] (Value=Distance)
+
+/////////////////////////////
+Datatype Abundance
+Data:       Matrix[GROUP~Species / ROW~SampleUnit / COL~Layer / CELL~LengthGroup / VAR~Abundance]
+Resolution: Matrix[ROW~Variable / VAR~Value] (Variable: Layertype, SampleUnitType and LengthInterval)
+Area:       Matrix[ROW~PolygonKey / VAR~Area] (PolygonKey = SampleUnit)
+
+/////////////////////////////
+Datatype IndividualDataStations
+Data:       Matrix[ROW~SampleUnit / COL~Layer / CELL~Observation / VAR~Included]
+Resolution: Matrix[ROW~Variable / VAR~Value] (Variable: SampleUnitType and Layertype, Observation)
+
+/////////////////////////////
+Datatype IndividualData
+Data:       Matrix[GROUP~Species / ROW~SampleUnit / COL~Layer / CELL~LengthGroup / VAR~Individuals]
+Resolution: Matrix[ROW~Variable / VAR~Value] (Variable: SampleUnitType and Layertype, LengthInterval)
+
+/////////////////////////////
+Datatype SuperIndividuals
+Data:       Matrix[ROW~Individual / COL~IndVariable / VAR~Value]
+
+/////////////////////////////
+Datatype Process data
+BIOTICASSIGNMENT:     Matrix[ROW~AssignmentID / COL~Station / VAR~StationWeight]
+SUASSIGNMENT:         Matrix[ROW~SampleUnit / COL~Layer / VAR~AssignmentID]
+ASSIGNMENTRESOLUTION: Matrix[ROW~Variable / VAR~Value] (Variable: Variable=SampleUnitType and Layertype)
+EDSUPSU:              Matrix[ROW~EDSU / VAR~PSU]
+PSUSTRATUM:           Matrix[ROW~PSU / VAR~Stratum]
+STRATUMPOLYGON:       Matrix[ROW~PolygonKey / VAR~Polygon] (PolygonKey=SampleUnit(Stratum)), Polygon er wkt MULTIPOLYGON

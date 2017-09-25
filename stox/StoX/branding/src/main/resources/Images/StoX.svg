@@ -1,0 +1,197 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:xlink="http://www.w3.org/1999/xlink"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   width="405.79355"
+   height="261.34668"
+   id="svg2"
+   sodipodi:version="0.32"
+   inkscape:version="0.48.4 r9939"
+   sodipodi:docname="StoX.svg"
+   version="1.0"
+   inkscape:output_extension="org.inkscape.output.svg.inkscape"
+   inkscape:export-filename="C:\Projects\Sea2Data\NewBeam\trunk\beam\StoX\StoX-Branding\src\main\resources\Images\StoX.png"
+   inkscape:export-xdpi="90"
+   inkscape:export-ydpi="90">
+  <defs
+     id="defs4">
+    <inkscape:perspective
+       sodipodi:type="inkscape:persp3d"
+       inkscape:vp_x="0 : 128 : 1"
+       inkscape:vp_y="0 : 1000 : 0"
+       inkscape:vp_z="256 : 128 : 1"
+       inkscape:persp3d-origin="128 : 85.333333 : 1"
+       id="perspective2835" />
+    <linearGradient
+       inkscape:collect="always"
+       id="linearGradient2555">
+      <stop
+         style="stop-color: rgb(255, 255, 255); stop-opacity: 1;"
+         offset="0"
+         id="stop2557" />
+      <stop
+         style="stop-color: rgb(255, 255, 255); stop-opacity: 0;"
+         offset="1"
+         id="stop2559" />
+    </linearGradient>
+    <linearGradient
+       inkscape:collect="always"
+       xlink:href="#linearGradient2555"
+       id="linearGradient2449"
+       gradientUnits="userSpaceOnUse"
+       gradientTransform="matrix(-0.5914583,0,0,0.5914584,210.0216,142.2324)"
+       x1="-344.15295"
+       y1="274.711"
+       x2="-395.84943"
+       y2="425.39993" />
+  </defs>
+  <sodipodi:namedview
+     id="base"
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1.0"
+     inkscape:pageopacity="0.0"
+     inkscape:pageshadow="2"
+     inkscape:zoom="1"
+     inkscape:cx="149.89679"
+     inkscape:cy="134.6996"
+     inkscape:document-units="px"
+     inkscape:current-layer="layer1"
+     inkscape:window-width="1920"
+     inkscape:window-height="1138"
+     inkscape:window-x="-8"
+     inkscape:window-y="-8"
+     showgrid="false"
+     inkscape:window-maximized="1" />
+  <metadata
+     id="metadata7">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+        <dc:title></dc:title>
+        <dc:creator>
+          <cc:Agent>
+            <dc:title>User:ZyMOS</dc:title>
+          </cc:Agent>
+        </dc:creator>
+        <dc:subject>
+          <rdf:Bag />
+        </dc:subject>
+        <cc:license
+           rdf:resource="http://creativecommons.org/licenses/publicdomain/" />
+        <dc:description />
+        <dc:contributor>
+          <cc:Agent>
+            <dc:title />
+          </cc:Agent>
+        </dc:contributor>
+        <dc:publisher>
+          <cc:Agent>
+            <dc:title>Open Icon Library</dc:title>
+          </cc:Agent>
+        </dc:publisher>
+      </cc:Work>
+      <cc:License
+         rdf:about="http://creativecommons.org/licenses/publicdomain/">
+        <cc:permits
+           rdf:resource="http://creativecommons.org/ns#Reproduction" />
+        <cc:permits
+           rdf:resource="http://creativecommons.org/ns#Distribution" />
+        <cc:permits
+           rdf:resource="http://creativecommons.org/ns#DerivativeWorks" />
+      </cc:License>
+    </rdf:RDF>
+  </metadata>
+  <g
+     inkscape:label="Layer 1"
+     inkscape:groupmode="layer"
+     id="layer1"
+     transform="translate(-383.88801,-328.59922)">
+    <rect
+       inkscape:export-ydpi="7.7063322"
+       inkscape:export-xdpi="7.7063322"
+       inkscape:export-filename="C:\Documents and Settings\Molumen\Desktop\path3511111.png"
+       transform="scale(-1,1)"
+       ry="39.36348"
+       rx="61.172703"
+       y="328.94492"
+       x="-789.33588"
+       height="260.6553"
+       width="405.10217"
+       id="rect1942"
+       style="fill:#dfdfe1;fill-opacity:1;fill-rule:evenodd;stroke:#000000;stroke-width:0.69138521;stroke-linecap:square;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:0.69138527, 1.38277054;stroke-dashoffset:0" />
+    <path
+       inkscape:export-ydpi="7.7063322"
+       inkscape:export-xdpi="7.7063322"
+       inkscape:export-filename="C:\Documents and Settings\Molumen\Desktop\path3511111.png"
+       sodipodi:nodetypes="ccccsssc"
+       id="path1950"
+       d="m 557.05665,338.89518 -110.82944,0 c -29.33688,0 -52.95465,23.80974 -52.95465,53.38507 l 0,108.12736 c 0.9496,23.08605 4.60229,8.49154 11.55502,-17.07471 8.08056,-29.71315 34.39648,-55.68287 66.44461,-75.1457 24.46133,-14.85525 51.84109,-24.34125 101.67955,-25.24367 28.26482,-0.51176 25.7695,-36.68291 -15.89509,-44.04835 z"
+       style="fill:url(#linearGradient2449);fill-opacity:1;fill-rule:evenodd;stroke:none" />
+    <text
+       xml:space="preserve"
+       style="font-size:120px;font-style:normal;font-weight:normal;fill:#000000;fill-opacity:1;stroke:none;font-family:Bitstream Vera Sans"
+       x="44.285713"
+       y="59.571426"
+       id="text3182"
+       transform="translate(373.642,318.344)"><tspan
+         sodipodi:role="line"
+         id="tspan3184"
+         x="44.285713"
+         y="59.571426" /></text>
+    <text
+       xml:space="preserve"
+       style="font-size:110px;font-style:italic;font-weight:bold;fill:#cccccc;fill-opacity:1;stroke:none;font-family:Bitstream Vera Sans;-inkscape-font-specification:Bitstream Charter Bold"
+       x="460.07056"
+       y="448.6297"
+       id="text3186"><tspan
+         sodipodi:role="line"
+         id="tspan3188"
+         x="460.07056"
+         y="448.6297">StoX</tspan></text>
+    <text
+       xml:space="preserve"
+       style="font-size:40px;font-style:normal;font-weight:normal;fill:#b3b3b3;fill-opacity:1;stroke:none;font-family:Bitstream Vera Sans"
+       x="563.92773"
+       y="492.05829"
+       id="text3190"><tspan
+         sodipodi:role="line"
+         id="tspan3192"
+         x="563.92773"
+         y="492.05829"
+         style="font-size:40px;font-weight:bold;-inkscape-font-specification:Bitstream Charter Bold" /></text>
+    <flowRoot
+       xml:space="preserve"
+       id="flowRoot2999"
+       style="fill:black;stroke:none;stroke-opacity:1;stroke-width:1px;stroke-linejoin:miter;stroke-linecap:butt;fill-opacity:1;font-family:Sans;font-style:normal;font-weight:normal;font-size:40px;line-height:125%;letter-spacing:0px;word-spacing:0px"><flowRegion
+         id="flowRegion3001"><rect
+           id="rect3003"
+           width="78"
+           height="50"
+           x="168"
+           y="131.34668" /></flowRegion><flowPara
+         id="flowPara3005" /></flowRoot>    <text
+       xml:space="preserve"
+       style="font-size:40px;font-style:normal;font-weight:normal;line-height:125%;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;font-family:Sans"
+       x="265"
+       y="171.34668"
+       id="text3007"
+       sodipodi:linespacing="125%"
+       transform="translate(383.88801,328.59922)"><tspan
+         sodipodi:role="line"
+         id="tspan3009"
+         x="265"
+         y="171.34668" /></text>
+  </g>
+</svg>

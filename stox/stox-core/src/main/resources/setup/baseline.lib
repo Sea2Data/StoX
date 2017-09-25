@@ -1,0 +1,661 @@
+#------------------------------------------------------
+# Acoustic functions
+#------------------------------------------------------
+
+[Function]
+Name: ReadAcousticXML
+Description: <I> ReadAcousticXML </I> reads scrutinized acoustic data (NASC by species and frequency) from files of format ListUser20.xml.<BR><BR>Output data is of format <U>AcousticData</U>. 
+Class: no.imr.stox.functions.acoustic.ReadAcousticXML
+Parameter: Name=FileName1, Alias=FileName, DataType=String, Description=Path to acoustic ListUser20.xml file 1
+Parameter: Name=FileName2, Required=false, DataType=String, Description=Path to acoustic ListUser20.xml file 2
+Parameter: Name=FileName3, Required=false, DataType=String, Description=Path to acoustic ListUser20.xml file 3
+Parameter: Name=FileName4, Required=false, DataType=String, Description=Path to acoustic ListUser20.xml file 4
+Parameter: Name=FileName5, Required=false, DataType=String, Description=Path to acoustic ListUser20.xml file 5
+Parameter: Name=FileName6, Required=false, DataType=String, Description=Path to acoustic ListUser20.xml file 6
+Parameter: Name=FileName7, Required=false, DataType=String, Description=Path to acoustic ListUser20.xml file 7
+Parameter: Name=FileName8, Required=false, DataType=String, Description=Path to acoustic ListUser20.xml file 8
+Parameter: Name=FileName9, Required=false, DataType=String, Description=Path to acoustic ListUser20.xml file 9
+Parameter: Name=FileName10, Required=false, DataType=String, Description=Path to acoustic ListUser20.xml file 10
+Parameter: Name=FileName11, Required=false, DataType=String, Description=Path to acoustic ListUser20.xml file 11
+Parameter: Name=FileName12, Required=false, DataType=String, Description=Path to acoustic ListUser20.xml file 12
+Parameter: Name=FileName13, Required=false, DataType=String, Description=Path to acoustic ListUser20.xml file 13
+Parameter: Name=FileName14, Required=false, DataType=String, Description=Path to acoustic ListUser20.xml file 14
+Parameter: Name=FileName15, Required=false, DataType=String, Description=Path to acoustic ListUser20.xml file 15
+Parameter: Name=FileName16, Required=false, DataType=String, Description=Path to acoustic ListUser20.xml file 16
+Parameter: Name=FileName17, Required=false, DataType=String, Description=Path to acoustic ListUser20.xml file 17
+Parameter: Name=FileName18, Required=false, DataType=String, Description=Path to acoustic ListUser20.xml file 18
+Parameter: Name=FileName19, Required=false, DataType=String, Description=Path to acoustic ListUser20.xml file 19
+Parameter: Name=FileName20, Required=false, DataType=String, Description=Path to acoustic ListUser20.xml file 20
+DataStorage: no.imr.stox.datastorage.EchoDataStorage
+Output: AcousticData
+
+[Function]
+Name: ReadAcousticLUF5
+Description: <I>ReadAcousticLUF5</I> reads scrutinized acoustic data (NASC by species and frequency) from files of format ListUser5.<BR><BR>Output data is of format <U>AcousticData</U>. 
+Class: no.imr.stox.functions.acoustic.ReadAcousticLUF5
+Parameter: Name=AcousticData, Required=false, DataType=AcousticData, Description=Path to acoustic data
+Parameter: Name=FileName, DataType=String, Description=Path to acoustic ListUser5 file
+DataStorage: no.imr.stox.datastorage.EchoDataStorage
+Output: AcousticData
+
+[Function]
+Name: FilterAcoustic
+Description: <I>FilterAcoustic</I> filters an input dataset of data type <U>AcousticData</U> based on several filtration expressions and output a subset of the input data.<BR><BR>Output data is of format <U>AcousticData</U>.
+Class: no.imr.stox.functions.acoustic.FilterAcoustic
+Respondable:true
+Parameter: Name=AcousticData, Required=true, DataType=AcousticData, Description=The <I>AcousticData</I> parameter is used to specify which previous process has generated the <U>AcousticData</U> input data.
+Parameter: Name=DistanceExpr, Required=false, DataType=String, Description=The <I>DistanceExpr</I> filtering parameter is used to extract acoustic data at the Echosounder_Dataset and Distance level (ref ListUser20.xml) in the hierarchic <U>AcousticData</U> dataset.<BR><BR> Java JEXL syntax is used. All variables at these levels can be used in the filter expression. Data on lower levels will be effected by filtering at a higher level in the hierarchy. 
+Parameter: Name=FreqExpr, Required=false, DataType=String, Description=The <I>FreqExpr</I> filtering parameter is used to extract acoustic data at the Frequency level (ref ListUser20.xml)in the hierarchic <U>AcousticData</U> dataset.<BR><BR> Java JEXL syntax is used. All variables at this level and levels above can be used in the filter expression. Data on lower levels will be effected by filtering at a higher level in the hierarchy. 
+Parameter: Name=NASCExpr, Alias=AcoCatExpr, Required=false, DataType=String, Description=The <I>NASCExpr</I> filtering parameter is used to extract acoustic data at the Channeltype and Acoustic Category levels (ref ListUser20.xml) in the hierarchic <U>AcousticData</U> dataset.<BR><BR> Java JEXL syntax is used. All variables at this level and levels above can be used in the filter expression. 
+DataStorage: no.imr.stox.datastorage.EchoDataStorage
+Output: AcousticData
+
+[Function]
+Name: NASC
+Alias: SA
+Description: The <I>LayerNASC</I> function creates a matrix of NASC values by EDSU from an <U>AcousticData</U> data set by layer of a specified LayerTypes.<BR><BR>Output data is of format <U>NASC</U>.  
+Class: no.imr.stox.functions.acoustic.NASC
+Parameter: Name=AcousticData, DataType=AcousticData, Description=The <I>AcousticData</I> parameter is used to specify which previous process has generated the <U>AcousticData</U> input data.
+Parameter: Name=LayerType, Alias=AcousticLayerType;ChannelLayerType, Required=false, DefaultValue=WaterColumn, DataType=String, Values=PChannel;DepthLayer;WaterColumn, Description=The <I>LayerType</I> parameter will determine the vertical resolution of NASC by EDSU in the output <U>NASC</U> data.<BR> LayerType can be&#58; <BR><BR><U>PChannel</U><BR> &#34;Pelagic channels&#34; as defined in ListUser20.xml from LSSS. PChannels exist from the sea surface to the sea bed.<BR><BR><U>DepthLayer</U><BR>The NASC values are aggregated into two layers&#58;<BR><B>PEL</B>&#58; Total NASC from sea surface down to the bottom layer BOT.<BR><B>BOT</B>&#58; Total NASC starting from the lower part of PEL and down to the sea bed.<BR><BR><U>WaterColumn</U><BR><B>PELBOT</B>&#58; Sum of NASC from the sea surface to the sea bed.
+DataStorage:no.imr.stox.datastorage.NASCMatrixStorage
+Output: NASC
+
+#------------------------------------------------------
+# Biotic functions
+#------------------------------------------------------
+
+[Function]
+Name: ReadBioticXML
+Description: <I>ReadBioticXML</I> reads biotic data (biological sampling data by station) from files of XML format.<BR><BR>Output data is of format <U>BioticData</U>.
+Class: no.imr.stox.functions.biotic.ReadBioticXML
+Parameter: Name=FileName1, Alias=FileName, DataType=String, Description=Path to biotic XML file 1
+Parameter: Name=FileName2, Required=false, DataType=String, Description=Path to biotic XML file 2
+Parameter: Name=FileName3, Required=false, DataType=String, Description=Path to biotic XML file 3
+Parameter: Name=FileName4, Required=false, DataType=String, Description=Path to biotic XML file 4
+Parameter: Name=FileName5, Required=false, DataType=String, Description=Path to biotic XML file 5
+Parameter: Name=FileName6, Required=false, DataType=String, Description=Path to biotic XML file 6
+Parameter: Name=FileName7, Required=false, DataType=String, Description=Path to biotic XML file 7
+Parameter: Name=FileName8, Required=false, DataType=String, Description=Path to biotic XML file 8
+Parameter: Name=FileName9, Required=false, DataType=String, Description=Path to biotic XML file 9
+Parameter: Name=FileName10, Required=false, DataType=String, Description=Path to biotic XML file 10
+Parameter: Name=FileName11, Required=false, DataType=String, Description=Path to biotic XML file 11
+Parameter: Name=FileName12, Required=false, DataType=String, Description=Path to biotic XML file 12
+Parameter: Name=FileName13, Required=false, DataType=String, Description=Path to biotic XML file 13
+Parameter: Name=FileName14, Required=false, DataType=String, Description=Path to biotic XML file 14
+Parameter: Name=FileName15, Required=false, DataType=String, Description=Path to biotic XML file 15
+Parameter: Name=FileName16, Required=false, DataType=String, Description=Path to biotic XML file 16
+Parameter: Name=FileName17, Required=false, DataType=String, Description=Path to biotic XML file 17
+Parameter: Name=FileName18, Required=false, DataType=String, Description=Path to biotic XML file 18
+Parameter: Name=FileName19, Required=false, DataType=String, Description=Path to biotic XML file 19
+Parameter: Name=FileName20, Required=false, DataType=String, Description=Path to biotic XML file 20
+DataStorage:no.imr.stox.datastorage.BioticDataStorage
+Output: BioticData
+
+[Function]
+Name: FilterBiotic
+Description: <I>FilterBiotic</I> filters an input dataset of data type <U>BioticData</U> based on several filtration expressions and output a subset of the input data.<BR><BR>Output data is of format <U>BioticData</U>.
+Class: no.imr.stox.functions.biotic.FilterBiotic
+Respondable:true
+Parameter: Name=BioticData, Alias=FishStations, Required=true, DataType=BioticData, Description=The <I>BioticData</I> parameter is used to specify which previous process has generated the <U>BioticData</U> input data.
+Parameter: Name=FishStationExpr, Alis=StationExpr, Required=false, DataType=String, Description=The <I>FishStationExpr</I> filtering parameter is used to extract biotic data at the Mission and FishStation level (ref biotic XML file format) in the hierarchic <U>BioticData</U> dataset.<BR><BR> Java JEXL syntax is used. All variables at these levels can be used in the filter expression. Data on lower levels will be effected by filtering at a higher level in the hierarchy.<BR> A special feature is the fs.hasCatch&#40;&#60;species&#62;&#41; that is used to remove stations without catch for the given species.<BR> Another special feature is the fs.getCount&#40;&#60;species&#62;&#41; that is used to remove stations with a small number of caught fish.
+Parameter: Name=CatchExpr, Required=false, DataType=String, Description=The <I>CatchExpr</I> filtering parameter is used to extract biotic data at the CatchSample level (ref biotic XML file format) in the hierarchic <U>BioticData</U> dataset.<BR><BR> Java JEXL syntax is used. ONLY variable &#60;species&#62; at this level and all variables on levels above can be used in the filter expression. Data on lower levels will be effected by filtering at a higher level in the hierarchy.
+Parameter: Name=SampleExpr, Required=false, DataType=String, Description=The <I>SampleExpr</I> filtering parameter is used to extract biotic data at the CatchSample level (ref biotic XML file format) in the hierarchic <U>BioticData</U> dataset.<BR><BR> Java JEXL syntax is used. All variables at this level EXCEPT &#60;species&#62; as well as all variables on levels above can be used in the filter expression. Data on lower levels will be effected by filtering at a higher level in the hierarchy.
+Parameter: Name=IndExpr, Required=false, DataType=String, Description=The <I>IndExpr</I> filtering parameter is used to extract biotic data the Individual and AgeDetermination levels (ref biotic XML file format) in the hierarchic <U>BioticData</U> dataset.<BR><BR> Java JEXL syntax is used. Most variables at these levels (ref. Reference Manual for details) as well as all variables on levels above can be used in the filter expression. 
+DataStorage:no.imr.stox.datastorage.BioticDataStorage
+Output: BioticData
+
+[Function]
+Name: ConvertLengthAndWeight
+Description: Estimates live length from partial length measurements.
+Class: no.imr.stox.functions.biotic.ConvertLengthAndWeight
+Parameter: Name=BioticData, Required=false, DataType=BioticData, Description=The <I>BioticData</I> parameter is used to specify which previous process has generated the <U>BioticData</U> input data.
+Parameter: Name=HeadCutFacA, Required=false, DataType=Double, Description=Head cutted factor A 
+Parameter: Name=HeadCutFacB, Required=false, DataType=Double, Description=Head cutted factor B 
+Parameter: Name=WGutHeadOff, Required=false, DataType=Double, Description=Gutted Head cutted factor 
+Parameter: Name=WGutHeadOn, Required=false, DataType=Double, Description=Gutted Head not cutted factor 
+DataStorage: no.imr.stox.datastorage.BioticDataStorage
+Output: BioticData
+
+[Function]
+Name: ReadLandingXML
+Description: ReadLandingXML reads landing data (sales notes and landing notes) from files of XML format.
+Class: no.imr.stox.functions.landing.ReadLandingXML
+Parameter: Name=FileName1, Alias=FileName, DataType=String, Description=Path to XML file 1
+Parameter: Name=FileName2, Required=false, DataType=String, Description=Path to XML file 2
+Parameter: Name=FileName3, Required=false, DataType=String, Description=Path to XML file 3
+DataStorage:no.imr.stox.datastorage.LandingDataStorage
+Output: LandingData
+
+
+[Function]
+Name: FilterLanding
+Description: <I>FilterLanding</I> filters an input dataset of data type <U>LandingData</U> based on several filtration expressions and output a subset of the input data.<BR><BR>Output data is of format <U>BioticData</U>.
+Class: no.imr.stox.functions.landing.FilterLanding
+Respondable:true
+Parameter: Name=LandingData, Required=true, DataType=LandingData, Description=The <I>LandingData</I> parameter is used to specify which previous process has generated the <U>LandingData</U> input data.
+Parameter: Name=SluttSeddelExpr, Required=false, DataType=String, Description=The <I>SluttseddelExpr</I> filtering parameter is used to extract landing data at the sluttseddel level (ref landing XML file format) in the hierarchic <U>LandingData</U> dataset.<BR><BR> Java JEXL syntax is used. All variables at these levels can be used in the filter expression. Data on lower levels will be effected by filtering at a higher level in the hierarchy.
+Parameter: Name=FiskeLinjeExpr, Required=false, DataType=String, Description=The <I>FiskeLinjeExpr</I> filtering parameter is used to extract landing data at the Fiskelinje level (ref landing XML file format) in the hierarchic <U>LandingData</U> dataset.<BR><BR> Java JEXL syntax is used. ONLY variable &#60;species&#62; at this level and all variables on levels above can be used in the filter expression.
+DataStorage:no.imr.stox.datastorage.LandingDataStorage
+Output: LandingData
+
+[Function]
+Name: ApplyPosToData
+Description: <I>ApplyPosToLanding</I> applies geographical position to landing or biotic based on a resource file given by the filename that maps mainarea/location to position.
+Class: no.imr.stox.functions.data.ApplyPosToData
+Parameter: Name=SourceType, DataType=String, Values=Landing;Biotic, Description=The <I>SourceType</I> The type of source of the covariates defined.
+Parameter: Name=LandingData, Required=false, DataType=LandingData, ParentTag=SourceType.Landing, Description=Landing data
+Parameter: Name=BioticData, Required=false, DataType=BioticData, ParentTag=SourceType.Biotic, Description=The <I>BioticData</I> parameter is used to specify which previous process has generated the <U>BioticData</U> input data.
+Parameter: Name=FileName, Required=false, DataType=String, Description=The <I>FileName</I> parameter gives the path to the resource file with mainarea/location-position mapping
+
+
+[Function]
+Name: AssignDataToStratum
+Description: <I>AssignStratumToLanding</I> applies stratum to landing based on process data strata
+Class: no.imr.stox.functions.data.AssignDataToStratum
+Parameter: Name=ProcessData, DataType=ProcessData, Description=The <I>ProcessData</I> parameter is used to specify which previous process has generated the <U>ProcessData</U> input data.<BR><BR>Process data contains information which cannot necessarily be created programmatically&#44; but may be a result of subjective user choices. These data makes it possible to reuse previous manual&#44; subjective data in a new execution. Normally&#44; the function ReadProcessData is the owner of data type <U>ProcessData</U>&#44; but other functions may have modified the content of this memory object during the model execution
+Parameter: Name=SourceType, DataType=String, Values=Landing;Biotic, Description=The <I>SourceType</I> The type of source of the covariates defined.
+Parameter: Name=LandingData, Required=false, DataType=LandingData, ParentTag=SourceType.Landing, Description=Landing data
+Parameter: Name=BioticData, Required=false, DataType=BioticData, ParentTag=SourceType.Biotic, Description=The <I>BioticData</I> parameter is used to specify which previous process has generated the <U>BioticData</U> input data.
+
+[Function]
+Name: ApplyStratumToBiotic
+Description: <I>ApplyStratumToBiotic</I> applies stratum to biotic based on process data strata
+Class: no.imr.stox.functions.landing.ApplyStratumToBiotic
+Parameter: Name=ProcessData, DataType=ProcessData, Description=The <I>ProcessData</I> parameter is used to specify which previous process has generated the <U>ProcessData</U> input data.<BR><BR>Process data contains information which cannot necessarily be created programmatically&#44; but may be a result of subjective user choices. These data makes it possible to reuse previous manual&#44; subjective data in a new execution. Normally&#44; the function ReadProcessData is the owner of data type <U>ProcessData</U>&#44; but other functions may have modified the content of this memory object during the model execution
+Parameter: Name=BioticData, Alias=FishStations, Required=true, DataType=BioticData, Description=The <I>BioticData</I> parameter is used to specify which previous process has generated the <U>BioticData</U> input data.
+DataStorage:no.imr.stox.datastorage.BioticDataStorage
+Output: BioticData
+
+[Function]
+Name: AppendSpecCat
+Description: <I>FilterBiotic</I> filters an input dataset of data type <U>BioticData</U> based on several filtration expressions and output a subset of the input data.<BR><BR>Output data is of format <U>BioticData</U>.
+Class: no.imr.stox.functions.biotic.AppendSpecCat
+Parameter: Name=BioticData, Alias=FishStations, Required=true, DataType=BioticData, Description=The <I>BioticData</I> parameter is used to specify which previous process has generated the <U>BioticData</U> input data.
+Parameter: Name=SpecCat, DataType=String, Description=The species category to append to catches. 
+DataStorage:no.imr.stox.datastorage.BioticDataStorage
+Output: BioticData
+
+[Function]
+Name: StationLengthDist
+Description: <I>StationLengthDist</I> produces a length frequency distribution for each biotic station by species of data type <U>LengthDist</U>. <BR><BR>Three different distributions can be generated:<BR><BR>1) A calculated length distribution as if every individual in the catch had been length measured.<BR><BR>2) Normalized length distribution to one nautical mile towing distance. This distribution shows the length distribution if the towing distance had been one nautical mile long and the entire catch had been length measured.<BR><BR>3) Length distribution in percent. One of the above distributions is recalculated to percent distribution.
+Class: no.imr.stox.functions.biotic.StationLengthDist
+Parameter: Name=BioticData, Alias=FishStations, DataType=BioticData, Description=The <I>BioticData</I> parameter is used to specify which previous process has generated the <U>BioticData</U> input data.
+Parameter: Name=LengthDistType, DefaultValue=PercentLengthDist, DataType=String, Values=LengthDist;NormLengthDist;PercentLengthDist, Description=The <I>LengthDistType</I> parameter is used to determine which type of length distributions by station should be output from this function.<BR><BR>Three options exists&#58;<BR> <U>LengthDistr</U> <BR> A frequency length distribution as if every fish in the catch had been length measured.<BR> <U>NormLengthDistr</U> <BR> The length distribution LengthDistr (see definition above) normalized to 1 nautical mile towing distance.<BR><U>PercentLengthDistr</U><BR>The length distribution of one of the two above converted to a percent distribution.
+DataStorage: no.imr.stox.datastorage.LengthDistMatrixStorage
+Output: LengthDist
+
+[Function]
+Name: RegroupLengthDist
+Description: <I>RegroupLengthDist</I> function is used to regroup a length frequency distribution of data type <U>LengthDist</U> to a courser length group resolution than the input data. The output data is also of data type <U>LengthDist</U>.
+Class: no.imr.stox.functions.biotic.RegroupLengthDist
+Parameter: Name=LengthDist, DataType=LengthDist, Description=The <I>LengthDist</I> parameter is used to specify which previous process has generated the <U>LengthDist</U> input data.
+Parameter: Name=LengthInterval, DataType=Double, Description=The <I>LengthInterval</I> parameter is used to specify the new length interval of the output <U>LengthDist</U> data. The new length interval must be logic and can not be finer than the input&#44; else the input interval is kept for the output data. 
+DataStorage: no.imr.stox.datastorage.LengthDistMatrixStorage
+Output: LengthDist
+
+[Function]
+Name: Catchability
+Description: <I>Catchability</I> changes a length frequency distribution according to a given catchability method, and produces a data type <U>LengthDist</U>. <BR><BR>One method can be chosen:<BR><BR>1) Size dependent swept area.
+Class: no.imr.stox.functions.biotic.Catchability
+Parameter: Name=CatchabilityMethod, DefaultValue=LengthDependentSweepWidth, DataType=String, Values=LengthDependentSweepWidth~SizeDependentSweptArea;LengthDependentSelectivity, Description=The <I>CatchabilityMethod</I> parameter is used to determine which method to manipulate the length frequency.<BR>Two options&#58;<BR><U>LengthDependentSweepWidth</U>&#58;n&#61;n&#x22C5;1852&#x2215;(&#x3B1;&#x22C5;L<sup>&#x3B2;</sup>)<BR><BR><U>LengthDependentSelectivity</U>&#58;n&#61;n&#x22C5;&#x3B1;&#x22C5;e<sup>L&#x3B2;</sup>
+Parameter: Name=LengthDist, DataType=LengthDist, Description=The <I>LengthDist</I> parameter is used to specify which previous process has generated the <U>LengthDist</U> input data.
+#Parameter: Name=BioticData, Alias=FishStations, DataType=BioticData, Description=The <I>BioticData</I> parameter is used to specify which previous process has generated the <U>BioticData</U> input data.
+Parameter: Name=Alpha, Required=false, DataType=Double, ParentTag=CatchabilityMethod.LengthDependentSweepWidth;CatchabilityMethod.LengthDependentSelectivity, Description=The <I>Alpha</I> parameter is used to specify the value of the <U>Alpha</U> in the formula for length dependent fishing width. The length dependent fishing width is applied during calculation of number by length for the trawl stations. This parameter is related to parameter <U>FishingWidthMetod</U> having a value equal to <U>LengthDependent</U>.
+Parameter: Name=Beta, Required=false, DataType=Double, ParentTag=CatchabilityMethod.LengthDependentSweepWidth;CatchabilityMethod.LengthDependentSelectivity, Description=The <I>Beta</I> parameter is used to specify the value of the <U>Beta</U> in the formula for length dependent fishing width. The length dependent fishing width is applied during calculation of number by length for the trawl stations. This parameter is related to parameter <U>FishingWidthMetod</U> having a value equal to <U>LengthDependent</U>.
+Parameter: Name=LMin, Required=false, DataType=Double, ParentTag=CatchabilityMethod.LengthDependentSweepWidth;CatchabilityMethod.LengthDependentSelectivity, Description=The <I>LMin</I> parameter is used to specify the value of the <U>LMin</U> in the formula for length dependent fishing width. The length dependent fishing width is applied during calculation of number by length for the trawl stations. This parameter is related to parameter <U>FishingWidthMetod</U> having a value equal to <U>LengthDependent</U>.
+Parameter: Name=LMax, Required=false, DataType=Double, ParentTag=CatchabilityMethod.LengthDependentSweepWidth;CatchabilityMethod.LengthDependentSelectivity, Description=The <I>LMax</I> parameter is used to specify the value of the <U>LMax</U> in the formula for length dependent fishing width. The length dependent fishing width is applied during calculation of number by length for the trawl stations. This parameter is related to parameter <U>FishingWidthMetod</U> having a value equal to <U>LengthDependent</U>.
+DataStorage: no.imr.stox.datastorage.LengthDistMatrixStorage
+Output: LengthDist
+
+[Function]
+Name: RelLengthDist
+Description: <I>RegroupLengthDist</I> function is used to make the length frequency relative in percent which means the sum is 1. Output is <U>LengthDist</U>
+Class: no.imr.stox.functions.biotic.RelLengthDist
+Parameter: Name=LengthDist, DataType=LengthDist, Description=The <I>LengthDist</I> parameter is used to specify which previous process has generated the <U>LengthDist</U> input data.
+DataStorage: no.imr.stox.datastorage.LengthDistMatrixStorage
+Output: LengthDist
+
+#------------------------------------------------------
+# Process data functions
+#------------------------------------------------------
+
+[Function]
+Name: ReadProcessData
+Alias: ProcessData
+Description: Description: The <I>ReadProcessData</I> function reads the project file &#34;project.xml&#34; and the xml tag &#34;processdata&#34; if it exist&#44;  or create if not. The content is contained in memory output data type <U>ProcessData</U>.<BR><BR>Process data contains information which cannot necessarily be created programmatically&#44; but may be a result of subjective user choices. These data makes it possible to reuse previous manual&#44; subjective data in a new execution. Normally&#44; the function ReadProcessData is the owner of data type <U>ProcessData</U>&#44; but other functions may modify the content of this memory object.<BR><BR> Examples of end user subjective data&#58<BR><BR>&#42; Alteration to the default strata system<BR>&#42; Definition of which acoustic distances &#40;EDSU&#41; belong to which transect &#40;PSU&#41;<BR>&#42; Manual assignment of biotic data to acoustic NASC values
+Class: no.imr.stox.functions.processdata.ReadProcessData
+Output: ProcessData
+
+[Function]
+Name: WriteProcessData
+Alias: SaveProject
+Description: The <I>WriteProcessData</I> function writes the content of memory data type <U>ProcessData</U> to the xml tag &#34;processdata&#34; of the project file &#34;project.xml&#34;. <BR><BR>Process data contains information which cannot necessarily be created programmatically&#44; but may be a result of subjective user choices. These data makes it possible to reuse previous manual&#44; subjective data in a new execution. Normally&#44; the function ReadProcessData is the owner of data type <U>ProcessData</U>&#44; but other functions may have modified the content of this memory object during the model execution.<BR><BR> Examples of end user subjective data&#58<BR><BR>&#42; Alteration to the default strata system<BR>&#42; Definition of which acoustic distances &#40;EDSU&#41; belong to which transect &#40;PSU&#41;<BR>&#42; Manual assignment of biotic data to acoustic NASC values
+Class: no.imr.stox.functions.processdata.WriteProcessData
+#Parameter: Name=ProcessData, DataType=ProcessData, Description=The <I>ProcessData</I> parameter is used to specify which previous process has generated the <U>ProcessData</U> input data.<BR><BR>Process data contains information which cannot necessarily be created programmatically&#44; but may be a result of subjective user choices. These data makes it possible to reuse previous manual&#44; subjective data in a new execution. Normally&#44; the function ReadProcessData is the owner of data type <U>ProcessData</U>&#44; but other functions may have modified the content of this memory object during the model execution.
+DataStorage:no.imr.stox.datastorage.ProcessDataStorage
+Output: ProcessData
+
+[Function]
+Name: DefineStrata
+Alias: ReadStrata
+Description: <I>DefineStrata</I> function reads strata definitions from a WKT polygon file or uses definitions from the <U>ProcessData</U> data object.<BR><BR>In the GIS window strata may be added&#44; deleted or modified. <BR><BR> In the Stratum&#47;PSU window&#44; strata may be excluded from the total aggregated survey estimate. On stratum level&#44; estimates are also performed for excluded strata.<BR><BR>The resulting strata definitions from this function is stored in the output data object <U>ProcessData</U> 
+Class: no.imr.stox.functions.processdata.DefineStrata
+Respondable:true
+Parameter: Name=ProcessData, DataType=ProcessData, Description=The <I>ProcessData</I> parameter is used to specify which previous process has generated the <U>ProcessData</U> input data.<BR><BR>Process data contains information which cannot necessarily be created programmatically&#44; but may be a result of subjective user choices. These data makes it possible to reuse previous manual&#44; subjective data in a new execution. Normally&#44; the function ReadProcessData is the owner of data type <U>ProcessData</U>&#44; but other functions may have modified the content of this memory object during the model execution
+Parameter: Name=UseProcessData, Required=false, DefaultValue=false, DataType=Boolean, Description=The <I>UseProcessData</I> parameter is a boolean which determine whether or not to use the strata definitions contained in the input <U>ProcessData</U> object.<BR><BR> This option is useful if you in a previous model execution have altered default strata definitions in GIS and do not want to repeat strata editing each time the model is run 
+Parameter: Name=FileName, Required=false, DataType=String, Description=The <I>FileName</I> parameter is used to give the complete path including filename to the WKT strata system file to be used
+Output:  ProcessData
+
+[Function]
+Name: StratumArea
+Description: <I>StratumArea</I> function calculates the area of each stratum based on the stratum definitions found in the memory object <U>ProcessData</U>. <BR>The function output is of data type <U>PolygonArea</U>
+Class: no.imr.stox.functions.processdata.StratumArea
+Parameter: Name=ProcessData, DataType=ProcessData, Description=The <I>ProcessData</I> parameter is used to specify which previous process has generated the <U>ProcessData</U> input data.<BR><BR>Process data contains information which cannot necessarily be created programmatically&#44; but may be a result of subjective user choices. These data makes it possible to reuse previous manual&#44; subjective data in a new execution. Normally&#44; the function ReadProcessData is the owner of data type <U>ProcessData</U>&#44; but other functions may have modified the content of this memory object during the model execution.<BR><BR> The strata system definitions are included in the <U>ProcessData</U> memory data object
+Parameter: Name=AreaMethod, Required=false, DefaultValue=Simple, Values=Simple;Accurate, DataType=String, Description=The <I>AreaMethod</I> parameter specifies the calculation method to be used to find the areas of the strata. <BR> The methods are&#58;<BR><BR><U>Simple</U><BR>A simple and less accurate stratum area calculation performed in Java<BR><BR><U>Accurate</U><BR> An accurate stratum area calculation based on azimuthal equal area projection. The calculations are performed in R. Requires R software to be installed on the computer
+DataStorage: no.imr.stox.datastorage.MatricesStorage
+Output:  PolygonArea
+
+[Function]
+Name: DefineAcousticTransect
+Alias: DefineTransect
+Class: no.imr.stox.functions.processdata.DefineTransect
+Respondable:true
+Description: <I>DefineAcousticTransect</I> function is used to define which acoustic integrator distances &#40;EDSU&#41; is part of which transect &#40;PSU&#41; <BR><BR> The function will set the GIS map window in a mode to allow the user to perform this task. The transect definitions is stored as a part of the output <U>ProcessData</U> data object
+Parameter: Name=ProcessData, DataType=ProcessData, Description=The <I>ProcessData</I> parameter is used to specify which previous process has generated the <U>ProcessData</U> input data.<BR><BR> The transect definitions may have been manually created or altered&#44; and are therefore by definition stored in <U>ProcessData</U>.
+Parameter: Name=AcousticData, DataType=AcousticData, Description=The <I>AcousticData</I> parameter is used to specify which previous process has generated the <U>AcousticData</U> input data which contains acoustic data by EDSU
+Parameter: Name=UseProcessData, Required=false, DefaultValue=true, DataType=Boolean, Description=The <I>UseProcessData</I> parameter is a boolean which determine whether or not to use the transect definitions contained in the input <U>ProcessData</U> object.<BR><BR> This option is useful if you in a previous model execution have defined transects in GIS and do not want to repeat this task each time the model is run 
+Output: ProcessData
+
+[Function]
+Name: MeanNASC
+Alias: MeanSA;MeanSAPSU
+Description: The <I>SampleUnitNASC</I> function calculates mean NASC by sample unit PSU or Stratum from the input <U>NASC</U> data.<BR><BR> The input <U>NASC</U> data must have a finer sample resolution &#40;e.g. EDSU in, PSU out&#41; than the desired mean NASC output. <BR> Output data object is of type <U>NASC</U> &#44; the same as the input data 
+Class: no.imr.stox.functions.processdata.MeanNASC
+Parameter: Name=ProcessData, DataType=ProcessData, Description=The <I>ProcessData</I> parameter is used to specify which previous process has generated the <U>ProcessData</U> input data.<BR> This data object contains information linking EDSU to PSU and PSU to Stratum
+Parameter: Name=NASC, Alias=SA, DataType=NASC, Description=The <I>NASC</I> parameter is used to specify which previous process has generated the <U>NASC</U> input data.
+Parameter: Name=SampleUnitType, DefaultValue=PSU, DataType=String, Values=PSU;Stratum, Description=The <I>SampleUnitType</I> parameter is used to specify at which sample unit resolution the output <U>NASC</U> should have. <BR><BR> Possible values are <U>PSU</U> or <U>Stratum</U>
+DataStorage:no.imr.stox.datastorage.NASCMatrixStorage
+Output: NASC
+
+[Function]
+Name: SplitNASC
+Description: The <I>SplitNASC</I> function splits a mixed acoustic category NASC data into several single species NASC data. An acoustic category may represent a mix of several biotic species. In other words&#44; the NASC values are a sum of acoustic returns from all these species.<BR><BR>To split a mixed NASC value by biotic species&#44; two things are needed&#58;<BR><BR>A normalized length distribution &#40;length distribution type NormLengthDist&#41; for each of the biotic species which the mix acoustic category represents.<BR><BR>The TS &#45; length relationship for each of the biotic species.
+Class: no.imr.stox.functions.processdata.SplitNASC
+Parameter: Name=ProcessData, DataType=ProcessData, Description=The <I>ProcessData</I> is used to identify which previous process in the model has generated the input dataset of data type <U>ProcessData</U>.<BR><BR>The <U>ProcessData</U> object contains information linking which length distributions is associated with the which acoustic NASC value &#40;EDSU resolution&#41;. In other words it contains the list of assignment of biotic data to acoustic data.
+Parameter: Name=AcousticData, DataType=AcousticData, Description=The <I>AcousticData</I> parameter is used to identify which previously executed function has generated the input <U>AcousticData</U> object.<BR><BR>The <U>AcousticData</U> input object contains information needed to calculate average depth when the vertical layertype is PChannel. The average depth of PChannels are needed if depth dependent TS is to be calculated and applied during NASC splitting.
+Parameter: Name=LengthDist, DataType=LengthDist, Description=The <I>LengthDist</I> parameter is used to identify which previous process in the model has generated the input dataset of data type <U>LengthDist</U>.<BR><BR>The input length distributions have to be total length distributions produced as a result of assignment of biotic stations to NASC values.<BR><BR><B>NOTE&#33;</B><BR>These length distributions need to be of length distribution type <B>NormLengthDist</B> as they will than contain an implicit weighting by catch number.
+Parameter: Name=NASC, DataType=NASC, Description=The <I>NASC</I> parameter is used to specify which previous process has generated the <U>NASC</U> input data.The input <U>NASC</U> values <U>MUST represent at least one mix acoustic category</U>. This mix NASC will be split.
+Parameter: Name=MixAcoCat, Required=true, DataType=String, Description=The <U>MixAcoCat</U> parameter is used to give the value of the mix acoustic category &#40;variable AcoCat of the NASC object&#41; that should be splitted.<BR><BR>This parameter is related to parameter SpeciesTS. 
+Parameter: Name=SpeciesTS, DataType=String, Description=The <I>SpeciesTS</I> parameter is used to give various values for the biotic species that is represented by the mix NASC values which we want to split into NASC for each individual biotic species.<BR><BR>The following variables need to be given for each biotic species&#58;<BR><BR><B>AcoCat</B><BR>The acoustic category value &#40;corresponds to the AcoCat variable of the <U>NASC</U> object&#41; for this biotic species.<BR><BR><B>SpecCat</B><BR>The species name for the species as given in the biotic length distribution input data &#40;variable SpecCat of the <U>LengthDist</U> object&#41;. This value MUST correspond with the value given AcoCat and represent the same species.<BR><BR><B> m &#44; a &#44;d</B><BR>This is the constants in the TS&#45;length formula for this species.
+DataStorage:no.imr.stox.datastorage.NASCMatrixStorage
+Output: NASC
+
+[Function]
+Name: CombineNASC
+Description: The <I>CombineNASC</I> function combines data from several input <U>NASC</U> objects into one output <U>NASC</U> object. Dependent on the user settings&#44; the combination may be done in two ways&#58;<BR><BR><B>Filter and sum one acoustic category</B><BR>If a specific target acoustic category is given for parameter TargetAcoCat&#44; all the input <U>NASC</U> objects are filtered for only this acoustic category&#44; other acoustic categories of the input <U>NASC</U> data sets are deleted. The filtered <U>NASC</U> data is than combined by &#34;cell&#34;. A cell is defined as a specific layer in a specific acoustic EDSU. If several of the <U>NASC</U> input objects contain the same cell&#44; the NASC values of this cell is summed.All the cells existing in all the input <U>NASC</U> objects will exist in the output <U>NASC</U> object from this function.<BR<BR><B>Append data from several input NASC objects containing several acoustic categories.</><BR>If a specific target acoustic category is NOT given for parameter TargetAcoCat&#44; the input <U>NASC</U> objects will be appended into a new output <U>NASC</U> object containing all the acoustic categories of the input <U>NASC</U> objects.
+Class: no.imr.stox.functions.acoustic.CombineNASC
+Parameter: Name=TargetAcoCat, Required=false, DataType=String, Description=The <I>TargetAcoCat</I> parameter is used to give the value of the target acoustic category &#40;variable AcoCat of the <U>NASC</U> object&#41; that should be combined. The input <U>NASC</U> data sets are filtered to contain only this acoustic category&#44; before they are combined into an output <U>NASC</U> object.<BR><BR>If this parameter is left blank&#44; all acoustic categories existing in the input <U>NASC</U> objects will be appended into the output <U>NASC</U> object.
+Parameter: Name=NASC1, DataType=NASC, Required=false, Description=The <I>NASC1</I> parameter is used to identify which previously executed function has generated the input <U>NASC</U> object. This input <U>NASC</U> object will be combined with other input <U>NASC</U> objects.
+Parameter: Name=NASC2, DataType=NASC, Required=false, Description=The <I>NASC2</I> parameter is used to identify which previously executed function has generated the input <U>NASC</U> object. This input <U>NASC</U> object will be combined with other input <U>NASC</U> objects.
+Parameter: Name=NASC3, DataType=NASC, Required=false, Description=The <I>NASC3</I> parameter is used to identify which previously executed function has generated the input <U>NASC</U> object. This input <U>NASC</U> object will be combined with other input <U>NASC</U> objects.
+Parameter: Name=NASC4, DataType=NASC, Required=false, Description=The <I>NASC4</I> parameter is used to identify which previously executed function has generated the input <U>NASC</U> object. This input <U>NASC</U> object will be combined with other input <U>NASC</U> objects.
+Parameter: Name=NASC5, DataType=NASC, Required=false, Description=The <I>NASC5</I> parameter is used to identify which previously executed function has generated the input <U>NASC</U> object. This input <U>NASC</U> object will be combined with other input <U>NASC</U> objects.
+DataStorage:no.imr.stox.datastorage.NASCMatrixStorage
+Output: NASC
+
+[Function]
+Name: NASCToAcousticData
+Alias: NASCToAcoustic
+Description: The <I>NASCToAcousticData</I> function is a converter function that converts an input <U>NASC</U> data object into an <U>AcousticData</U> object. This is useful when the values of the <U>NASC</U> object have been manipulated and altered within the model. The <U>NASC</U> object originated from an <U>AcousticData</U> object&#44; but does not contain all the heading data of the <U>AcousticData</U> object. By combining the original <U>AcousticData</U> object and the new NASC values of the <U>NASC</U> object&#44; the AcousticData object&#39;s NASC values is substituted with the new manipulated NASC data.
+Class: no.imr.stox.functions.acoustic.NASCToAcousticData
+Parameter: Name=AcousticData, DataType=AcousticData, Description=The <I>AcousticData</I> parameter is used to identify which previous process in the model has generated the input object of data type <U>AcousticData</U>.<BR>This <U>AcousticData</U> input object must be the same as the one used to create the input <U>NASC</U> object &#40;see parameter NASC&#41;.
+Parameter: Name=NASC, DataType=NASC, Description=The <I>NASC</I> parameter is used to identify which previously executed function has generated the <U>NASC</U> input object that is to be converted into an <U>AcousticData</U> object.This <U>NASC</U> input object must previously have been created from the input <U>AcousticData</U> object of this function &#40;see parameter AcousticData&#41;.
+DataStorage: no.imr.stox.datastorage.EchoDataStorage
+Output: AcousticData
+
+[Function]
+Name: WriteAcousticDataToXML
+Alias: WriteAcousticXML
+Description: The <I>WriteAcousticDataToXML</I> function writes the content of an <U>AcousticData</U> object &#40;NASC by species category and frequency&#41; to an XML file. Refer to LSSS documentation for details on the file &#34;ListUser20.xml&#34; format.
+Class: no.imr.stox.functions.acoustic.WriteAcousticDataToXML
+Parameter: Name=AcousticData, DataType=AcousticData, Description=The <I>AcousticData</I> parameter is used to specify which previous process has generated the <U>AcousticData</U> input data that is to be written to an XML file.
+Parameter: Name=FileName, DataType=String, Description=The <I>FileName</I> parameter is used to identify the name and path of the output XML file. The format of the file is the same as &#34;ListUser20.xml&#34; from LSSS. 
+
+[Function]
+Name: BioStationAssignment
+Alias: TransectAssignment;TransectAsg;TransAsg
+Class: no.imr.stox.functions.processdata.BioStationAssignment
+Respondable:true
+Description: The <I>BioticStationAssignment</I)> function is used to assign one or more biotic stations of data type <U>BioticData</U> to acoustic sample unit observations &#40;EDSU, PSU or Stratum&#41;.<BR> The assigned acoustic observations may have one of different layer resolutions &#40;Pch&#44; PEL&#44; BOT or PELBOT&#41;.<BR> The result of the assignment will be stored in data memory data object <U>ProcessData</U>.<BR><BR> Assignment may be performed manually in the GIS window and by using one of the following automated methods&#58;<BR><BR> <U>Stratum</U>&#44; <U>Radius</U>&#44; or <U>UseProcessData</U>&#44;<BR><BR> NOTE&#33; The function <I>BioticStationWeighting</> is assosiated with this function and <U>MUST</U> follow next&#33;
+Parameter: Name=ProcessData, DataType=ProcessData, Description=The <I>ProcessData</I> parameter is used to specify which previous process has generated the <U>ProcessData</U> input data.<BR> This data object contains information on which EDSU's belong to which PSU. The linking of EDSU to PSU has been done in a previous function of this model and may have been inherited from a previous execution of the model.<BR> It also contain information on biotic station assignments to acoustic data, that may have been performed in an earlier execution of the model. The results of the current assignment updates the assignment content of <U>ProcessData</U>
+Parameter: Name=BioticData, Alias=FishStations, DataType=BioticData, Description=The <I>BioticData</I> parameter is used to specify which previous process has generated the <U>BioticData</U> input data. It contains the biotic stations that may be assigned to acoustic values
+Parameter: Name=AssignmentMethod, Required=false, DefaultValue=Stratum, Values=Stratum;Radius;UseProcessData, DataType=String, Description=The <I>AssignmentMethod</I> parameter is used to specify which automated assignment method to use. The following automated ways of assigning exist&#58; <BR><BR><U>Stratum</U><BR>  All biotic stations in the stratum is assigned to all PSU&#39;s of the stratum. This method assigns identical to all estimation layers.<BR><BR><U>Radius</U><BR>Assign all biotic stations within a given radius to the EDSU&#39;s that is making up the PSU&#39;s. <BR>Note that parameters <I>Radius</I> and <I>AcousticData</I> are linked to this assignment method. This method assigns identical to all estimation layers.<BR><BR><U>UseProcessData</U><BR>Use the assignments that already exist from a previous execution. These assignments can be found in input data object <U>ProcessData</U>. This method assigns identical to all estimation layers.
+Parameter: Name=AcousticData, Required=false, DataType=AcousticData, ParentTag=AssignmentMethod.Radius, Description=The <I>AcousticData</I> parameter is used to specify which previous process has generated the <U>AcousticData</U> input data which contains acoustic data by EDSU. The AssignmentMethod &#61; Radius needs the EDSU acoustic resolution to select and assign the adequate biotic stations
+Parameter: Name=Radius, Required=false, DefaultValue=15.0, DataType=Double, ParentTag=AssignmentMethod.Radius, Description=The <I>Radius</I> parameter gives the search radius used to select and assign biotic stations to acoustic observations. The parameter is relevant in connection with AssignmentMethod &#61; Radius. The parameter is given in nautical miles.
+Parameter: Name=EstLayers, DataType=String, Description=Estimation layer definition. Example '1~1-16 2~30-42' or '1~PEL 2~BOT or 1~PELBOT'.   
+Output: ProcessData
+
+[Function]
+Name: SplitNASCAssignment
+Class: no.imr.stox.functions.processdata.SplitNASCAssignment
+Description: The <I>SplitNASCAssignment</I> function is used to assign biotic stations to acoustic EDSU values.<BR>The length distributions for several biotic species is needed when NASC values for a mixed acoustic category is to be split into independent NASC values for each of these biotic species. Other functions will perform the actual splitting of NASC&#44; this function only generate an assignment list.
+Parameter: Name=AcousticData, DataType=AcousticData, Description=The <I>AcousticData</I> parameter is used to identify which previous process in the model has generated the dataset of data type AcousticData to be used. These acoustic data have EDSU resolution.<BR><BR>The position of each EDSU is contained in AcousticData and this information is needed to search and assign biotic stations within a radius of the ESDSU.
+Parameter: Name=Radius, Required=false, DefaultValue=15.0, DataType=Double, Description=The <I>Radius</I> parameter is used to search and assign biotic stations within a radius of an acoustic EDSU. The value of the Radius parameter is given in nautical. Search for biotic stations is performed for every EDSU of the input AcousticData object.<BR><BR>If the chosen search radius is too small for one or more EDSU&#39;s to get assigned any biotic stations&#44; the <U>SplitNASCAssignment</U> will not give any output. A warning will be given in the User Log that the radius is too small&#44; together with information on the minimum required radius.
+Parameter: Name=BioticData, Alias=FishStations, DataType=BioticData, Description=The <I>BioticData</I> parameter is used to specify which previous process has generated the <U>BioticData</U> input data. It contains the biotic stations that may be assigned to acoustic values.
+Output: ProcessData
+
+[Function]
+Name: BioStationWeighting
+Class: no.imr.stox.functions.processdata.BioStationWeighting
+Description: <I>BioticStationWeighting</I)> function is used to give a weight to each biotic station of each unique assignment. <BR>The function updates the assignments performed in <I>BioticStationAssignment</I> function earlier in the model with a <U>weighting</U> variable. It is the input data object <U>ProcessData</U> that is updated and which also becomes the output data from this function.<BR>The following assignment methods exist&#58;<BR><BR><U>Equal</U>&#44; <U>NumberOfLengthSamples</U> and <U>NASC</U>
+Parameter: Name=ProcessData, DataType=ProcessData, Description=The <I>ProcessData</I> parameter is used to specify which previous process has generated the <U>ProcessData</U> input data.<BR> This data object contains information on biotic station assignments performed earlier in function <I>BioticStationAssignment</I>. The <I>BioticStationWeighting</I> function will update the weight variable of the assigned biotic stations with new values. The content of the output <U>ProcessData</U> is updated.
+Parameter: Name=WeightingMethod, DefaultValue=Equal, DataType=String, Values=Equal;NumberOfLengthSamples;NASC;NormTotalWeight;NormTotalCount;SumWeightedCount;InvSumWeightedCount, Description=<I>WeightingMethod</I)> function is used to select which method to use for weighting of the assigned biotic stations. <BR>The following assignment methods exist&#58;<BR><BR><U>Equal</U><BR>All assigned biotic stations are given equal weight<BR><BR><U>NumberOfLengthSamples</U><BR> The assigned biotic stations are given a weight according to the number of samples in the catch. Parameters <I>BioticData</> and <I>MaxNumLengthSamples</I> is linked to this parameter and <I>MaxNumLengthSamples</I> is used to limit the weighting to a maximum number of samples.<BR><BR><U>NASC</U><BR> The assigned biotic stations are given <U>weight</U> based on surrounding NASC values that is converted to densities by combining the NASC values with the length distribution of the biotic station. Parameters <I>BioticData</>&#44;<I>NASC</I>&#44;<I>AcousticData</I>&#44;<I>LengthDist</I>&#44;<I>Radius</I>&#44;<I>m</I> and <I>a</I> are linked to this parameter.<BR><BR><U>NormTotalWeight</U><BR> The normalized total weight in catch weight<BR><BR><U>NormTotalCount</U><BR> The normalized total count in catch weight<BR><U>SumWeightedCount</U><BR> The inversed weighted count given, the total length distribution becomes normalized to 1 for all species and all length groups per station weight<BR><BR><U>InvSumWeightedCount</U><BR> The inversed weighted count given, the total length ditribution becomes normalized to 1 for all species and all length groups per station weight
+Parameter: Name=BioticData, Alias=FishStations, Required=false, DataType=BioticData, ParentTag=WeightingMethod.NASC;WeightingMethod.NumberOfLengthSamples;WeightingMethod.NormTotalWeight;WeightingMethod.NormTotalCount, Description=The <I>BioticData</I> parameter is used to specify which previous process has generated the <U>BioticData</U> input data.  This parameter is linked to &#58;<BR><BR> Parameter <U> WeightingMethod &#61; NumberOfLengthSamples</U> where <U>BioticData</U> also includes the number of samples. <BR><BR>Parameter <U> WeightingMethod &#61; NASC</U> where <U>BioticData</U> contains biotic station data with position information. Via this selection of <U>BioticData</U> the station length distributions of data object <U>LengthDist</U> can be identified and used in the calculation of the weighting variable values. 
+Parameter: Name=NASC, Alias=SA, Required=false, DataType=NASC, ParentTag=WeightingMethod.NASC, Description=NASC Matrix, Description=The <I>NASC</I> parameter is used to specify which previous process has generated the <U>NASC</U> input data. <U>NASC</U> data is used in combination with <U>LengthDist</U> data to calculate a density weighting variable values for each biotic station of an assignment. <BR> This parameter is linked to <U>Weighting Method &#61; NASC</U>.
+Parameter: Name=AcousticData, Required=false, DataType=AcousticData, ParentTag=WeightingMethod.NASC, Description=The <I>AcousticData</I> parameter is used to specify which previous process has generated the <U>AcousticData</U> input data. This parameter is linked to <U>Weighting Method &#61; NASC</U>. Unlike the <U>NASC</U> object&#44; the <U>AcousticData</U> object contains position information. This information is used to identify relevant NASC data to be used to calculate density weighting values for the biotic stations of each assignment.
+Parameter: Name=LengthDist, Required=false, DataType=LengthDist, ParentTag=WeightingMethod.NASC;WeightingMethod.SumWeightedCount;WeightingMethod.InvSumWeightedCount, Description=The <I>LengthDist</I> parameter is used to specify which previous process has generated the <U>LengthDist</U> input data. This parameter is linked to <U>Weighting Method &#61; NASC</U>. The length distributions found in <U>LengthDist</U> is combined with NASC values to calculate a density weighting value for the biotic stations of each assignment.
+Parameter: Name=Radius, Required=false, DataType=Double, ParentTag=WeightingMethod.NASC, Description=This parameter is only used when <U>Weighting Method &#61; NASC</U> is chosen. The value of the parameter is given in nautical miles and will be used as the search radius to find acoustic NASC data which will be combined with each corresponding biotic station length distribution &#40;LengthDist&#41; to calculate a density weighting variable for each assigned biotic station. 
+Parameter: Name=m, Required=false, DefaultValue=20, DataType=Double, ParentTag=WeightingMethod.NASC, Description=This parameter is used to specify the value of the <U>m</U> constant of the TS &#45; length formula used to calculate the density weighting value from the NASC values that has been identified and the biotic station length distribution &#40;LengthDist&#41. <BR> The relationship is given as&#58; <BR><BR> TS &#61; m &#42; log10 &#40;L&#41; &#43; a
+Parameter: Name=a, Alias=B, Required=false, DataType=Double, ParentTag=WeightingMethod.NASC, Description=This parameter is used to specify the value of the <U>a</U> constant of the TS &#45; length formula used to calculate the density weighting value from the NASC values that has been identified and the biotic station length distribution &#40;LengthDist&#41. <BR> The relationship is given as&#58; <BR><BR> TS &#61; m &#42; log10 &#40;L&#41; &#43; a
+Parameter: Name=MaxNumLengthSamples, Required=false, DataType=Integer, DefaultValue=100, ParentTag=WeightingMethod.NumberOfLengthSamples, Description=The <I>MaxNumLengthSamples</I> parameter is used to set an upper limit for number of samples that can be used as a weighting variable for an assigned biotic station. This parameter is linked to parameter WeightingMethod &#61; NumberOfLengthSamples.
+Output: ProcessData
+
+[Function]
+Name: DefineRectangle
+Class: no.imr.stox.functions.processdata.DefineRectangle
+Respondable:true
+Description: Define rectangles
+Parameter: Name=ProcessData, DataType=ProcessData, Description=Process data
+Parameter: Name=AcousticData, DataType=AcousticData, Description=Acoustic data
+Parameter: Name=Width, DataType=Double, Description=Width of rectangle
+Parameter: Name=Height, DataType=Double, Description=Height of rectangle
+Output: ProcessData
+
+
+[Function]
+Name: RectangleArea
+Description: Calculate area of psu rectangles clipped against strata area in process data
+Class: no.imr.stox.functions.processdata.RectangleArea
+Parameter: Name=ProcessData, DataType=ProcessData, Description=Process data
+DataStorage: no.imr.stox.datastorage.MatricesStorage
+Output:  PolygonArea
+
+[Function]
+Name: RectangleAssignment
+Class: no.imr.stox.functions.processdata.RectangleAssignment
+Respondable:true
+Description: Auto assign all trawl stations within rectangles to all acoustic distances in the rectangle, no weighting.
+Parameter: Name=ProcessData, DataType=ProcessData, Description=Process data
+Parameter: Name=BioticData, Alias=FishStations, DataType=BioticData, Description=Fish stations
+Parameter: Name=NASC, Alias=SA, DataType=NASC, Description=NASC Matrix, Description=NASC matrix
+Parameter: Name=UseProcessData, Required=false, DefaultValue=false, DataType=Boolean, Description=if true use existing assignments
+Parameter: Name=EstLayers, DataType=String, Description=Estimation layer definition. Example '1~(1-16) 2~(17-32)' or '1~PEL 2~BOT or 1~PELBOT'.   
+Output: ProcessData
+
+
+[Function]
+Name: TotalLengthDist
+Description: The <I>TotalLengthDist</> function produces one total length distribution for each unique combination &#40;identified by an AssignmentID&#41; of assigned biotic stations with corresponding weighting variables.<BR><BR>The input length distributions &#40;<U>LengthDist</U>&#41; from the individual biotic stations may be of any of the three distribution types&#44; percent&#44; normalized length distribution or length distribution. <BR><BR>Input distributions of type <B>LengthDist</B> will contain an implisit weighting by catch and towing distance in the output total length distribution.<BR>Input distributions of type <B>NormLengthDist</B> will contain an implisit weighting by catch in the output total length distribution.<BR>Input distributions of type <B>Percent</B> will contain NO implisit weighting in the output total length distribution. <BR><BR>The information on all combinations of assigned biotic stations with weighting exist in the input <U>ProcessData</U> object.<BR><BR>The output length distribution from this function is of data type <U>LengthDist</U>.
+Class: no.imr.stox.functions.processdata.TotalLengthDist
+Parameter: Name=ProcessData, DataType=ProcessData, Description=The <I>ProcessData</I> parameter is used to specify which previous process has generated the <U>ProcessData</U> input data.<BR><U>ProcessData</U> contains information on the biotic stations and their corresponding weighting values related to each unique assignment.
+Parameter: Name=LengthDist, DataType=LengthDist, Description=The <I>LengthDist</I> parameter is used to specify which previous process has generated the <U>LengthDist</U> input data.<BR> The input length distributions have to be on biotic station resolution and may be of any of the three distribution types&#44; percent&#44; normalized length distribution or length distribution.
+#Parameter: Name=Aggregation, Required=false, DefaultValue=Average, Values=Average;Sum, DataType=String, Description=Aggregation method
+DataStorage: no.imr.stox.datastorage.LengthDistMatrixStorage
+Output: LengthDist
+
+[Function]
+Name: DefineSweptAreaPSU
+Class: no.imr.stox.functions.processdata.DefineSweptAreaPSU
+Respondable:true
+Description: The <I>DefineSweptAreaPSU</I> function is used to define that the biotic stations &#40;EDSU&#41; is also the primary sampling units &#40;PSU&#41;. This is a simple task&#44; but to maintain consistency within the StoX environment&#44; a generic mechanism is used. This mechanism is in other contexts used for much more complex linking of EDSU&#39;s to PSU&#39;s and Strata.
+Parameter: Name=ProcessData, DataType=ProcessData, Description=The <I>ProcessData</I> parameter is used to identify which previously executed function has generated the <U>ProcessData</U> memory object.<BR><BR> The linking of EDSU to PSU and PSU to Stratum is contained in the <U>ProcessData</U> object.
+Parameter: Name=BioticData, DataType=BioticData, Description=The <I>BioticData</I> parameter is used to specify which previous process has generated the <U>BioticData</U> input data. This object contains data on biotic stations &#47; EDSU&#39;s.
+Parameter: Name=Method, Required=false, DefaultValue=Station, Values=Station;UseProcessData, DataType=String, Description=The <I>Method</I> parameter determines how to make biotic station EDSU &#61 PSU. Two methods exist&#44; and the result does not differ.<BR>The methods are&#58;<BR><BR><B>Station</B><BR>Use the input <U>BioticData</U> object to make biotic station EDSU &#61; PSU and update the output <U>ProcessData</U> with this information.<BR><BR><B>UseProcessData<BR></B>Use the EDSU &#61; PSU that has already been done in a previous model execution. This information exists in the input <U>ProcessData</U> object.
+
+Output: ProcessData
+
+#------------------------------------------------------
+# Density functions
+#------------------------------------------------------
+
+[Function]
+Name: AcousticDensity
+Alias: Density
+Description: The <I>AcousticDensity</I> function calculates length distributed densities as number of fish per square nautical mile. Such density distributions are calculated for each NASC value of the <U>NASC</U> input object. By combining a NASC value with a length distribution (input object <U>LengthDist</>) and applying a TS &#45; length relationship&#44; a corresponding density length distribution can be calculated.<BR><BR>The link between a NASC value in the <U>NASC</> data object and a length distribution of the <U>LengthDist</U> object exist in the data object <U>ProcessData.</U> All NASC values of the <U>NASC</U> data object have such a link or assignment ID.
+Class: no.imr.stox.functions.density.AcousticDensity
+Parameter: Name=ProcessData, DataType=ProcessData, Description=The <I>ProcessData</I> parameter is used to identify which previously executed function has generated the ProcessData memory object. <BR><BR>The matching of NASC values and corresponding length distributions is governed by the content of the &#60;suassignment&#62; table of the <U>ProcessData</U> object. 
+Parameter: Name=LengthDist, DataType=LengthDist, Description=The <I>LengthDist</I> parameter is used to specify which previous process has generated the <U>LengthDist</U> input data.<BR><BR> The input length distributions have to be total length distributions produced as a result of assignment of biotic stations to NASC values.
+Parameter: Name=NASC, Alias=SA, DataType=NASC, Description=The <I>NASC</I> parameter is used to specify which previous process has generated the <U>NASC</U> input data.
+Parameter: Name=m, Required=false, DefaultValue=20, DataType=Double, Description=This parameter is used to specify the value of the <U>m</U> constant of the TS &#45; length formula used to calculate length based densities from each NASC value of the input <U>NASC</U> object and their assigned total length distributions from the input <U>LengthDist</U> object.<BR><BR> The TS-length relationship is given as&#58; <BR><BR> TS &#61; m&#42;log10&#40;L&#41; &#43; a &#43; d&#42;log10&#40;1&#43;&#40;DEPTHpchannel&#47;10&#41;&#41;
+Parameter: Name=a, Alias=B, DataType=Double, Description=This parameter is used to specify the value of the <U>a</U> constant of the TS &#45; length formula used to calculate length based densities from each NASC value of the input <U>NASC</U> object and their assigned total length distributions from the input <U>LengthDist</U> object.<BR><BR> The TS-length relationship is given as&#58; <BR><BR> TS &#61; m&#42;log10&#40;L&#41; &#43; a &#43; d&#42;log10&#40;1&#43;&#40;DEPTHpchannel&#47;10&#41;&#41;
+Parameter: Name=d, Alias=C, Required=false, DataType=Double, Description=This parameter is used to specify the value of the <U>d</U> constant of the TS &#45; length formula used to calculate length based densities from each NASC value of the input <U>NASC</U> object and their assigned total length distributions from the input <U>LengthDist</U> object.<BR><BR> The TS-length relationship is given as&#58; <BR><BR> TS &#61; m&#42;log10&#40;L&#41; &#43; a &#43; d&#42;log10&#40;1&#43;&#40;DEPTHpchannel&#47;10&#41;&#41;<BR><BR>Note that depth dependent TS can ONLY be used if&#58;<BR> 1&#41 The <U>NASC</U> object has a vertical resolution at PChannel level.<BR> The d parameter is different from zero.<BR><BR>The parameter AcousticData is associated with this parameter since it contains information needed to find the depth of an acoustic PChannel.
+Parameter: Name=AcousticData, DataType=AcousticData, Description=The <U>AcousticData</U> parameter is used to identify which previously executed function has generated the input <U>AcousticData</U> object.<BR><BR>The <U>AcousticData</U> input object contains information needed to calculate average depth when the vertical layertype is PChannel.The average depth of PChannels are needed when depth dependent TS is to be calculated and applied. This parameter is dependent on parameter <U>d</U> having a different value than zero.
+DataStorage: no.imr.stox.datastorage.DensityStorage
+Output: Density
+
+[Function]
+Name: SweptAreaDensity
+Description: The <I>SweptAreaDensity</I> function calculates length distributed area densities as number of fish per square nautical mile. Normally&#44; the trawl station is defined as the PSU and area densities are calculated on this level.
+Class: no.imr.stox.functions.density.SweptAreaDensity
+Parameter: Name=ProcessData, DataType=ProcessData, Description=The <I>ProcessData</I> parameter is used to identify which previously executed function has generated the input <U>ProcessData</U> object.<BR><BR> Definitions of EDSUs&#44; PSUs and Strata are contained in the <U>ProcessData</U> input object. Generic mechanisms in StoX are used whenever densities are to be calculated.  The relationship between EDSU&#44; PSU and Stratum is key information when densities are to be calculated.
+Parameter: Name=SweptAreaMethod, DefaultValue=LengthDependent, DataType=String, Values=LengthDependent;TotalCatch, Description=The <I>SweptAreaMethod</I> parameter is used to specify a method for the swept area. 
+Parameter: Name=BioticData, Required=false, DataType=BioticData, Description=Fish stations
+Parameter: Name=CatchVariable, Required=false, DefaultValue=Weight, DataType=String, ParentTag=SweptAreaMethod.TotalCatch, Values=Weight;Count, Description=The <I>CatchVariable</I> is the sample catch variable used in density.
+Parameter: Name=LengthDist, Required=false, DataType=LengthDist, ParentTag=SweptAreaMethod.LengthDependent, Description=The <I>LengthDist</I> parameter is used to identify which previous process in the model has generated the dataset of data type <U>LengthDist</U> to be used.<BR><BR> The length distribution &#40;length based number of fish per nautical mile&#41; is used together with the sweep width of the trawl to calculate length based area densities as number of fish per square nautical mile.<BR><BR><B>WARNING&#33;</B><BR>In this function it is a requirement that the input <U>LengthDist</U> data object is of length distribution type <B>NormLengthDist</B>.
+Parameter: Name=SweepWidthMethod, Alias=FishingWidthMethod, DefaultValue=Constant, DataType=String, Values=Constant;LengthDependent@;CruiseDependent;Predetermined~NotNeeded, Description=The <I>FishingWidthMethod</I> parameter is used to specify a method to be used to get the fishing width&#47;sweep width of the trawl. Specific additional parameters are related to each of the available methods.<BR> The methods are&#58;<BR><BR><B>Constant</B><BR>A constant fishing width is applied to all the input data when area densities are calculated. The parameter <U>FishingWidth</U> is related to this method.<BR><BR><B>LengthDependent</B><BR>This method is used to apply variable catch efficiency by length.  The parameters <U>Alpha</U>&#44; <U>Beta</U>&#44; <U>Lmin</U> and <U>Lmax</U> are related to this method.<BR>The length dependent effective fishing width as described by Dickson &#40;1993 a&#44; b&#41; is implemented in the density calculations.<BR><BR><B>CruiseDependent</B><BR>This method allows the user to enter a specific constant fishing width for each cruise &#40;vessel&#41; in the input length distribution data. The parameter <U>FishingWidthExpr</U> is related to this method. <BR><BR><B>NotNeeded</B><BR>This method is useful when the length frequency is already adjusted with effective fishing width
+Parameter: Name=SweepWidth, Alias=FishingWidth, Required=false, DefaultValue=25, DataType=Double, ParentTag=FishingWidthMethod.Constant, Description=The <I>FishingWidth</I> parameter is used to specify the common value for fishing width for the trawl. This value will be used for all trawl hauls of the survey when the area density is to be calculated by station.<BR><BR>Fishing width is given in meters.<BR>This parameter is related to parameter <U>FishingWidthMetod</U> having a value equal to <U>Constant</U>.
+Parameter: Name=Alpha@, Required=false, DataType=Double, ParentTag=SweepWidthMethod.LengthDependent, Description=The <I>Alpha</I> parameter is used to specify the value of the <U>Alpha</U> in the formula for length dependent fishing width. The length dependent fishing width is applied during calculation of area density by length for the trawl stations. This parameter is related to parameter <U>FishingWidthMetod</U> having a value equal to <U>LengthDependent</U>.
+Parameter: Name=Beta@, Required=false, DataType=Double, ParentTag=SweepWidthMethod.LengthDependent, Description=The <I>Beta</I> parameter is used to specify the value of the <U>Beta</U> in the formula for length dependent fishing width. The length dependent fishing width is applied during calculation of area density by length for the trawl stations. This parameter is related to parameter <U>FishingWidthMetod</U> having a value equal to <U>LengthDependent</U>.
+Parameter: Name=LMin@, Required=false, DataType=Double, ParentTag=SweepWidthMethod.LengthDependent, Description=The <I>LMin</I> parameter is used to specify the value of the <U>LMin</U> in the formula for length dependent fishing width. The length dependent fishing width is applied during calculation of area density by length for the trawl stations. This parameter is related to parameter <U>FishingWidthMetod</U> having a value equal to <U>LengthDependent</U>.
+Parameter: Name=LMax@, Required=false, DataType=Double, ParentTag=SweepWidthMethod.LengthDependent, Description=The <I>LMax</I> parameter is used to specify the value of the <U>LMax</U> in the formula for length dependent fishing width. The length dependent fishing width is applied during calculation of area density by length for the trawl stations. This parameter is related to parameter <U>FishingWidthMetod</U> having a value equal to <U>LengthDependent</U>.
+Parameter: Name=SweepWidthExpr, Alias=FishingWidthExpr, Required=false, DataType=String, ParentTag=FishingWidthMethod.CruiseDependent, Description=The <I>FishingWidthExpr</I> parameter is used to specify a constant fishing width for each vessel participating in the survey. An expression has to be written that identifies each vessel by the <B>cruise</B> variable &#40;please refer to data type <U>BioticData</U> for details on the cruise variable&#41; and a corresponding value for this vessel&#39;s fishing width in meters.<BR><BR> The syntax is&#58;<BR>&#60;cruise value for vessel 1>&#62; &#58; &#60;fishing width in meters for vessel 1&#62; &#59; . . . . &#60;cruise value for vessel N&#62; &#58; &#60;fishing width in meters for vessel N&#62;This parameter is related to parameter "FishingWidthMetod" having a value equal to "CruiseDependent".
+DataStorage: no.imr.stox.datastorage.DensityStorage
+Output: Density
+
+[Function]
+Name: LarvaeDensity
+Description: The <I>LarvaeDensity</I> function calculates length distributed area densities as number of larvae per cubic meter per meter in the water column. 
+Class: no.imr.stox.functions.density.LarvaeDensity
+Parameter: Name=ProcessData, DataType=ProcessData, Description=The <I>ProcessData</I> parameter is used to identify which previously executed function has generated the input <U>ProcessData</U> object.<BR><BR> Definitions of EDSUs&#44; PSUs and Strata are contained in the <U>ProcessData</U> input object. Generic mechanisms in StoX are used whenever densities are to be calculated.  The relationship between EDSU&#44; PSU and Stratum is key information when densities are to be calculated.
+Parameter: Name=LengthDist, DataType=LengthDist, Description=The <I>LengthDist</I> parameter is used to identify which previous process in the model has generated the dataset of data type <U>LengthDist</U> to be used.<BR><BR> The length distribution &#40;length based number of fish per nautical mile&#41; is used together with the sweep width of the trawl to calculate length based area densities as number of fish per square nautical mile.<BR><BR><B>WARNING&#33;</B><BR>In this function it is a requirement that the input <U>LengthDist</U> data object is of length distribution type <B>NormLengthDist</B>.
+Parameter: Name=BioticData, Alias=FishStations, DataType=BioticData, Description=Fish stations
+Parameter: Name=GearOpeningArea, DataType=String,  Description=The <I>GearOpeningArea</I> (comma spearated list of gear:area in sq.m) specifies the opening area per gear type.
+DataStorage: no.imr.stox.datastorage.DensityStorage
+Output: Density
+
+[Function]
+Name: MeanDensity
+Description: The <U>MeanDensity</U> function aggregates densities horizontally. This means that densities can be aggregated from SampleUnitType resolution EDSU to either PSU or Stratum resolution. Or alternatively&#44; from PSU to Stratum.<BR><BR> This function calculates a weighted mean where each input observation &#40e.g. density of a PSU &#40;transect&#41;&#41; is weighted by the distance it represents. 
+Class: no.imr.stox.functions.density.MeanDensity
+Parameter: Name=ProcessData, DataType=ProcessData, Description=The <I>ProcessData</I> parameter is used to specify which previous process has generated the <U>ProcessData</U> input data.<BR>The <U>ProcessData</U> matrixes EDSUPSUMatrix and PSUStratumMatrix are used to identify which EDSU belong to which PSU and Stratum. Based on this information&#44; horizontal aggregation of mean densities can be performed.
+Parameter: Name=Density, Alias=Densities, DataType=Density, Description=The <I>Density</I> parameter is used to specify which previous process has generated the <U>Density</U> input data.<BR>These input data will be aggregated to a courser horizontal resolution in the functions <U>Density</U> output data.<BR><BR>Depending on the resolution of the input data&#44; the aggregation may be from EDSU to PSU or Stratum. Or alternatively&#44; from PSU to Stratum.
+Parameter: Name=SampleUnitType, Alias=Aggregation, DefaultValue=Stratum, DataType=String, Values=PSU;Stratum, Description=The <U>SampleUnitType</U> parameter determines the horizontal aggregation resolution of the output data.
+DataStorage: no.imr.stox.datastorage.DensityStorage
+Output: Density
+
+[Function]
+Name: SumDensity
+Description: The <I>SumDensity</I> function aggregates densities vertically. This means that densities are aggregated from the input <U>Density</U> object&#39;s layer resolution PChannel&#44; DepthLayer or WaterColumn and into EstLayer resolution.<BR>EstLayer is the final vertical resolution at which the estimate is splitted or depth stratified. 
+Class: no.imr.stox.functions.density.SumDensity
+Parameter: Name=Density, Alias=Densities, DataType=Density, Description=The <I>Density</I> parameter is used to specify which previous process has generated the input <U>Density</U> data object. Through inherited information on estimation layer resolution&#44; the output <U>Density</U> data object will be aggregated vertically to EstLayer resolution &#40;equivalent to depth stratification&#41;. This means that densities are aggregated from the input <U>Density</U> object&#39;s layer resolution PChannel&#44; DepthLayer or WaterColumn and into EstLayer resolution.<BR>EstLayer is the final vertical resolution at which the estimate is splitted or depth stratified. 
+DataStorage: no.imr.stox.datastorage.DensityStorage
+Output:  Density
+
+#------------------------------------------------------
+# Abundance functions
+#------------------------------------------------------
+
+[Function]
+Name: Abundance
+Alias: AbundanceByLength
+Description: The <I>Abundance</I> function is used to calculate length based abundance &#40;number of organisms&#41; within a polygon. The polygon is normally a stratum. The area of each polygon is multiplied with the length based densities of the polygon.
+Class: no.imr.stox.functions.abundance.Abundance
+Parameter: Name=Density, Alias=Densities, DataType=Density, Description=The <I>Density</I> parameter is used to identify which previous process in the model has generated the input dataset object Density.<BR><BR>The input densities have to represent the same horizontal sampleunit resolution as the polygon. Normally&#44; this means that the densities have to represent a stratum and that the polygon is also a stratum.
+Parameter: Name=PolygonArea, Alias=SampleArea, DataType=PolygonArea, Description=The <I>PolygonArea</I> parameter is used to identify which previous process in the model has generated the input dataset object <U>PolygonArea</U>.<BR><BR>The areas of the polygons&#47;strata are combined with the corresponding densities for the strata to calculate abundance.
+
+DataStorage: no.imr.stox.datastorage.AbundanceStorage
+Output:  Abundance
+
+[Function]
+Name: SumAbundance
+Description: Aggregate abundance horizontally over sample unit
+Class: no.imr.stox.functions.abundance.SumAbundance
+Parameter: Name=ProcessData, DataType=ProcessData, Description=Process data
+Parameter: Name=Abundance, DataType=Abundance, Description=Abundance
+DataStorage: no.imr.stox.datastorage.AbundanceStorage
+Output:  Abundance
+
+[Function]
+Name: RegroupAbundance
+Description: Regroup abundance by summing length groups
+Class: no.imr.stox.functions.abundance.RegroupAbundance
+Parameter: Name=Abundance, DataType=Abundance, Description=Abundance
+Parameter: Name=LengthInterval, DataType=Double, Description=New length group
+DataStorage: no.imr.stox.datastorage.AbundanceStorage
+Output:  Abundance
+
+#------------------------------------------------------
+# Individual data functions
+#------------------------------------------------------
+
+[Function]
+Name: IndividualDataStations
+Alias: IndividualDataSelection
+Description: The <I>IndividualDataStation</I> function creates a list of biotic stations that has previously been assigned to a SampleUnit &#40;normally Stratum&#41; and a Layer &#40;normally EstLayer&#41; during biotic assignment to acoustic values.<BR><BR> The purpose of the list is identify the biotic stations from which individual fish samples with their population parameters &#40;length&#44; age&#44; weight&#44; sex etc&#41; can found and later used to split abundance estimate by population parameters.
+Class: no.imr.stox.functions.individualdata.IndividualDataStations
+Parameter: Name=ProcessData, DataType=ProcessData, Description=The <I>ProcessData</> parameter is used to identify which previous process in the model has generated the dataset of data type <U>ProcessData</U> to be used.<BR><BR><U>ProcessData</U> contains information on which biotic stations have been used during assignment of biotic data to acoustics. Individual sample data from these assigned biotic stations are used to split abundances by population parameters later in the model.
+Parameter: Name=Abundance, DataType=Abundance, Description=The <I>Abundance</I> parameter is used to identify which previous process in the model has generated the input dataset object <U>Abundance</U>.<BR><BR>The <U>Abundance</U> input object contains the horizontal SampleUnitType &#40;normally Stratum&#41; and vertical LayerType &#40;normally EstLayer&#41; resolution used during assignment.
+DataStorage: no.imr.stox.datastorage.IndividualDataStationsStorage
+Output:  IndividualDataStations
+
+[Function]
+Name: IndividualData
+Description: The <I>IndividualData</I> function extracts the individual data from an input <U>BioticData</U> object. Only individual sample from biotic stations in a list are extracted. This list exists in the input data type <U>IndividualDataStation</U>.<BR><BR>The output <U>IndividualData</U> forms the basis to create so called super individuals which represent the estimated abundance and may be used to split the abundance by population parameters later in the model.<BR><BR>The extracted individual data are output from the function as a <U>IndividualData</U> type object.
+Class: no.imr.stox.functions.individualdata.IndividualData
+Parameter: Name=BioticData, Alias=FishStations, DataType=BioticData, Description=The <I>BioticData</I> parameter is used to identify which previous process in the model has generated the dataset of data type <U>BioticData</U> to be used.<BR><BR> It will be used as an input dataset to the <U>IndividualData</U> function as it contains the biotic station data. Individual data samples are a part of the biotic data set and it is these data that will be extracted.
+Parameter: Name=IndividualDataStations, Alias=IndividualDataSelection, DataType=IndividualDataStations, Description=The <I>IndividualDataStation</I> parameter is used to identify which previous process in the model has generated the input dataset object <U>IndividualDataStation</U>.<BR><BR>The <U>IndividualDataStation</U> object contains a list of which biotic stations should be used to extract individual data by sample unit &#40;e.g. Stratum&#41; and layer type &#40;e.g. estimation layer &#40;EstLayer&#41;&#41;.
+DataStorage:no.imr.stox.datastorage.IndividualDataStorage
+Output:  IndividualData
+
+[Function]
+Name: CorrectForInnsufficientSampling
+Description: Correct for insufficient sampling by using individuals from other strata at estlayer/lengroup
+Class: no.imr.stox.functions.individualdata.CorrectForInnsufficientSampling
+Parameter: Name=Abundance, Alias=AbundanceByLength, DataType=Abundance, Description=Abundance
+Parameter: Name=IndividualData, DataType=IndividualData, Description=Individual data
+DataStorage:no.imr.stox.datastorage.IndividualDataStorage
+Output: IndividualData
+
+[Function]
+Name: SuperIndAbundance
+Alias: AbundanceByIndividuals
+Description: The purpose of function <I>SuperIndAbundance</I> is to produces a super individual table.<BR>A super individual is an individual fish sample containing population parameters like age&#44; weight&#44; sex&#44; length&#44; maturity etc. In addition&#44; the super individual is given abundance. The abundance of the super individual is a proportion of the estimated abundance.<BR><BR>Since the super individuals link abundance and population parameters&#44; they can be used to split the estimate by any combination of population parameters. 
+Class: no.imr.stox.functions.individualdata.SuperIndAbundance
+Parameter: Name=Abundance, Alias=AbundanceByLength, DataType=Abundance, Description=The <I>Abundance</I> parameter is used to identify which previously executed function has generated the input <U>Abundance</U> data object.<BR><BR>The estimated Abundance for a stratum&#44; estimation layer and length group will be divided between each individual of the same stratum&#44; estimation layer and length group. Various methods to perform this division of abundance exist.  
+Parameter: Name=IndividualData, DataType=IndividualData, Description=The <I>IndividualData</I> parameter is used to identify which previously executed function has generated the input <U>IndividualData</U> data object.<BR><BR> This data object contains the individual samples from biotic stations that will become super individuals after appending variables like the &#34;abundance&#34; variable.
+Parameter: Name=ProcessData, DataType=ProcessData, Description=The <I>ProcessData</I> parameter is used to identify which previously executed function has generated the <U>ProcessData</U> object.<BR><BR>The &#34;includedintotal&#34; definitions are found in the input <U>ProcessData</U> object and is a variable in the output <U>SuperIndAbundance</U> data.
+Parameter: Name=AbundWeightMethod, DefaultValue=Equal, DataType=String, Values=Equal;StationDensity, Description=The <I>AbundWeightMethod</I> parameter is used to determine which method to use when abundance is to be divided between the super individuals. These methods exist&#58;<BR<BR><B>Equal&#58;</B><BR>All super individuals for a Stratum&#44; estimation layer and length group is given an equal abundance value. The total estimated abundance for the Stratum&#44; estimation layer and length group is split in equal proportions between these individuals.<BR><BR><B>StationDensity&#58;</B><BR>This method gives weight to the biotic stations in the Stratum according to the catch densities. In addition&#44; the number of individual samples taken on each station is accounted for to avoid bias due to varying numbers of samples on each station.
+Parameter: Name=LengthDist, Required=false, DataType=LengthDist, ParentTag=AbundWeightMethod.StationDensity, Description=The <I>LengthDist</I> parameter is used to identify which previous process in the model has generated the dataset of data type <U>LengthDist</U>.<BR><BR> This parameter is related to parameter <I>AbundWeightMethod</I>.<BR><BR>The input length distributions HAVE TO BE in of LengthDistType=LengthDist and represent individual biotic stations for one species. This is a requirement as the length distribution data used to calculate abundance for the super individuals requires length distribution data of this type.
+DataStorage:no.imr.stox.datastorage.SuperIndAbundanceDataStorage
+Output: SuperIndividuals
+
+[Function]
+Name: DATRASConvert
+Description: DATRAS conversion
+Class: no.imr.stox.functions.biotic.DATRASConvert
+Respondable:true
+Parameter: Name=BioticData, Alias=FishStations, Required=true, DataType=BioticData, Description=List of fish station
+DataStorage:no.imr.stox.datastorage.DATRASDataStorage
+Output: BioticData
+
+[Function]
+Name: DefineTemporal
+Description: Define temporal covariates for ECA cells
+Class: no.imr.stox.functions.processdata.DefineTemporal
+Respondable:true
+Parameter: Name=ProcessData, DataType=ProcessData, Description=The <I>ProcessData</I> parameter is used to identify the covariate for the CovariateType and Source given.
+Parameter: Name=SourceType, DataType=String, Values=Landing;Biotic, Description=The <I>SourceType</I> The type of source of the covariates defined.
+Parameter: Name=CovariateType, DefaultValue=Fixed, DataType=String, Values=Fixed;Random;Dependency, Description=The <I>CovariateDependenytype</I> The type of error structure dependencies <BR>Fixed: covariate will be treated as fixed effect.<BR>Random: covariate will be treated as random effect.<BR>Dependency: missing documentation
+Parameter: Name=ConditionalAutoRegression, DefaultValue=false, DataType=Boolean, ParentTag=CovariateType.Random, Description=The <I>ConditionalAutoRegression</I> if random covariates are correlated
+Parameter: Name=DefinitionMethod, DefaultValue=UseData, DataType=String, Values=Inherit;UseData;ResourceFile;UseProcessData, Description=The <I>DefinitionMethod</I> is how to define the coveriates
+Parameter: Name=LandingData, Required=false, DataType=LandingData, ParentTag=SourceType.Landing, Description=Landing data
+Parameter: Name=BioticData, Required=false, DataType=BioticData, ParentTag=SourceType.Biotic, Description=The <I>BioticData</I> parameter is used to specify which previous process has generated the <U>BioticData</U> input data.
+Parameter: Name=FileName, Required=false, DataType=String, ParentTag=DefinitionMethod.ResourceFile, Description=The <I>FileName</I> parameter is used to give the complete path including filename to the WKT strata system file to be used
+Parameter: Name=TimeInterval, Required=false, DataType=String, ParentTag=DefinitionMethod.UseData, Values=Year;Quarter;Month;Week;Period, Description=The time interval period for temporal covariates
+Parameter: Name=Seasonal, DefaultValue=false, DataType=Boolean, ParentTag=DefinitionMethod.UseData, Description=The <I>Seasonal</I> 
+Output: ProcessData
+
+[Function]
+Name: DefineGearFactor
+Alias: DefineGear
+Description: Define gear covariates for ECA cells. Reads mapping from gear codes in Landings or Biotic to the gear category wanted from resource file:
+Class: no.imr.stox.functions.processdata.DefineGearFactor
+Respondable:true
+Parameter: Name=ProcessData, DataType=ProcessData, Description=The <I>ProcessData</I> parameter is used to identify the covariate for the CovariateType and Source given.
+Parameter: Name=SourceType, DataType=String, Values=Landing;Biotic, Description=The <I>SourceType</I> The type of source of the covariates defined.
+Parameter: Name=CovariateType, DefaultValue=Fixed, DataType=String, Values=Fixed;Random;Dependency, Description=The <I>CovariateDependenytype</I> The type of error structure dependencies <BR>Fixed: covariate will be treated as fixed effect.<BR>Random: covariate will be treated as random effect.<BR>Dependency: missing documentation
+Parameter: Name=ConditionalAutoRegression, DefaultValue=false, DataType=Boolean, ParentTag=CovariateType.Random, Description=The <I>ConditionalAutoRegression</I> if random covariates are correlated
+Parameter: Name=DefinitionMethod, DefaultValue=UseProcessData, DataType=String, Values=InheritCovarId;ResourceFile;UseProcessData, Description=The <I>DefinitionMethod</I> is how to define the coveriates
+Parameter: Name=FileName, Required=false, DataType=String, ParentTag=DefinitionMethod.ResourceFile, Description=The <I>FileName</I> parameter is used to give the complete path including filename to the WKT strata system file to be used
+Output: ProcessData
+
+[Function]
+Name: DefineSpatial
+Description: Define spatial covariate for ECA cells, as a concatenation of var1 and var2. Must be chosen in correspondance with DefineStratumNeighbour.
+Class: no.imr.stox.functions.processdata.DefineSpatial
+Respondable:true
+Parameter: Name=ProcessData, DataType=ProcessData, Description=The <I>ProcessData</I> parameter is used to identify the covariate for the CovariateType and Source given.
+Parameter: Name=SourceType, DataType=String, Values=Landing;Biotic, Description=The <I>SourceType</I> The type of source of the covariates defined.
+Parameter: Name=CovariateType, DefaultValue=Fixed, DataType=String, Values=Fixed;Random;Dependency, Description=The <I>CovariateDependenytype</I> The type of error structure dependencies <BR>Fixed: covariate will be treated as fixed effect.<BR>Random: covariate will be treated as random effect.<BR>Dependency: missing documentation
+Parameter: Name=ConditionalAutoRegression, DefaultValue=false, DataType=Boolean, ParentTag=CovariateType.Random, Description=The <I>ConditionalAutoRegression</I> if random covariates are correlated
+Parameter: Name=DefinitionMethod, DefaultValue=UseData, DataType=String, Values=Inherit;UseData;UseProcessData, Description=The <I>DefinitionMethod</I> is how to define the coveriates
+Parameter: Name=LandingData, Required=false, DataType=LandingData, ParentTag=SourceType.Landing, Description=Landing data
+Parameter: Name=BioticData, Required=false, DataType=BioticData, ParentTag=SourceType.Biotic, Description=The <I>BioticData</I> parameter is used to specify which previous process has generated the <U>BioticData</U> input data.
+Parameter: Name=FileName, Required=false, DataType=String, ParentTag=DefinitionMethod.ResourceFile, Description=The <I>FileName</I> parameter is used to give the complete path including filename to the WKT strata system file to be used
+Parameter: Name=Var1, Required=false, DefaultValue=MainArea, DataType=String, ParentTag=DefinitionMethod.UseData, Values=None;Stratum;MainArea;Location;LandingSite, Description=The <I>dimension 1</I> in the spatial covariate
+Parameter: Name=Var2, Required=false, DefaultValue=Location, DataType=String, ParentTag=DefinitionMethod.UseData, Values=None;Stratum;MainArea;Location;LandingSite, Description=The <I>dimension 2</I> in the spatial covariate
+Output: ProcessData
+
+[Function]
+Name: DefineAgeErrorMatrix
+Description: Reads error matrix for age determination from the parameter FileName. This file should be a tab delimited file with probabilities of read age (row) given true age (column). Ages are given as first row and first column.
+Class: no.imr.stox.functions.processdata.DefineAgeErrorMatrix
+Parameter: Name=ProcessData, DataType=ProcessData, Description=The <I>ProcessData</I> parameter is used to identify the covariate for the CovariateType and Source given.
+Parameter: Name=DefinitionMethod, DefaultValue=ResourceFile, DataType=String, Values=ResourceFile;UseProcessData, Description=The <I>DefinitionMethod</I> is how to define the Age error matrix
+Parameter: Name=FileName, Required=false, DataType=String, ParentTag=DefinitionMethod.ResourceFile, Description=The <I>FileName</I> parameter is used to give the complete path including filename to the WKT strata system file to be used
+Output: ProcessData
+
+[Function]
+Name: DefineStratumNeighbour
+Description: Reads definition of neighbours strata from parameter FileName. Neighbour definition must be chosen in correspondance with DefineSpatialLanding and DefineSpatialBiotic. The file should be a tab delimited file with a column for each stratum, and a column with a comma-separated list of neighbouring strata. First row are column names.
+Class: no.imr.stox.functions.processdata.DefineStratumNeighbour
+Parameter: Name=ProcessData, DataType=ProcessData, Description=The <I>ProcessData</I> parameter is used to identify the covariate for the CovariateType and Source given.
+Parameter: Name=DefinitionMethod, DefaultValue=ResourceFile, DataType=String, Values=ResourceFile;UseProcessData, Description=The <I>DefinitionMethod</I> is how to define the Age error matrix
+Parameter: Name=FileName, Required=false, DataType=String, ParentTag=DefinitionMethod.ResourceFile, Description=The <I>FileName</I> parameter is used to give the complete path including filename to the WKT strata system file to be used
+Output: ProcessData
+
+[Function]
+Name: BioticCovData
+Description: Sum of landing weight by covariate temporal, gear and spatial
+Class: no.imr.stox.functions.individualdata.BioticCovData
+Parameter: Name=ProcessData, DataType=ProcessData, Description=The <I>ProcessData</I> parameter is used to identify the covariate for the CovariateType and Source given.
+Parameter: Name=BioticData, Required=false, DataType=BioticData, Description=The <I>BioticData</I> parameter is used to specify which previous process has generated the <U>BioticData</U> input data.
+DataStorage: no.imr.stox.datastorage.BioticCovDataStorage
+Output: BioticCovData
+
+[Function]
+Name: LandingCovData
+Description: Sum of landing weight by covariate temporal, gear and spatial
+Class: no.imr.stox.functions.landing.LandingCovData
+Parameter: Name=ProcessData, DataType=ProcessData, Description=The <I>ProcessData</I> parameter is used to identify the covariate for the CovariateType and Source given.
+Parameter: Name=LandingData, Required=false, DataType=LandingData, Description=Landing data
+DataStorage: no.imr.stox.datastorage.LandingCovDataStorage
+Output: LandingCovData
+
+[Function]
+Name: LandingWeightCovData
+Description: Sum of landing weight by covariate temporal, gear and spatial
+Class: no.imr.stox.functions.landing.LandingWeightCovData
+Parameter: Name=LandingCovData, Required=true, DataType=LandingCovData, Description=Landing data
+DataStorage: no.imr.stox.datastorage.LandingWeightCovDataStorage
+Output: LandingWeightCovData

@@ -1,0 +1,15 @@
+FAQ and todos
+1) Rectangle PUS
+   How to identify rectangles PSU?
+2) Standard reports
+   Which 4-5 standard reports to produce in AbundanceByPopParam?
+3) SA matrix
+   aggregate by using estimation layer matrix?
+   using estimation layer as channel layer key?
+4) Strata
+   Function for defining strata or main area
+   Clipping to smooth the strata edges by subjective ideas, ie.e coverage degree, depth contours, weather etc.
+5) Abundance individual 
+   If no individuals present at survey, create dummy individual with length group.
+6) Instrument people can allocate stations to transects and depth channels (Øyvind)
+

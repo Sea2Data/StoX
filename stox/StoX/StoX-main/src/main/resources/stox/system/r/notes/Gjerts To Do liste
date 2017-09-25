@@ -1,0 +1,52 @@
+Gjerts To Do liste:
+
+1. Generell kvalitetsjekk av funksjoner
+2. Slett unødvendige linjer
+3. Sett inn forklaring ved behov og sjekk in/out variabler (definisjoner)
+   OK. Gjør alle funksjoner kompatibel med roxygen2 (https://github.com/klutometis/roxygen#roxygen2); automatic R-package documentation
+4. Sett inn testfunksjon for å være sikker på at inndata er tilstrekkelig for bootstrap rutine
+    StoxAcoustic er rettet opp og skal virke som planlagt men det kan være lurt å legge inn en funksjon som tester datasettene  hvis weibull eller gamma blir valgt. Disse metodene setter visse krav til dataene og brukeren bør få en melding hvis disse ikke er oppfylt.
+    Sjekk i R på input data fra baseline. Gi fornuftige meldinger. Eksempel: At man har verdier per PSU og ikke per Stratum
+    skriv ut feilmelding hvis data ikke er tilstrekkelig
+    send feilrapport til StoX (tekstfil?)
+5. OK 1/10 Definer liste med vanlige aggregeringsformler (age, age+sex, length, etc.)
+6. Utført 25/9 (ekskludering flyttet til rapportfunksjonene) Ta hensyn til include/exclude in total (eksludere stratum i swept area rstox_sweptarea bootstrap fra prosess data excludeintotal flagg, se rstox_acoustic) 
+7. Utført 24/9 Imputeringsalgoritme (behandling av individ uten biologisk prøve utover lengde)
+    -Under uttesting 18/9
+    OK -Endre slik at kjente verdier beholdes 
+8. Sjekk areal funksjon (gArea må brukes)
+9. OK 25/9 Gjør om slik at det skrives/leses til/fra xml Ikke behov (skriving og lesing gjøres i Java)
+10. 1. versjon 1/10 RapportGenerering.r ?? (alternativ for høyoppløsning) tabell med median, 5th og 95th percentile basert på bootstrap
+11. 1. versjon 1/10 plotAbundanceByAge - (Til Gjert) mer generell . velge aggregerings parameter. Feks for lengdebaserte data. Dele opp i flere deler.
+    OK. Funksjon for utskriving av rapporter fra rstox må lages og figurfunksjon må gjøres mer generisk slik at samme funksjon kan brukes for bare lengdedata (arter uten aldersinformasjon). 
+12. OK 25/9 Bytt ut saveRImage med saveRList i bootstrap rutine; load([workspace]) overskriver alle funksjoner i nyere StoX versjoner
+13. Utført 18/9 Bytt figur fra png til tif. 
+14. Utført 23/9 Lag en egen funksjon for load(bootstrap*.rda) og la alle rapportfunksjoner referere til denne
+15. Summary table
+16. OK 6/11 Sort out4 i plotAbundance
+17. OK 6/11 Resample NASC, observerte verdier
+18. OK 6/11 Legge til 0 verdier hvis resultat for grupperingsvariabel mangler i bootstrap kjøring (påvirker out4 resultater) 
+
+
+
+Funksjonsmal for bruk dukumentasjon vha roxygen2:
+
+
+#*********************************************
+#' Header ----
+#'
+#' Description
+#'
+#' @param x Vector with data (input to function)
+#' @param y etc...
+#'
+#' @return What does the function return
+#'
+#' @examples
+#' test <- testfunction()
+#'
+#' @export
+testfunction <- function(input)
+{
+...
+}

@@ -1,0 +1,32 @@
+###############################################################
+# Release notes for Rstox version 1.2 (latest, 2016-04-12)    #
+# The package Rstox contains most of the functionality of     #
+#   the stock assesment utility StoX, which is an open source #
+#   approach to acoustic and swept area survey calculations.  #
+# Rstox is built under R version 3.2.3.                       #
+# Download Rstox from ftp://ftp.imr.no/StoX/Download/Rstox or #
+#   simply install by running the following commands in R:    #
+###############################################################
+
+# Install the packages that Rstox depends on. Note that this updates 
+#   all the specified packages to the latest (binary) version:
+install.packages(c("MASS", "data.table", "parallel", "rJava", "rgdal", "rgeos", "sp", "gdata"))
+
+# Install Rstox:
+install.packages("ftp://ftp.imr.no/StoX/Download/Rstox/Rstox.tar.gz", repos=NULL)
+
+# Also, create the test project:
+library(Rstox)
+createProject("Test_Rstox", acoustic=system.file("extdata", "Test_Rstox", package="Rstox"), ow=FALSE)
+
+
+# Updates in Rstox_1.2:
+
+# 1. Added the function baseline2eca(), which prepares the output from runBaseline
+# for use in the estimated catch by age (ECA) model, which is under development
+# as an R package.
+
+# 2. Fixed some minor bugs and cleaned up some inaccuracies in the code.
+
+
+

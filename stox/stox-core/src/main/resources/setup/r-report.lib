@@ -1,0 +1,24 @@
+[Function]
+Name: plotNASCDistribution
+Alias: plotSA;plotNASC
+Description: Generate NASC plot
+
+[Function]
+Name: plotAbundance
+Alias: plot.boot.abundance;plotAbundanceByAge
+Description: Generate bootstrap abundance plot with uncertainty
+Parameter: Name=grp1, Required=false, DefaultValue=age, DataType=String, Description=The dimension of (x axis)
+Parameter: Name=grp2, Required=false, DataType=String, Description=The dimension of grouping series
+Parameter: Name=numberscale, Alias=scale, Required=true, DataType=Integer, DefaultValue=1000000, Description=Number scale
+
+[Function]
+Name: getPlots
+Description: Get single plot or collection of plots specified by categories
+Parameter: Name=out, Required=false, DataType=String, DefaultValue=all, Description=Comma separated list of plot functions
+Parameter: Name=options, Required=false, DataType=String, Description=Semicolon separated list of name=value parameters to the plot functions, grp1='age'
+
+[Function]
+Name: getReports
+Description: Get single plot or collection of reports specified by categories
+Parameter: Name=out, Required=false, DataType=String, DefaultValue=all, Description=Comma separated list of report names
+Parameter: Name=options, Required=false, DataType=String, Description=Semicolon separated list of name=value sent in to the R report, grp1='age'

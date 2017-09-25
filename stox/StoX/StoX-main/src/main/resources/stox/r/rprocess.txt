@@ -1,0 +1,74 @@
+[Process set.boot.param]
+Function: set.boot.param
+Parameter: Name=projectName, Value=Tobis-2013842-test
+Parameter: Name=nB, Value=50
+Parameter: Name=seed, Value=TRUE
+#Output: RObject
+
+[Process rStoX.acquireModel]
+Function: rStoX.acquireModel
+Parameter: Name=set.boot.param.out, Value=Process(set.boot.param)
+
+[Process rStoX.runModel]
+Function: rStoX.runModel
+Parameter: Name=model, Value=Process(rStoX.acquireModel)
+#Output: No output
+
+
+[Process rstox.processdata.getmeanSA]
+Function: rstox.processdata.getmeanSA
+Parameter: Name=model, Value=Process(rStoX.acquireModel)
+#Output: RObject
+
+[Process rstox.processdata.getassignments]
+Function: rstox.processdata.getassignments
+Parameter: Name=model, Value=Process(rStoX.acquireModel)
+#Output: RObject
+
+[Process calc.sA.dist]
+Function: calc.sA.dist
+Parameter: Name=model, Value=Process(rStoX.acquireModel)
+Parameter: Name=msa, Value=Process(rstox.processdata.getmeanSA)
+Parameter: Name=sA.distr, Value=normal
+#Output: RObject
+
+[Process resample.sA]
+Function: resample.sA
+Parameter: Name=model, Value=Process(rStoX.acquireModel)
+Parameter: Name=ssa, Value=Process(calc.sA.dist)
+Parameter: Name=set.boot.param.out, Value=Process(set.boot.param)
+#Output: RObject
+
+[Process BootstrapTrawl]
+Function: BootstrapTrawl
+Parameter: Name=model, Value=Process(rStoX.acquireModel)
+Parameter: Name=asg, Value=Process(rstox.processdata.getassignments)
+Parameter: Name=msa, Value=Process(rstox.processdata.getmeanSA)
+Parameter: Name=ssa, Value=Process(calc.sA.dist)
+Parameter: Name=rsa, Value=Process(resample.sA)
+Parameter: Name=start.process, Value=TotalLengthDist
+Parameter: Name=end.process, Value=AbundanceByPopulationCategory
+Parameter: Name=set.boot.param.out, Value=Process(set.boot.param)
+#Output: RObject
+
+[Process saveRImage]
+Function: saveRImage
+Parameter: Name=model, Value=Process(rStoX.acquireModel)
+#Output: No output
+
+[Process plotSA]
+Function: plotSA
+Parameter: Name=model, Value=Process(rStoX.acquireModel)
+Parameter: Name=msa, Value=Process(rstox.processdata.getmeanSA)
+Parameter: Name=rsa, Value=Process(resample.sA)
+Parameter: Name=set.boot.param.out, Value=Process(set.boot.param)
+#Output: png-file
+
+[Process plot.boot.abundance]
+Function: plot.boot.abundance
+Parameter: Name=model, Value=Process(rStoX.acquireModel)
+Parameter: Name=BootstrapTrawl.out, Value=Process(BootstrapTrawl)
+Parameter: Name=set.boot.param.out, Value=Process(set.boot.param)
+Parameter: Name=scale, Value=1000000
+#Output: png-file
+

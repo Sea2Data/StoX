@@ -1,0 +1,87 @@
+[Datatype]
+Name: String
+Description: String data type
+
+[Datatype]
+Name: Integer
+Description: Integer data type
+
+[Datatype]
+Name: Double
+Description: Double data type
+
+[Datatype]
+Name: Boolean
+Description: Boolean data type
+
+[Datatype]
+Name: NASC
+Description: List of matrices NASC Values, sample size and distance.
+
+[Datatype]
+Name: LengthDist
+Description: Length distribution over observations.
+
+[Datatype]
+Name: Density
+Description: Density as numbers by sq.nm.
+
+[Datatype]
+Name: Abundance
+Description: Abundance as numbers of fish estimated
+
+[Datatype]
+Name: IndividualDataStations
+Description: Selection of stations with individual data.
+
+[Datatype]
+Name: IndividualData
+Description: Selection of individual data.
+
+[Datatype]
+Name: SuperIndividuals
+Description: List of super individuals representing abundance
+
+[Datatype]
+Name: PolygonArea
+Description: List of one matrix used for area in sq nautical miles.
+
+[Datatype]
+Name: ProcessData
+Description: List of matrices with manual things that cannot be reproduced automatically.
+
+[Datatype]
+Name: BioticData
+Description: List of fish stations with catchsamples and individuals
+
+[Datatype]
+Name: LandingData
+Description: List of sluttsedler with fiskelinjer
+
+[Datatype]
+Name: AcousticData
+Description: List of acoustic distances with NASC values
+
+[Datatype]
+Name: Reports
+Description: List of Reports of aggregated data
+
+[Datatype]
+Name: Matrix
+Description: A matrix with contents arranged in group, row, col and cell dimension
+
+[Datatype]
+Name: RObject
+Description: R object.
+
+[Datatype]
+Name: BioticCovData
+Description: Covariance biotic data
+
+[Datatype]
+Name: LandingCovData
+Description: Covariance landingdata
+
+[Datatype]
+Name: LandingWeightCovData
+Description: landing weight Covariance grouped weight

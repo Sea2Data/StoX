@@ -1,0 +1,7 @@
+x Rename MeanSA
+  Choose vertical channel thickness in aggregation as parameter to MeanSA
+  kode dokumentasjon i rstox.r
+  RTools lage pakke
+  StoX - legge prosjekt utenfor workspace.
+  jri r-java java-r
+  projections in java or r
