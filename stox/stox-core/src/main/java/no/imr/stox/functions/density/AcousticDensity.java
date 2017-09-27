@@ -117,7 +117,9 @@ public class AcousticDensity extends AbstractFunction {
                 String asgID = AbndEstProcessDataUtil.getSUAssignmentIDBySampleUnitAndEstimationLayer(pd, sampleUnit, estLayer, sampleUnitType);
 
                 if (asgID == null) {
-                    error += "\n" + getSampleUnitPath(pd, sampleUnit, sampleUnitType) + " have no assignments";
+                    if (sampleUnitType.equals(Functions.SAMPLEUNIT_PSU)) {
+                        error += "\n" + getSampleUnitPath(pd, sampleUnit, sampleUnitType) + " have no assignments";
+                    }
                     continue;
                 }
                 /*                MatrixBO basgm = bsAsg.getRowValueAsMatrix(asgID);
