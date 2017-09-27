@@ -31,3 +31,14 @@ vignettes/*.pdf
 # Temporary files created by R markdown
 *.utf8.md
 *.knit.md
+
+# maven output folders
+/target/
+/stox/stox-core/target/
+/stox/stox-util/target/
+/stox/stox-base/target/
+/stox/StoX/StoX-gt/target/
+/stox/StoX/branding/target/
+/stox/StoX/application/target/
+/stox/StoX/StoX-main/target/
+/stox/StoX/StoX-map/target/
