@@ -41,7 +41,7 @@ public class LengthDistMatrixStorage extends FileDataStorage {
         for (String species : ldMatrix.getData().getKeys()) {
             for (String observation : ldMatrix.getData().getSortedGroupRowKeys(species)) {
                 for (String lengthGroup : ldMatrix.getData().getSortedGroupRowCellKeys(species, observation)) {
-                    Double wCount = Calc.roundTo(ldMatrix.getData().getGroupRowCellValueAsDouble(species, observation, lengthGroup), 5);
+                    Double wCount = Calc.roundToWithTrailingZeros(ldMatrix.getData().getGroupRowCellValueAsDouble(species, observation, lengthGroup), 5);
                     ImrIO.write(wr, ExportUtil.carrageReturnLineFeed(ExportUtil.tabbed(species, observation, lengthGroup, lengthInterval, wCount, lDistType)));
                 }
             }

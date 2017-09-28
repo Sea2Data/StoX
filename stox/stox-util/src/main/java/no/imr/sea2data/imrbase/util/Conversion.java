@@ -6,6 +6,7 @@ import java.math.RoundingMode;
 import java.text.DecimalFormat;
 import java.text.DecimalFormatSymbols;
 import java.text.NumberFormat;
+import no.imr.sea2data.imrbase.math.Calc;
 
 /**
  *
@@ -318,29 +319,13 @@ public final class Conversion {
         if (value == null) {
             return "";
         }
-//        String s = String.format("%.18f", value);
-//        s = s.replace(',', '.');
-//        int idec = s.indexOf('.');
-//        if (idec == 1 && s.charAt(0) == '0' || idec == 2 && s.charAt(0) == '-' && s.charAt(1) == '0') {
-//            int n = 0;
-//            while (idec < s.length() - 1) {
-//                idec++;
-//                if (s.charAt(idec) != '0') {
-//                    break;
-//                }
-//                n++;
-//            }
-//            numdecimals += n;
-//        }
         String s = String.format("%." + numdecimals + "f", value);
         s = s.replace(',', '.');
-//        while (s.endsWith("0")) {
-//            s = (s.substring(0, s.length() - 1));
-//        }
-//        if (s.endsWith(".")) {
-//            s = (s.substring(0, s.length() - 1));
-//        }
         return s;
+    }
+
+    public static String formatDoubletoDecimalStringWithTrailingZeros(Double value, int numSignificantDigits) {
+        return formatDoubletoDecimalString(value, numSignificantDigits + Calc.getNumTrailingZeros(value));
     }
 
     /**

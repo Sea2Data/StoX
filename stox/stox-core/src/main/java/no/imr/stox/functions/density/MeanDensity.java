@@ -85,17 +85,27 @@ public class MeanDensity extends AbstractFunction {
                 for (String layer : densities.getData().getColKeys()) {
                     // Handle source data
                     MatrixBO densCell = (MatrixBO) densities.getData().getGroupRowColValueAsMatrix(specCat, sourceSU, layer);
-                    if (densCell == null) {
-                        result.getData().addGroupRowColCellValue(specCat, targetSU, layer, null, 0d);
-                        continue;
-                    }
-                    for (String lenGrp : densCell.getKeys()) {
-                        Double density = densCell.getValueAsDouble(lenGrp);
-                        Double densProportion = StoXMath.proportion(density, relWeight);
-                        if (densProportion != null && densProportion > 0d) {
-                            posSampleSize.setGroupRowColValue(specCat, sourceSU, layer, sampleSize);
+                    if (densCell != null) {
+                        for (String lenGrp : densCell.getKeys()) {
+                            Double density = densCell.getValueAsDouble(lenGrp);
+                            Double densProportion = StoXMath.proportion(density, relWeight);
+                            if (densProportion != null && densProportion > 0d) {
+                                posSampleSize.setGroupRowColValue(specCat, sourceSU, layer, sampleSize);
+                            }
+                            result.getData().addGroupRowColCellValue(specCat, targetSU, layer, lenGrp, densProportion);
                         }
-                        result.getData().addGroupRowColCellValue(specCat, targetSU, layer, lenGrp, densProportion);
+                    }
+                }
+            }
+        }
+        // Fill in empty sample units to make the matrix complete by al group dimensions
+        for (String sourceSU : targetMatrix.getRowKeys()) {
+            String targetSU = (String) targetMatrix.getRowValue(sourceSU);
+            for (String specCat : densities.getData().getKeys()) {
+                for (String layer : densities.getData().getColKeys()) {
+                    MatrixBO densCell = (MatrixBO) result.getData().getGroupRowColValueAsMatrix(specCat, targetSU, layer);
+                    if (densCell == null) {
+                        result.getData().setGroupRowColCellValue(specCat, targetSU, layer, null, null);
                     }
                 }
             }

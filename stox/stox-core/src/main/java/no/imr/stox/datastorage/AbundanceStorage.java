@@ -24,7 +24,7 @@ public class AbundanceStorage extends FileDataStorage {
         asTable((AbundanceMatrix) data, level, wr);
     }
 
-    public void asTable(AbundanceMatrix mtrx, Integer level, Writer wr){
+    public void asTable(AbundanceMatrix mtrx, Integer level, Writer wr) {
         //Matrix[GROUP~Species / ROW~SampleUnit / COL~Layer / CELL~LengthGroup / VAR~Density]
         String groupHdr = mtrx.getData().getMetaMatrix().getHeader(IMetaMatrix.GROUP);
         String rowHdr = mtrx.getSUHdr();
@@ -49,8 +49,8 @@ public class AbundanceStorage extends FileDataStorage {
                                 sampleUnitType, su,
                                 Conversion.formatDoubletoDecimalString(area, 3),
                                 estLayer, estLayerDef,
-                                lGrp, lengthInterval,
-                                Conversion.formatDoubletoDecimalString(value, 3)));
+                                lGrp, lGrp == null ? null : lengthInterval,
+                                Conversion.formatDoubletoDecimalStringWithTrailingZeros(value, 3)));
                         ImrIO.write(wr, s);
                     }
                 }

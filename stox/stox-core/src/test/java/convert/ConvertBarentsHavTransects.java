@@ -43,7 +43,7 @@ import org.junit.Test;
  *
  * @author aasmunds
  */
-//@Ignore
+@Ignore
 public class ConvertBarentsHavTransects {
 
     @Test
@@ -136,7 +136,10 @@ public class ConvertBarentsHavTransects {
                             String asgId = "" + i;
                             String psu = "T" + i;
                             String stratum = tr.getMissionStratumKey();
-
+                            if (!AbndEstProcessDataUtil.getStratumPolygons(pr.getProcessData()).getRowKeys().contains(stratum)) {
+                                //System.out.println("Year " + year + " Stratum " + stratum + " not found in process data");
+                                throw new RuntimeException("Stratum " + stratum + " not found in process data");
+                            }
                             String cruise = ycMap.get(tr.getShip());
                             Integer startLog = tr.getFrom();
                             Integer toLog = tr.getTo();

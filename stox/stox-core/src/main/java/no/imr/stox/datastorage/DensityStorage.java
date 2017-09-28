@@ -6,6 +6,7 @@
 package no.imr.stox.datastorage;
 
 import java.io.Writer;
+import java.math.BigDecimal;
 import no.imr.sea2data.imrbase.math.Calc;
 import no.imr.sea2data.imrbase.util.Conversion;
 import no.imr.stox.bo.VariableWithEstimationLayer;
@@ -52,12 +53,13 @@ public class DensityStorage extends FileDataStorage {
                     String estLayerDef = mtrx.getEstLayerDefMatrix() != null ? (String) mtrx.getEstLayerDefMatrix().getRowValue(estLayer) : null;
                     Integer posSampleSize = mtrx.getPosSampleSizeMatrix().getGroupRowColValueAsInteger(species, su, layerKey);
                     for (String lGrp : mtrx.getData().getSortedGroupRowColCellKeys(species, su, layerKey)) {
-                        Double value = Calc.roundTo(mtrx.getData().getGroupRowColCellValueAsDouble(species, su, layerKey, lGrp), 3);
+                        Double value = mtrx.getData().getGroupRowColCellValueAsDouble(species, su, layerKey, lGrp);
+                        //value = Calc.roundTo(value, tz + 3);
                         String s = ExportUtil.carrageReturnLineFeed(ExportUtil.tabbed(species,
                                 sampleUnitType, su, sampleSize, posSampleSize, Conversion.formatDoubletoDecimalString(distance, 3),
                                 layerType, layer, estLayer, estLayerDef,
-                                lGrp, lengthInterval,
-                                Conversion.formatDoubletoDecimalString(value, 3)));
+                                lGrp, lGrp == null ? null : lengthInterval,
+                                Conversion.formatDoubletoDecimalStringWithTrailingZeros(value, 3)));
                         ImrIO.write(wr, s);
                     }
                 }

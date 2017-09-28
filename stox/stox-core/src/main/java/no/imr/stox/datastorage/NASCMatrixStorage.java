@@ -45,7 +45,7 @@ public class NASCMatrixStorage extends FileDataStorage {
                 for (String layer : nascMatrix.getData().getSortedColKeys(acoCat, dist)) {
                     Double nascVal = nascMatrix.getData().getGroupRowColValueAsDouble(acoCat, dist, layer);
                     if(nascVal != null) {
-                        nascVal = Calc.roundTo(nascVal, 5);
+                        nascVal = Calc.roundToWithTrailingZeros(nascVal, 5);
                     }
                     String s = ExportUtil.carrageReturnLineFeed(ExportUtil.tabbed(acoCat, 
                             sampleUnitType, dist, sampleSize, posSampleSize, distance,

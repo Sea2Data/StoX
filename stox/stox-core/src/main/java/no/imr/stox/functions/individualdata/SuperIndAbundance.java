@@ -11,6 +11,7 @@ import no.imr.stox.bo.AbundanceMatrix;
 import no.imr.stox.bo.IndividualDataMatrix;
 import no.imr.stox.bo.LengthDistMatrix;
 import no.imr.sea2data.imrbase.matrix.MatrixBO;
+import no.imr.sea2data.imrbase.util.Conversion;
 import no.imr.stox.bo.ProcessDataBO;
 import no.imr.stox.functions.utils.AbndEstProcessDataUtil;
 import no.imr.stox.functions.utils.BioticUtils;
@@ -196,7 +197,7 @@ public class SuperIndAbundance extends AbstractFunction {
         resData.setRowColValue(indKey, Functions.COL_ABNDBYIND_ESTLAYER, estLayer);
         resData.setRowColValue(indKey, Functions.COL_ABNDBYIND_LENGRP, lenGrp);
         resData.setRowColValue(indKey, Functions.COL_ABNDBYIND_LENINTV, lenIntv);
-        resData.setRowColValue(indKey, Functions.COL_ABNDBYIND_ABUNDANCE, Calc.roundTo(abundance, 4));
+        resData.setRowColValue(indKey, Functions.COL_ABNDBYIND_ABUNDANCE, Calc.roundToWithTrailingZeros(abundance, 4));
     }
 
     /**

@@ -6,6 +6,7 @@ import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import no.imr.sea2data.imrbase.math.Calc;
 import no.imr.sea2data.imrbase.util.Conversion;
 import no.imr.sea2data.imrbase.util.IMRdate;
 import no.imr.sea2data.imrbase.util.ImrSort;
@@ -28,7 +29,7 @@ public class AbundanceByPopCategoryDataStorage extends FileDataStorage {
     @Override
     public <T> void asTable(T data, Integer level, Writer wr, Boolean withUnits) {
         ReportsBO reports = (ReportsBO) data;
-        if(reports == null) {
+        if (reports == null) {
             return;
         }
         String var = null;
@@ -71,7 +72,7 @@ public class AbundanceByPopCategoryDataStorage extends FileDataStorage {
                         if (!(var.equals("Abundance") || var.equals("Biomass"))) {
                             continue;
                         }
-                        int numDec = var.equals("Abundance") ? 0 : 1;
+                        int numDec = Calc.getNumTrailingZeros((Double) val) + 1 + (var.equals("Abundance") ? 0 : 1);
                         String str = String.format("%25." + numDec + "f", (Double) val).trim();
                         s = Math.max(s, str.length());
                     }
@@ -168,10 +169,10 @@ public class AbundanceByPopCategoryDataStorage extends FileDataStorage {
         String dim3Total = dim3Keys.size() == 1 ? dim3Keys.iterator().next() : "TOTAL";
         String dim4Total = dim3Keys.size() == 1 ? dim4Keys.iterator().next() : "TOTAL";
         String dim5Total = dim3Keys.size() == 1 ? dim5Keys.iterator().next() : "TOTAL";*/
-        
+
         String exclStrata = (String) mReport.getGroupRowColCellValue(
                 ReportUtil.heading("TOTAL", "TOTAL", "TOTAL", "TOTAL", "TOTAL"), "TOTAL", "TOTAL", "ExcludedStrata");
-        if(exclStrata != null) {
+        if (exclStrata != null) {
             exclStrata = WordUtils.wrap(exclStrata.replaceAll(",", ", "), 110, "\n      ", false);
         }
         for (String heading : groupKeys) {
@@ -281,10 +282,15 @@ public class AbundanceByPopCategoryDataStorage extends FileDataStorage {
 
     String formatNumber(MatrixBO cell, String var, int numDec, int width) {
         Double val = null;
+        int trailingZ = 0;
         if (cell != null) {
             val = cell.getValueAsDouble(var);
+            if (val != null && val != 0d) {
+                trailingZ = Calc.getNumTrailingZeros(val) + 1;
+            }
         }
-        return ReportUtil.formatNumber(val, numDec, width);
+
+        return ReportUtil.formatNumber(val, trailingZ + numDec, width);
     }
 
     private String getDimVal(String dimParam, String dimVal) {

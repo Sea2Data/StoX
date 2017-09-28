@@ -14,6 +14,11 @@
     </properties>
     <dependencies>
         <dependency>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
             <groupId>com.luckycatlabs</groupId>
             <artifactId>SunriseSunsetCalculator</artifactId>
             <version>1.2</version>
