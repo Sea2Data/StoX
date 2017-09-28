@@ -11,6 +11,7 @@ import no.imr.stox.bo.NASCMatrix;
 import no.imr.sea2data.imrbase.util.ExportUtil;
 import no.imr.stox.functions.utils.Functions;
 import no.imr.sea2data.imrbase.matrix.IMetaMatrix;
+import no.imr.sea2data.imrbase.util.Conversion;
 import no.imr.sea2data.imrbase.util.ImrIO;
 
 /**
@@ -48,7 +49,7 @@ public class NASCMatrixStorage extends FileDataStorage {
                         nascVal = Calc.roundToWithTrailingZeros(nascVal, 5);
                     }
                     String s = ExportUtil.carrageReturnLineFeed(ExportUtil.tabbed(acoCat, 
-                            sampleUnitType, dist, sampleSize, posSampleSize, distance,
+                            sampleUnitType, dist, sampleSize, posSampleSize, Conversion.formatDoubletoDecimalString(distance, 3),
                             layerType, layer, nascVal));
                     ImrIO.write(wr, s);
                 }

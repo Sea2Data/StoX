@@ -72,7 +72,8 @@ public class AbundanceByPopCategoryDataStorage extends FileDataStorage {
                         if (!(var.equals("Abundance") || var.equals("Biomass"))) {
                             continue;
                         }
-                        int numDec = Calc.getNumTrailingZeros((Double) val) + 1 + (var.equals("Abundance") ? 0 : 1);
+                        int trailingZ = Calc.getNumTrailingZeros((Double) val);
+                        int numDec = trailingZ + (trailingZ == 0 ? 0 : 1) + (var.equals("Abundance") ? 0 : 1);
                         String str = String.format("%25." + numDec + "f", (Double) val).trim();
                         s = Math.max(s, str.length());
                     }
@@ -286,11 +287,11 @@ public class AbundanceByPopCategoryDataStorage extends FileDataStorage {
         if (cell != null) {
             val = cell.getValueAsDouble(var);
             if (val != null && val != 0d) {
-                trailingZ = Calc.getNumTrailingZeros(val) + 1;
+                trailingZ = Calc.getNumTrailingZeros(val);
             }
         }
 
-        return ReportUtil.formatNumber(val, trailingZ + numDec, width);
+        return ReportUtil.formatNumber(val, trailingZ + numDec + (trailingZ == 0 ? 0 : 1), width);
     }
 
     private String getDimVal(String dimParam, String dimVal) {
