@@ -12,6 +12,7 @@
         <commons.collection.version>3.2.1</commons.collection.version>
         <commons.io.version>2.4</commons.io.version>
         <netbeans.version>RELEASE82</netbeans.version>
+        <brandingToken>stox</brandingToken>
     </properties>
     <repositories>
         <repository>

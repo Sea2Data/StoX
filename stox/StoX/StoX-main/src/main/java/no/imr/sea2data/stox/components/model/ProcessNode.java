@@ -76,9 +76,9 @@ public class ProcessNode extends AbstractNode {
 
     @Override
     public String getShortDescription() {
-        if (process.getMetaFunction() != null) {
+        /*if (process.getMetaFunction() != null) {
             return "<html><p width=\"350px\">" + process.getMetaFunction().getDescription() + "</p></html>";
-        }
+        }*/
         return super.getShortDescription(); //To change body of generated methods, choose Tools | Templates.
     }
 
@@ -143,12 +143,12 @@ public class ProcessNode extends AbstractNode {
 
     private void updateDisplayNameAndTooltip() {
         setDisplayName(process.getName());
-        String s = process.getName();
+        /*String s = process.getName();
         String err = process.validate();
         if (err != null) {
             s += ", " + err;
         }
-        setShortDescription(s);
+        setShortDescription(s);*/
     }
 
     public void update() {

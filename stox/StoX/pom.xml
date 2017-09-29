@@ -16,7 +16,6 @@
 
     <properties>
         <netbeans.version>RELEASE82</netbeans.version>
-        <brandingToken>stox</brandingToken>
         <geotoolkit.version>4.x-SNAPSHOT-20140228</geotoolkit.version>
     </properties>
 
