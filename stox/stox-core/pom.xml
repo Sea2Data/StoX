@@ -66,7 +66,6 @@
                 <configuration>
                     <archive>
                         <manifest>
-                            <!--<mainClass>no.imr.sea2data.beam.app.BeamBatch</mainClass>-->
                         </manifest>
                     </archive>
                     <descriptorRefs>
@@ -77,8 +76,8 @@
                 </configuration>
                 <executions>
                     <execution>
-                        <id>make-assembly</id> <!-- this is used for inheritance merges -->
-                        <phase>package</phase> <!-- bind to the packaging phase -->
+                        <!--<id>make-assembly</id> -->
+                        <phase>install</phase> 
                         <goals>
                             <goal>single</goal>
                         </goals>
