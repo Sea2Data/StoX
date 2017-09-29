@@ -153,7 +153,6 @@
     <modules>
         <module>branding</module>
         <module>application</module>
-        <module>StoX-gt</module>
         <module>StoX-main</module>
         <module>StoX-map</module>
     </modules>
