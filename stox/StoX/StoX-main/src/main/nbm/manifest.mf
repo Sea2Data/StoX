@@ -1,5 +1,0 @@
-Manifest-Version: 1.0
-OpenIDE-Module-Localizing-Bundle: no/imr/sea2data/stox/main/Bundle.properties
-OpenIDE-Module-Install: no/imr/sea2data/stox/Installer.class
-OpenIDE-Module-Layer: no/imr/sea2data/stox/layer.xml
-OpenIDE-Module-Requires: org.openide.windows.WindowManager

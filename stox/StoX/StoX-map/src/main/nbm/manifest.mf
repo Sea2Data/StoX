@@ -1,4 +1,0 @@
-Manifest-Version: 1.0
-OpenIDE-Module-Localizing-Bundle: no/imr/sea2data/stox/map/Bundle.properties
-OpenIDE-Module-Requires: org.openide.windows.WindowManager
-
