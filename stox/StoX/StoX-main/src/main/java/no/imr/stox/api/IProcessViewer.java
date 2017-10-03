@@ -15,7 +15,7 @@ import no.imr.stox.model.IProcess;
 public interface IProcessViewer {
 
     public void openProcess(IProcess p, boolean activate);
-
+    public void closeTab(int tab);
     public void setTabbedPane(JTabbedPane jTabbedPane1);
     public void clear();
 }

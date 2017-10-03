@@ -43,6 +43,10 @@ public class AcousticDensity extends AbstractFunction {
         Double d = (Double) input.get(Functions.PM_ACOUSTICDENSITY_D);
         // Acoustic data used in channel to depth calculation (formula with upper int.dep. and pel.thickness)
         List<DistanceBO> distances = (List<DistanceBO>) input.get(Functions.PM_ACOUSTICDENSITY_ACOUSTICDATA);
+        if (d != null && distances == null) {
+            logger.error("AcousticDensity is blank when d is set", null);
+            return null;
+        }
         // totLengthDist = Matrix[GROUP~Species / ROW~Assignment / CELL~LengthGroup / VAR~WeightedCount]
         LengthDistMatrix totLengthDist = (LengthDistMatrix) input.get(Functions.PM_ACOUSTICDENSITY_LENGTHDIST);
         // NASCMatrix = Matrix[ROW~Distance / COL~Layer / VAR~NASC]
@@ -62,18 +66,33 @@ public class AcousticDensity extends AbstractFunction {
             logger.error("NASC should contain one and only one acoustic category.", null);
         }
         ProcessDataBO pd = (ProcessDataBO) input.get(Functions.PM_ACOUSTICDENSITY_PROCESSDATA);
+        String layerTypePd = (String) AbndEstProcessDataUtil.getAssignmentResolutions(pd).getRowValue(Functions.RES_LAYERTYPE);
         String sampleUnitType = (String) nascMatrix.getResolutionMatrix().getRowValue(Functions.RES_SAMPLEUNITTYPE);//input.get(Functions.PM_DENSITY_SAMPLEUNITTYPE);
-        String layerType = (String) nascMatrix.getResolutionMatrix().getRowValue(Functions.RES_LAYERTYPE);
+        String layerTypeNASC = (String) nascMatrix.getResolutionMatrix().getRowValue(Functions.RES_LAYERTYPE);
         // Set how to translate the SampleUnit in the result, i.e labels in csv outpur
-        if (sampleUnitType == null || layerType == null) {
+        if (sampleUnitType == null) {
+            logger.error("Missing NASC sampleunit", null);
             return null;
         }
-        if (d != null && d != 0d && !layerType.equals(Functions.LAYERTYPE_PCHANNEL)) {
-            logger.log("Depth dependent target strength cannot be calculated for the layer type " + layerType
+        if (layerTypeNASC == null) {
+            logger.error("Missing NASC layer type", null);
+            return null;
+        }
+        if (layerTypePd == null) {
+            logger.error("Missing Assignment layer type", null);
+            return null;
+        }
+        if (!layerTypeNASC.equals(layerTypePd)) {
+            logger.error("Different layer type for NASC input data and assignment resolution such as NASC LayerType and BioStationAssignment EstLayers", null);
+            return null;
+        }
+        if (d != null && d != 0d && !layerTypeNASC.equals(Functions.LAYERTYPE_PCHANNEL)) {
+            logger.log("Depth dependent target strength cannot be calculated for the layer type " + layerTypeNASC
                     + ". Constant d=" + d + " will be ignored.");
         }
         if (!AbndEstProcessDataUtil.isResolutionCompatibleWithSUAssignment(pd, nascMatrix.getResolutionMatrix())) {
             logger.error("NASC resolution is not compatible with the process data resolution.", null);
+            return null;
         }
         MatrixBO sampleUnitAssignment = AbndEstProcessDataUtil.getSUAssignments(pd);
         // Check input sources before calculation
@@ -83,8 +102,8 @@ public class AcousticDensity extends AbstractFunction {
         // The following iterates dimensions GROUP, COL, ROW and CELL according to the function diagram from Atle.
         DensityMatrix result = new DensityMatrix();
         // Define resolution:
-        result.getResolutionMatrix().setRowValue(Functions.RES_LAYERTYPE, layerType);
-        Boolean asPChannel = layerType.equals(Functions.LAYERTYPE_PCHANNEL);
+        result.getResolutionMatrix().setRowValue(Functions.RES_LAYERTYPE, layerTypeNASC);
+        Boolean asPChannel = layerTypeNASC.equals(Functions.LAYERTYPE_PCHANNEL);
         result.getResolutionMatrix().setRowValue(Functions.RES_SAMPLEUNITTYPE, sampleUnitType);
         Double lengthInterval = totLengthDist.getResolutionMatrix().getRowValueAsDouble(Functions.RES_LENGTHINTERVAL);
         result.getResolutionMatrix().setRowValue(Functions.RES_LENGTHINTERVAL, lengthInterval);
@@ -184,8 +203,6 @@ public class AcousticDensity extends AbstractFunction {
      */
     DistanceBO getDepthRepresentativeDistance(ProcessDataBO pd, List<DistanceBO> distances, String sampleUnitType, String sampleUnit) {
         //Set<Double> upperIntpDep = new HashSet<>();
-        Set<Double> pelChThickness = new HashSet<>();
-        DistanceBO result = null;
         List<String> EDSUs = new ArrayList<>();
         switch (sampleUnitType) {
             case Functions.SAMPLEUNIT_EDSU:
@@ -199,22 +216,10 @@ public class AcousticDensity extends AbstractFunction {
         }
         for (DistanceBO d : distances) {
             if (EDSUs.contains(d.getKey())) {
-                result = d;
-                pelChThickness.add(d.getPel_ch_thickness());
-                /*for (FrequencyBO f : d.getFrequencies()) {
-                 upperIntpDep.add(f.getUpper_interpret_depth());
-                 break;
-                 }*/
-                if (EDSUs.size() == 1) {
-                    break;
-                }
+                return d;
             }
         }
-        if (/*upperIntpDep.size() != 1 || */pelChThickness.size() != 1) {
-            // Sample unit have no uniquely defined upper interpret dep  / pelchthickness
-            return null;
-        }
-        return result;
+        return null;
     }
 
 }

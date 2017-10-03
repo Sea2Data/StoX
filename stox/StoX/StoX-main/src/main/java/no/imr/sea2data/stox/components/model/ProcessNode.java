@@ -11,6 +11,7 @@ import javax.swing.GrayFilter;
 import no.imr.sea2data.guibase.utils.IMRtooltip;
 import no.imr.sea2data.imrbase.util.Conversion;
 import no.imr.sea2data.stox.actions.ActionPopup;
+import no.imr.sea2data.stox.editor.CatchabilityPropertyEditor;
 import no.imr.sea2data.stox.editor.ProjectFileNameEditor;
 import no.imr.sea2data.stox.editor.ListPropertyEditor;
 import no.imr.sea2data.stox.editor.SpeciesTSPropertyEditor;
@@ -21,8 +22,7 @@ import no.imr.stox.functions.utils.ProjectUtils;
 import no.imr.stox.library.IMetaFunction;
 import no.imr.stox.library.IMetaParameter;
 import no.imr.stox.model.IModel;
-import no.imr.stox.model.IProcess;
-import static no.imr.stox.model.Process.PROCESS_START_LITERAL;
+import no.imr.stox.model.IProcess; 
 import no.imr.stox.model.RModel;
 import org.openide.actions.DeleteAction;
 import org.openide.actions.MoveDownAction;
@@ -264,6 +264,8 @@ public class ProcessNode extends AbstractNode {
         public PropertyEditor getPropertyEditor() {
             if (mp.getMetaFunction().getName().equals(Functions.FN_SPLITNASC) && mp.getName().equals(Functions.PM_SPLITNASC_SPECIESTS)) {
                 return new SpeciesTSPropertyEditor((String) process.getActualValue(Functions.PM_SPLITNASC_SPECIESTS));
+            } else if (mp.getMetaFunction().getName().equals(Functions.FN_CATCHABILITY) && mp.getName().equals(Functions.PM_CATCHABILITY_TABLE)) {
+                return new CatchabilityPropertyEditor((String) process.getActualValue(Functions.PM_CATCHABILITY_TABLE));
             }
             if (mp.getName().toLowerCase().startsWith("filename")) {
                 String defPath = process.getModel().getProject().getProjectFolder() + "/"
@@ -404,7 +406,7 @@ public class ProcessNode extends AbstractNode {
                     for (IMetaParameter mp : p.getMetaFunction().getMetaParameters()) {
                         String pn = p.getProcessNameFromParameter(mp);
                         if (pn != null && pn.equalsIgnoreCase(sourceName)) {
-                            p.setValue(mp, PROCESS_START_LITERAL + newProcessRef + ")");
+                            p.setValue(mp, no.imr.stox.model.Process.PROCESS_START_LITERAL + newProcessRef + ")"); 
                         }
                     }
                 }

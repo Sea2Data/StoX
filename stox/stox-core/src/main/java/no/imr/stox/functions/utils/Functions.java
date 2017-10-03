@@ -227,6 +227,7 @@ public final class Functions {
     public static final String PM_CATCHABILITY_BETA = "Beta";
     public static final String PM_CATCHABILITY_LMIN = "LMin";
     public static final String PM_CATCHABILITY_LMAX = "LMax";
+    public static final String PM_CATCHABILITY_TABLE = "Table";
 
     public static final String FN_DEFINEACOUSTICTRANSECT = "DefineAcousticTransect";
     public static final String PM_DEFINEACOUSTICTRANSECT_PROCESSDATA = "ProcessData";

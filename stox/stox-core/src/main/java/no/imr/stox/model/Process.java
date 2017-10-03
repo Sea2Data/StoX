@@ -44,6 +44,7 @@ public final class Process implements IProcess {
     public static IProcess createProcess(IModel model, String processName) {
         IProcess process = new Process(model);
         process.setProcessName(processName);
+        process.setRespondInGUI(true); // new processes responds in gui by default
         // Try to find a library function that match the process name and use it as default meta function
         IMetaFunction fnc = model.getLibrary().findMetaFunction(processName);
         if (fnc != null) {
@@ -62,7 +63,7 @@ public final class Process implements IProcess {
         this.processName = processName;
     }
 
-    public static final String PROCESS_START_LITERAL = "Process(";
+    public static final String PROCESS_START_LITERAL = "Process("; 
 
     /**
      * Get input values where referenced datastorage output object from Source
@@ -436,11 +437,9 @@ public final class Process implements IProcess {
 
     @Override
     public IProcess setRespondInGUI(Boolean respondInGUI) {
-        if (metaFunction == null || !metaFunction.isRespondable()) {
-            return this;
-        }
-        if (!respondInGUI.equals(this.respondInGUI)) {
-            this.respondInGUI = respondInGUI;
+        this.respondInGUI = respondInGUI;
+        if (!respondInGUI.equals(this.respondInGUI) && metaFunction != null && !metaFunction.isRespondable()) {
+            // Fire response change
             if (getModel().getModellisteners() != null) {
                 getModel().getModellisteners().stream().forEach((ml) -> {
                     ml.onProcessChanged(this);

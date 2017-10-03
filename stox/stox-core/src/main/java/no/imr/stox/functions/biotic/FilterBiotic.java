@@ -61,8 +61,8 @@ public class FilterBiotic extends AbstractFunction {
         engine.setSilent(false);
         Expression stationExpression = engine.createExpression(stationExpr);
         Expression catchExpression = engine.createExpression(catchExpr.toLowerCase()); // species incasesensitive
-        Expression sampleExpression = engine.createExpression(sampleExpr);
-        Expression individualExpression = engine.createExpression(individualExpr);
+        Expression sampleExpression = engine.createExpression(sampleExpr.toLowerCase());
+        Expression individualExpression = engine.createExpression(individualExpr.toLowerCase());
         JexlContext ctx = new MapContext();
         if(Functions.XMLDATA) {
             

@@ -5,7 +5,9 @@
  */
 package no.imr.stox.functions.biotic;
 
+import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import no.imr.sea2data.imrbase.math.ImrMath;
 import no.imr.sea2data.imrbase.matrix.MatrixBO;
 import no.imr.sea2data.imrbase.util.Conversion;
@@ -33,6 +35,8 @@ public class Catchability extends AbstractFunction {
             logger.error("LengthDist parameter must have LengthDistType.", null);
             return null;
         }
+        String table = (String) input.get(Functions.PM_CATCHABILITY_TABLE);
+        MatrixBO tableM = getTable(table, lengthDistMatrix.getData().getKeys());
         LengthDistMatrix result = new LengthDistMatrix();
         String catchabilityMethod = (String) input.get(Functions.PM_CATCHABILITY_CATCHABILITYMETHOD);
         Double lenInterval = lengthDistMatrix.getResolutionMatrix().getRowValueAsDouble(Functions.RES_LENGTHINTERVAL);
@@ -57,18 +61,27 @@ public class Catchability extends AbstractFunction {
         }
 
         result.getResolutionMatrix().setRowValue(Functions.RES_LENGTHDISTTYPE, lenDistTypeOut);
-        Double alpha = (Double) input.get(Functions.PM_CATCHABILITY_ALPHA);
-        Double beta = (Double) input.get(Functions.PM_CATCHABILITY_BETA);
-        Double lmin = (Double) input.get(Functions.PM_CATCHABILITY_LMIN);
-        Double lmax = (Double) input.get(Functions.PM_CATCHABILITY_LMAX);
-        switch (catchabilityMethod) {
-            case Functions.CATCHABILITYMETHOD_LENGTHDEPENDENTSWEEPWIDTH:
-            case Functions.CATCHABILITYMETHOD_LENGTHDEPENDENTSELECTIVITY:
-                if (alpha == null || beta == null || lmin == null || lmax == null) {
-                    logger.error("Parameters alpha, beta, lmin, lmax must have a value.", null);
-                }
-        }
         for (String specCat : lengthDist.getKeys()) {
+            MatrixBO m = null;
+            Double alpha = null;
+            Double beta = null;
+            Double lmin = null;
+            Double lmax = null;
+            switch (catchabilityMethod) {
+                case Functions.CATCHABILITYMETHOD_LENGTHDEPENDENTSWEEPWIDTH:
+                case Functions.CATCHABILITYMETHOD_LENGTHDEPENDENTSELECTIVITY: {
+                    m = tableM.getRowValueAsMatrix(specCat);
+                    if (m != null) {
+                        alpha = m.getValueAsDouble("alpha");
+                        beta = m.getValueAsDouble("beta");
+                        lmin = m.getValueAsDouble("lmin");
+                        lmax = m.getValueAsDouble("lmax");
+                        if (alpha == null || beta == null || lmin == null || lmax == null) {
+                            logger.error("Parameters alpha, beta, lmin, lmax must have a value.", null);
+                        }
+                    }
+                }
+            }
             for (String obsKey : lengthDist.getGroupRowKeys(specCat)) {
                 //FishstationBO fs = BioticUtils.findStation(fishStations, obsKey);
                 MatrixBO obs = (MatrixBO) lengthDist.getGroupRowValue(specCat, obsKey);
@@ -82,31 +95,69 @@ public class Catchability extends AbstractFunction {
                     switch (catchabilityMethod) {
                         case Functions.CATCHABILITYMETHOD_LENGTHDEPENDENTSWEEPWIDTH:
                         case Functions.CATCHABILITYMETHOD_LENGTHDEPENDENTSELECTIVITY:
-                            Double l = length < lmin ? lmin : length > lmax ? lmax : length;
-                            switch (catchabilityMethod) {
-                                case Functions.CATCHABILITYMETHOD_LENGTHDEPENDENTSWEEPWIDTH:
-                                    // Implement Formula according to IMR/PINRO Joint Report 2014(2)
-                                    //        alpha beta lmin lmax
-                                    // Cod     5.91 0.43 15 cm 62 cm
-                                    // Haddock 2.08 0.75 15 cm 48 cm
-                                    Double sweepWidthInM = alpha * Math.pow(l, beta);
-                                    Double sweepWidthNM = ImrMath.safeDivide(sweepWidthInM, 1852.0);
-                                    //Double sweptArea = StoXMath.getSweptArea(fs.getDistance(), sweepWidthInM);
-                                    adjFac = ImrMath.safeDivide(1d, sweepWidthNM);
-                                    break;
-                                case Functions.CATCHABILITYMETHOD_LENGTHDEPENDENTSELECTIVITY:
-                                    // Implement Formula according to IMR/PINRO Joint Report 2014(2)
-                                    //        alpha beta lmin lmax
-                                    // Cod     5.91 0.43 15 cm 62 cm
-                                    // Haddock 2.08 0.75 15 cm 48 cm
-                                    adjFac = alpha * Math.exp(beta * l);
+                            if (m != null) {
+                                Double l = length < lmin ? lmin : length > lmax ? lmax : length;
+                                switch (catchabilityMethod) {
+                                    case Functions.CATCHABILITYMETHOD_LENGTHDEPENDENTSWEEPWIDTH:
+                                        // Implement Formula according to IMR/PINRO Joint Report 2014(2)
+                                        //        alpha beta lmin lmax
+                                        // Cod     5.91 0.43 15 cm 62 cm
+                                        // Haddock 2.08 0.75 15 cm 48 cm
+                                        Double sweepWidthInM = alpha * Math.pow(l, beta);
+                                        Double sweepWidthNM = ImrMath.safeDivide(sweepWidthInM, 1852.0);
+                                        //Double sweptArea = StoXMath.getSweptArea(fs.getDistance(), sweepWidthInM);
+                                        adjFac = ImrMath.safeDivide(1d, sweepWidthNM);
+                                        break;
+                                    case Functions.CATCHABILITYMETHOD_LENGTHDEPENDENTSELECTIVITY:
+                                        // Implement Formula according to IMR/PINRO Joint Report 2014(2)
+                                        //        alpha beta lmin lmax
+                                        // Cod     5.91 0.43 15 cm 62 cm
+                                        // Haddock 2.08 0.75 15 cm 48 cm
+                                        adjFac = alpha * Math.exp(beta * l);
+                                }
                             }
                             adjValue = ImrMath.safeMult(value, adjFac);
                     }
-                    result.getData().addGroupRowCellValue(specCat, obsKey, lenGrp, adjValue);
+                    if (adjValue != null) {
+                        result.getData().addGroupRowCellValue(specCat, obsKey, lenGrp, adjValue);
+                    }
                 }
             }
         }
         return result;
+    }
+
+    private MatrixBO getTable(String table, List<String> specKeys) {
+
+        MatrixBO res = new MatrixBO();
+        if (table != null) {
+            String lines[] = table.split("/");
+            for (int row = 0; row < lines.length; row++) {
+                String line = lines[row];
+                if (line.isEmpty()) {
+                    continue;
+                }
+                String cells[] = line.split(";");
+                String specCat = cells[0];
+                if (specCat.equals("-") && specKeys.size() == 1 && lines.length == 1) {
+                    // Special case where we have only one species
+                    specCat = specKeys.get(0);
+                } else {
+                    // Wrap the spec cat to same case used by total length dist
+                    Optional<String> opt = specKeys.stream().filter(s -> s.equalsIgnoreCase(cells[0])).findFirst();
+                    specCat = opt.isPresent() ? opt.get() : specCat;
+                }
+                Double alpha = Conversion.safeStringtoDoubleNULL(cells[1]);
+                Double beta = Conversion.safeStringtoDoubleNULL(cells[2]);
+                Double lmin = Conversion.safeStringtoDoubleNULL(cells[3]);
+                Double lmax = Conversion.safeStringtoDoubleNULL(cells[4]);
+                res.setRowColValue(specCat, "SpecCat", specCat);
+                res.setRowColValue(specCat, "alpha", alpha);
+                res.setRowColValue(specCat, "beta", beta);
+                res.setRowColValue(specCat, "lmin", lmin);
+                res.setRowColValue(specCat, "lmax", lmax);
+            }
+        }
+        return res;
     }
 }

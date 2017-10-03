@@ -88,13 +88,12 @@ public final class FilterUtils {
                 context.set("period", period);
             }
         } else if (o instanceof CatchBO) {
-
             CatchBO cs = (CatchBO) o;
-            context.set("species", cs.getSpecies() != null ? cs.getSpecies().toLowerCase() : null);
-            context.set("noname", cs.getNoname() != null ? cs.getNoname().toLowerCase() : null);
-            context.set("aphia", cs.getAphia());
+            addCatchFilter(context, cs);
         } else if (o instanceof SampleBO) {
             SampleBO cs = (SampleBO) o;
+            CatchBO css = cs.getCatchBO();
+            addCatchFilter(context, css);
             context.set("samplenumber", cs.getSampleNumber());
             context.set("sampletype", cs.getSampletype());
             context.set("group", cs.getGroup());
@@ -115,6 +114,10 @@ public final class FilterUtils {
             context.set("comment", cs.getComment());
         } else if (o instanceof IndividualBO) {
             IndividualBO ii = (IndividualBO) o;
+            if (ii.getSample() != null) {
+                CatchBO cs = ii.getSample().getCatchBO();
+                addCatchFilter(context, cs);
+            }
             context.set("no", ii.getNo());
             context.set("weightmethod", ii.getWeightMethod());
             context.set("weight", ii.getWeight());
@@ -146,7 +149,7 @@ public final class FilterUtils {
             context.set("readability", ii.getReadability());
             context.set("otolithtype", ii.getOtolithType());
             context.set("otolithedge", ii.getOtolithEdge());
-            context.set("otolithcebtre", ii.getOtolithCentre());
+            context.set("otolithcentre", ii.getOtolithCentre());
             context.set("calibration", ii.getCalibration());
         } else if (o instanceof DistanceBO) {
             DistanceBO d = (DistanceBO) o;
@@ -242,7 +245,7 @@ public final class FilterUtils {
             1032 SEI    
             1038 KOLMULE
             2013 MAKRELL
-            */
+             */
             context.set("konservering", fl.getKonservering());
             context.set("tilstand", fl.getTilstand());
             context.set("kvalitet", fl.getKvalitet());
@@ -251,6 +254,7 @@ public final class FilterUtils {
             context.set("rundvekt", fl.getRundVekt());
         }
     }
+
     /*public static List<Object> copyBOList(List<Object> list, Object parent) {
         List li = new ArrayList<>();
         for (Object o : list) {
@@ -286,4 +290,12 @@ public final class FilterUtils {
         }
         return li;
     }*/
+    private static void addCatchFilter(JexlContext context, CatchBO cs) {
+        if (cs == null) {
+            return;
+        }
+        context.set("species", cs.getSpecies() != null ? cs.getSpecies().toLowerCase() : null);
+        context.set("noname", cs.getNoname() != null ? cs.getNoname().toLowerCase() : null);
+        context.set("aphia", cs.getAphia());
+    }
 }

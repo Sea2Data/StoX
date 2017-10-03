@@ -196,7 +196,7 @@ public final class OutputTopComponent extends TopComponent {
                     JPopupMenu popup = new JPopupMenu();
                     addMenuItem(popup, "Close", (ActionEvent ev) -> {
                         if (jTabbedPane1.getSelectedIndex() >= 0) {
-                            jTabbedPane1.removeTabAt(jTabbedPane1.getSelectedIndex());
+                            pv.closeTab(jTabbedPane1.getSelectedIndex());
                         }
                     });
                     popup.show(jTabbedPane1, e.getX(), e.getY());

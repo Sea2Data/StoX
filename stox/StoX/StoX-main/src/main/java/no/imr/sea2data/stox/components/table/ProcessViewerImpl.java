@@ -91,4 +91,16 @@ public class ProcessViewerImpl implements IProcessViewer {
         tabbedPane.removeAll();
         views.clear();
     }
+
+    @Override
+    public void closeTab(int tab) {
+        if (tab <= tabbedPane.getTabCount() - 1) {
+            OutputPanel panel = (OutputPanel) tabbedPane.getComponentAt(tab);
+            IProcess p = panel.getProcess();
+            if (p != null) {
+                views.remove(p.getProcessName());
+            }
+            tabbedPane.removeTabAt(tabbedPane.getSelectedIndex());
+        }
+    }
 }

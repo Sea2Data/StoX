@@ -47,6 +47,19 @@ public class BioStationAssignment extends AbstractFunction {
         MatrixBO estLayer = AbndEstParamUtil.getEstLayerMatrixFromEstLayerDef(estLayerDef);
         // Transfer estimation layer table to process data as transient table available for pickup from later processes
         pd.getMatrices().put(Functions.TABLE_ESTLAYERDEF, estLayer);
+        // Work on PSU Watercolumn:
+        AbndEstProcessDataUtil.setAssignmentResolution(pd, Functions.SAMPLEUNIT_PSU);
+        if (estLayerDef != null) {
+            String layerType = Functions.LAYERTYPE_PCHANNEL;
+            if (estLayerDef.contains(Functions.WATERCOLUMN_PELBOT)) {
+                layerType = Functions.LAYERTYPE_WATERCOLUMN;
+            } else if (estLayerDef.contains(Functions.DEPTHLAYER_PEL) || estLayerDef.contains(Functions.DEPTHLAYER_BOT)) {
+                layerType = Functions.LAYERTYPE_DEPTHLAYER;
+            } else if (estLayerDef.isEmpty()) {
+                layerType = Functions.LAYERTYPE_WATERCOLUMN;
+            }
+            AbndEstProcessDataUtil.getAssignmentResolutions(pd).setRowValue(Functions.RES_LAYERTYPE, layerType);
+        }
         if (!useExisting) {
 
             if (byRadius) {
@@ -57,8 +70,6 @@ public class BioStationAssignment extends AbstractFunction {
                     logger.error("Missing parameter AcousticData", null);
                 }
             }
-            // Work on PSU Watercolumn:
-            AbndEstProcessDataUtil.setAssignmentResolution(pd, Functions.SAMPLEUNIT_PSU);
             // Clear trawl and acoustic assignments
             // trawlAsg = Matrix[ROW~Assignment / COL~Station / VAR~StationWeight]
             // acoAsg = Matrix[ROW~Distance / COL~Layer / VAR~Assignment]
