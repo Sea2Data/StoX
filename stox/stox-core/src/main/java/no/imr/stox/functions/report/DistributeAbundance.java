@@ -9,6 +9,8 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.Random;
+import java.util.function.Function;
+import java.util.stream.Collectors;
 import no.imr.sea2data.imrbase.matrix.MatrixBO;
 import no.imr.stox.functions.utils.Functions;
 
@@ -36,82 +38,95 @@ public class DistributeAbundance {
      * @param abnd Abundance matrix with individual data
      * @param seed
      */
-    public static void distributeAbundance(MatrixBO abnd, Integer seed) {
-        List<MatrixBO> abndDistrKnown = new ArrayList<>();
-        List<String> abndDistrUnknown = new ArrayList<>();
-        String knownCriteriaVar = Functions.COL_IND_AGE;
-        Collection<String> abndRowKeys = abnd.getRowKeys();
-        // Set the random generator
-        Random r = new Random();
-        if (seed != null) {
-            r.setSeed(Math.abs(seed)); // Reproducability
-        }
-        for (String rowKey : abndRowKeys) {
-            MatrixBO row = abnd.getRowValueAsMatrix(rowKey);
-            Object age = row.getValue(knownCriteriaVar);
-            if (age == null) {
-                abndDistrUnknown.add(rowKey);
-            } else {
-                abndDistrKnown.add(row);
-            }
-        }
-        System.out.println("Data have " + abndDistrKnown.size() + " aged individuals.");
-        System.out.println("Data have " + abndDistrUnknown.size() + " length sampled individuals without known age.");
+    private static final int MAXLEVELS = 3;
+    private static final String KNOWNCRITERIAVAR = Functions.COL_IND_AGE;
 
-        int[] countImpLevels = new int[3];
-        int[] missingImputes = new int[1];
-        missingImputes[0] = 0;
-        for (int i = 0; i < countImpLevels.length; i++) {
-            countImpLevels[i] = 0;
-        }
-        // Unknown loop (nonseed for parallelization, seed for reproducability)
-        abndDistrUnknown.stream().forEach(rowKey -> {
+    public static void distributeAbundance(MatrixBO abnd, Integer seed) {
+        Collection<String> abndRowKeys = abnd.getSortedRowKeys();
+        Collection<String> specList = abndRowKeys.stream().parallel().map(rowKey -> {
             MatrixBO row = abnd.getRowValueAsMatrix(rowKey);
-            List<MatrixBO> knownData = new ArrayList<>();
-            String strata = (String) row.getValue(Functions.COL_ABNDBYIND_STRATUM);
-            String lenGrp = (String) row.getValue(Functions.COL_ABNDBYIND_LENGRP);
-            String cruise = (String) row.getValue(Functions.COL_IND_CRUISE);
-            String serialno = (String) row.getValue(Functions.COL_IND_SERIALNO);
-            // Pick known data from different imputation levels
-            for (int impLevel = 0; impLevel < countImpLevels.length; impLevel++) {
-                for (MatrixBO rowK : abndDistrKnown) {
-                    String strataK = (String) rowK.getValue(Functions.COL_ABNDBYIND_STRATUM);
-                    String lenGrpK = (String) rowK.getValue(Functions.COL_ABNDBYIND_LENGRP);
-                    String cruiseK = (String) rowK.getValue(Functions.COL_IND_CRUISE);
-                    String serialnoK = (String) rowK.getValue(Functions.COL_IND_SERIALNO);
-                    Boolean skipStationCheck = impLevel >= 1;
-                    Boolean skipStrataCheck = impLevel >= 2;
-                    boolean match = (skipStrataCheck || strataK.equals(strata))
-                            && (skipStationCheck || cruiseK.equals(cruise) && serialnoK.equals(serialno))
-                            && lenGrpK.equals(lenGrp);
-                    if (match) {
-                        knownData.add(rowK);
-                    }
+            String species = (String) row.getValue(Functions.COL_IND_SPECIES);
+            return species;
+        }).collect(Collectors.toSet());
+        // Separated imputes must be done inside each species
+        for (String spec : specList) {
+            List<MatrixBO> abndDistrKnown = new ArrayList<>();
+            List<MatrixBO> abndDistrUnknown = new ArrayList<>();
+            // Set the random generator
+            Random r = new Random();
+            if (seed != null) {
+                r.setSeed(Math.abs(seed)); // Reproducability
+            }
+            for (String rowKey : abndRowKeys) {
+                MatrixBO row = abnd.getRowValueAsMatrix(rowKey);
+                String species = (String) row.getValue(Functions.COL_IND_SPECIES);
+                if (!species.equals(spec)) {
+                    continue;
                 }
-                if (knownData.size() > 0) {
-                    countImpLevels[impLevel]++;
-                    break;
+                Object age = row.getValue(KNOWNCRITERIAVAR);
+                if (age == null) {
+                    abndDistrUnknown.add(row);
+                } else {
+                    abndDistrKnown.add(row);
                 }
             }
-            if (knownData.isEmpty()) {
-                missingImputes[0]++;
-            } else {
-                // Pick random from known data
-                int idx = r.nextInt(knownData.size());//r.nextInt(abndRowKeys.size());
-                idx = idx % knownData.size();
-                MatrixBO rowK = knownData.get(idx);
-                // Transfer individual variables if missing
-                for (String code : Functions.INDIVIDUALS) {
-                    Object o = row.getValue(code);
-                    if (o == null || o.toString().equals("-")) {
-                        row.setValue(code, rowK.getValue(code));
+            /*System.out.println("Data have " + abndDistrKnown.size() + " aged individuals.");
+            System.out.println("Data have " + abndDistrUnknown.size() + " length sampled individuals without known age.");
+
+            int[] countImpLevels = new int[MAXLEVELS];
+            int[] missingImputes = new int[1];
+            missingImputes[0] = 0;
+            for (int i = 0; i < countImpLevels.length; i++) {
+                countImpLevels[i] = 0;
+            }*/
+            // Unknown loop (nonseed for parallelization, seed for reproducability)
+            abndDistrUnknown.stream().forEach(row -> {
+                List<MatrixBO> knownData = new ArrayList<>();
+                String strata = (String) row.getValue(Functions.COL_ABNDBYIND_STRATUM);
+                String lenGrp = (String) row.getValue(Functions.COL_ABNDBYIND_LENGRP);
+                String cruise = (String) row.getValue(Functions.COL_IND_CRUISE);
+                String serialno = (String) row.getValue(Functions.COL_IND_SERIALNO);
+                // Pick known data from different imputation levels
+                for (int impLevel = 0; impLevel < MAXLEVELS; impLevel++) {
+                    for (MatrixBO rowK : abndDistrKnown) {
+                        String strataK = (String) rowK.getValue(Functions.COL_ABNDBYIND_STRATUM);
+                        String lenGrpK = (String) rowK.getValue(Functions.COL_ABNDBYIND_LENGRP);
+                        String cruiseK = (String) rowK.getValue(Functions.COL_IND_CRUISE);
+                        String serialnoK = (String) rowK.getValue(Functions.COL_IND_SERIALNO);
+                        Boolean skipStationCheck = impLevel >= 1;
+                        Boolean skipStrataCheck = impLevel >= 2;
+                        boolean match = (skipStrataCheck || strataK.equals(strata))
+                                && (skipStationCheck || cruiseK.equals(cruise) && serialnoK.equals(serialno))
+                                && lenGrpK.equals(lenGrp);
+                        if (match) {
+                            knownData.add(rowK);
+                        }
+                    }
+                    if (knownData.size() > 0) {
+                        //countImpLevels[impLevel]++;
+                        break;
                     }
                 }
-            }
-        });
-        System.out.println(countImpLevels[0] + " individual ages were imputed at station level.");
-        System.out.println(countImpLevels[1] + " individual ages were imputed at strata level.");
-        System.out.println(countImpLevels[2] + " individual ages were imputed at survey level.");
-        System.out.println(missingImputes[0] + " individual ages were not possible to impute.");
+                if (knownData.isEmpty()) {
+                    //missingImputes[0]++;
+                } else {
+                    // Pick random from known data
+                    int idx = r.nextInt(knownData.size());//r.nextInt(abndRowKeys.size());
+                    idx = idx % knownData.size();
+                    MatrixBO rowK = knownData.get(idx);
+                    // Transfer individual variables if missing
+                    for (String code : Functions.INDIVIDUALS) {
+                        Object o = row.getValue(code);
+                        if (o == null || o.toString().equals("-")) {
+                            row.setValue(code, rowK.getValue(code));
+                        }
+                    }
+                }
+            });
+            /*System.out.println(countImpLevels[0] + " individual ages were imputed at station level.");
+            System.out.println(countImpLevels[1] + " individual ages were imputed at strata level.");
+            System.out.println(countImpLevels[2] + " individual ages were imputed at survey level.");
+            System.out.println(missingImputes[0] + " individual ages were not possible to impute.");*/
+        }
     }
 }
