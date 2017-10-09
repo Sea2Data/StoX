@@ -71,4 +71,8 @@ public interface IProjectProvider {
     void setrStoxFTPPath(String rStoxFTPPath);
 
     String getrStoxFTPPath();
+
+    String getWorkDir();
+
+    void setWorkDir(String workDir);
 }

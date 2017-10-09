@@ -24,7 +24,7 @@ public final class ExportUtil {
         return tabbed + "\r\n";
     }
 
-    public static String separated(char sep, Object... params) {
+    public static String separatedMissingStr(char sep, String missingStr, Object... params) {
         if (params.length == 1 && params[0] instanceof List) {
             List l = (List) params[0];
             params = new Object[l.size()];
@@ -39,12 +39,16 @@ public final class ExportUtil {
                 res += sep;
             }
             if (p == null || p.toString().isEmpty()) {
-                p = "-";
+                p = missingStr;
             }
             res += p;
         }
         // include carriage return to support notepad
         return res;
+    }
+
+    public static String separated(char sep, Object... params) {
+        return separatedMissingStr(sep, "-", params);
     }
 
     /**

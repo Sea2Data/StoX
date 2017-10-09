@@ -16,12 +16,12 @@ public class SelectWorkspaceProjectDialog extends javax.swing.JDialog {
     /**
      * Creates new form SelectWorkspaceProjectDialog
      */
-    public SelectWorkspaceProjectDialog() {
+    public SelectWorkspaceProjectDialog(String workDir) {
         super((java.awt.Frame) null, true);
         initComponents();
         setLocationRelativeTo(null);
         setTitle("Select project in workspace");
-        jDir.setText(ProjectUtils.getSystemProjectRoot());
+        jDir.setText(workDir);
         updateProjectList();
     }
 
@@ -156,6 +156,10 @@ public class SelectWorkspaceProjectDialog extends javax.swing.JDialog {
         }
     }//GEN-LAST:event_jButton2ActionPerformed
 
+    public String getWorkDir() {
+        return jDir.getText();
+
+    }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton jButton1;

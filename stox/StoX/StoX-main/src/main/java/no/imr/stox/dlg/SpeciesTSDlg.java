@@ -31,27 +31,37 @@ public class SpeciesTSDlg extends javax.swing.JDialog {
         DefaultTableModel dt = (DefaultTableModel) jTable.getModel();
         String txt = ed.getAsText();
         String lines[] = txt.split("/");
+        dt.setRowCount(lines.length);
         for (int row = 0; row < lines.length; row++) {
             String line = lines[row];
-            if(line.isEmpty()) {
+            if (line.isEmpty()) {
                 continue;
             }
             String cells[] = line.split(";");
-            String acoCat = cells[0];
-            String specCat = cells[1];
-            Double m = Conversion.safeStringtoDoubleNULL(cells[2]);
-            Double a = Conversion.safeStringtoDoubleNULL(cells[3]);
-            Double d = Conversion.safeStringtoDoubleNULL(cells[4]);
-            dt.setValueAt(acoCat, row, 0);
-            dt.setValueAt(specCat, row, 1);
+            String mixacoCat = "";
+            int i = 0;
+            if (cells.length < 5 || cells.length > 6) {
+                continue;
+            }
+            if (cells.length == 6) {
+                mixacoCat = cells[i++];
+            }
+            String acoCat = cells[i++];
+            String specCat = cells[i++];
+            Double m = Conversion.safeStringtoDoubleNULL(cells[i++]);
+            Double a = Conversion.safeStringtoDoubleNULL(cells[i++]);
+            Double d = Conversion.safeStringtoDoubleNULL(cells[i++]);
+            dt.setValueAt(mixacoCat, row, 0);
+            dt.setValueAt(acoCat, row, 1);
+            dt.setValueAt(specCat, row, 2);
             if (m != null) {
-                dt.setValueAt(m, row, 2);
+                dt.setValueAt(m, row, 3);
             }
             if (a != null) {
-                dt.setValueAt(a, row, 3);
+                dt.setValueAt(a, row, 4);
             }
             if (d != null) {
-                dt.setValueAt(d, row, 4);
+                dt.setValueAt(d, row, 5);
             }
             if (row > dt.getRowCount() - 1) {
                 break; // limit
@@ -71,6 +81,8 @@ public class SpeciesTSDlg extends javax.swing.JDialog {
         jOK = new javax.swing.JButton();
         jScrollPane1 = new javax.swing.JScrollPane();
         jTable = new javax.swing.JTable();
+        jDelete = new javax.swing.JButton();
+        jButton1 = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
@@ -83,37 +95,37 @@ public class SpeciesTSDlg extends javax.swing.JDialog {
 
         jTable.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null, null, null, null},
-                {null, null, null, null, null},
-                {null, null, null, null, null},
-                {null, null, null, null, null},
-                {null, null, null, null, null},
-                {null, null, null, null, null},
-                {null, null, null, null, null},
-                {null, null, null, null, null},
-                {null, null, null, null, null},
-                {null, null, null, null, null},
-                {null, null, null, null, null},
-                {null, null, null, null, null},
-                {null, null, null, null, null},
-                {null, null, null, null, null},
-                {null, null, null, null, null},
-                {null, null, null, null, null},
-                {null, null, null, null, null},
-                {null, null, null, null, null},
-                {null, null, null, null, null},
-                {null, null, null, null, null},
-                {null, null, null, null, null},
-                {null, null, null, null, null},
-                {null, null, null, null, null},
-                {null, null, null, null, null}
+                {null, null, null, null, null, null},
+                {null, null, null, null, null, null},
+                {null, null, null, null, null, null},
+                {null, null, null, null, null, null},
+                {null, null, null, null, null, null},
+                {null, null, null, null, null, null},
+                {null, null, null, null, null, null},
+                {null, null, null, null, null, null},
+                {null, null, null, null, null, null},
+                {null, null, null, null, null, null},
+                {null, null, null, null, null, null},
+                {null, null, null, null, null, null},
+                {null, null, null, null, null, null},
+                {null, null, null, null, null, null},
+                {null, null, null, null, null, null},
+                {null, null, null, null, null, null},
+                {null, null, null, null, null, null},
+                {null, null, null, null, null, null},
+                {null, null, null, null, null, null},
+                {null, null, null, null, null, null},
+                {null, null, null, null, null, null},
+                {null, null, null, null, null, null},
+                {null, null, null, null, null, null},
+                {null, null, null, null, null, null}
             },
             new String [] {
-                "AcoCat", "SpecCat", "m", "a", "d"
+                "MixAcoCat", "AcoCat", "SpecCat", "m", "a", "d"
             }
         ) {
             Class[] types = new Class [] {
-                java.lang.String.class, java.lang.String.class, java.lang.Double.class, java.lang.Double.class, java.lang.Double.class
+                java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.Double.class, java.lang.Double.class, java.lang.Double.class
             };
 
             public Class getColumnClass(int columnIndex) {
@@ -124,27 +136,47 @@ public class SpeciesTSDlg extends javax.swing.JDialog {
         jScrollPane1.setViewportView(jTable);
         jTable.getColumnModel().getSelectionModel().setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
         if (jTable.getColumnModel().getColumnCount() > 0) {
-            jTable.getColumnModel().getColumn(0).setPreferredWidth(100);
-            jTable.getColumnModel().getColumn(0).setHeaderValue(org.openide.util.NbBundle.getMessage(SpeciesTSDlg.class, "SpeciesTSDlg.jTable.columnModel.title0")); // NOI18N
+            jTable.getColumnModel().getColumn(0).setHeaderValue(org.openide.util.NbBundle.getMessage(SpeciesTSDlg.class, "SpeciesTSDlg.jTable.columnModel.title5")); // NOI18N
             jTable.getColumnModel().getColumn(1).setPreferredWidth(100);
-            jTable.getColumnModel().getColumn(1).setHeaderValue(org.openide.util.NbBundle.getMessage(SpeciesTSDlg.class, "SpeciesTSDlg.jTable.columnModel.title1")); // NOI18N
-            jTable.getColumnModel().getColumn(2).setMinWidth(50);
-            jTable.getColumnModel().getColumn(2).setPreferredWidth(50);
-            jTable.getColumnModel().getColumn(2).setMaxWidth(50);
-            jTable.getColumnModel().getColumn(2).setHeaderValue(org.openide.util.NbBundle.getMessage(SpeciesTSDlg.class, "SpeciesTSDlg.jTable.columnModel.title2")); // NOI18N
-            jTable.getColumnModel().getColumn(3).setHeaderValue(org.openide.util.NbBundle.getMessage(SpeciesTSDlg.class, "SpeciesTSDlg.jTable.columnModel.title3")); // NOI18N
-            jTable.getColumnModel().getColumn(4).setHeaderValue(org.openide.util.NbBundle.getMessage(SpeciesTSDlg.class, "SpeciesTSDlg.jTable.columnModel.title4")); // NOI18N
+            jTable.getColumnModel().getColumn(1).setHeaderValue(org.openide.util.NbBundle.getMessage(SpeciesTSDlg.class, "SpeciesTSDlg.jTable.columnModel.title0")); // NOI18N
+            jTable.getColumnModel().getColumn(2).setPreferredWidth(100);
+            jTable.getColumnModel().getColumn(2).setHeaderValue(org.openide.util.NbBundle.getMessage(SpeciesTSDlg.class, "SpeciesTSDlg.jTable.columnModel.title1")); // NOI18N
+            jTable.getColumnModel().getColumn(3).setMinWidth(50);
+            jTable.getColumnModel().getColumn(3).setPreferredWidth(50);
+            jTable.getColumnModel().getColumn(3).setMaxWidth(50);
+            jTable.getColumnModel().getColumn(3).setHeaderValue(org.openide.util.NbBundle.getMessage(SpeciesTSDlg.class, "SpeciesTSDlg.jTable.columnModel.title2")); // NOI18N
+            jTable.getColumnModel().getColumn(4).setHeaderValue(org.openide.util.NbBundle.getMessage(SpeciesTSDlg.class, "SpeciesTSDlg.jTable.columnModel.title3")); // NOI18N
+            jTable.getColumnModel().getColumn(5).setHeaderValue(org.openide.util.NbBundle.getMessage(SpeciesTSDlg.class, "SpeciesTSDlg.jTable.columnModel.title4")); // NOI18N
         }
+
+        org.openide.awt.Mnemonics.setLocalizedText(jDelete, org.openide.util.NbBundle.getMessage(SpeciesTSDlg.class, "SpeciesTSDlg.jDelete.text")); // NOI18N
+        jDelete.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jDeleteActionPerformed(evt);
+            }
+        });
+
+        org.openide.awt.Mnemonics.setLocalizedText(jButton1, org.openide.util.NbBundle.getMessage(SpeciesTSDlg.class, "SpeciesTSDlg.jButton1.text")); // NOI18N
+        jButton1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton1ActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(jOK)
-                    .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 378, Short.MAX_VALUE))
+                .addComponent(jButton1)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jDelete)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(jOK, javax.swing.GroupLayout.PREFERRED_SIZE, 97, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(10, 10, 10))
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 500, Short.MAX_VALUE)
+                .addContainerGap())
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -152,7 +184,10 @@ public class SpeciesTSDlg extends javax.swing.JDialog {
                 .addContainerGap()
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 154, Short.MAX_VALUE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jOK)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jOK)
+                    .addComponent(jDelete)
+                    .addComponent(jButton1))
                 .addContainerGap())
         );
 
@@ -161,24 +196,46 @@ public class SpeciesTSDlg extends javax.swing.JDialog {
 
     private void jOKActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jOKActionPerformed
         DefaultTableModel dt = (DefaultTableModel) jTable.getModel();
+        if (jTable.getCellEditor() != null) {
+            jTable.getCellEditor().stopCellEditing();
+        }
         String res = "";
-        for (int row = 0; row < dt.getRowCount() - 1; row++) {
-            String acoCat = (String) dt.getValueAt(row, 0);
-            if(acoCat == null || acoCat.isEmpty()) {
+        for (int row = 0; row < dt.getRowCount(); row++) {
+            String mixacoCat = (String) dt.getValueAt(row, 0);
+            if (mixacoCat == null) {
+                mixacoCat = "";
+            }
+            String acoCat = (String) dt.getValueAt(row, 1);
+            if (acoCat == null || acoCat.isEmpty()) {
                 continue;
             }
-            String specCat = (String) dt.getValueAt(row, 1);
-            Double m = (Double) dt.getValueAt(row, 2);
-            Double a = (Double) dt.getValueAt(row, 3);
-            Double d = (Double) dt.getValueAt(row, 4);
-            String line = ExportUtil.separated(';', acoCat, specCat, m, a, d);
+            String specCat = (String) dt.getValueAt(row, 2);
+            Double m = (Double) dt.getValueAt(row, 3);
+            Double a = (Double) dt.getValueAt(row, 4);
+            Double d = (Double) dt.getValueAt(row, 5);
+            String line = ExportUtil.separatedMissingStr(';', "", mixacoCat, acoCat, specCat, m, a, d);
             res += (res.isEmpty() ? "" : "/") + line;
         }
         ed.setAsText(res);
         setVisible(false);
     }//GEN-LAST:event_jOKActionPerformed
 
+    private void jDeleteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jDeleteActionPerformed
+        DefaultTableModel dt = (DefaultTableModel) jTable.getModel();
+        if (jTable.getSelectedRow() >= 0) {
+            dt.removeRow(jTable.getSelectedRow());
+        }
+    }//GEN-LAST:event_jDeleteActionPerformed
+
+    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+        DefaultTableModel dt = (DefaultTableModel) jTable.getModel();
+        dt.setNumRows(dt.getRowCount() + 1);
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jButton1ActionPerformed
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton jButton1;
+    private javax.swing.JButton jDelete;
     private javax.swing.JButton jOK;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JTable jTable;

@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<actions>
+        <action>
+            <actionName>CUSTOM-Build main</actionName>
+            <displayName>Build main</displayName>
+            <goals>
+                <goal>clean</goal>
+                <goal>install</goal>
+                <goal>-P</goal>
+                <goal>main</goal>
+                
+                
+            </goals>
+        </action>
+    </actions>

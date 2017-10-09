@@ -22,7 +22,7 @@ import no.imr.stox.functions.utils.ProjectUtils;
 import no.imr.stox.library.IMetaFunction;
 import no.imr.stox.library.IMetaParameter;
 import no.imr.stox.model.IModel;
-import no.imr.stox.model.IProcess; 
+import no.imr.stox.model.IProcess;
 import no.imr.stox.model.RModel;
 import org.openide.actions.DeleteAction;
 import org.openide.actions.MoveDownAction;
@@ -143,6 +143,8 @@ public class ProcessNode extends AbstractNode {
 
     private void updateDisplayNameAndTooltip() {
         setDisplayName(process.getName());
+        setValue("nodeDescription", "<html><p width=\"350px\">"
+                + (process.getMetaFunction() != null ? process.getMetaFunction().getDescription() : process.getName()) + "</p></html>");
         /*String s = process.getName();
         String err = process.validate();
         if (err != null) {
@@ -406,7 +408,7 @@ public class ProcessNode extends AbstractNode {
                     for (IMetaParameter mp : p.getMetaFunction().getMetaParameters()) {
                         String pn = p.getProcessNameFromParameter(mp);
                         if (pn != null && pn.equalsIgnoreCase(sourceName)) {
-                            p.setValue(mp, no.imr.stox.model.Process.PROCESS_START_LITERAL + newProcessRef + ")"); 
+                            p.setValue(mp, no.imr.stox.model.Process.PROCESS_START_LITERAL + newProcessRef + ")");
                         }
                     }
                 }

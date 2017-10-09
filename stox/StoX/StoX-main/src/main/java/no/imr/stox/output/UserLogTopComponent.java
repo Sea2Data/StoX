@@ -3,6 +3,8 @@ package no.imr.stox.output;
 import java.io.File;
 import java.io.IOException;
 import java.util.List;
+import javax.swing.JMenuItem;
+import javax.swing.JPopupMenu;
 import no.imr.stox.model.IModel;
 import no.imr.stox.model.IModelListenerService;
 import no.imr.stox.model.ModelListenerAdapter;
@@ -39,12 +41,18 @@ import org.openide.util.NbBundle.Messages;
     "HINT_UserLogTopComponent=This is a User Logging window"
 })
 public final class UserLogTopComponent extends TopComponent {
-
+    
     public UserLogTopComponent() {
         initComponents();
         setName(Bundle.CTL_UserLogTopComponent());
         setToolTipText(Bundle.HINT_UserLogTopComponent());
-
+        // Clear Text area
+        JPopupMenu pmenu = new JPopupMenu();
+        jTextArea1.setComponentPopupMenu(pmenu);
+        JMenuItem m = new JMenuItem("Clear");
+        m.addActionListener(al -> {
+            jTextArea1.setText("");
+        });
     }
 
     /**
@@ -79,17 +87,17 @@ public final class UserLogTopComponent extends TopComponent {
         // TODO add custom code on component opening
         IModelListenerService fls = (IModelListenerService) Lookup.getDefault().lookup(IModelListenerService.class);
         fls.getModelListeners().add(new ModelListenerAdapter() {
-
+            
             @Override
             public void onProcessLog(IModel model, String msg) {
                 UserLogTopComponent.this.onProcessLog(model, msg); //To change body of generated methods, choose Tools | Templates.
             }
-
+            
             @Override
             public void onReset(IModel m) {
                 jTextArea1.setText("");
             }
-
+            
             @Override
             public void onModelStop(IModel model) {
                 
@@ -99,35 +107,35 @@ public final class UserLogTopComponent extends TopComponent {
                 } catch (IOException ex) {
                 }
             }
-
+            
             @Override
             public void onModelStart(IModel model) {
-                appendMsg("\r\n------------------------------------------------------------------------\r\n" + "Running " + model.getModelName() + 
-                        "\r\n------------------------------------------------------------------------\r\n\r\n") ;
+                appendMsg("\r\n------------------------------------------------------------------------\r\n" + "Running " + model.getModelName()
+                        + "\r\n------------------------------------------------------------------------\r\n\r\n");
             }
-
+            
         });
     }
-
+    
     @Override
     public void componentClosed() {
         // TODO add custom code on component closing
     }
-
+    
     void writeProperties(java.util.Properties p) {
         // better to version settings since initial version as advocated at
         // http://wiki.apidesign.org/wiki/PropertyFiles
         p.setProperty("version", "1.0");
         // TODO store your settings
     }
-
+    
     void readProperties(java.util.Properties p) {
     }
-
+    
     public void appendMsg(String msg) {
         jTextArea1.append(msg + "\r\n");
     }
-
+    
     public void onProcessLog(IModel model, String msg) {
         appendMsg(msg);
         jTextArea1.setCaretPosition(jTextArea1.getDocument().getLength());

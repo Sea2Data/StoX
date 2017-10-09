@@ -5,6 +5,7 @@
  */
 package no.imr.stox.functions.processdata;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -38,7 +39,7 @@ public class SplitNASC extends AbstractFunction {
     public Object perform(Map<String, Object> input) {
         ILogger logger = (ILogger) input.get(Functions.PM_LOGGER);
         // a, b, c constants used in TS formula
-        String mixAcoCat = (String) input.get(Functions.PM_SPLITNASC_MIXACOCAT);
+        String mixAco = (String) input.get(Functions.PM_SPLITNASC_MIXACOCAT);
         String speciesTS = (String) input.get(Functions.PM_SPLITNASC_SPECIESTS);
         // Acoustic data used in channel to depth calculation (formula with upper int.dep. and pel.thickness)
         List<DistanceBO> distances = (List<DistanceBO>) input.get(Functions.PM_SPLITNASC_ACOUSTICDATA);
@@ -50,7 +51,7 @@ public class SplitNASC extends AbstractFunction {
         if (totLengthDist == null || nascMatrix == null) {
             return null;
         }
-        MatrixBO specTS = getSpecTS(speciesTS, totLengthDist.getData().getKeys());
+        Map<String, MatrixBO> acospecTS = getSpecTS(speciesTS, totLengthDist.getData().getKeys(), mixAco);
         // Accorinding to STOX-80, SplitNasc must work with all lfq types.
         /*String lenDistType = (String) totLengthDist.getResolutionMatrix().getRowValue(Functions.RES_LENGTHDISTTYPE);
         if (lenDistType == null || !lenDistType.equals(Functions.LENGTHDISTTYPE_NORMLENGHTDIST)) {
@@ -78,12 +79,13 @@ public class SplitNASC extends AbstractFunction {
         // Create a copy NASC matrix
         NASCMatrix result = new NASCMatrix();
         result.setData(nascMatrix.getData().copy());
+        /*
         // Remove the acocats not in split category:
         for (String acoCat : result.getData().getKeys()) {
             if (!acoCat.equals(mixAcoCat)) {
                 result.getData().removeValue(acoCat);
             }
-        }
+        }*/
 
         // Define resolution:
         result.getResolutionMatrix().setRowValue(Functions.RES_LAYERTYPE, layerType);
@@ -96,79 +98,81 @@ public class SplitNASC extends AbstractFunction {
         result.setDistanceMatrix(nascMatrix.getDistanceMatrix().copy());
         MatrixBO estLayerMatrix = pd.getMatrices().get(Functions.TABLE_ESTLAYERDEF);
         // For each sample unit in NASC.
-        for (String edsu : nascValues.getGroupRowKeys(mixAcoCat)) {
-            // When using pchannels on each distance, depth correction can be performed; Get depth from distance and channel
-            DistanceBO depthRepDist = EchosounderUtils.findDistance(distances, edsu);
-            // For each layer in NASC matrix
-            for (String channel : nascValues.getGroupRowColKeys(mixAcoCat, edsu)) {
-                // Lookup assignment from sampleUnit and layer
-                String estLayer = AbndEstParamUtil.getEstLayerFromLayer(estLayerMatrix, channel);
-                String asgID = AbndEstProcessDataUtil.getSUAssignmentIDBySampleUnitAndEstimationLayer(pd, edsu, estLayer, sampleUnitType);
-                /*String assignment = (String) sampleUnitAssignment.getRowColValue(sampleUnit, layer);
+        for (String mixAcoCat : acospecTS.keySet()) {
+            MatrixBO specTS = acospecTS.get(mixAcoCat);
+            for (String edsu : nascValues.getGroupRowKeys(mixAcoCat)) {
+                // When using pchannels on each distance, depth correction can be performed; Get depth from distance and channel
+                DistanceBO depthRepDist = EchosounderUtils.findDistance(distances, edsu);
+                // For each layer in NASC matrix
+                for (String channel : nascValues.getGroupRowColKeys(mixAcoCat, edsu)) {
+                    // Lookup assignment from sampleUnit and layer
+                    String estLayer = AbndEstParamUtil.getEstLayerFromLayer(estLayerMatrix, channel);
+                    String asgID = AbndEstProcessDataUtil.getSUAssignmentIDBySampleUnitAndEstimationLayer(pd, edsu, estLayer, sampleUnitType);
+                    /*String assignment = (String) sampleUnitAssignment.getRowColValue(sampleUnit, layer);
                  if (assignment == null && (layerType.equals(Functions.LAYERTYPE_PCHANNEL) || layerType.equals(Functions.LAYERTYPE_DEPTHLAYER))) {
                  // Assignments was not found for spesific layer, try PELBOT:
                  assignment = (String) sampleUnitAssignment.getRowColValue(sampleUnit, Functions.WATERCOLUMN_PELBOT);
                  }*/
 
-                if (asgID == null) {
-                    continue;
-                }
-                Double depth = depthRepDist != null ? EchosounderUtils.getDepth(depthRepDist, channel) : null;
-                Double nasc = (Double) nascValues.getGroupRowColValue(mixAcoCat, edsu, channel);
-                if (nasc == null || nasc == 0d) {
-                    continue;
-                }
-                // Build lDist parameter
-                MatrixBO lDist = new MatrixBO();
-                for (String acoCat : specTS.getRowKeys()) {
-                    String specCat = (String) specTS.getRowColValue(acoCat, "SpecCat");
-                    MatrixBO lD = totLengthDist.getData().getGroupRowDefaultValueAsMatrix(specCat, asgID);
-                    if (lD == null) {
+                    if (asgID == null) {
                         continue;
                     }
-                    for (String lenGrp : lD.getKeys()) {
-                        lDist.setRowColValue(acoCat, lenGrp, lD.getValueAsDouble(lenGrp));
+                    Double depth = depthRepDist != null ? EchosounderUtils.getDepth(depthRepDist, channel) : null;
+                    Double nasc = (Double) nascValues.getGroupRowColValue(mixAcoCat, edsu, channel);
+                    if (nasc == null || nasc == 0d) {
+                        continue;
                     }
-                }
-                if (lDist.getKeys().isEmpty()) {
-                    logger.error("Length distribution not found for edsu " + edsu + ". Increase the radius to assign at least one station which includes at least one of the splitted species categories.", null);
-                }
-                // Calculate NASC proportions
-                MatrixBO nascProp = StoXMath.getNASCProportions(nasc, lDist, lengthInterval, depth, specTS);
+                    // Build lDist parameter
+                    MatrixBO lDist = new MatrixBO();
+                    for (String acoCat : specTS.getRowKeys()) {
+                        String specCat = (String) specTS.getRowColValue(acoCat, "SpecCat");
+                        MatrixBO lD = totLengthDist.getData().getGroupRowDefaultValueAsMatrix(specCat, asgID);
+                        if (lD == null) {
+                            continue;
+                        }
+                        for (String lenGrp : lD.getKeys()) {
+                            lDist.setRowColValue(acoCat, lenGrp, lD.getValueAsDouble(lenGrp));
+                        }
+                    }
+                    if (lDist.getKeys().isEmpty()) {
+                        logger.error("Length distribution not found for edsu " + edsu + ". Increase the radius to assign at least one station which includes at least one of the splitted species categories.", null);
+                    }
+                    // Calculate NASC proportions
+                    MatrixBO nascProp = StoXMath.getNASCProportions(nasc, lDist, lengthInterval, depth, specTS);
 
-                Double mixval = result.getData().getGroupRowColValueAsDouble(mixAcoCat, edsu, channel);
-                if (mixval == null) {
-                    logger.error("Mix NASC is missing.", null);
-                }
-                // Move the proportion from mix to single categories
-                for (String acoCat : nascProp.getRowKeys()) {
-                    MatrixBO m = nascProp.getRowValueAsMatrix(acoCat);
-                    if (m == null) {
-                        continue;
+                    Double mixval = result.getData().getGroupRowColValueAsDouble(mixAcoCat, edsu, channel);
+                    if (mixval == null) {
+                        logger.error("Mix NASC is missing.", null);
                     }
-                    Double s = m.getSum();
-                    if (s == null) {
-                        continue;
+                    // Move the proportion from mix to single categories
+                    for (String acoCat : nascProp.getRowKeys()) {
+                        MatrixBO m = nascProp.getRowValueAsMatrix(acoCat);
+                        if (m == null) {
+                            continue;
+                        }
+                        Double s = m.getSum();
+                        if (s == null) {
+                            continue;
+                        }
+                        // Move the nasc proportion out of split into the single category.
+                        result.getData().addGroupRowColValue(acoCat, edsu, channel, s);
+                        mixval -= s;
+                        result.getData().setGroupRowColValue(mixAcoCat, edsu, channel, mixval);
                     }
-                    // Move the nasc proportion out of split into the single category.
-                    result.getData().addGroupRowColValue(acoCat, edsu, channel, s);
-                    mixval -= s;
-                    result.getData().setGroupRowColValue(mixAcoCat, edsu, channel, mixval);
+                    if (Math.abs(mixval) > 0.000000001 && mixval < 0) {
+                        logger.error("Error in splitting mix - val < 0", null);
+                    }
+                    // It is not possible to retain a mix value at this moment, because the lfq is required so that at least one species will get the nasc value.
+                    result.getData().getGroupRowValueAsMatrix(mixAcoCat, edsu).removeValue(channel);
                 }
-                if (Math.abs(mixval) > 0.000000001 && mixval < 0) {
-                    logger.error("Error in splitting mix - val < 0", null);
-                }
-                // It is not possible to retain a mix value at this moment, because the lfq is required so that at least one species will get the nasc value.
-                result.getData().getGroupRowValueAsMatrix(mixAcoCat, edsu).removeValue(channel);
             }
         }
 
         return result;
     }
 
-    private MatrixBO getSpecTS(String speciesTS, List<String> specKeys) {
-
-        MatrixBO res = new MatrixBO();
+    private Map<String, MatrixBO> getSpecTS(String speciesTS, List<String> specKeys, String mixAcoCat) {
+        Map<String, MatrixBO> res2 = new HashMap<>();
         String lines[] = speciesTS.split("/");
         for (int row = 0; row < lines.length; row++) {
             String line = lines[row];
@@ -176,20 +180,36 @@ public class SplitNASC extends AbstractFunction {
                 continue;
             }
             String cells[] = line.split(";");
-            String acoCat = cells[0];
-            String specCat = cells[1];
+            int i = 0;
+            if (cells.length < 5 || cells.length > 6) {
+                continue;
+            }
+            String acoCatMix = mixAcoCat;
+            if (cells.length == 6) {
+                acoCatMix = cells[i++];
+            }
+            if(acoCatMix == null || acoCatMix.isEmpty()) {
+                continue;
+            }
+            MatrixBO res = res2.get(acoCatMix);
+            if (res == null) {
+                res = new MatrixBO();
+                res2.put(acoCatMix, res);
+            }
+            String acoCat = cells[i++];
+            String specCatIn = cells[i++];
             // Wrap the spec cat to same case used by total length dist
-            Optional<String> opt = specKeys.stream().filter(s -> s.equalsIgnoreCase(cells[1])).findFirst();
-            specCat = opt.isPresent() ? opt.get() : specCat;
-            Double m = Conversion.safeStringtoDoubleNULL(cells[2]);
-            Double a = Conversion.safeStringtoDoubleNULL(cells[3]);
-            Double d = Conversion.safeStringtoDoubleNULL(cells[4]);
+            Optional<String> opt = specKeys.stream().filter(s -> s.equalsIgnoreCase(specCatIn)).findFirst();
+            String specCat = opt.isPresent() ? opt.get() : specCatIn;
+            Double m = Conversion.safeStringtoDoubleNULL(cells[i++]);
+            Double a = Conversion.safeStringtoDoubleNULL(cells[i++]);
+            Double d = Conversion.safeStringtoDoubleNULL(cells[i++]);
             res.setRowColValue(acoCat, "SpecCat", specCat);
             res.setRowColValue(acoCat, "m", m);
             res.setRowColValue(acoCat, "a", a);
             res.setRowColValue(acoCat, "d", d);
         }
-        return res;
+        return res2;
     }
 
 }

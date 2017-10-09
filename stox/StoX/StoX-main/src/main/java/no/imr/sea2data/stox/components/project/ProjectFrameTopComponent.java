@@ -116,6 +116,8 @@ public final class ProjectFrameTopComponent extends TopComponent implements Expl
      * @param p Property object.
      */
     public void writeProperties(final java.util.Properties properties) {
+        IProjectProvider provider = (IProjectProvider) Lookup.getDefault().lookup(IProjectProvider.class);
+        properties.setProperty("workdir", provider.getWorkDir());
     }
 
     /**
@@ -124,8 +126,12 @@ public final class ProjectFrameTopComponent extends TopComponent implements Expl
      * @param p Property object.
      */
     public void readProperties(final java.util.Properties properties) {
+        IProjectProvider provider = (IProjectProvider) Lookup.getDefault().lookup(IProjectProvider.class);
+        String workDir = properties.getProperty("workdir");
+        if (workDir != null && !workDir.isEmpty()) {
+            provider.setWorkDir(workDir);
+        }
     }
-
 
     /**
      * Refreshes all properties.

@@ -8,10 +8,26 @@
     </parent>
     <artifactId>stox-base-aggregator</artifactId>
     <packaging>pom</packaging>
-    <modules>
-        <module>./../stox-util</module>
-        <module>./../stox-core</module>
-        <module>./../stox-base</module>
-        <module>./../StoX/application</module>
-    </modules>
+    <profiles>
+        <!-- DO NOT CHANGE THE *ORDER* IN WHICH THESE PROFILES ARE DEFINED! -->
+        <profile>
+            <id>main</id>
+            <modules>
+                <module>./../StoX/StoX-main</module>
+                <module>./../StoX/application</module>
+            </modules>
+        </profile>
+        <profile>
+            <id>default</id>
+            <activation>
+                <activeByDefault>true</activeByDefault>
+            </activation>
+            <modules>
+                <module>./../stox-util</module>
+                <module>./../stox-core</module>
+                <module>./../stox-base</module>
+                <module>./../StoX/application</module>
+            </modules>
+        </profile>
+    </profiles>
 </project>

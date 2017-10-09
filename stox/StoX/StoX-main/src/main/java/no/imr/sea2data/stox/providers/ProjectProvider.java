@@ -27,6 +27,7 @@ import no.imr.stox.factory.FactoryUtil;
 import no.imr.stox.dlg.NewProjectDialog;
 import no.imr.stox.dlg.SaveAsDlg;
 import no.imr.stox.dlg.SelectWorkspaceProjectDialog;
+import no.imr.stox.functions.utils.ProjectUtils;
 import no.imr.stox.functions.utils.RUtils;
 import no.imr.stox.model.IModelListenerService;
 import no.imr.stox.model.IProject;
@@ -64,6 +65,7 @@ final public class ProjectProvider implements IProjectProvider {
     private String rStoxFTPPath;
     List<String> readMeLinesRstox;
     List<String> readMeLinesStoX;
+    String workDir = ProjectUtils.getSystemProjectRoot();
     //String packagesStr = null;
 
     public ProjectProvider() {
@@ -109,12 +111,23 @@ final public class ProjectProvider implements IProjectProvider {
     }
 
     @Override
+    public String getWorkDir() {
+        return workDir;
+    }
+
+    @Override
+    public void setWorkDir(String workDir) {
+        this.workDir = workDir;
+    }
+
+    @Override
     public void openProject() {
         if (!DirtyChecker.canContinueIfDirty()) {
             return;
         }
-        SelectWorkspaceProjectDialog dlg = new SelectWorkspaceProjectDialog();
+        SelectWorkspaceProjectDialog dlg = new SelectWorkspaceProjectDialog(workDir);
         dlg.setVisible(true);
+        workDir = dlg.getWorkDir();
         if (dlg.getProject() == null) {
             return;
         }

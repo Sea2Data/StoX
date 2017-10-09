@@ -122,7 +122,7 @@ public class SelectFileDlg extends javax.swing.JDialog {
         int returnVal = fc.showOpenDialog(SelectFileDlg.this);
         if (returnVal == JFileChooser.APPROVE_OPTION) {
             String path = fc.getSelectedFile().getPath().replace("\\", "/");
-            path = path.replace(project.getProjectFolder() + "/", "");
+            path = path.replace(project.getProjectFolder().replace("\\", "/") + "/", "");
             path = path.replace(ProjectUtils.getSystemFolder(), "${STOX}");
             jFile.setText(path);
         }
