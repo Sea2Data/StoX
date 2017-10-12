@@ -218,7 +218,6 @@
         <module>stox-core</module>
         <module>stox-base</module>
         <module>StoX</module>
-        <module>StoX-gt</module>
     </modules>
 
 </project>

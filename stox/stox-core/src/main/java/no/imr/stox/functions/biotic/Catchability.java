@@ -78,34 +78,42 @@ public class Catchability extends AbstractFunction {
                             Double lGroup = Conversion.safeStringtoDoubleNULL(lenGrp);
                             Double value = lfq.getValueAsDouble(lenGrp);
                             Double length = StoXMath.getLength(lGroup, lenInterval);
-                            Double adjFac = null;
+                            Double adjFac = 1.0;
                             Double adjValue = value;
                             switch (catchabilityMethod) {
                                 case Functions.CATCHABILITYMETHOD_LENGTHDEPENDENTSWEEPWIDTH:
                                 case Functions.CATCHABILITYMETHOD_LENGTHDEPENDENTSELECTIVITY:
-                                    Double l = length < cp.getlMin() ? cp.getlMin() : length > cp.getlMax() ? cp.getlMax() : length;
                                     switch (catchabilityMethod) {
-                                        case Functions.CATCHABILITYMETHOD_LENGTHDEPENDENTSWEEPWIDTH:
+                                        case Functions.CATCHABILITYMETHOD_LENGTHDEPENDENTSWEEPWIDTH: {
                                             // Implement Formula according to IMR/PINRO Joint Report 2014(2)
                                             //        alpha beta lmin lmax
                                             // Cod     5.91 0.43 15 cm 62 cm
                                             // Haddock 2.08 0.75 15 cm 48 cm
+                                            Double l = length < cp.getlMin() ? cp.getlMin() : length > cp.getlMax() ? cp.getlMax() : length;
                                             Double sweepWidthInM = cp.getAlpha() * Math.pow(l, cp.getBeta());
                                             Double sweepWidthNM = ImrMath.safeDivide(sweepWidthInM, 1852.0);
                                             //Double sweptArea = StoXMath.getSweptArea(fs.getDistance(), sweepWidthInM);
                                             adjFac = ImrMath.safeDivide(1d, sweepWidthNM);
                                             break;
-                                        case Functions.CATCHABILITYMETHOD_LENGTHDEPENDENTSELECTIVITY:
+                                        }
+                                        case Functions.CATCHABILITYMETHOD_LENGTHDEPENDENTSELECTIVITY: {
                                             // Implement Formula according to IMR/PINRO Joint Report 2014(2)
                                             //        alpha beta lmin lmax
                                             // Cod     5.91 0.43 15 cm 62 cm
                                             // Haddock 2.08 0.75 15 cm 48 cm
-                                            adjFac = cp.getAlpha() * Math.exp(cp.getBeta() * l);
+                                            //Double l = length < cp.getlMin() ? cp.getlMin() : length > cp.getlMax() ? cp.getlMax() : length;
+                                            Double l = length;
+                                            if (l >= cp.getlMin() && l <= cp.getlMax()) {
+                                                adjFac = cp.getAlpha() * Math.exp(cp.getBeta() * l);
+                                            }
+                                            break;
+                                        }
                                     }
                                     adjValue = ImrMath.safeMult(value, adjFac);
                             }
                             if (adjValue != null) {
-                                result.getData().setGroupRowCellValue(cp.getSpecCat(), obsKey, lenGrp, adjValue);
+                                lfq.setValue(obsKey, adjValue);
+                                //result.getData().setGroupRowCellValue(cp.getSpecCat(), obsKey, lenGrp, adjValue);
                             }
                         }
                     }

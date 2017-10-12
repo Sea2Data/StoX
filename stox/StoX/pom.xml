@@ -155,6 +155,7 @@
         <module>application</module>
         <module>StoX-main</module>
         <module>StoX-map</module>
+        <module>StoX-gt</module>
     </modules>
 
 </project>
