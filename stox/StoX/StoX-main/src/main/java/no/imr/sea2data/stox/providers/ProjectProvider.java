@@ -87,10 +87,6 @@ final public class ProjectProvider implements IProjectProvider {
 
             @Override
             public void onReset(IModel m) {
-                IProcessViewer viewer = (IProcessViewer) Lookup.getDefault().lookup(IProcessViewer.class);
-                if (viewer != null) {
-                    viewer.clear();
-                }
             }
 
         });
@@ -136,6 +132,11 @@ final public class ProjectProvider implements IProjectProvider {
 
     @Override
     public void openProject(String projectRoot, String projectName, String template) {
+        // CLear process viewer
+        IProcessViewer viewer = (IProcessViewer) Lookup.getDefault().lookup(IProcessViewer.class);
+        if (viewer != null) {
+            viewer.clear();
+        }
         project = FactoryUtil.acquireProject(projectRoot, projectName, template);
         project.setRFolder(rFolder); // Transfer rfolder to project.
         project.setStoxVersion(System.getProperty("netbeans.buildnumber"));

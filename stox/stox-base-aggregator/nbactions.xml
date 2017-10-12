@@ -7,9 +7,19 @@
                 <goal>clean</goal>
                 <goal>install</goal>
                 <goal>-P</goal>
-                <goal>main</goal>
+                <goal>main_app</goal>
                 
                 
+            </goals>
+        </action>
+        <action>
+            <actionName>CUSTOM-Build main and core</actionName>
+            <displayName>Build main and core</displayName>
+            <goals>
+                <goal>clean</goal>
+                <goal>install</goal>
+                <goal>-P</goal>
+                <goal>main_core_app</goal>
             </goals>
         </action>
     </actions>

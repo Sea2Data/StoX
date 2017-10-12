@@ -47,12 +47,14 @@ public final class UserLogTopComponent extends TopComponent {
         setName(Bundle.CTL_UserLogTopComponent());
         setToolTipText(Bundle.HINT_UserLogTopComponent());
         // Clear Text area
+        jTextArea1.setInheritsPopupMenu(true);
         JPopupMenu pmenu = new JPopupMenu();
-        jTextArea1.setComponentPopupMenu(pmenu);
         JMenuItem m = new JMenuItem("Clear");
         m.addActionListener(al -> {
             jTextArea1.setText("");
         });
+        pmenu.add(m);
+        jScrollPane1.setComponentPopupMenu(pmenu);
     }
 
     /**

@@ -106,7 +106,8 @@ public class EchoXMLReader extends XMLReader {
         } else if (object instanceof SABO) {
             SABO sa = (SABO) object;
             if (key.equals("sa")) {
-                sa.setSa(Conversion.safeStringtoDoubleNULL(value));
+                // Ensure that . and , is supported when nasc is read
+                sa.setSa(Conversion.safeStringtoDoubleNULLEnglishFormat(value));
             } else if (key.equals("ch")) {
                 sa.setCh(Conversion.safeStringtoIntegerNULL(value));
                 // Set the keys found at frequency level

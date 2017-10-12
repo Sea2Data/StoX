@@ -10,11 +10,11 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import no.imr.sea2data.echosounderbo.DistanceBO;
-import no.imr.sea2data.imrbase.util.Conversion;
 import no.imr.stox.bo.LengthDistMatrix;
 import no.imr.sea2data.imrbase.matrix.MatrixBO;
 import no.imr.stox.bo.NASCMatrix;
 import no.imr.stox.bo.ProcessDataBO;
+import no.imr.stox.bo.SpeciesTSMix;
 import no.imr.stox.functions.AbstractFunction;
 import no.imr.stox.functions.utils.AbndEstParamUtil;
 import no.imr.stox.functions.utils.AbndEstProcessDataUtil;
@@ -39,7 +39,7 @@ public class SplitNASC extends AbstractFunction {
     public Object perform(Map<String, Object> input) {
         ILogger logger = (ILogger) input.get(Functions.PM_LOGGER);
         // a, b, c constants used in TS formula
-        String mixAco = (String) input.get(Functions.PM_SPLITNASC_MIXACOCAT);
+        //String mixAco = (String) input.get(Functions.PM_SPLITNASC_MIXACOCAT);
         String speciesTS = (String) input.get(Functions.PM_SPLITNASC_SPECIESTS);
         // Acoustic data used in channel to depth calculation (formula with upper int.dep. and pel.thickness)
         List<DistanceBO> distances = (List<DistanceBO>) input.get(Functions.PM_SPLITNASC_ACOUSTICDATA);
@@ -51,7 +51,7 @@ public class SplitNASC extends AbstractFunction {
         if (totLengthDist == null || nascMatrix == null) {
             return null;
         }
-        Map<String, MatrixBO> acospecTS = getSpecTS(speciesTS, totLengthDist.getData().getKeys(), mixAco);
+        Map<String, MatrixBO> acospecTS = getSpecTS(speciesTS, totLengthDist.getData().getKeys());
         // Accorinding to STOX-80, SplitNasc must work with all lfq types.
         /*String lenDistType = (String) totLengthDist.getResolutionMatrix().getRowValue(Functions.RES_LENGTHDISTTYPE);
         if (lenDistType == null || !lenDistType.equals(Functions.LENGTHDISTTYPE_NORMLENGHTDIST)) {
@@ -135,7 +135,7 @@ public class SplitNASC extends AbstractFunction {
                         }
                     }
                     if (lDist.getKeys().isEmpty()) {
-                        logger.error("Length distribution not found for edsu " + edsu + ". Increase the radius to assign at least one station which includes at least one of the splitted species categories.", null);
+                        logger.error("Length distribution not found for edsu " + edsu + ". Increase the radius/ellipsoidal distance to assign at least one station which includes at least one of the splitted species categories.", null);
                     }
                     // Calculate NASC proportions
                     MatrixBO nascProp = StoXMath.getNASCProportions(nasc, lDist, lengthInterval, depth, specTS);
@@ -171,44 +171,25 @@ public class SplitNASC extends AbstractFunction {
         return result;
     }
 
-    private Map<String, MatrixBO> getSpecTS(String speciesTS, List<String> specKeys, String mixAcoCat) {
+    private Map<String, MatrixBO> getSpecTS(String speciesTS, List<String> specKeys) {
         Map<String, MatrixBO> res2 = new HashMap<>();
-        String lines[] = speciesTS.split("/");
-        for (int row = 0; row < lines.length; row++) {
-            String line = lines[row];
-            if (line.isEmpty()) {
-                continue;
-            }
-            String cells[] = line.split(";");
-            int i = 0;
-            if (cells.length < 5 || cells.length > 6) {
-                continue;
-            }
-            String acoCatMix = mixAcoCat;
-            if (cells.length == 6) {
-                acoCatMix = cells[i++];
-            }
-            if(acoCatMix == null || acoCatMix.isEmpty()) {
-                continue;
-            }
-            MatrixBO res = res2.get(acoCatMix);
+        List<SpeciesTSMix> lines = SpeciesTSMix.fromString(speciesTS);
+        lines.forEach(line -> {
+            MatrixBO res = res2.get(line.getMixAcoCat());
             if (res == null) {
                 res = new MatrixBO();
-                res2.put(acoCatMix, res);
+                res2.put(line.getMixAcoCat(), res);
             }
-            String acoCat = cells[i++];
-            String specCatIn = cells[i++];
+            String acoCat = line.getAcoCat();
+            String specCatIn = line.getSpecCat();
             // Wrap the spec cat to same case used by total length dist
             Optional<String> opt = specKeys.stream().filter(s -> s.equalsIgnoreCase(specCatIn)).findFirst();
             String specCat = opt.isPresent() ? opt.get() : specCatIn;
-            Double m = Conversion.safeStringtoDoubleNULL(cells[i++]);
-            Double a = Conversion.safeStringtoDoubleNULL(cells[i++]);
-            Double d = Conversion.safeStringtoDoubleNULL(cells[i++]);
-            res.setRowColValue(acoCat, "SpecCat", specCat);
-            res.setRowColValue(acoCat, "m", m);
-            res.setRowColValue(acoCat, "a", a);
-            res.setRowColValue(acoCat, "d", d);
-        }
+            res.setRowColValue(acoCat, "SpecCat", line.getSpecCat());
+            res.setRowColValue(acoCat, "m", line.getM());
+            res.setRowColValue(acoCat, "a", line.getA());
+            res.setRowColValue(acoCat, "d", line.getD());
+        });
         return res2;
     }
 

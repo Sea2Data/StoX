@@ -229,7 +229,7 @@ public final class MapTopComponent extends TopComponent implements LookupListene
                 case Functions.FN_DEFINERECTANGLE:
                     checkRectangleLayer();
                 // Drop to set handler
-                case Functions.FN_DEFINEACOUSTICTRANSECT:
+                case Functions.FN_DEFINEACOUSTICPSU:
                     checkAcousticLayer();
                     setup.getMapPanel().getMap().setHandler(new TransectBuildHandler(setup));
                     stoxBar.getStationSelectAction().setEnabled(false);
@@ -356,7 +356,7 @@ public final class MapTopComponent extends TopComponent implements LookupListene
                     break;
                 case Functions.FN_DEFINERECTANGLE:
                 // Drop to set handler
-                case Functions.FN_DEFINEACOUSTICTRANSECT:
+                case Functions.FN_DEFINEACOUSTICPSU:
                     stoxBar.getTransectAction().setEnabled(false);
                     setup.getMapPanel().getMap().setHandler(null);
                     // Clear selection in acoustic layer

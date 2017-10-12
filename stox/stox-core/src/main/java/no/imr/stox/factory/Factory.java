@@ -169,10 +169,10 @@ public class Factory {
                 setRespondInGUI(true).setBreakInGUI(true);
         m.addProcess(Functions.FN_STRATUMAREA, Functions.FN_STRATUMAREA).
                 setParameterProcessValue(Functions.PM_DEFINESTRATA_PROCESSDATA, Functions.FN_READPROCESSDATA);
-        m.addProcess(Functions.FN_DEFINEACOUSTICTRANSECT, Functions.FN_DEFINEACOUSTICTRANSECT).
+        m.addProcess(Functions.FN_DEFINEACOUSTICPSU, Functions.FN_DEFINEACOUSTICPSU).
                 setRespondInGUI(true).setBreakInGUI(true).
-                setParameterProcessValue(Functions.PM_DEFINEACOUSTICTRANSECT_PROCESSDATA, Functions.FN_READPROCESSDATA).
-                setParameterProcessValue(Functions.PM_DEFINEACOUSTICTRANSECT_ACOUSTICDATA, Functions.FN_FILTERACOUSTIC);
+                setParameterProcessValue(Functions.PM_DEFINEACOUSTICPSU_PROCESSDATA, Functions.FN_READPROCESSDATA).
+                setParameterProcessValue(Functions.PM_DEFINEACOUSTICPSU_ACOUSTICDATA, Functions.FN_FILTERACOUSTIC);
         m.addProcess(Functions.FN_MEANNASC, Functions.FN_MEANNASC).
                 setParameterProcessValue(Functions.PM_MEANNASC_NASC, Functions.FN_NASC).
                 setParameterProcessValue(Functions.PM_MEANNASC_PROCESSDATA, Functions.FN_READPROCESSDATA).
@@ -556,16 +556,14 @@ public class Factory {
                 setParameterProcessValue(Functions.PM_SPLITNASC_ACOUSTICDATA, Functions.FN_FILTERACOUSTIC).
                 setParameterProcessValue(Functions.PM_SPLITNASC_LENGTHDIST, Functions.FN_TOTALLENGTHDIST).
                 setParameterProcessValue(Functions.PM_SPLITNASC_NASC, Functions.FN_NASC).
-                setParameterValue(Functions.PM_SPLITNASC_MIXACOCAT, 2).
-                setParameterValue(Functions.PM_SPLITNASC_SPECIESTS, "22;SEI;20.0;-67.0;0.0/18;HVITTING;20.0;-67.0;0.0/31;TORSK;20.0;-66.0;0.0/30;HYSE;20.0;-65.0;0.0/28;ØYEPÅL;20.0;-67.0;0.0/24;KOLMULE;20.0;-67.0;0.0");
+                setParameterValue(Functions.PM_SPLITNASC_SPECIESTS, "2;22;SEI;20.0;-67.0;0.0/2;18;HVITTING;20.0;-67.0;0.0/2;31;TORSK;20.0;-66.0;0.0/2;30;HYSE;20.0;-65.0;0.0/2;28;ØYEPÅL;20.0;-67.0;0.0/2;24;KOLMULE;20.0;-67.0;0.0");
 
         m.addProcess(Functions.FN_SPLITNASC + "_BUNN2", Functions.FN_SPLITNASC).
                 setParameterProcessValue(Functions.PM_SPLITNASC_PROCESSDATA, Functions.FN_SPLITNASCASSIGNMENT).
                 setParameterProcessValue(Functions.PM_SPLITNASC_ACOUSTICDATA, Functions.FN_FILTERACOUSTIC).
                 setParameterProcessValue(Functions.PM_SPLITNASC_LENGTHDIST, Functions.FN_TOTALLENGTHDIST).
                 setParameterProcessValue(Functions.PM_SPLITNASC_NASC, Functions.FN_NASC).
-                setParameterValue(Functions.PM_SPLITNASC_MIXACOCAT, 52).
-                setParameterValue(Functions.PM_SPLITNASC_SPECIESTS, "22;SEI;20.0;-67.0;0.0/18;HVITTING;20.0;-67.0;0.0/31;TORSK;20.0;-66.0;0.0/30;HYSE;20.0;-65.0;0.0/28;ØYEPÅL;20.0;-67.0;0.0");
+                setParameterValue(Functions.PM_SPLITNASC_SPECIESTS, "52;22;SEI;20.0;-67.0;0.0/52;18;HVITTING;20.0;-67.0;0.0/52;31;TORSK;20.0;-66.0;0.0/52;30;HYSE;20.0;-65.0;0.0/52;28;ØYEPÅL;20.0;-67.0;0.0");
 
         m.addProcess(Functions.FN_COMBINENASC + "_SEI", Functions.FN_COMBINENASC).
                 setParameterProcessValue(Functions.PM_COMBINENASC_NASC1, Functions.FN_SPLITNASC + "_BUNN").

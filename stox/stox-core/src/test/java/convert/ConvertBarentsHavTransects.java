@@ -170,7 +170,7 @@ public class ConvertBarentsHavTransects {
                         });
             });
             AbndEstProcessDataUtil.regroupAssignments(pd); // Optimize assignments
-            bl.getProcessByFunctionName(Functions.FN_DEFINEACOUSTICTRANSECT).setParameterValue(Functions.PM_DEFINEACOUSTICTRANSECT_USEPROCESSDATA, String.valueOf(true));
+            bl.getProcessByFunctionName(Functions.FN_DEFINEACOUSTICPSU).setParameterValue(Functions.PM_DEFINEACOUSTICPSU_USEPROCESSDATA, String.valueOf(true));
             pr.save();
         } catch (IOException ex) {
             Logger.getLogger(ConvertBarentsHavTransects.class.getName()).log(Level.SEVERE, null, ex);
@@ -306,7 +306,7 @@ public class ConvertBarentsHavTransects {
             createTransect(pr.getProcessData(), prevStrata, distList, tr);
         }
         // Set transect definition method to "use process data"
-        bl.getProcessByFunctionName(Functions.FN_DEFINEACOUSTICTRANSECT).setParameterValue(Functions.PM_DEFINEACOUSTICTRANSECT_USEPROCESSDATA, String.valueOf(true));
+        bl.getProcessByFunctionName(Functions.FN_DEFINEACOUSTICPSU).setParameterValue(Functions.PM_DEFINEACOUSTICPSU_USEPROCESSDATA, String.valueOf(true));
         pr.save();
     }
 

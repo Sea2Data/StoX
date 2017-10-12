@@ -6,6 +6,7 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 import javax.swing.SwingWorker;
 import javax.xml.stream.XMLStreamException;
 import javax.xml.stream.XMLStreamWriter;
@@ -385,6 +386,13 @@ public class Model implements IModel {
             }
         }
         return null;
+    }
+
+    @Override
+    public List<IProcess> getProcessesByFunctionName(String functionName) {
+        return getProcessList().stream()
+                .filter(p -> p.getMetaFunction() != null && p.getMetaFunction().getName().equals(functionName))
+                .collect(Collectors.toList());
     }
 
     @Override

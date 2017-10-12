@@ -1,8 +1,12 @@
 package no.imr.stox.factory;
 
+import java.util.List;
+import java.util.stream.Collectors;
 import no.imr.sea2data.imrbase.util.Workspace;
+import no.imr.stox.bo.SpeciesTSMix;
 import no.imr.stox.functions.utils.Functions;
 import no.imr.stox.functions.utils.ProjectUtils;
+import no.imr.stox.library.IMetaFunction;
 import no.imr.stox.model.IModel;
 import no.imr.stox.model.IProcess;
 import no.imr.stox.model.IProject;
@@ -38,6 +42,16 @@ public final class FactoryUtil {
             template = Factory.TEMPLATE_USERDEFINED;
         }
         return acquireProject(projectRoot, projectName, template);
+    }
+
+    public static List<IMetaFunction> getTemplateFunctionsByModel(String template, String model) {
+        IProject project = new Project();
+        Factory.applyProjectTemplate(project, template);
+        IModel m = project.getModel(model);
+        if (m != null) {
+            return m.getProcessList().stream().map(p -> p.getMetaFunction()).filter(f -> f != null).collect(Collectors.toList());
+        }
+        return null;
     }
 
     public static IProject acquireProject(String projectRoot, String projectName, String template) {
@@ -76,155 +90,6 @@ public final class FactoryUtil {
 
         }
 
-        /*if (prj.getResourceVersion() < 1.09) {
-            IProcess prw = prj.getBaseline().findProcessByFunction(Functions.FN_INDIVIDUALDATASTATIONS);
-            IProcess prw2 = prj.getBaseline().findProcessByFunction(Functions.FN_ABUNDANCE);
-            if (prw != null && prw2 != null) {
-                // Set abundance parameter to get access to estlayerdef.
-                prw.setParameterValue(Functions.PM_INDIVIDUALDATASTATIONS_ABUNDANCE, "Process(" + prw2.getName() + ")");
-            }
-            prw = prj.getBaseline().findProcessByFunction(Functions.FN_FILTERACOUSTIC);
-            if (prw != null && prw2 != null) {
-                String s = (String) prw.getParameterValue(Functions.PM_FILTERACOUSTIC_FREQEXPR);
-                if (s != null) {
-                    prw.setParameterValue(Functions.PM_FILTERACOUSTIC_FREQEXPR, s.replace("tranceiver", "transceiver")); // Spell check
-                }
-            }
-        }
-        if (prj.getResourceVersion() < 1.17) {
-            IProcess prw = prj.getBaseline().findProcessByFunction(Functions.FN_FILTERBIOTIC);
-            if (prw != null) {
-                String s = (String) prw.getParameterValue(Functions.PM_FILTERBIOTIC_CATCHEXPR);
-                if (s != null) {
-                    prw.setParameterValue(Functions.PM_FILTERBIOTIC_CATCHEXPR, s.replace("species", "noname")); // species as noname
-                }
-            }
-        }
-
-        if (prj.getResourceVersion() < 1.21) {
-            IProcess prw = prj.getBaseline().findProcessByFunction(Functions.FN_SUPERINDABUNDANCE);
-            if (prw != null) {
-                prw.setParameterProcessValueByFunction(Functions.PM_SUPERINDABUNDANCE_PROCESSDATA, Functions.FN_READPROCESSDATA);
-            }
-        }
-        if (prj.getResourceVersion() < 1.32) {
-            IProcess prw = prj.getBaseline().findProcessByFunction(Functions.FN_SUPERINDABUNDANCE);
-            if (prw != null) {
-                prw.setParameterProcessValueByFunction(Functions.PM_SUPERINDABUNDANCE_INDIVIDUALDATA, Functions.FN_INDIVIDUALDATA);
-            }
-            prw = prj.getBaseline().findProcessByFunction(Functions.FN_CORRECTFORINNSUFFICIENTSAMPLING);
-            if (prw != null) {
-                prj.getBaseline().getProcessList().remove(prw);
-            }
-        }
-        // Ensure that report processes belongs to the report model
-        IProcess p = prj.getBaseline().getProcessByFunctionName(Functions.FN_ESTIMATEBYPOPULATIONCATEGORY);
-        if (p != null) {
-            p.moveTo(prj.getBaselineReport());
-        }
-        String[] s = {Functions.FN_PLOTNASCDISTRIBUTION, Functions.FN_PLOTABUNDANCE};
-        for (String pr : s) {
-            p = prj.getRModel().getProcessByFunctionName(pr);
-            if (p != null) {
-                p.moveTo(prj.getRModelReport());
-            }
-        }
-
-        // Use FillMissingData in baseline report when < 1.33:
-        if (prj.getResourceVersion() < 1.33) {
-            IProcess prw = prj.getBaseline().findProcessByFunction(Functions.FN_SUPERINDABUNDANCE);
-            if (prw != null) {
-                prw.setProcessName(Functions.FN_SUPERINDABUNDANCE);
-            }
-            prj.getBaselineReport().getProcessList().clear();
-            Factory.createAbundanceReport(prj.getBaselineReport(), true, 1.0, 1000, Functions.COL_IND_AGE);
-        }
-        
-        Boolean hasAcousticDensity = prj.getBaseline().getProcessByFunctionName(Functions.FN_ACOUSTICDENSITY) != null;
-        Boolean hasSweptarea = prj.getBaseline().getProcessByFunctionName(Functions.FN_SWEPTAREADENSITY) != null;
-        if (prj.getResourceVersion() < 1.42 && (hasAcousticDensity || hasSweptarea)) {
-            prj.getRModel().getProcessList().clear();
-            prj.getRModelReport().getProcessList().clear();
-            // Reset the R template 
-            if (hasAcousticDensity) {
-                Factory.createAcousticRWithUncertainty(prj.getRModel());
-                Factory.createRReport(prj.getRModelReport());
-            } else if (hasSweptarea) {
-                Factory.createSweptareaRModelWithUncertainty(prj.getRModel());
-                Factory.createSweptareaRReport(prj.getRModelReport(), true);
-            }
-        }
-
-        if (prj.getResourceVersion() < 1.41) {
-            IProcess prw = prj.getRModelReport().findProcessByFunction(Functions.FN_PLOTABUNDANCE);
-            if (prw != null) {
-                prw.setProcessName(Functions.FN_PLOTABUNDANCE);
-            }
-        }
-        if (prj.getResourceVersion() < 1.67) {
-            hasAcousticDensity = prj.getBaseline().getProcessByFunctionName(Functions.FN_ACOUSTICDENSITY) != null;
-            hasSweptarea = prj.getBaseline().getProcessByFunctionName(Functions.FN_SWEPTAREADENSITY) != null
-                    || prj.getBaseline().getProcessByFunctionName(Functions.FN_LARVAEDENSITY) != null;
-            prj.getRModel().getProcessList().clear();
-            prj.getRModelReport().getProcessList().clear();
-            // Reset the R template 
-            if (hasAcousticDensity) {
-                Factory.createAcousticRWithUncertainty(prj.getRModel());
-                Factory.createRReport(prj.getRModelReport());
-            } else if (hasSweptarea) {
-                Factory.createSweptareaRModelWithUncertainty(prj.getRModel());
-                Factory.createSweptareaRReport(prj.getRModelReport(), true);
-            }
-        }
-        if (prj.getResourceVersion() < 1.66) {
-            IProcess prw = prj.getBaseline().findProcessByFunction(Functions.FN_FILTERBIOTIC);
-            if (prw != null) {
-                String str = (String) prw.getParameterValue(Functions.PM_FILTERBIOTIC_CATCHEXPR);
-                if (str != null) {
-                    if (str.contains("==") && !str.contains(" == ")) {
-                        str = str.replace("==", " == ");
-                    }
-                    str = str.replace(" eq ", " == ");
-                    str = str.replace("noname == 'SILD'", "species == '161722'");
-                    str = str.replace("noname == 'SILDG05'", "species == '161722.G05'");
-                    str = str.replace("noname == 'SILDG03'", "species == '161722.G03'");
-                    str = str.replace("noname == 'HYSE'", "species == '164744'");
-                    str = str.replace("noname == 'TORSK'", "species == '164712'");
-                    str = str.replace("noname == 'SEI'", "species == '164727'");
-                    str = str.replace("noname == 'MAKRELL'", "species == '172414'");
-                    str = str.replace("noname == 'KOLMULE'", "species == '164774'");
-                    str = str.replace("noname == 'LODDE'", "species == '162035'");
-                    prw.setParameterValue(Functions.PM_FILTERBIOTIC_CATCHEXPR, str); // species as noname
-                }
-            }
-        }
-        if (prj.getResourceVersion() < 1.69) {
-            hasAcousticDensity = prj.getBaseline().getProcessByFunctionName(Functions.FN_ACOUSTICDENSITY) != null;
-            IProcess prw = prj.getRModelReport().findProcessByFunction(Functions.FN_PLOTABUNDANCE);
-            if (prw != null) {
-                String str = (String) prw.getParameterValue(Functions.PM_PLOTABUNDANCE_TYPE);
-                if (str == null) {
-                    prw.setParameterValue(Functions.PM_PLOTABUNDANCE_TYPE, hasAcousticDensity ? "Acoustic" : "SweptArea");
-                }
-            }
-            prw = prj.getRModelReport().findProcessByFunction(Functions.FN_IMPUTEBYAGE);
-            if (prw != null) {
-                String str = (String) prw.getParameterValue(Functions.PM_IMPUTEBYAGE_TYPE);
-                if (str == null) {
-                    prw.setParameterValue(Functions.PM_IMPUTEBYAGE_TYPE, hasAcousticDensity ? "Acoustic" : "SweptArea");
-                }
-            }
-        }
-        if (prj.getResourceVersion() < 1.70) {
-            // Set saveRImage parameters on report model.
-            // Start using outputfolder and filenamebase
-            // outputFolder="report", fileBaseName="impute.RData"
-            IProcess prw = prj.getRModelReport().findProcessByFunction(Functions.FN_SAVERIMAGE);
-            if (prw != null) {
-                prw.setParameterValue(Functions.PM_SAVERIMAGE_OUTPUTFOLDER, "report");
-                prw.setParameterValue(Functions.PM_SAVERIMAGE_FILEBASENAME, "impute.RData");
-            }
-        }*/
         if (prj.getResourceVersion() < 1.33) {
             IProcess prw = prj.getBaseline().findProcessByFunction(Functions.FN_SUPERINDABUNDANCE);
             if (prw != null) {
@@ -253,6 +118,22 @@ public final class FactoryUtil {
             if (hasSweptarea) {
                 setParameterValue(prj.getBaseline(), Functions.FN_RUNBOOTSTRAP, Functions.PM_RUNBOOTSTRAP_ACOUSTICMETHOD, "");
             }
+        }
+        if (prj.getResourceVersion() < 1.73) {
+            // Split Nasc mix acocat is moved to speciesTS parameter
+            List<IProcess> pr = prj.getBaseline().getProcessesByFunctionName(Functions.FN_SPLITNASC);
+            pr.stream().forEach(p -> {
+                String mixAco = (String) p.getParameterValue(Functions.PM_SPLITNASC_MIXACOCAT);
+                String specTs = (String) p.getParameterValue(Functions.PM_SPLITNASC_SPECIESTS);
+                List<SpeciesTSMix> l = SpeciesTSMix.fromString(specTs);
+                if (l != null) {
+                    l.stream().forEach(s -> s.setMixAcoCat(mixAco));
+                    specTs = SpeciesTSMix.toString(l);
+                    p.setParameterValue(Functions.PM_SPLITNASC_SPECIESTS, specTs);
+                }
+                p.setParameterValue(Functions.PM_SPLITNASC_MIXACOCAT, null);
+            });
+            
         }
         /*if (prj.getResourceVersion() < 1.72) {
             // Resolve deprecation <-1.72v: swept area swept area sweep width method length dependent into catchability length dependent sweep width.

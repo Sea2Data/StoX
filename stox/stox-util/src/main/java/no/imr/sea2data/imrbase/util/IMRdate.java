@@ -196,17 +196,24 @@ public final class IMRdate {
         return encodeDate(year, month, day, 0, 0, 0, 0, gmt);
     }
 
+    public static LocalDateTime encodeLocalDateTime(Date date, Date time) {
+        if (date == null && time == null) {
+            return null;
+        }
+        return getLocalTime(time).atDate(getLocalDate(date));
+    }
     public static Date encodeDate(Date date, Date time) {
         if (date == null && time == null) {
             return null;
         }
-        Integer year = date != null ? getYear(date, true) : 1900;
+        return Date.from(encodeLocalDateTime(date, time).toInstant(ZoneOffset.UTC));
+        /*Integer year = date != null ? getYear(date, true) : 1900;
         Integer month = date != null ? getMonth(date, true) : 1;
         Integer day = date != null ? getDayOfMonth(date, true) : 1;
         Integer hour = time != null ? getHourOfDay(time, true) : 0;
         Integer minute = time != null ? getMinute(time, true) : 0;
         Integer sec = time != null ? getSecond(time, true) : 0;
-        return encodeDate(year, month, day, hour, minute, sec, 0, true);
+        return encodeDate(year, month, day, hour, minute, sec, 0, true);*/
     }
 
     private static final String DEFAULT_DATE_TIME_PATTERN = "yyyy-MM-dd HH:mm:ss";
@@ -243,7 +250,7 @@ public final class IMRdate {
 
     public static LocalDate strToLocalDate(String s, String format) {
         try {
-            if(s == null) {
+            if (s == null) {
                 return null;
             }
             return LocalDate.parse(s, DateTimeFormatter.ofPattern(format));
@@ -564,6 +571,13 @@ public final class IMRdate {
         return getZonedDateTime(d).toLocalDate();
     }
 
+    public static LocalDateTime getLocalDateTime(Date d) {
+        if (d == null) {
+            return null;
+        }
+        return getZonedDateTime(d).toLocalDateTime();
+    }
+
     public static LocalTime getLocalTime(Date d) {
         if (d == null) {
             return null;
@@ -619,6 +633,11 @@ public final class IMRdate {
 
     public static Date asDate(LocalDate localDate) {
         return Date.from(localDate.atStartOfDay().atZone(utcZoneId).toInstant());
+    }
+
+    public static Date asTime(LocalDate localDate, LocalTime localTime) {
+        Instant instant = localTime.atDate(localDate).atZone(utcZoneId).toInstant();
+        return Date.from(instant);
     }
 
     /**

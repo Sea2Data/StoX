@@ -161,7 +161,7 @@ public final class DistanceTableTopComponent extends TopComponent implements IPr
 
 
     public void onProcessEnd(IProcess process) {
-        if (process.isRespondInGUI() && process.getMetaFunction().getName().equals(Functions.FN_DEFINEACOUSTICTRANSECT)) {
+        if (process.isRespondInGUI() && process.getMetaFunction().getName().equals(Functions.FN_DEFINEACOUSTICPSU)) {
             definingTransect = true;
             table.updateTable();
         } else if(definingTransect) {

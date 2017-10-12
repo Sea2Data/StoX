@@ -17,6 +17,7 @@ public class MetaParameter extends MetaObject implements IMetaParameter {
     private IMetaDataType metaDataType;
     private IMetaMatrix metaMatrix;
     private Boolean required;
+    private Boolean deprecated;
     private Boolean fileRef = false;
     private Object defaultValue;
     private List<String> values;
@@ -28,11 +29,12 @@ public class MetaParameter extends MetaObject implements IMetaParameter {
         super(library);
     }
 
-    public MetaParameter(IMetaFunction metaFunction, Boolean required, Boolean fileRef, IMetaDataType metaDataType, IMetaMatrix metaMatrix, String name, String description,
+    public MetaParameter(IMetaFunction metaFunction, Boolean required, Boolean deprecated, Boolean fileRef, IMetaDataType metaDataType, IMetaMatrix metaMatrix, String name, String description,
             Object defaultValue, List<String> values, List<String> parentTags) {
         super(metaFunction.getLibrary(), name, description);
         this.required = required;
         this.fileRef = fileRef;
+        this.deprecated = deprecated;
         this.metaDataType = metaDataType;
         this.metaMatrix = metaMatrix;
         this.metaFunction = metaFunction;
@@ -85,6 +87,16 @@ public class MetaParameter extends MetaObject implements IMetaParameter {
     @Override
     public void setRequired(Boolean required) {
         this.required = required;
+    }
+
+    @Override
+    public Boolean isDeprecated() {
+        return deprecated;
+    }
+
+    @Override
+    public void setDeprecated(Boolean deprecated) {
+        this.deprecated = deprecated;
     }
 
     @Override

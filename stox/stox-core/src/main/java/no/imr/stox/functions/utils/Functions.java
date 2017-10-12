@@ -229,10 +229,11 @@ public final class Functions {
     public static final String PM_CATCHABILITY_LMAX = "LMax";
     public static final String PM_CATCHABILITY_TABLE = "Table";
 
-    public static final String FN_DEFINEACOUSTICTRANSECT = "DefineAcousticTransect";
-    public static final String PM_DEFINEACOUSTICTRANSECT_PROCESSDATA = "ProcessData";
-    public static final String PM_DEFINEACOUSTICTRANSECT_ACOUSTICDATA = "AcousticData";
-    public static final String PM_DEFINEACOUSTICTRANSECT_USEPROCESSDATA = "UseProcessData";
+    public static final String FN_DEFINEACOUSTICPSU = "DefineAcousticPSU";
+    public static final String PM_DEFINEACOUSTICPSU_PROCESSDATA = "ProcessData";
+    public static final String PM_DEFINEACOUSTICPSU_ACOUSTICDATA = "AcousticData";
+    public static final String PM_DEFINEACOUSTICPSU_DEFINITIONMETHOD = "DefinitionMethod";
+    public static final String PM_DEFINEACOUSTICPSU_USEPROCESSDATA = "UseProcessData";
 
     public static final String FN_DEFINESWEPTAREAPSU = "DefineSweptAreaPSU";
     public static final String PM_DEFINESWEPTAREAPSU_PROCESSDATA = "ProcessData";
@@ -253,6 +254,13 @@ public final class Functions {
     public static final String PM_BIOSTATIONASSIGNMENT_RADIUS = "Radius";
     public static final String PM_BIOSTATIONASSIGNMENT_ACOUSTICDATA = "AcousticData";
     public static final String PM_BIOSTATIONASSIGNMENT_ESTLAYERS = "EstLayers";
+    public static final String PM_BIOSTATIONASSIGNMENT_MINNUMSTATIONS = "MinNumStations";
+    public static final String PM_BIOSTATIONASSIGNMENT_SCALARPRODUCTLIMIT = "ScalarProductLimit";
+    public static final String PM_BIOSTATIONASSIGNMENT_REFLATITUDE = "RefLatitude";
+    public static final String PM_BIOSTATIONASSIGNMENT_REFLONGITUDE = "RefLongitude";
+    public static final String PM_BIOSTATIONASSIGNMENT_REFGCDISTANCE = "RefGCDistance";
+    public static final String PM_BIOSTATIONASSIGNMENT_REFTIME = "RefTime";
+    public static final String PM_BIOSTATIONASSIGNMENT_REFBOTDEPTH = "RefBotDepth";
 
     public static final String FN_SPLITNASCASSIGNMENT = "SplitNASCAssignment";
     public static final String PM_SPLITNASCASSIGNMENT_ACOUSTICDATA = "AcousticData";
@@ -646,6 +654,7 @@ public final class Functions {
     // Biostation assignment method
     public static final String ASSIGNMENTMETHOD_STRATUM = SAMPLEUNIT_STRATUM;
     public static final String ASSIGNMENTMETHOD_RADIUS = "Radius";
+    public static final String ASSIGNMENTMETHOD_ELLIPSOIDALDISTANCE = "EllipsoidalDistance";
     public static final String ASSIGNMENTMETHOD_USEPROCESSDATA = "UseProcessData";
 
     // Define swept area psu method
@@ -732,6 +741,10 @@ public final class Functions {
     public static final String COVARIATETYPE_FIXED = "Fixed";
     public static final String COVARIATETYPE_RANDOM = "Random";
     public static final String COVARIATETYPE_DEPENDENCY = "Dependency";
+    // Acoustic PSU definition method
+    public static final String ACOUSTICPSU_DEFINITIONMETHOD_NONE = "None";
+    public static final String ACOUSTICPSU_DEFINITIONMETHOD_USEPROCESSDATA = "UseProcessData";
+    public static final String ACOUSTICPSU_DEFINITIONMETHOD_EDSUTOPSU = "EDSUToPSU";
     // Covariate definition method
     public static final String DEFINITIONMETHOD_INHERIT = "Inherit";
     public static final String DEFINITIONMETHOD_INHERITCOVARID = "InheritCovarId";

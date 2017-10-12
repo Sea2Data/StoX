@@ -2,19 +2,26 @@ package no.imr.stox.functions.processdata;
 
 import com.vividsolutions.jts.geom.Coordinate;
 import com.vividsolutions.jts.geom.MultiPolygon;
+import java.time.Duration;
 import java.util.Collection;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 import no.imr.sea2data.imrbase.matrix.MatrixBO;
 import no.imr.stox.bo.ProcessDataBO;
 import no.imr.stox.functions.AbstractFunction;
 import no.imr.stox.functions.utils.AbndEstProcessDataUtil;
 import no.imr.sea2data.biotic.bo.FishstationBO;
 import no.imr.sea2data.echosounderbo.DistanceBO;
+import no.imr.sea2data.echosounderbo.FrequencyBO;
+import no.imr.sea2data.imrbase.math.ImrMath;
+import no.imr.sea2data.imrbase.util.IMRdate;
 import no.imr.sea2data.imrmap.utils.JTSUtils;
 import no.imr.stox.functions.utils.AbndEstParamUtil;
 import no.imr.stox.functions.utils.EchosounderUtils;
 import no.imr.stox.functions.utils.Functions;
+import no.imr.stox.functions.utils.StoXMath;
 import no.imr.stox.log.ILogger;
 
 /**
@@ -42,6 +49,14 @@ public class BioStationAssignment extends AbstractFunction {
         MatrixBO stratumPlgs = AbndEstProcessDataUtil.getStratumPolygons(pd);
         // Booleans
         Boolean byRadius = assignmentMethod.equals(Functions.ASSIGNMENTMETHOD_RADIUS);
+        Boolean byEllipsoidal = assignmentMethod.equals(Functions.ASSIGNMENTMETHOD_ELLIPSOIDALDISTANCE);
+        Integer minNumStations = (Integer) input.get(Functions.PM_BIOSTATIONASSIGNMENT_MINNUMSTATIONS);
+        Double scalarProductLimit = (Double) input.get(Functions.PM_BIOSTATIONASSIGNMENT_SCALARPRODUCTLIMIT);
+        Double refLatitude = (Double) input.get(Functions.PM_BIOSTATIONASSIGNMENT_REFLATITUDE);
+        Double refLongitude = (Double) input.get(Functions.PM_BIOSTATIONASSIGNMENT_REFLONGITUDE);
+        Double refGCDistance = (Double) input.get(Functions.PM_BIOSTATIONASSIGNMENT_REFGCDISTANCE);
+        Double refTime = (Double) input.get(Functions.PM_BIOSTATIONASSIGNMENT_REFTIME);
+        Double refBotDepth = (Double) input.get(Functions.PM_BIOSTATIONASSIGNMENT_REFBOTDEPTH);
         Boolean useExisting = assignmentMethod.equals(Functions.ASSIGNMENTMETHOD_USEPROCESSDATA);
         String estLayerDef = (String) input.get(Functions.PM_BIOSTATIONASSIGNMENT_ESTLAYERS);
         MatrixBO estLayer = AbndEstParamUtil.getEstLayerMatrixFromEstLayerDef(estLayerDef);
@@ -61,6 +76,10 @@ public class BioStationAssignment extends AbstractFunction {
             AbndEstProcessDataUtil.getAssignmentResolutions(pd).setRowValue(Functions.RES_LAYERTYPE, layerType);
         }
         if (!useExisting) {
+
+            if (byEllipsoidal) {
+
+            }
 
             if (byRadius) {
                 if (radius == null) {
@@ -86,41 +105,78 @@ public class BioStationAssignment extends AbstractFunction {
                 for (String psu : AbndEstProcessDataUtil.getPSUsByStratum(pd, stratum)) {
                     Boolean psuIsAssigned = false;
                     Collection<DistanceBO> distsBOPerPSU = null;
-                    if (byRadius) {
+                    if (byRadius || byEllipsoidal) {
                         Collection<String> distsPerPSU = AbndEstProcessDataUtil.getEDSUsByPSU(pd, psu);
                         distsBOPerPSU = EchosounderUtils.findDistances(distances, distsPerPSU);
                     }
                     String asgKey = asg.toString();
 
                     // Build the trawl assignments
-                    for (FishstationBO fs : fList) {
-                        if (fs.getLatitudeStart() == null || fs.getLongitudeStart() == null) {
-                            logger.error("Missing position at " + fs.getKey(), null);
+                    if (byEllipsoidal) {
+                        if (distsBOPerPSU == null || !(distsBOPerPSU.size() == 1)) {
+                            continue;
                         }
-                        Coordinate fPos = new Coordinate(fs.getLongitudeStart(), fs.getLatitudeStart());
-                        boolean assigned = false;
-                        if (byRadius) {
-                            // Calculate if the radius is covering some of the distances
-                            for (DistanceBO distBO : distsBOPerPSU) {
-                                if (distBO == null) {
-                                    continue;
-                                }
-                                Coordinate dPos = new Coordinate(distBO.getLon_start(), distBO.getLat_start());
-                                Double gcDist = JTSUtils.gcircledist(fPos, dPos);
-                                if (gcDist < radius) {
-                                    assigned = true;
-                                    break;
-                                }
+                        DistanceBO d = distsBOPerPSU.iterator().next();
+
+                        try {
+                            List<WeightedFishStation> wfsList = fList.parallelStream()
+                                    .map(fs -> new WeightedFishStation(getScalarProduct(d, fs, refLatitude, refLongitude, refGCDistance, refTime, refBotDepth), fs))
+                                    .filter(wfs -> wfs.getScalar() != null)
+                                    .collect(Collectors.toList());
+                            List<WeightedFishStation> wfsListFilter = 
+                                    scalarProductLimit == null || scalarProductLimit < 0d ? wfsList :
+                                    wfsList.parallelStream()
+                                    .filter(wfs -> wfs.getScalar() < scalarProductLimit)
+                                    .collect(Collectors.toList());
+
+                            if (minNumStations != null && wfsListFilter.size() < minNumStations) {
+                                wfsList = wfsList.parallelStream()
+                                        .sorted(Comparator.comparingDouble(WeightedFishStation::getScalar))
+                                        .limit(minNumStations)
+                                        .collect(Collectors.toList());
+
+                            } else {
+                                wfsList = wfsListFilter;
                             }
-                        } else {
-                            // assign by strata
-                            // all stations inside stratum to all transects 
-                            assigned = JTSUtils.within(fPos, stratumPol);
+                            wfsList.forEach(wfs -> {
+                                // Define trawl station assignment with default weight=1
+                                FishstationBO fs = wfs.getFs();
+                                bsAsg.setRowColValue(asgKey, fs.getKey(), 1d);
+                            });
+                            psuIsAssigned = !wfsList.isEmpty();
+                        } catch (Exception e) {
+                            e.printStackTrace();
                         }
-                        if (assigned) {
-                            // Define trawl station assignment with default weight=1
-                            bsAsg.setRowColValue(asgKey, fs.getKey(), 1d);
-                            psuIsAssigned = true;
+                    } else {
+                        for (FishstationBO fs : fList) {
+                            if (fs.getLatitudeStart() == null || fs.getLongitudeStart() == null) {
+                                logger.error("Missing position at " + fs.getKey(), null);
+                            }
+                            Coordinate fPos = new Coordinate(fs.getLongitudeStart(), fs.getLatitudeStart());
+                            boolean assigned = false;
+                            if (byRadius) {
+                                // Calculate if the radius is covering some of the distances
+                                for (DistanceBO distBO : distsBOPerPSU) {
+                                    if (distBO == null) {
+                                        continue;
+                                    }
+                                    Coordinate dPos = new Coordinate(distBO.getLon_start(), distBO.getLat_start());
+                                    Double gcDist = JTSUtils.gcircledist(fPos, dPos);
+                                    if (gcDist < radius) {
+                                        assigned = true;
+                                        break;
+                                    }
+                                }
+                            } else {
+                                // assign by strata
+                                // all stations inside stratum to all transects 
+                                assigned = JTSUtils.within(fPos, stratumPol);
+                            }
+                            if (assigned) {
+                                // Define trawl station assignment with default weight=1
+                                bsAsg.setRowColValue(asgKey, fs.getKey(), 1d);
+                                psuIsAssigned = true;
+                            }
                         }
                     }
                     if (psuIsAssigned) {
@@ -162,5 +218,84 @@ public class BioStationAssignment extends AbstractFunction {
         if (!missingAsgError.isEmpty()) {
             logger.log("Warning: Missing assignments for EDSU at the given PSU's:" + missingAsgError + ". Solution: 1) Perform assignments manually or 2) Redefine transects or 3) Change assignment method/parameter");
         }
+    }
+
+    private Double getScalarProduct(DistanceBO d, FishstationBO fs, Double refLatitude, Double refLongitude, Double refGCDistance, Double refTime, Double refBotDepth) {
+        Double scalarProduct = 0d;
+        if (refLatitude != null && refLatitude > 0d) {
+            Double val = StoXMath.safeSumRelativeSquared(fs.getStartLat(), d.getLat_start(), refLatitude);
+            if (val == null) {
+                return null;
+            }
+            scalarProduct += val;
+        }
+        if (refLongitude != null && refLongitude > 0d) {
+            Double val = StoXMath.safeSumRelativeSquared(fs.getStartLon(), d.getLon_start(), refLongitude);
+            if (val == null) {
+                return null;
+            }
+            scalarProduct += val;
+        }
+        if (refGCDistance != null && refGCDistance > 0d) {
+            Coordinate dPos = new Coordinate(d.getLon_start(), d.getLat_start());
+            Coordinate fPos = new Coordinate(fs.getLongitudeStart(), fs.getLatitudeStart());
+            Double gcDist = JTSUtils.gcircledist(fPos, dPos);
+            Double val = StoXMath.safeSumRelativeDiffSquared(gcDist, refGCDistance);
+            if (val == null) {
+                return null;
+            }
+            scalarProduct += val;
+        }
+        if (refTime != null && refTime > 0d) {
+            if (d.getStart_time() == null || fs.getStartDate() == null || fs.getStartTime() == null) {
+                return null;
+            }
+            try {
+                Duration dur = Duration.between(IMRdate.getLocalDateTime(d.getStart_time()),
+                        IMRdate.encodeLocalDateTime(fs.getStartDate(), fs.getStartTime()));
+                Double hours = dur.getSeconds() / 3600d;
+                Double val = StoXMath.safeSumRelativeDiffSquared(hours, refTime);
+                if (val == null) {
+                    return null;
+                }
+                scalarProduct += val;
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+        if (refBotDepth != null && refBotDepth > 0d) {
+            Double fsBotDepth = StoXMath.safeAverage(fs.getBottomDepthStart(), fs.getBottomDepthStop());
+            Double dBotDepth = null;
+            if (d.getFrequencies().size() == 1) {
+                FrequencyBO f = d.getFrequencies().get(0);
+                dBotDepth = StoXMath.safeAverage(f.getMin_bot_depth(), f.getMax_bot_depth());
+            }
+            Double val = StoXMath.safeSumRelativeSquared(fsBotDepth, dBotDepth, refBotDepth);
+            if (val == null) {
+                return null;
+            }
+            scalarProduct += val;
+        }
+        return scalarProduct;
+    }
+
+    class WeightedFishStation {
+
+        Double scalar;
+        FishstationBO fs;
+
+        public WeightedFishStation(Double scalar, FishstationBO fs) {
+            this.scalar = scalar;
+            this.fs = fs;
+        }
+
+        public Double getScalar() {
+            return scalar;
+        }
+
+        public FishstationBO getFs() {
+            return fs;
+        }
+
     }
 }

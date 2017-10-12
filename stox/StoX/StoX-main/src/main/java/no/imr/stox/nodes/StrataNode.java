@@ -82,7 +82,7 @@ public class StrataNode extends AbstractNode {
         IProcess p = pdp.getModel() != null ? pdp.getModel().getRunningProcess() : null;
         if (p != null && p.getMetaFunction() != null) {
             switch (p.getMetaFunction().getName()) {
-                case Functions.FN_DEFINEACOUSTICTRANSECT:
+                case Functions.FN_DEFINEACOUSTICPSU:
                     actions.add(new AddTransectAction("Add Transect"));
                     break;
                 case Functions.FN_DEFINESTRATA:

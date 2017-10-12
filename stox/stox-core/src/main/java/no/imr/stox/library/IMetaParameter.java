@@ -36,6 +36,10 @@ public interface IMetaParameter extends IMetaObject {
      */
     void setRequired(Boolean required);
 
+    Boolean isDeprecated();
+
+    void setDeprecated(Boolean deprecated);
+
     Boolean isFileRef();
 
     void setFileRef(Boolean fileRef);

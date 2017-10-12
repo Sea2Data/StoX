@@ -112,6 +112,8 @@ public interface IModel {
 
     IProcess getProcessByFunctionName(String functionName);
 
+    List<IProcess> getProcessesByFunctionName(String functionName);
+
     String getModelName();
 
     String getDescription();

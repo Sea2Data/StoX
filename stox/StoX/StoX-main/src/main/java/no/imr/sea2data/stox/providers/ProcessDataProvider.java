@@ -46,7 +46,7 @@ public class ProcessDataProvider {
     List<IProcessDataListener> pdListeners = new ArrayList<>();
     DistancePSUHandler distPSUHandler = new DistancePSUHandler(this);
     IProjectProvider provider = null;
-        
+
     public ProcessDataProvider() {
         provider = (IProjectProvider) Lookup.getDefault().lookup(IProjectProvider.class);
     }
@@ -70,19 +70,20 @@ public class ProcessDataProvider {
     }
 
     public void onProcessEnd(IProcess process) {
-        if (process.getMetaFunction().getName().equals(Functions.FN_READPROCESSDATA)) {
-            model = process.getModel();
+        switch (process.getMetaFunction().getName()) {
+            case Functions.FN_READPROCESSDATA:
+                model = process.getModel();
             // refresh factory to get children created
-            refreshStrataNodes();
-        } else if (process.getMetaFunction().getName().equals(Functions.FN_DEFINESTRATA)) {
-            // refresh factory to get children created
-            refreshStrataNodes();
-        } else if (process.getMetaFunction().getName().equals(Functions.FN_FILTERACOUSTIC)) {
-            distances = (List<DistanceBO>) process.getOutput();
-            distPSUHandler.createDistances();
-        } else if (process.getMetaFunction().getName().equals(Functions.FN_WRITEPROCESSDATA)
-                || process.getMetaFunction().getName().equals(Functions.FN_PLOTABUNDANCE)) {
-            //StatusBarProvider.update();
+            // drop
+            case Functions.FN_DEFINESTRATA:
+            case Functions.FN_DEFINEACOUSTICPSU:
+            case Functions.FN_DEFINESWEPTAREAPSU:
+                refreshStrataNodes();
+                break;
+            case Functions.FN_FILTERACOUSTIC:
+                distances = (List<DistanceBO>) process.getOutput();
+                distPSUHandler.createDistances();
+                break;
         }
     }
 
@@ -227,6 +228,6 @@ public class ProcessDataProvider {
         for (Node n : getRoot().getChildren().getNodes()) {
             ((StrataNode) n).update();
         }
-        
+
     }
 }

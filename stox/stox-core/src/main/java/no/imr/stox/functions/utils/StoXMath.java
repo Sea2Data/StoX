@@ -1,6 +1,9 @@
 package no.imr.stox.functions.utils;
 
 import no.imr.sea2data.imrbase.math.ImrMath;
+import static no.imr.sea2data.imrbase.math.ImrMath.safeDivide;
+import static no.imr.sea2data.imrbase.math.ImrMath.safeMinus;
+import static no.imr.sea2data.imrbase.math.ImrMath.safeMult;
 import no.imr.sea2data.imrbase.util.Conversion;
 import no.imr.sea2data.imrbase.matrix.MatrixBO;
 
@@ -294,5 +297,25 @@ public final class StoXMath {
     public static Double getSweptArea(Double sweptDistance, Double sweepWidthInM) {
         Double sweepWidthNM = ImrMath.safeDivide(sweepWidthInM, 1852.0);
         return ImrMath.safeMult(sweptDistance, sweepWidthNM);
+    }
+
+    public static Double safeSumRelativeDiffSquared(Double diff, Double ref) {
+        Double rel = safeDivide(diff, ref);
+        Double sq = safeMult(rel, rel);
+        return sq;
+    }
+
+    public static Double safeSumRelativeSquared(Double val1, Double val2, Double ref) {
+        return safeSumRelativeDiffSquared(safeMinus(val1, val2), ref);
+    }
+
+    public static Double safeAverage(Double val1, Double val2) {
+        if(val1 == null) {
+            return val2;
+        }
+        if(val2 == null) {
+            return val1;
+        }
+        return ImrMath.safeMult(0.5, ImrMath.safePlus(val1, val2));
     }
 }

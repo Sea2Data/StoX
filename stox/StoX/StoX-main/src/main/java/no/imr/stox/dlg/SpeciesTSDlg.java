@@ -6,9 +6,11 @@
 package no.imr.stox.dlg;
 
 import java.beans.PropertyEditor;
+import java.util.List;
 import javax.swing.table.DefaultTableModel;
 import no.imr.sea2data.imrbase.util.Conversion;
 import no.imr.sea2data.imrbase.util.ExportUtil;
+import no.imr.stox.bo.SpeciesTSMix;
 
 /**
  *
@@ -30,43 +32,24 @@ public class SpeciesTSDlg extends javax.swing.JDialog {
         getRootPane().setDefaultButton(jOK);
         DefaultTableModel dt = (DefaultTableModel) jTable.getModel();
         String txt = ed.getAsText();
-        String lines[] = txt.split("/");
-        dt.setRowCount(lines.length);
-        for (int row = 0; row < lines.length; row++) {
-            String line = lines[row];
-            if (line.isEmpty()) {
-                continue;
+        List<SpeciesTSMix> lines = SpeciesTSMix.fromString(txt);
+        dt.setRowCount(1);
+        lines.stream().forEach(line -> {
+            int row = dt.getRowCount() - 1;
+            dt.setValueAt(line.getMixAcoCat(), row, 0);
+            dt.setValueAt(line.getAcoCat(), row, 1);
+            dt.setValueAt(line.getSpecCat(), row, 2);
+            if (line.getM() != null) {
+                dt.setValueAt(line.getM(), row, 3);
             }
-            String cells[] = line.split(";");
-            String mixacoCat = "";
-            int i = 0;
-            if (cells.length < 5 || cells.length > 6) {
-                continue;
+            if (line.getA() != null) {
+                dt.setValueAt(line.getA(), row, 4);
             }
-            if (cells.length == 6) {
-                mixacoCat = cells[i++];
+            if (line.getD() != null) {
+                dt.setValueAt(line.getD(), row, 5);
             }
-            String acoCat = cells[i++];
-            String specCat = cells[i++];
-            Double m = Conversion.safeStringtoDoubleNULL(cells[i++]);
-            Double a = Conversion.safeStringtoDoubleNULL(cells[i++]);
-            Double d = Conversion.safeStringtoDoubleNULL(cells[i++]);
-            dt.setValueAt(mixacoCat, row, 0);
-            dt.setValueAt(acoCat, row, 1);
-            dt.setValueAt(specCat, row, 2);
-            if (m != null) {
-                dt.setValueAt(m, row, 3);
-            }
-            if (a != null) {
-                dt.setValueAt(a, row, 4);
-            }
-            if (d != null) {
-                dt.setValueAt(d, row, 5);
-            }
-            if (row > dt.getRowCount() - 1) {
-                break; // limit
-            }
-        }
+            dt.setRowCount(dt.getRowCount() + 1);
+        });
     }
 
     /**

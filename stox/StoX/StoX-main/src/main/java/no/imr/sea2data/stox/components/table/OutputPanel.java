@@ -11,6 +11,7 @@ import no.imr.stox.datastorage.IDataStorage;
 import no.imr.stox.datastorage.ProcessDataStorage;
 import no.imr.stox.functions.utils.Functions;
 import no.imr.stox.model.IModel;
+import no.imr.stox.model.IModelListener;
 import no.imr.stox.model.IModelListenerService;
 import no.imr.stox.model.IProcess;
 import no.imr.stox.model.ModelListenerAdapter;
@@ -27,6 +28,31 @@ public class OutputPanel extends javax.swing.JPanel {
     String modelName;
     String processName;
     int idx;
+    IModelListener modelListener = new ModelListenerAdapter() {
+        @Override
+        public void onProcessEnd(IProcess process) {
+            if (process == null) {
+                return;
+            }
+            IProcess p = getProcess();
+            if (p == null) {
+                getTextArea().setText("");
+                return;
+            }
+            IDataStorage ds = getDataStorage(p);
+            if (process.equals(p) && ds != null) {
+                String res = ds.asTable(p.getOutput(), idx + 1, true);
+                setText(res);
+            } else if (process.getProcessStep() < p.getProcessStep()) {
+                getTextArea().setText("");
+            }
+        }
+
+        @Override
+        public void onReset(IModel m) {
+            setText("");
+        }
+    };
 
     /**
      * Creates new form OutputPanel
@@ -37,30 +63,7 @@ public class OutputPanel extends javax.swing.JPanel {
         this.idx = idx;
         initComponents();
         final IModelListenerService fls = (IModelListenerService) Lookup.getDefault().lookup(IModelListenerService.class);
-        fls.getModelListeners().add(new ModelListenerAdapter() {
-            @Override
-            public void onProcessEnd(IProcess process) {
-                if (process == null) {
-                    return;
-                }
-                IProcess p = getProcess();
-                IDataStorage ds = getDataStorage(p);
-                if (process.equals(p) && ds != null) {
-                    String res = ds.asTable(p.getOutput(), idx + 1, true);
-                    setText(res);
-                    res = FormattedOutput.formatTable(res);
-                    getTextArea().setText(res);
-                    getTextArea().setCaretPosition(0);
-                } else if (p == null || process.getProcessStep() < p.getProcessStep()) {
-                    getTextArea().setText("");
-                }
-            }
-
-            /*@Override
-            public void onReset(IModel m) {
-                setText(null);
-            }*/
-        });
+        fls.getModelListeners().add(modelListener);
     }
 
     public static IDataStorage getDataStorage(IProcess p) {
@@ -95,6 +98,14 @@ public class OutputPanel extends javax.swing.JPanel {
 
     public void setText(String text) {
         this.text = text;
+        String res = FormattedOutput.formatTable(text);
+        getTextArea().setText(res);
+        getTextArea().setCaretPosition(0);
+    }
+
+    public void onClose() {
+        final IModelListenerService fls = (IModelListenerService) Lookup.getDefault().lookup(IModelListenerService.class);
+        fls.getModelListeners().remove(modelListener);
     }
 
     /**

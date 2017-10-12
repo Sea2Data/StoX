@@ -111,6 +111,7 @@ public final class Library implements ILibrary {
                             String[] tokens2 = tokens[1].split(",");
                             String name = null;
                             Boolean required = true;
+                            Boolean deprecated = false;
                             IMetaDataType dataType = null;
                             IMetaMatrix metaMatrix = null;
                             String descr = null;
@@ -151,6 +152,9 @@ public final class Library implements ILibrary {
                                     case "required":
                                         required = Boolean.valueOf(tokens3[1].trim());
                                         break;
+                                    case "deprecated":
+                                        deprecated = Boolean.valueOf(tokens3[1].trim());
+                                        break;
                                     case "fileref":
                                         fileRef = Boolean.valueOf(tokens3[1].trim());
                                         break;
@@ -162,7 +166,7 @@ public final class Library implements ILibrary {
                                         break;
                                 }
                             }
-                            IMetaParameter mp = new MetaParameter(((IMetaFunction) mo), required, fileRef, dataType, metaMatrix, name, descr, defaultValue, values, parentTags);
+                            IMetaParameter mp = new MetaParameter(((IMetaFunction) mo), required, deprecated, fileRef, dataType, metaMatrix, name, descr, defaultValue, values, parentTags);
                             mp.getAliases().addAll(alias);
                             ((IMetaFunction) mo).getMetaParameters().add(mp);
                         } else if (line.startsWith("DataStorage:")) {
@@ -184,7 +188,7 @@ public final class Library implements ILibrary {
                                 }
                                 String descr = "Output:" + dataType.getDescription().trim();
                                 String name = dataTypeName;
-                                IMetaParameter outputParam = new MetaParameter(((IMetaFunction) mo), true, false, dataType, metaMatrix, name, descr, null, null, null);
+                                IMetaParameter outputParam = new MetaParameter(((IMetaFunction) mo), true, false, false, dataType, metaMatrix, name, descr, null, null, null);
                                 ((IMetaFunction) mo).setOutput(outputParam);
                             }
                         }

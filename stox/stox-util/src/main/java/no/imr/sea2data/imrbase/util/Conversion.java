@@ -173,10 +173,13 @@ public final class Conversion {
     }
 
     public static Double safeStringtoDoubleNULLEnglishFormat(String value) {
-        if (value != null && value.contains(",")) {
+        Double res = safeStringtoDoubleNULL(value);
+        if (res == null && value != null && value.contains(",")) {
+            // Try a second time .
             value = value.replace(",", ".");
+            res = safeStringtoDoubleNULL(value);
         }
-        return safeStringtoDoubleNULL(value);
+        return res;
     }
 
     /**

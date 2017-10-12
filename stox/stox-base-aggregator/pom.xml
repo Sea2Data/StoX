@@ -11,9 +11,19 @@
     <profiles>
         <!-- DO NOT CHANGE THE *ORDER* IN WHICH THESE PROFILES ARE DEFINED! -->
         <profile>
-            <id>main</id>
+            <id>main_app</id>
             <modules>
                 <module>./../StoX/StoX-main</module>
+                <module>./../StoX/application</module>
+            </modules>
+        </profile>
+        <profile>
+            <id>main_core_app</id>
+            <modules>
+                <module>./../StoX/StoX-main</module>
+                <module>./../stox-util</module>
+                <module>./../stox-core</module>
+                <module>./../stox-base</module>
                 <module>./../StoX/application</module>
             </modules>
         </profile>

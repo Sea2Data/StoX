@@ -6,6 +6,7 @@
 package no.imr.stox.datastorage;
 
 import java.io.Writer;
+import java.util.ArrayList;
 import java.util.List;
 import no.imr.sea2data.biotic.bo.CatchBO;
 import no.imr.sea2data.biotic.bo.FishstationBO;
@@ -76,31 +77,31 @@ public class BioticDataStorage extends FileDataStorage {
                         "latitudestart", "longitudestart", "system", "area", "location", "stratum", "bottomdepthstart", "bottomdepthstop", "gear", "gearcount",
                         "gearspeed", "starttime", "logstart", "stoptime", "distance", "gearcondition", "trawlquality", "fishingdepthmax",
                         "fishingdepthmin", "fishingdepthcount", "trawlopening", "trawldoorspread", "latitudeend", "longitudeend", "wirelength", "stopdate", "logstop", "flowcount",
-                        "flowconst")));
+                        "flowconst", "comment")));
                 for (FishstationBO fs : (List<FishstationBO>) (List) list) {
                     ImrIO.write(wr, ExportUtil.carrageReturnLineFeed(ExportUtil.tabbed(fs.getMissionType(), fs.getCruise(), fs.getSerialNo(), fs.getPlatform(), IMRdate.formatDate(fs.getStartDate()),
                             fs.getStationNo(), fs.getStationType(), Conversion.formatDoubletoDecimalString(fs.getLatitudeStart(), 4),
                             Conversion.formatDoubletoDecimalString(fs.getLongitudeStart(), 4), fs.getSystem(), fs.getArea(),
                             fs.getLocation(), fs.getStratum(), fs.getBottomDepthStart(), fs.getBottomDepthStop(), fs.getGear(), fs.getGearCount(), fs.getGearSpeed(),
                             IMRdate.formatTime(fs.getStartTime()), fs.getLogStart(), IMRdate.formatTime(fs.getStopTime()),
-                            fs.getDistance(), fs.getGearCondition(), fs.getTrawlQuality(), fs.getFishingDepthMax(), fs.getFishingDepthMin(),fs.getFishingDepthCount(),
+                            fs.getDistance(), fs.getGearCondition(), fs.getTrawlQuality(), fs.getFishingDepthMax(), fs.getFishingDepthMin(), fs.getFishingDepthCount(),
                             fs.getTrawlOpening(), fs.getTrawlDoorSpread(), fs.getLatitudeEnd(), fs.getLongitudeEnd(), fs.getWireLength(),
-                            IMRdate.formatDate(fs.getStopDate()), fs.getLogStop(), fs.getFlowCount(), fs.getFlowConst())));
+                            IMRdate.formatDate(fs.getStopDate()), fs.getLogStop(), fs.getFlowCount(), fs.getFlowConst(), fs.getComment())));
                 }
                 break;
 
             case 2:
                 ImrIO.write(wr, ExportUtil.carrageReturnLineFeed(ExportUtil.tabbed("cruise", "serialno", "platform", "species", "noname", "aphia", "samplenumber", "sampletype", "group",
                         "conservation", "measurement", "weight", "count", "samplemeasurement", "lengthmeasurement", "lengthsampleweight",
-                        "lengthsamplecount", "individualsamplecount", "parasite", "stomach", "genetics")));
+                        "lengthsamplecount", "individualsamplecount", "parasite", "stomach", "genetics", "comment")));
                 for (FishstationBO fs : (List<FishstationBO>) (List) list) {
                     for (CatchBO c : fs.getCatchBOCollection()) {
                         for (SampleBO s : c.getSampleBOCollection()) {
                             ImrIO.write(wr, ExportUtil.carrageReturnLineFeed(ExportUtil.tabbed(
-                                    /*IMRdate.getYear(fs.getStartDate(), true)*/fs.getCruise(), fs.getSerialNo(), fs.getPlatform(), 
+                                    /*IMRdate.getYear(fs.getStartDate(), true)*/fs.getCruise(), fs.getSerialNo(), fs.getPlatform(),
                                     c.getSpecies(), c.getNoname(), c.getAphia(), s.getSampleNo(), s.getSampletype(), s.getGroup(), s.getConservationtype(), s.getMeasurementTypeTotal(),
                                     s.getTotalWeight(), s.getTotalCount(), s.getMeasurementTypeSampled(), s.getLengthType(), s.getSampledWeight(),
-                                    s.getSampledCount(), s.getInumber(), s.getParasite(), s.getStomach(), s.getGenetics())));
+                                    s.getSampledCount(), s.getInumber(), s.getParasite(), s.getStomach(), s.getGenetics(), s.getComment())));
                         }
                     }
                 }
@@ -125,8 +126,11 @@ public class BioticDataStorage extends FileDataStorage {
      * @param inds
      * @param wr
      */
+    
     public static void asTable(String context, List<IndividualBO> inds, Writer wr) {
-        asTable(Functions.INDIVIDUALS, context, inds, wr);
+        List<String> fields = new ArrayList<>(Functions.INDIVIDUALS);
+//        fields.add("comment");
+        asTable(fields, context, inds, wr);
     }
 
     public static void asTable(List<String> fields, String context, List<IndividualBO> inds, Writer wr) {
@@ -136,6 +140,9 @@ public class BioticDataStorage extends FileDataStorage {
                 Object c = BioticUtils.getIndVar(i, code);
                 line = line != null ? ExportUtil.tabbed(line, c) : c == null ? "-" : c.toString();
             }
+            // Add comment
+            //line = line != null ? ExportUtil.tabbed(line, i.getComment()) : line;
+
             line = ExportUtil.carrageReturnLineFeed(line);
             ImrIO.write(wr, line);
         }

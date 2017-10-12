@@ -6,9 +6,12 @@
 package no.imr.stox.dlg;
 
 import java.beans.PropertyEditor;
+import java.util.List;
 import javax.swing.table.DefaultTableModel;
 import no.imr.sea2data.imrbase.util.Conversion;
 import no.imr.sea2data.imrbase.util.ExportUtil;
+import no.imr.stox.bo.CatchabilityParam;
+import static no.imr.stox.functions.utils.ProjectUtils.txt;
 
 /**
  *
@@ -30,33 +33,22 @@ public class CatchabilityDlg extends javax.swing.JDialog {
         getRootPane().setDefaultButton(jOK);
         DefaultTableModel dt = (DefaultTableModel) jTable.getModel();
         String txt = ed.getAsText();
-        String lines[] = txt.split("/");
-        for (int row = 0; row < lines.length; row++) {
-            String line = lines[row];
-            if (line.isEmpty()) {
-                continue;
+        List<CatchabilityParam> lines = CatchabilityParam.fromString(txt);
+        dt.setRowCount(lines.size());
+        for (int row = 0; row < lines.size(); row++) {
+            CatchabilityParam line = lines.get(row);
+            dt.setValueAt(line.getSpecCat(), row, 0);
+            if (line.getAlpha() != null) {
+                dt.setValueAt(line.getAlpha(), row, 1);
             }
-            String cells[] = line.split(";");
-            if (cells.length != 5) {
-                continue;
+            if (line.getBeta() != null) {
+                dt.setValueAt(line.getBeta(), row, 2);
             }
-            String specCat = cells[0];
-            Double alpha = Conversion.safeStringtoDoubleNULL(cells[1]);
-            Double beta = Conversion.safeStringtoDoubleNULL(cells[2]);
-            Double lmin = Conversion.safeStringtoDoubleNULL(cells[3]);
-            Double lmax = Conversion.safeStringtoDoubleNULL(cells[4]);
-            dt.setValueAt(specCat, row, 0);
-            if (alpha != null) {
-                dt.setValueAt(alpha, row, 1);
+            if (line.getlMin() != null) {
+                dt.setValueAt(line.getlMin(), row, 3);
             }
-            if (beta != null) {
-                dt.setValueAt(beta, row, 2);
-            }
-            if (lmin != null) {
-                dt.setValueAt(lmin, row, 3);
-            }
-            if (lmax != null) {
-                dt.setValueAt(lmax, row, 4);
+            if (line.getlMax() != null) {
+                dt.setValueAt(line.getlMax(), row, 4);
             }
             if (row > dt.getRowCount() - 1) {
                 break; // limit
@@ -76,6 +68,8 @@ public class CatchabilityDlg extends javax.swing.JDialog {
         jOK = new javax.swing.JButton();
         jScrollPane1 = new javax.swing.JScrollPane();
         jTable = new javax.swing.JTable();
+        jButton1 = new javax.swing.JButton();
+        jDelete = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
@@ -140,13 +134,33 @@ public class CatchabilityDlg extends javax.swing.JDialog {
             jTable.getColumnModel().getColumn(4).setHeaderValue(org.openide.util.NbBundle.getMessage(CatchabilityDlg.class, "CatchabilityDlg.jTable.columnModel.title0_1")); // NOI18N
         }
 
+        org.openide.awt.Mnemonics.setLocalizedText(jButton1, org.openide.util.NbBundle.getMessage(CatchabilityDlg.class, "CatchabilityDlg.jButton1.text")); // NOI18N
+        jButton1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton1ActionPerformed(evt);
+            }
+        });
+
+        org.openide.awt.Mnemonics.setLocalizedText(jDelete, org.openide.util.NbBundle.getMessage(CatchabilityDlg.class, "CatchabilityDlg.jDelete.text")); // NOI18N
+        jDelete.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jDeleteActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(jOK)
+                    .addGroup(layout.createSequentialGroup()
+                        .addContainerGap()
+                        .addComponent(jButton1)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jDelete)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(jOK, javax.swing.GroupLayout.PREFERRED_SIZE, 75, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 378, Short.MAX_VALUE))
                 .addGap(10, 10, 10))
         );
@@ -156,7 +170,11 @@ public class CatchabilityDlg extends javax.swing.JDialog {
                 .addContainerGap()
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 154, Short.MAX_VALUE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jOK)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addComponent(jDelete)
+                        .addComponent(jButton1))
+                    .addComponent(jOK))
                 .addContainerGap())
         );
 
@@ -166,7 +184,7 @@ public class CatchabilityDlg extends javax.swing.JDialog {
     private void jOKActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jOKActionPerformed
         DefaultTableModel dt = (DefaultTableModel) jTable.getModel();
         String res = "";
-        for (int row = 0; row < dt.getRowCount() - 1; row++) {
+        for (int row = 0; row < dt.getRowCount(); row++) {
             String specCat = (String) dt.getValueAt(row, 0);
             Double alpha = (Double) dt.getValueAt(row, 1);
             Double beta = (Double) dt.getValueAt(row, 2);
@@ -175,14 +193,29 @@ public class CatchabilityDlg extends javax.swing.JDialog {
             if (specCat == null && alpha == null && beta == null && lmin == null && lmax == null) {
                 continue;
             }
-            String line = ExportUtil.separated(';', specCat, alpha, beta, lmin, lmax);
+            String line = ExportUtil.separatedMissingStr(';', "", specCat, alpha, beta, lmin, lmax);
             res += (res.isEmpty() ? "" : "/") + line;
         }
         ed.setAsText(res);
         setVisible(false);
     }//GEN-LAST:event_jOKActionPerformed
 
+    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+        DefaultTableModel dt = (DefaultTableModel) jTable.getModel();
+        dt.setNumRows(dt.getRowCount() + 1);
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jButton1ActionPerformed
+
+    private void jDeleteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jDeleteActionPerformed
+        DefaultTableModel dt = (DefaultTableModel) jTable.getModel();
+        if (jTable.getSelectedRow() >= 0) {
+            dt.removeRow(jTable.getSelectedRow());
+        }
+    }//GEN-LAST:event_jDeleteActionPerformed
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton jButton1;
+    private javax.swing.JButton jDelete;
     private javax.swing.JButton jOK;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JTable jTable;

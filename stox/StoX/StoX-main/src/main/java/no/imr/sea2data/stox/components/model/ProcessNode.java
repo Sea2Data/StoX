@@ -194,7 +194,7 @@ public class ProcessNode extends AbstractNode {
                 Boolean b = Conversion.safeObjectToBoolean(process.getParameterValue(Functions.PM_DEFINESTRATA_USEPROCESSDATA));
                 return b == null || !b;
             }
-            return true;
+            return !mp.isDeprecated();
         }
         for (String tag : mp.getParentTags()) {
             String[] token = tag.split("\\.");
