@@ -61,6 +61,7 @@ public class Catchability extends AbstractFunction {
                 break;
         }
 
+        result.setData(lengthDist.copy());
         switch (catchabilityMethod) {
             case Functions.CATCHABILITYMETHOD_LENGTHDEPENDENTSWEEPWIDTH:
             case Functions.CATCHABILITYMETHOD_LENGTHDEPENDENTSELECTIVITY: {
@@ -70,9 +71,9 @@ public class Catchability extends AbstractFunction {
                         logger.error("Parameters alpha, beta, lmin, lmax must have a value.", null);
                     }
 
-                    for (String obsKey : lengthDist.getGroupRowKeys(cp.getSpecCat())) {
+                    for (String obsKey : result.getData().getGroupRowKeys(cp.getSpecCat())) {
                         //FishstationBO fs = BioticUtils.findStation(fishStations, obsKey);
-                        MatrixBO obs = (MatrixBO) lengthDist.getGroupRowValue(cp.getSpecCat(), obsKey);
+                        MatrixBO obs = (MatrixBO) result.getData().getGroupRowValue(cp.getSpecCat(), obsKey);
                         MatrixBO lfq = obs.getDefaultValueAsMatrix();
                         for (String lenGrp : lfq.getKeys()) {
                             Double lGroup = Conversion.safeStringtoDoubleNULL(lenGrp);
@@ -112,8 +113,8 @@ public class Catchability extends AbstractFunction {
                                     adjValue = ImrMath.safeMult(value, adjFac);
                             }
                             if (adjValue != null) {
-                                lfq.setValue(obsKey, adjValue);
-                                //result.getData().setGroupRowCellValue(cp.getSpecCat(), obsKey, lenGrp, adjValue);
+                                //lfq.setValue(obsKey, adjValue);
+                                result.getData().setGroupRowCellValue(cp.getSpecCat(), obsKey, lenGrp, adjValue);
                             }
                         }
                     }

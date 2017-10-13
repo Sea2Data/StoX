@@ -47,7 +47,7 @@ public class EchoXMLReader extends XMLReader {
                 // convert double to one decimal place
                 BigDecimal val = new BigDecimal(Conversion.safeStringtoDouble(value));
                 val = val.setScale(1, RoundingMode.HALF_UP);
-                d.setLog_start(val);
+                    d.setLog_start(val);
             } else if (key.equals("start_time")) {
                 // set seconds and miliseconds to value 0
                 d.setStart_time(IMRdate.strToDateTime(value));

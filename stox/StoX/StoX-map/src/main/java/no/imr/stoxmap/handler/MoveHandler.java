@@ -7,8 +7,13 @@ package no.imr.stoxmap.handler;
 
 import java.awt.event.MouseEvent;
 import javax.swing.ToolTipManager;
+import no.imr.sea2data.biotic.bo.CatchBO;
 import no.imr.sea2data.biotic.bo.FishstationBO;
+import no.imr.sea2data.biotic.bo.SampleBO;
 import no.imr.sea2data.echosounderbo.DistanceBO;
+import no.imr.sea2data.echosounderbo.FrequencyBO;
+import no.imr.sea2data.echosounderbo.SABO;
+import no.imr.sea2data.imrbase.math.Calc;
 import no.imr.sea2data.imrbase.util.IMRdate;
 import no.imr.sea2data.stox.mapgui.StoXMapSetup;
 import no.imr.stox.api.IProjectProvider;
@@ -72,10 +77,10 @@ public class MoveHandler {
             if (sf == null) {
                 return;
             }
-            String s;
+            String s = "<html>";
             if (sf.getUserData() != null && sf.getUserData() instanceof DistanceBO) {
                 DistanceBO d = (DistanceBO) sf.getUserData();
-                s = "<html>Cruise: " + d.getCruise() + "<br>Log: " + d.getLog_start() + "<br>Date: " + IMRdate.getLocalDate(d.getStart_time()).toString()
+                s = s + "Cruise: " + d.getCruise() + "<br>Log: " + d.getLog_start() + "<br>Date: " + IMRdate.getLocalDate(d.getStart_time()).toString()
                         + "<br>Time: " + IMRdate.getLocalTime(d.getStart_time());
                 IProject p = Lookup.getDefault().lookup(IProjectProvider.class).getProject();
                 String psu = AbndEstProcessDataUtil.getEDSUPSU(p.getProcessData(), d.getKey());
@@ -86,13 +91,41 @@ public class MoveHandler {
                         s = s + "<br>Stratum: " + stratum;
                     }
                 }
-                s = s + "</html>";
+                if (e.isAltDown()) {
+                    for (FrequencyBO f : d.getFrequencies()) {
+                        s = s + "<br>Freq/Tr: " + f.getFreq() + "/" + f.getTranceiver();
+                        s = s + "<br>Lat/Lon: " + d.getLat_start() + "/" + d.getLon_start();
+                        s = s + "<br>Bot. depth min-max: " + f.getMin_bot_depth() + "-" + f.getMax_bot_depth();
+                        /* if (e.isShiftDown()) {
+                            s = s + "<br>";
+                            for (SABO sa : f.getSa()) {
+                                s = s + sa.getAcoustic_category() + ":" + sa.getCh_type() + ":" + sa.getCh() + ":" + sa.getSa() + ", ";
+                            }
+                        }*/
+                    }
+                }
             } else if (sf.getUserData() != null && sf.getUserData() instanceof FishstationBO) {
                 FishstationBO fs = (FishstationBO) sf.getUserData();
-                s = "<html>Cruise: " + fs.getCruise() + "<br>Serialno: " + fs.getSerialNo() + "</html>";
+                s = s + "Cruise: " + fs.getCruise() + "<br>Serialno: " + fs.getSerialNo();
+                if (e.isAltDown()) {
+                    Double b1 = Calc.roundTo(fs.getBottomDepthStart(), 0);
+                    Double b2 = Calc.roundTo(fs.getBottomDepthStop(), 0);
+                    s = s + "<br>Bot.depth start-stop: " + b1 + "-" + b2;
+                    s = s + "<br>Lat/Lon: " + fs.getStartLat() + "/" + fs.getStartLon();
+                    if (e.isShiftDown()) {
+                        for (CatchBO c : fs.getCatchBOCollection()) {
+                            for (SampleBO samp : c.getSampleBOCollection()) {
+                                if (c.getNoname() != null && samp.getWeight() != null) {
+                                    s = s + "<br>" + c.getNoname() + ": " + samp.getWeight() + " kg. (" + (samp.getIndividualSampleCount() != null ? samp.getIndividualSampleCount() : 0) + " bio. individuals)";
+                                }
+                            }
+                        }
+                    }
+                }
             } else {
-                s = "<html>Stratum: " + sf.getName() + "</html>";
+                s = s + "Stratum: " + sf.getName();
             }
+            s = s + "</html>";
             if (s == null) {
                 return;
             }
