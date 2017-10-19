@@ -10,7 +10,7 @@ import java.util.List;
  */
 public final class Functions {
 
-    public static  Boolean XMLDATA = false; // Use this swithc to turn on and off XMLDATA
+    public static Boolean XMLDATA = false; // Use this swithc to turn on and off XMLDATA
     // Variables used as matrix dimensions or content
     // Assignments are specified per sampling unit (normally transect) and groups of channel layers (normally PB)
     public static final String DIM_ASSIGNMENT = "AssignmentID";
@@ -87,6 +87,7 @@ public final class Functions {
     public static final String MM_INDIVIDUALDATASTATIONS_MATRIX = "Matrix[ROW~SampleUnit / COL~EstLayer / CELL~Observation / VAR~Included]";
     public static final String MM_INDIVIDUALDATA_MATRIX = "Matrix[GROUP~SpecCat / ROW~SampleUnit / COL~EstLayer / CELL~LengthGroup / VAR~Individuals]";
     public static final String MM_SUPERINDABUNDANCE_MATRIX = "Matrix[ROW~Individual / COL~IndVariable / VAR~Value]";
+    public static final String MM_SAMPLEUNITVARIABLE_MATRIX = "Matrix[ROW~SampleUnit / COL~Variable / VAR~Value]";
 
     // Report matrices
     public static final String MM_XCATBYLENGTH_MATRIX = "Matrix[GROUP~SPEC_ESTL_STRATA / ROW~LengthGroup / COL~XCat / CELL~Variable / VAR~Value]";
@@ -255,12 +256,11 @@ public final class Functions {
     public static final String PM_BIOSTATIONASSIGNMENT_ACOUSTICDATA = "AcousticData";
     public static final String PM_BIOSTATIONASSIGNMENT_ESTLAYERS = "EstLayers";
     public static final String PM_BIOSTATIONASSIGNMENT_MINNUMSTATIONS = "MinNumStations";
-    public static final String PM_BIOSTATIONASSIGNMENT_SCALARPRODUCTLIMIT = "ScalarProductLimit";
-    public static final String PM_BIOSTATIONASSIGNMENT_REFLATITUDE = "RefLatitude";
-    public static final String PM_BIOSTATIONASSIGNMENT_REFLONGITUDE = "RefLongitude";
     public static final String PM_BIOSTATIONASSIGNMENT_REFGCDISTANCE = "RefGCDistance";
     public static final String PM_BIOSTATIONASSIGNMENT_REFTIME = "RefTime";
     public static final String PM_BIOSTATIONASSIGNMENT_REFBOTDEPTH = "RefBotDepth";
+    public static final String PM_BIOSTATIONASSIGNMENT_REFLATITUDE = "RefLatitude";
+    public static final String PM_BIOSTATIONASSIGNMENT_REFLONGITUDE = "RefLongitude";
 
     public static final String FN_SPLITNASCASSIGNMENT = "SplitNASCAssignment";
     public static final String PM_SPLITNASCASSIGNMENT_ACOUSTICDATA = "AcousticData";
@@ -306,6 +306,7 @@ public final class Functions {
     public static final String PM_SWEPTAREADENSITY_BIOTICDATA = "BioticData";
     public static final String PM_SWEPTAREADENSITY_CATCHVARIABLE = "CatchVariable";
     public static final String PM_SWEPTAREADENSITY_LENGTHDIST = "LengthDist";
+    public static final String PM_SWEPTAREADENSITY_DISTANCEMETHOD = "DistanceMethod";
     public static final String PM_SWEPTAREADENSITY_SWEEPWIDTHMETHOD = "SweepWidthMethod";
     public static final String PM_SWEPTAREADENSITY_SWEEPWIDTH = "SweepWidth";
     public static final String PM_SWEPTAREADENSITY_ALPHA = "Alpha";
@@ -313,6 +314,10 @@ public final class Functions {
     public static final String PM_SWEPTAREADENSITY_LMIN = "LMin";
     public static final String PM_SWEPTAREADENSITY_LMAX = "LMax";
     public static final String PM_SWEPTAREADENSITY_SWEEPWIDTHEXPR = "SweepWidthExpr";
+
+    public static final String FN_LENGTHWEIGHTRELATIONSHIP = "LengthWeightRelationship";
+    public static final String PM_LENGTHWEIGHTRELATIONSHIP_PROCESSDATA = "ProcessData";
+    public static final String PM_LENGTHWEIGHTRELATIONSHIP_BIOTICDATA = "BioticData";
 
     public static final String FN_LARVAEDENSITY = "LarvaeDensity";
     public static final String PM_LARVAEDENSITY_PROCESSDATA = "ProcessData";
@@ -377,6 +382,7 @@ public final class Functions {
     public static final String PM_FILLMISSINGDATA_SUPERINDIVIDUALS = "SuperIndividuals";
     public static final String PM_FILLMISSINGDATA_FILLVARIABLES = "FillVariables";
     public static final String PM_FILLMISSINGDATA_FILLWEIGHT = "FillWeight";
+    public static final String PM_FILLMISSINGDATA_FILENAME = "FileName";
     public static final String PM_FILLMISSINGDATA_A = "a";
     public static final String PM_FILLMISSINGDATA_B = "b";
     public static final String PM_FILLMISSINGDATA_SEED = "Seed";
@@ -467,7 +473,7 @@ public final class Functions {
     /*public static final String FN_LOADENV = "loadEnv";
     public static final String PM_LOADENV_FILEBASENAME = "fileBaseName";
     public static final String PM_LOADENV_OUTPUTFOLDER = "outputFolder";
-*/
+     */
     public static final String FN_RUNBOOTSTRAP = "runBootstrap";
     public static final String PM_RUNBOOTSTRAP_ACOUSTICMETHOD = "acousticMethod";
     public static final String PM_RUNBOOTSTRAP_BIOTICMETHOD = "bioticMethod";
@@ -682,7 +688,7 @@ public final class Functions {
     public static final String LENGTHDISTTYPE_PERCENTLENGHTDIST = LENGTHDISTTYPE_STD_PERCENT + LENGTHDISTTYPE_LENGHTDIST;
     public static final String LENGTHDISTTYPE_SWEEPWLENGHTDIST = LENGTHDISTTYPE_STD_SWEEPW + LENGTHDISTTYPE_LENGHTDIST;
     public static final String LENGTHDISTTYPE_SWEEPWNORMLENGHTDIST = LENGTHDISTTYPE_STD_SWEEPW + LENGTHDISTTYPE_NORMLENGHTDIST;
-    
+
     public static final String CATCHABILITYMETHOD_LENGTHDEPENDENTSWEEPWIDTH = "LengthDependentSweepWidth";
     public static final String CATCHABILITYMETHOD_LENGTHDEPENDENTSELECTIVITY = "LengthDependentSelectivity";
     // Layer Types (4 types of layers with different capabilities)
@@ -727,7 +733,8 @@ public final class Functions {
 // Fill variables method for missing weights at superindividuals
     public static final String FILLWEIGHT_MEAN = "Mean";
     public static final String FILLWEIGHT_REGRESSION = "Regression";
-    public static final String FILLWEIGHT_STANDARD = "Standard";
+    public static final String FILLWEIGHT_MANUALLY = "Manually";
+    public static final String FILLWEIGHT_FROMFILE = "FromFile";
     public static final String FILLWEIGHT_NONE = "None";
 
     // Super individual abundance weighting method
@@ -773,4 +780,11 @@ public final class Functions {
     public static final int WARNINGLEVEL_STRICT = 0;
     public static final int WARNINGLEVEL_MEDIUM = 1;
     public static final int WARNINGLEVEL_LOW = 2;
+
+    public static final String DISTANCEMETHOD_FULLDISTANCE = "FullDistance";
+    public static final String DISTANCEMETHOD_BYDEPTH = "ByDepth";
+
+    public static final String LENGTHWEIGHT_COEFF_A = "a";
+    public static final String LENGTHWEIGHT_COEFF_B = "b";
+    public static final String LENGTHWEIGHT_COEFF_R2 = "r2";
 }

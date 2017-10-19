@@ -17,6 +17,7 @@ import no.imr.stox.bo.AbundanceIndividualsMatrix;
 import no.imr.sea2data.imrbase.matrix.MatrixBO;
 import no.imr.stox.functions.AbstractFunction;
 import no.imr.stox.functions.utils.Functions;
+import no.imr.stox.functions.utils.ProjectUtils;
 import no.imr.stox.log.ILogger;
 
 /**
@@ -28,17 +29,20 @@ public class FillMissingData extends AbstractFunction {
     @Override
     public Object perform(Map<String, Object> input) {
         ILogger logger = (ILogger) input.get(Functions.PM_LOGGER);
-        String fileName = (String) input.get(Functions.PM_FILLMISSINGDATA_SUPERINDIVIDUALS);
-        if (!new File(fileName).exists()) {
+        String fileNameSuperInd = (String) input.get(Functions.PM_FILLMISSINGDATA_SUPERINDIVIDUALS);
+        if (!new File(fileNameSuperInd).exists()) {
             logger.error("Missing input file for parameter " + Functions.PM_ESTIMATEBYPOPCATEGORY_SUPERINDIVIDUALS, null);
         }
-        AbundanceIndividualsMatrix abnByInd = readAbundance(fileName);
+        AbundanceIndividualsMatrix abnByInd = readAbundance(fileNameSuperInd);
         MatrixBO abnd = abnByInd.getData();
 
         String fillVariables = (String) input.get(Functions.PM_FILLMISSINGDATA_FILLVARIABLES);
         String fillWeight = (String) input.get(Functions.PM_FILLMISSINGDATA_FILLWEIGHT);
         String a = (String) input.get(Functions.PM_FILLMISSINGDATA_A);
         String b = (String) input.get(Functions.PM_FILLMISSINGDATA_B);
+        String fileNameLengthWeight = ProjectUtils.resolveParameterFileName((String) input.get(Functions.PM_FILLMISSINGDATA_FILENAME),
+                (String) input.get(Functions.PM_PROJECTFOLDER));
+        
         Integer seed = (Integer) input.get(Functions.PM_FILLMISSINGDATA_SEED);
         Boolean imputeByAge = fillVariables != null && fillVariables.equals(Functions.FILLVARIABLES_IMPUTEBYAGE);
         // Fill in missing weights
@@ -49,7 +53,7 @@ public class FillMissingData extends AbstractFunction {
             DistributeAbundance.distributeAbundance(abnd, seed);
         }
         if (fillWeight != null) {
-            AbndFillMissingWeights.fillMissingWeights(abnd, fillWeight, a, b);
+            AbndFillMissingWeights.fillMissingWeights(abnd, fillWeight, a, b, fileNameLengthWeight);
         }
 
         return abnByInd;

@@ -38,7 +38,7 @@ public class TotalAbundance extends AbstractFunction {
         Stream.of(Functions.PM_TOTALABUNDANCE_WEIGHTABUNDANCE, Functions.PM_TOTALABUNDANCE_COUNTABUNDANCE)
                 .forEach(param -> {
                     String fileName = (String) input.get(param);
-                    if (fileName != null) {
+                    if (fileName != null && !fileName.isEmpty()) {
                         if (!new File(fileName).exists()) {
                             logger.error("Missing input file for parameter " + Functions.PM_TOTALABUNDANCE_WEIGHTABUNDANCE, null);
                         }

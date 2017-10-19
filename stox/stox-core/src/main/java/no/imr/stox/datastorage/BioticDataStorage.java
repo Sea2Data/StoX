@@ -91,15 +91,15 @@ public class BioticDataStorage extends FileDataStorage {
                 break;
 
             case 2:
-                ImrIO.write(wr, ExportUtil.carrageReturnLineFeed(ExportUtil.tabbed("cruise", "serialno", "platform", "species", "noname", "aphia", "samplenumber", "sampletype", "group",
+                ImrIO.write(wr, ExportUtil.carrageReturnLineFeed(ExportUtil.tabbed("cruise", "serialno", "platform", Functions.COL_IND_SPECCAT, "species", "noname", "aphia", "samplenumber", "sampletype", "group",
                         "conservation", "measurement", "weight", "count", "samplemeasurement", "lengthmeasurement", "lengthsampleweight",
                         "lengthsamplecount", "individualsamplecount", "parasite", "stomach", "genetics", "comment")));
                 for (FishstationBO fs : (List<FishstationBO>) (List) list) {
                     for (CatchBO c : fs.getCatchBOCollection()) {
                         for (SampleBO s : c.getSampleBOCollection()) {
-                            ImrIO.write(wr, ExportUtil.carrageReturnLineFeed(ExportUtil.tabbed(
+                ImrIO.write(wr, ExportUtil.carrageReturnLineFeed(ExportUtil.tabbed(
                                     /*IMRdate.getYear(fs.getStartDate(), true)*/fs.getCruise(), fs.getSerialNo(), fs.getPlatform(),
-                                    c.getSpecies(), c.getNoname(), c.getAphia(), s.getSampleNo(), s.getSampletype(), s.getGroup(), s.getConservationtype(), s.getMeasurementTypeTotal(),
+                                    s.getCatchBO().getSpeciesCatTableKey(), c.getSpecies(), c.getNoname(), c.getAphia(), s.getSampleNo(), s.getSampletype(), s.getGroup(), s.getConservationtype(), s.getMeasurementTypeTotal(),
                                     s.getTotalWeight(), s.getTotalCount(), s.getMeasurementTypeSampled(), s.getLengthType(), s.getSampledWeight(),
                                     s.getSampledCount(), s.getInumber(), s.getParasite(), s.getStomach(), s.getGenetics(), s.getComment())));
                         }

@@ -41,7 +41,7 @@ public class StationLengthDist extends AbstractFunction {
         LengthDistMatrix result = new LengthDistMatrix();
         // Set the resolution matrix as Observation type and length interval
         String lengthDistType = (String) input.get(Functions.PM_STATIONLENGTHDIST_LENGTHDISTTYPE);
-        Double lengthInterval = getLengthInterval(fishStations);
+        Double lengthInterval = BioticUtils.getLengthInterval(fishStations);
         result.getResolutionMatrix().setRowValue(Functions.RES_OBSERVATIONTYPE, Functions.OBSERVATIONTYPE_STATION);
         result.getResolutionMatrix().setRowValue(Functions.RES_LENGTHINTERVAL, lengthInterval);
         result.getResolutionMatrix().setRowValue(Functions.RES_LENGTHDISTTYPE, lengthDistType);
@@ -50,8 +50,7 @@ public class StationLengthDist extends AbstractFunction {
         Double firstLenGrp = Double.MAX_VALUE, lastLenGrp = -Double.MAX_VALUE;
         for (FishstationBO fs : fishStations) {
             // Standardize LFQ to number of trawl depths.
-            Integer nDep = fs.getFishingDepthCount() != null ? fs.getFishingDepthCount() : 1;
-            Double distanceWFac = StoXMath.raiseFac(1.0, nDep.doubleValue());
+            Double distanceWFac = 1.0;
             // Standardize to 1 NM if NORMLengthDist
             if (normToDist) {
                 distanceWFac = StoXMath.raiseFac(distanceWFac, fs.getDistance());
@@ -62,6 +61,10 @@ public class StationLengthDist extends AbstractFunction {
                 for (SampleBO s : c.getSampleBOCollection()) {
                     // Standardize sample to total catch
                     Double sampleWFac = StoXMath.raiseFac(s.getTotalWeight(), s.getSampledWeight());
+                    if (s.getIndividualBOCollection().isEmpty() && (s.getSampledWeight() != null && s.getSampledWeight() > 0d || s.getLengthSampleCount() != null && s.getLengthSampleCount() > 0d)) {
+                        logger.log("Warning: Length distr. not calculated because of missing length sample individuals in " + s.getKey());
+                        continue;
+                    }
                     if (sampleWFac == null) {
                         if (inPercent) {
                             // Standardize sample to total catch is not needed, the percent (shape) of the LFQ is given.
@@ -111,45 +114,5 @@ public class StationLengthDist extends AbstractFunction {
             BioticUtils.toPercent(result);
         }
         return result;
-    }
-
-    private double getLengthInterval(List<FishstationBO> fishStations) {
-        Set<Integer> units = new HashSet<>();
-        for (FishstationBO fs : fishStations) {
-            for (CatchBO c : fs.getCatchBOCollection()) {
-                for (SampleBO s : c.getSampleBOCollection()) {
-                    for (IndividualBO i : s.getIndividualBOCollection()) {
-                        if (i.getLengthUnit() == null || i.getLengthUnit().isEmpty()) {
-                            continue;
-                        }
-                        units.add(Conversion.safeStringtoIntegerNULL(i.getLengthUnit()));
-                    }
-                }
-            }
-        }
-        // Analyse the combinations:
-        // 6 0.01cm
-        // 7 0.05cm
-        // 1 0.10cm
-        // 2 0.50cm
-        // 3 1.00cm
-        // 4 3.00cm
-        // 5 5.00cm
-        if (units.contains(4) && units.contains(5)) {
-            return 3.0 * 5.0; // 15 cm 
-        } else {
-            Integer i = 5;
-            do {
-                if (units.contains(i)) {
-                    return BioticUtils.getLengthInterval(i);
-                }
-                if (i == 1) {
-                    i = 7;
-                } else {
-                    i--;
-                }
-            } while (i != 5);
-        }
-        return 1d;
     }
 }

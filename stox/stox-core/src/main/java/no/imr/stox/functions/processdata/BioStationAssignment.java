@@ -51,7 +51,7 @@ public class BioStationAssignment extends AbstractFunction {
         Boolean byRadius = assignmentMethod.equals(Functions.ASSIGNMENTMETHOD_RADIUS);
         Boolean byEllipsoidal = assignmentMethod.equals(Functions.ASSIGNMENTMETHOD_ELLIPSOIDALDISTANCE);
         Integer minNumStations = (Integer) input.get(Functions.PM_BIOSTATIONASSIGNMENT_MINNUMSTATIONS);
-        Double scalarProductLimit = (Double) input.get(Functions.PM_BIOSTATIONASSIGNMENT_SCALARPRODUCTLIMIT);
+        Double scalarProductLimit = 1.0;//(Double) input.get(Functions.PM_BIOSTATIONASSIGNMENT_SCALARPRODUCTLIMIT);
         Double refLatitude = (Double) input.get(Functions.PM_BIOSTATIONASSIGNMENT_REFLATITUDE);
         Double refLongitude = (Double) input.get(Functions.PM_BIOSTATIONASSIGNMENT_REFLONGITUDE);
         Double refGCDistance = (Double) input.get(Functions.PM_BIOSTATIONASSIGNMENT_REFGCDISTANCE);
@@ -113,37 +113,39 @@ public class BioStationAssignment extends AbstractFunction {
 
                     // Build the trawl assignments
                     if (byEllipsoidal) {
-                        if (distsBOPerPSU == null || !(distsBOPerPSU.size() == 1)) {
+                        if (distsBOPerPSU == null) {
                             continue;
                         }
-                        DistanceBO d = distsBOPerPSU.iterator().next();
 
                         try {
-                            List<WeightedFishStation> wfsList = fList.parallelStream()
-                                    .map(fs -> new WeightedFishStation(getScalarProduct(d, fs, refLatitude, refLongitude, refGCDistance, refTime, refBotDepth), fs))
-                                    .filter(wfs -> wfs.getScalar() != null)
-                                    .collect(Collectors.toList());
-                            List<WeightedFishStation> wfsListFilter = 
-                                    scalarProductLimit == null || scalarProductLimit < 0d ? wfsList :
-                                    wfsList.parallelStream()
-                                    .filter(wfs -> wfs.getScalar() < scalarProductLimit)
-                                    .collect(Collectors.toList());
-
-                            if (minNumStations != null && wfsListFilter.size() < minNumStations) {
-                                wfsList = wfsList.parallelStream()
-                                        .sorted(Comparator.comparingDouble(WeightedFishStation::getScalar))
-                                        .limit(minNumStations)
+                            for (DistanceBO d : distsBOPerPSU) {
+                                List<WeightedFishStation> wfsList = fList.parallelStream()
+                                        .map(fs -> new WeightedFishStation(getScalarProduct(d, fs, refLatitude, refLongitude, refGCDistance, refTime, refBotDepth), fs))
+                                        .filter(wfs -> wfs.getScalar() != null)
                                         .collect(Collectors.toList());
+                                List<WeightedFishStation> wfsListFilter
+                                        = wfsList.parallelStream()
+                                                        .filter(wfs -> wfs.getScalar() < scalarProductLimit)
+                                                        .collect(Collectors.toList());
 
-                            } else {
-                                wfsList = wfsListFilter;
+                                if (minNumStations != null && wfsListFilter.size() < minNumStations) {
+                                    wfsList = wfsList.parallelStream()
+                                            .sorted(Comparator.comparingDouble(WeightedFishStation::getScalar))
+                                            .limit(minNumStations)
+                                            .collect(Collectors.toList());
+
+                                } else {
+                                    wfsList = wfsListFilter;
+                                }
+                                wfsList.forEach(wfs -> {
+                                    // Define trawl station assignment with default weight=1
+                                    FishstationBO fs = wfs.getFs();
+                                    bsAsg.setRowColValue(asgKey, fs.getKey(), 1d);
+                                });
+                                if (!wfsList.isEmpty()) {
+                                    psuIsAssigned = true;
+                                }
                             }
-                            wfsList.forEach(wfs -> {
-                                // Define trawl station assignment with default weight=1
-                                FishstationBO fs = wfs.getFs();
-                                bsAsg.setRowColValue(asgKey, fs.getKey(), 1d);
-                            });
-                            psuIsAssigned = !wfsList.isEmpty();
                         } catch (Exception e) {
                             e.printStackTrace();
                         }

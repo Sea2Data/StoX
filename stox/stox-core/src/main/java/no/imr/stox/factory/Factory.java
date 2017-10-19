@@ -25,6 +25,7 @@ public class Factory {
     public static final String TEMPLATE_STATIONLENGTHDIST = "StationLengthDistTemplate";
     public static final String TEMPLATE_DATRAS = "DATRASTemplate";
     public static final String TEMPLATE_SWEPTAREA = "SweptAreaTemplate";
+    public static final String TEMPLATE_LENGTHWEIGHTRELATIONSHIP = "LengthWeightRelationShip";
     public static final String TEMPLATE_SWEPTAREA_TOTAL = "SweptAreaTotalTemplate";
     public static final String TEMPLATE_LARVAESWEPTAREA = "LarvaeSweptAreaTemplate";
     public static final String TEMPLATE_SPLITNASC = "SplitNASC";
@@ -35,12 +36,13 @@ public class Factory {
         return Arrays.asList(
                 TEMPLATE_ACOUSTICABUNDANCETRANSECT,
                 //TEMPLATE_ACOUSTICABUNDANCERECTANGLE,
-                TEMPLATE_STATIONLENGTHDIST,
-                TEMPLATE_DATRAS,
                 TEMPLATE_SWEPTAREA,
                 TEMPLATE_SWEPTAREA_TOTAL,
-                TEMPLATE_LARVAESWEPTAREA,
                 TEMPLATE_SPLITNASC,
+                TEMPLATE_LENGTHWEIGHTRELATIONSHIP,
+                TEMPLATE_STATIONLENGTHDIST,
+                TEMPLATE_DATRAS,
+                TEMPLATE_LARVAESWEPTAREA,
                 TEMPLATE_USERDEFINED/*,
                 TEMPLATE_ECA*/ // not finished
         );
@@ -68,6 +70,8 @@ public class Factory {
                 return "ECA - Estimate catch at age";
             case TEMPLATE_USERDEFINED:
                 return "User defined (empty models)";
+            case TEMPLATE_LENGTHWEIGHTRELATIONSHIP:
+                return "Length Weight relationship";
         }
         return "";
     }
@@ -116,6 +120,9 @@ public class Factory {
             case TEMPLATE_ECA:
                 createECAProject(p.getBaseline());
                 createECARModel(p.getRModel());
+                break;
+            case TEMPLATE_LENGTHWEIGHTRELATIONSHIP:
+                createLengthWeightRelationshipTemplateProject(p.getBaseline());
                 break;
         }
         // Set template description by using basline - should have another project file.
@@ -500,6 +507,40 @@ public class Factory {
                     setParameterProcessValue(Functions.PM_ABUNDANCE_DENSITY, meanProc).
                     setParameterProcessValue(Functions.PM_ABUNDANCE_POLYGONAREA, Functions.FN_STRATUMAREA);
         });
+        // Write process data
+        m.addProcess(Functions.FN_WRITEPROCESSDATA, Functions.FN_WRITEPROCESSDATA).
+                setRespondInGUI(Boolean.TRUE);
+    }
+
+    private static void createLengthWeightRelationshipTemplateProject(IModel m) {
+        m.setDescription("Length weight relationship");
+
+        // Read process data
+        m.addProcess(Functions.FN_READPROCESSDATA, Functions.FN_READPROCESSDATA);
+
+        // Biotic related:
+        m.addProcess(Functions.FN_READBIOTICXML, Functions.FN_READBIOTICXML).
+                setFileOutput(false);
+
+        m.addProcess(Functions.FN_FILTERBIOTIC, Functions.FN_FILTERBIOTIC).
+                setParameterProcessValue(Functions.PM_FILTERBIOTIC_BIOTICDATA, Functions.FN_READBIOTICXML).
+                setParameterValue(Functions.PM_FILTERBIOTIC_CATCHEXPR, "noname == 'SILDG03'").
+                setRespondInGUI(true);
+
+        // Process data related:
+        m.addProcess(Functions.FN_DEFINESTRATA, Functions.FN_DEFINESTRATA).
+                setParameterProcessValue(Functions.PM_DEFINESTRATA_PROCESSDATA, Functions.FN_READPROCESSDATA).
+                setParameterValue(Functions.PM_DEFINESTRATA_USEPROCESSDATA, false).
+                setRespondInGUI(true);
+
+        m.addProcess(Functions.FN_DEFINESWEPTAREAPSU, Functions.FN_DEFINESWEPTAREAPSU).
+                setParameterProcessValue(Functions.PM_DEFINESWEPTAREAPSU_PROCESSDATA, Functions.FN_READPROCESSDATA).
+                setParameterProcessValue(Functions.PM_DEFINESWEPTAREAPSU_BIOTICDATA, Functions.FN_FILTERBIOTIC).
+                setParameterValue(Functions.PM_DEFINESWEPTAREAPSU_METHOD, Functions.SWEPTAREAPSUMETHOD_STATION);
+
+        m.addProcess(Functions.FN_LENGTHWEIGHTRELATIONSHIP, Functions.FN_LENGTHWEIGHTRELATIONSHIP).
+                setParameterProcessValue(Functions.PM_SWEPTAREADENSITY_PROCESSDATA, Functions.FN_READPROCESSDATA).
+                setParameterProcessValue(Functions.PM_SWEPTAREADENSITY_BIOTICDATA, Functions.FN_FILTERBIOTIC);
         // Write process data
         m.addProcess(Functions.FN_WRITEPROCESSDATA, Functions.FN_WRITEPROCESSDATA).
                 setRespondInGUI(Boolean.TRUE);

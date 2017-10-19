@@ -348,7 +348,7 @@ public class Model implements IModel {
         if (runningProcess != idx) {
             if (idx < runningProcess) {
                 // Clear output:
-                for (int i = runningProcess; i > Math.max(0, idx); i--) {
+                for (int i = Math.min(runningProcess, getProcessList().size() - 1); i > Math.max(0, idx); i--) {
                     getProcessList().get(i).clearOutput();
                 }
             }

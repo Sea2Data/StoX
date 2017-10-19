@@ -2,10 +2,14 @@ package no.imr.stox.functions.utils;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Objects;
+import java.util.Set;
+import no.imr.sea2data.biotic.bo.CatchBO;
 import no.imr.sea2data.biotic.bo.FishstationBO;
 import no.imr.sea2data.biotic.bo.IndividualBO;
+import no.imr.sea2data.biotic.bo.SampleBO;
 import no.imr.sea2data.imrbase.math.ImrMath;
 import no.imr.sea2data.imrbase.matrix.MatrixBO;
 import no.imr.sea2data.imrbase.util.Conversion;
@@ -235,4 +239,43 @@ public final class BioticUtils {
 
     }
 
+    public static double getLengthInterval(List<FishstationBO> fishStations) {
+        Set<Integer> units = new HashSet<>();
+        for (FishstationBO fs : fishStations) {
+            for (CatchBO c : fs.getCatchBOCollection()) {
+                for (SampleBO s : c.getSampleBOCollection()) {
+                    for (IndividualBO i : s.getIndividualBOCollection()) {
+                        if (i.getLengthUnit() == null || i.getLengthUnit().isEmpty()) {
+                            continue;
+                        }
+                        units.add(Conversion.safeStringtoIntegerNULL(i.getLengthUnit()));
+                    }
+                }
+            }
+        }
+        // Analyse the combinations:
+        // 6 0.01cm
+        // 7 0.05cm
+        // 1 0.10cm
+        // 2 0.50cm
+        // 3 1.00cm
+        // 4 3.00cm
+        // 5 5.00cm
+        if (units.contains(4) && units.contains(5)) {
+            return 3.0 * 5.0; // 15 cm 
+        } else {
+            Integer i = 5;
+            do {
+                if (units.contains(i)) {
+                    return BioticUtils.getLengthInterval(i);
+                }
+                if (i == 1) {
+                    i = 7;
+                } else {
+                    i--;
+                }
+            } while (i != 5);
+        }
+        return 1d;
+    }
 }

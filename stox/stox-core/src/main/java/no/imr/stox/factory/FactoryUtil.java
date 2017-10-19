@@ -133,17 +133,17 @@ public final class FactoryUtil {
                 }
                 p.setParameterValue(Functions.PM_SPLITNASC_MIXACOCAT, null);
             });
-            
+
         }
-        /*if (prj.getResourceVersion() < 1.72) {
+        if (prj.getResourceVersion() < 1.74) {
             // Resolve deprecation <-1.72v: swept area swept area sweep width method length dependent into catchability length dependent sweep width.
             //----------------------------------
             IProcess fbPr = prj.getBaseline().getProcessByFunctionName(Functions.FN_FILTERBIOTIC);
-            IProcess cPr = prj.getBaseline().getProcessByFunctionName(Functions.FN_CATCHABILITY);
-            IProcess totPr = prj.getBaseline().getProcessByFunctionName(Functions.FN_TOTALLENGTHDIST);
+//            IProcess cPr = prj.getBaseline().getProcessByFunctionName(Functions.FN_CATCHABILITY);
+//            IProcess totPr = prj.getBaseline().getProcessByFunctionName(Functions.FN_TOTALLENGTHDIST);
             IProcess swPr = prj.getBaseline().getProcessByFunctionName(Functions.FN_SWEPTAREADENSITY);
-            if (swPr != null && totPr != null) {
-                if (cPr == null) {
+            if (swPr != null) {
+                /*if (cPr == null) {
                     String sweepWidthMethod = (String) swPr.getParameterValue(Functions.PM_SWEPTAREADENSITY_SWEEPWIDTHMETHOD);
                     if (sweepWidthMethod != null && sweepWidthMethod.equals(Functions.SWEEPWIDTH_LENGTHDEPENDENT)) {
                         String lDistPName = (String) totPr.getProcessNameFromParameter(totPr.getMetaFunction().findMetaParameter(Functions.PM_TOTALLENGTHDIST_LENGTHDIST));
@@ -160,7 +160,7 @@ public final class FactoryUtil {
                             totPr.setParameterProcessValue(Functions.PM_TOTALLENGTHDIST_LENGTHDIST, cPr.getName());
                         }
                     }
-                }
+                }*/
                 if (fbPr != null) {
                     String bioticData = (String) swPr.getParameterValue(Functions.PM_SWEPTAREADENSITY_BIOTICDATA);
                     if (bioticData == null) {
@@ -168,7 +168,7 @@ public final class FactoryUtil {
                     }
                 }
             }
-        }*/
+        }
         // Remove processes not pointing to functions
         for (IModel m : prj.getModels().values()) {
             for (int i = m.getProcessList().size() - 1; i >= 0; i--) {

@@ -5,15 +5,22 @@
  */
 package no.imr.stox.functions.report;
 
+import java.io.IOException;
+import java.io.UncheckedIOException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import no.imr.stox.functions.utils.ReportUtil;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import no.imr.sea2data.imrbase.math.LWRelationship;
 import no.imr.sea2data.imrbase.util.Conversion;
 import no.imr.sea2data.imrbase.matrix.MatrixBO;
 import no.imr.sea2data.imrbase.util.ExportUtil;
+import no.imr.stox.bo.LengthWeightRelationshipMatrix;
 import no.imr.stox.functions.utils.Functions;
 import no.imr.stox.functions.utils.StoXMath;
 
@@ -29,7 +36,7 @@ public class AbndFillMissingWeights {
      * @param abnByIndData
      * @param method
      */
-    public static void fillMissingWeights(MatrixBO abnByIndData, String method, String a, String b) {
+    public static void fillMissingWeights(MatrixBO abnByIndData, String method, String a, String b, String fileNameLengthWeight) {
         MatrixBO weights = new MatrixBO();
         Double lenIntv = null;
         for (String row : abnByIndData.getRowKeys()) {
@@ -78,25 +85,43 @@ public class AbndFillMissingWeights {
                 weights.setGroupRowColValue(heading, lenGrp, "MeanWeight", meanWeight);
             }
         }
-
+        LengthWeightRelationshipMatrix lwM = getLengthWeightFromFile(fileNameLengthWeight);
         // Fill in missing weights in super individual matrix:
         for (String row : abnByIndData.getRowKeys()) {
             String lenGrp = (String) abnByIndData.getRowColValue(row, Functions.COL_ABNDBYIND_LENGRP);
             Double weight = abnByIndData.getRowColValueAsDouble(row, Functions.COL_IND_WEIGHT);
             if (weight == null) {
                 switch (method) {
-                    case Functions.FILLWEIGHT_STANDARD:
+                    case Functions.FILLWEIGHT_MANUALLY: {
                         String species = (String) abnByIndData.getRowColValue(row, Functions.COL_IND_SPECIES);
                         weight = getMeanWeightFromStandard(lenGrp, lenIntv, a, b, species);
                         break;
-                    default:
+                    }
+                    case Functions.FILLWEIGHT_FROMFILE: {
+                        String stratum = (String) abnByIndData.getRowColValue(row, Functions.COL_ABNDBYIND_STRATUM);
+                        String aphia = (String) abnByIndData.getRowColValue(row, Functions.COL_IND_APHIA);
+                        if (lwM != null) {
+                            Double aa = lwM.getData().getGroupRowColValueAsDouble(aphia, stratum, Functions.LENGTHWEIGHT_COEFF_A);
+                            Double bb = lwM.getData().getGroupRowColValueAsDouble(aphia, stratum, Functions.LENGTHWEIGHT_COEFF_B);
+                            if (aa == null || bb == null) {
+                                aa = lwM.getData().getGroupRowColValueAsDouble(aphia, "TOTAL", Functions.LENGTHWEIGHT_COEFF_A);
+                                bb = lwM.getData().getGroupRowColValueAsDouble(aphia, "TOTAL", Functions.LENGTHWEIGHT_COEFF_B);
+                            }
+                            weight = getMeanWeightFromStandard(lenGrp, lenIntv, aa, bb);
+                        }
+                        break;
+                    }
+                    default: {
                         String estLayer = (String) abnByIndData.getRowColValue(row, Functions.COL_ABNDBYIND_ESTLAYER);
                         String stratum = (String) abnByIndData.getRowColValue(row, Functions.COL_ABNDBYIND_STRATUM);
                         String specCatKey = (String) abnByIndData.getRowColValue(row, Functions.COL_ABNDBYIND_SPECCAT);
                         String heading = ExportUtil.separated('/', estLayer, stratum, specCatKey);
                         weight = weights.getGroupRowColValueAsDouble(heading, lenGrp, "MeanWeight");
+                    }
                 }
-                abnByIndData.setRowColValue(row, Functions.COL_IND_WEIGHT, weight);
+                if (weight != null) {
+                    abnByIndData.setRowColValue(row, Functions.COL_IND_WEIGHT, weight);
+                }
             }
         }
     }
@@ -178,16 +203,42 @@ public class AbndFillMissingWeights {
                 }
             }
         }
-        return null;
+        return c;
     }
 
     private static Double getMeanWeightFromStandard(String lenGrp, Double lenIntv, String aa, String bb, String species) {
         Double a = extractConstant(aa, species);
         Double b = extractConstant(bb, species);
+        return getMeanWeightFromStandard(lenGrp, lenIntv, a, b);
+    }
+
+    private static Double getMeanWeightFromStandard(String lenGrp, Double lenIntv, Double a, Double b) {
         Double length = StoXMath.getLength(Conversion.safeStringtoDoubleNULL(lenGrp), lenIntv);
         if (a != null && b != null && length != null) {
             return a * Math.pow(length, b);
         }
         return null;
+    }
+
+    private static LengthWeightRelationshipMatrix getLengthWeightFromFile(String fileNameLengthWeight) {
+        try {
+            LengthWeightRelationshipMatrix res = new LengthWeightRelationshipMatrix();
+            List<String> lines = Files.readAllLines(Paths.get(fileNameLengthWeight));
+            if (lines.size() <= 1) {
+                return res;
+            }
+            lines.remove(0);
+            lines.forEach(line -> {
+                String[] elms = line.split("\\s++");
+                if (elms.length == 5) {
+                    res.getData().setGroupRowColValue(elms[0], elms[1], Functions.LENGTHWEIGHT_COEFF_A, Conversion.safeStringtoDoubleNULL(elms[2]));
+                    res.getData().setGroupRowColValue(elms[0], elms[1], Functions.LENGTHWEIGHT_COEFF_B, Conversion.safeStringtoDoubleNULL(elms[3]));
+                    res.getData().setGroupRowColValue(elms[0], elms[1], Functions.LENGTHWEIGHT_COEFF_R2, Conversion.safeStringtoDoubleNULL(elms[4]));
+                }
+            });
+            return res;
+        } catch (IOException ex) {
+            throw new UncheckedIOException(ex);
+        }
     }
 }

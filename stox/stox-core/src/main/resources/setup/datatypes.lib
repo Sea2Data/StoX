@@ -3,6 +3,10 @@ Name: String
 Description: String data type
 
 [Datatype]
+Name: FileName
+Description: String data type
+
+[Datatype]
 Name: Integer
 Description: Integer data type
 
@@ -28,6 +32,10 @@ Description: Density as numbers by sq.nm.
 
 [Datatype]
 Name: Abundance
+Description: Abundance as numbers of fish estimated
+
+[Datatype]
+Name: LengthWeightCoefficients
 Description: Abundance as numbers of fish estimated
 
 [Datatype]

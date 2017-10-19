@@ -36,6 +36,7 @@ public class SweptAreaDensity extends AbstractFunction {
     public Object perform(Map<String, Object> input) {
         ILogger logger = (ILogger) input.get(Functions.PM_LOGGER);
         ProcessDataBO pd = (ProcessDataBO) input.get(Functions.PM_SWEPTAREADENSITY_PROCESSDATA);
+        String distanceMethod = (String) input.get(Functions.PM_SWEPTAREADENSITY_DISTANCEMETHOD);
         String sweptAreaMethod = (String) input.get(Functions.PM_SWEPTAREADENSITY_SWEPTAREAMETHOD);
         String catchVariable = (String) input.get(Functions.PM_SWEPTAREADENSITY_CATCHVARIABLE);
         List<FishstationBO> bioticData = (List<FishstationBO>) input.get(Functions.PM_SWEPTAREADENSITY_BIOTICDATA);
@@ -174,21 +175,19 @@ public class SweptAreaDensity extends AbstractFunction {
             MatrixBO posSampleSize = new MatrixBO();
             for (String station : stations) {
                 FishstationBO fs = BioticUtils.findStation(bioticData, station);
+                if (fs == null) {
+                    logger.error("Station " + station + " not available in Biotic Data.", null);
+                    return null;
+                }
                 sweepWidthInM = getSweepWidthByStation(station, sweepWidthInM, sweepWidthMethod, sweepWidthMap);
                 Double sweptDistance = 1.0;
                 if (!distanceGivenInLengthDist) {
-                    if (bioticData == null) {
-                        logger.error("Biotic Data is not set in parameter.", null);
-                        return null;
-                    }
-                    if (fs == null) {
-                        logger.error("Station " + station + " not available in Biotic Data.", null);
-                        return null;
-                    }
                     sweptDistance = fs.getDistance();
                     if (sweptDistance == null || sweptDistance == 0) {
                         logger.error("Missing distance in station " + station + ".", null);
                     }
+                }
+                if (distanceMethod != null && distanceMethod.equals(Functions.DISTANCEMETHOD_BYDEPTH)) {
                     if (fs.getFishingDepthCount() != null && fs.getFishingDepthCount() > 1) {
                         // Standardize the swept distance to one depth unit
                         sweptDistance = sweptDistance / fs.getFishingDepthCount();
@@ -262,10 +261,20 @@ public class SweptAreaDensity extends AbstractFunction {
                                 switch (catchVariable) {
                                     case Functions.CATCHVARIABLE_WEIGHT:
                                         variable = s.getWeight();
+                                        if(variable == null){
+                                            logger.error("Missing weight at " + s.getKey() + " for psu " + psu, null);
+                                        }
                                         break;
                                     case Functions.CATCHVARIABLE_COUNT:
                                         variable = Conversion.safeIntegerToDouble(s.getCount());
                                         break;
+                                }
+                                switch (catchVariable) {
+                                    case Functions.CATCHVARIABLE_WEIGHT:
+                                    case Functions.CATCHVARIABLE_COUNT:
+                                        if(variable == null){
+                                            logger.error("Missing " + catchVariable + " at " + s.getKey() + " for psu " + psu, null);
+                                        }
                                 }
                                 Double sweptArea = StoXMath.getSweptArea(sweptDistance, sweepWidthInM);
                                 Double density = getDensity(variable, sweptArea, numEDSUs);
