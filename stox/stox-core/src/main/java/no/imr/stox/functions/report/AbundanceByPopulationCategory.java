@@ -185,7 +185,7 @@ public class AbundanceByPopulationCategory extends AbstractFunction {
             }
         }
         if (!missingBiomass.isEmpty()) {
-            logger.log("Error: Biomass not calculated for length group(s): " + missingBiomass + ". Consider using regression to estimate meanweight at the report");
+            logger.log("Warning: Biomass not calculated for length group(s): " + missingBiomass + ". Consider using regression to estimate meanweight at the report");
         }
     }
 

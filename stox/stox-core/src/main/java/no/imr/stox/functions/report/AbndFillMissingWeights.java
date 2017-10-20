@@ -5,6 +5,7 @@
  */
 package no.imr.stox.functions.report;
 
+import java.io.File;
 import java.io.IOException;
 import java.io.UncheckedIOException;
 import java.nio.file.Files;
@@ -85,7 +86,10 @@ public class AbndFillMissingWeights {
                 weights.setGroupRowColValue(heading, lenGrp, "MeanWeight", meanWeight);
             }
         }
-        LengthWeightRelationshipMatrix lwM = getLengthWeightFromFile(fileNameLengthWeight);
+        LengthWeightRelationshipMatrix lwM = null;
+        if (method.equals(Functions.FILLWEIGHT_FROMFILE)) {
+            lwM = getLengthWeightFromFile(fileNameLengthWeight);
+        }
         // Fill in missing weights in super individual matrix:
         for (String row : abnByIndData.getRowKeys()) {
             String lenGrp = (String) abnByIndData.getRowColValue(row, Functions.COL_ABNDBYIND_LENGRP);
@@ -223,6 +227,9 @@ public class AbndFillMissingWeights {
     private static LengthWeightRelationshipMatrix getLengthWeightFromFile(String fileNameLengthWeight) {
         try {
             LengthWeightRelationshipMatrix res = new LengthWeightRelationshipMatrix();
+            if (!(new File(fileNameLengthWeight)).exists()) {
+                return res;
+            }
             List<String> lines = Files.readAllLines(Paths.get(fileNameLengthWeight));
             if (lines.size() <= 1) {
                 return res;

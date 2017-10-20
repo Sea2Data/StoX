@@ -35,7 +35,7 @@ public class OutputPanel extends javax.swing.JPanel {
                 return;
             }
             IProcess p = getProcess();
-            if (p == null) {
+            if (p == null || p.getOutput() == null) {
                 getTextArea().setText("");
                 return;
             }

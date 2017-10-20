@@ -133,9 +133,11 @@ public class Model implements IModel {
                 try {
                     // Tell the listeners
                     onStart(p);
+                    if (p.isEnabled()) {
+                        getProcessLog().log("Process " + p.getName() + (p.isRespondInGUI() ? " / Respond in gui" : ""));
+                    }
                     p.perform();
                     setRunningProcess(prIdx);
-                    getProcessLog().log("Process " + p.getName() + (p.isRespondInGUI() ? " / Respond in gui" : ""));
                     onEnd(p);
                     if (breakable && p.isBreakInGUI()) {
                         getProcessLog().log("Break in gui");
@@ -348,7 +350,7 @@ public class Model implements IModel {
         if (runningProcess != idx) {
             if (idx < runningProcess) {
                 // Clear output:
-                for (int i = Math.min(runningProcess, getProcessList().size() - 1); i > Math.max(0, idx); i--) {
+                for (int i = Math.min(runningProcess, getProcessList().size() - 1); i >= Math.max(0, idx); i--) {
                     getProcessList().get(i).clearOutput();
                 }
             }
