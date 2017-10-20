@@ -10,6 +10,7 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Objects;
 import java.util.Set;
 import javax.swing.event.MouseInputListener;
 import no.imr.sea2data.stox.mapgui.StoXMapSetup;
@@ -52,6 +53,7 @@ public class BioStationAssignmentHandler extends BaseHandler {
     private final ProcessDataBO pd;
     public static final FilterFactory2 FF = (FilterFactory2) FactoryFinder.getFilterFactory(null);
     StoXMapSetup setup;
+    boolean isSelectingPSUAtPD = false;
     /**
      * Mouse picking tolerance in pixels around the mouse cursor.
      */
@@ -170,7 +172,7 @@ public class BioStationAssignmentHandler extends BaseHandler {
         //Set<FeatureId> ids = new HashSet<>();
         for (FeatureBO f : selectedFishStations) {
             // ids.add(f.getFeature().getIdentifier());
-            if (f.getSelection().equals(0) ) {
+            if (f.getSelection().equals(0)) {
                 f.setSelection(1);
             }
         }
@@ -179,6 +181,9 @@ public class BioStationAssignmentHandler extends BaseHandler {
     }
 
     private void setSelectedPSU(String selectedPSU) {
+        if (isSelectingPSUAtPD || Objects.equals(this.selectedPSU, selectedPSU)) {
+            return;
+        }
         this.selectedPSU = selectedPSU;
         selectedAssignment = AbndEstProcessDataUtil.getBioticAssignments(pd).getRowKeyGroupValues().getRowValueAsInteger("max");
         if (selectedAssignment == null) {
@@ -188,7 +193,15 @@ public class BioStationAssignmentHandler extends BaseHandler {
         }
         setSelectedAcousticFeatures();
         selectFishStationsForSelectedPSU();
-        createLengthFrequencyGraphics();
+        try {
+            // The Utilities.actionsGlobalContext().lookup generates checkLookup and resultChanged with the old PSU selected in the view/lookup
+            // In future: remove the use of lookup and use spesific listener classes to remove the magic complexity.
+            isSelectingPSUAtPD = true;
+            getPD().selectPSUNodeByKey(selectedPSU);
+            createLengthFrequencyGraphics();
+        } finally {
+            isSelectingPSUAtPD = false;
+        }
     }
 
     /**
@@ -232,9 +245,14 @@ public class BioStationAssignmentHandler extends BaseHandler {
         map.getCanvas().repaint();
         LFQProvider lfq = Lookup.getDefault().lookup(LFQProvider.class);
         try {
+            // The Utilities.actionsGlobalContext().lookup generates checkLookup and resultChanged with the old PSU selected in the view/lookup
+            // In future: remove the use of lookup and use spesific listener classes to remove the magic complexity.
+            isSelectingPSUAtPD = true;
             lfq.createPSULFQ(getPD().getModel(), pd, selectedPSU);
         } catch (UserErrorException ex) {
             Exceptions.attachLocalizedMessage(ex, "Unable to show the length frequency for this psu");
+        } finally {
+            isSelectingPSUAtPD = false;
         }
     }
 
@@ -482,7 +500,6 @@ public class BioStationAssignmentHandler extends BaseHandler {
      * Updates the lengthFrequency graphics
      */
     private void createLengthFrequencyGraphics() {
-        getPD().selectPSUNodeByKey(selectedPSU);
         LFQProvider lfq = Lookup.getDefault().lookup(LFQProvider.class);
         try {
             lfq.createPSULFQ(getPD().getModel(), pd, selectedPSU);
