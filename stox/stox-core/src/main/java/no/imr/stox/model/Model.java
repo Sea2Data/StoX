@@ -116,7 +116,7 @@ public class Model implements IModel {
 
     void stop() {
         setRunState(RUNSTATE_STOPPED);
-        IProcess p = getProcessList().get(getRunningProcessIdx());
+        //IProcess p = getProcessList().get(getRunningProcessIdx());
         getModellisteners().stream().forEach((ml) -> {
             ml.onModelStop(this);
         });
@@ -128,6 +128,10 @@ public class Model implements IModel {
         }
         start();
         try {
+            // Clear output from the firstProces to the end:
+            for (int i = getProcessList().size() - 1; i >= Math.max(0, firstProcess); i--) {
+                getProcessList().get(i).clearOutput();
+            }
             for (int prIdx = firstProcess; prIdx <= lastProcess; prIdx++) {
                 IProcess p = getProcessList().get(prIdx);
                 try {
@@ -187,6 +191,10 @@ public class Model implements IModel {
     public void reset() {
         System.gc();
         setRunningProcess(-1);
+        // reset all outputs
+        for (int i = getProcessList().size() - 1; i >= 0; i--) {
+            getProcessList().get(i).clearOutput();
+        }
     }
 
     /**
@@ -348,12 +356,6 @@ public class Model implements IModel {
     @Override
     public void setRunningProcess(int idx) {
         if (runningProcess != idx) {
-            if (idx < runningProcess) {
-                // Clear output:
-                for (int i = Math.min(runningProcess, getProcessList().size() - 1); i >= Math.max(0, idx); i--) {
-                    getProcessList().get(i).clearOutput();
-                }
-            }
             runningProcess = idx;
             for (IModelListener ml : getModellisteners()) {
                 ml.onRunningProcessChanged(this, runningProcess);

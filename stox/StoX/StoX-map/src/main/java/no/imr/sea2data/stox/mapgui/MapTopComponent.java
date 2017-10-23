@@ -215,6 +215,9 @@ public final class MapTopComponent extends TopComponent implements LookupListene
 
     private void onStopModel(IModel model) {
         IProcess process = model.getRunningProcess();
+        if(process == null) {
+            return;
+        }
         try {
             switch (process.getMetaFunction().getName()) {
                 case Functions.FN_DEFINESTRATA:

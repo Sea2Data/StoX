@@ -17,7 +17,7 @@ public class TestFactory {
 
     //@Test
     public void test() {
-        List<IMetaFunction> l = FactoryUtil.getTemplateFunctionsByModel(Factory.TEMPLATE_SWEPTAREA, ProjectUtils.BASELINE);
+        List<String> l = FactoryUtil.getTemplateProcessNamesByModel(Factory.TEMPLATE_SWEPTAREA, ProjectUtils.BASELINE);
         l.stream().forEach(System.out::println);
     }
 }

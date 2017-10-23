@@ -50,9 +50,39 @@ public class ConvertBarentsHavTransects {
     public void test() {
         //convertVinterTokt();
         IntStream
-                .range(2003, 2003 + 1).boxed()
+                .range(1994, 2013 + 1).boxed()
                 .sorted(Collections.reverseOrder())
-                .forEach(year -> convertKystTokt(year, 6, "Sei"));
+                .forEach(year -> {
+                    //   convertKystTokt(year, 6, "Sei");
+                    appendCatchability(year);
+                });
+    }
+
+    public void appendCatchability(Integer year) {
+        IProject prj = acquireProject("R:\\alle\\stox\\Akustikk Vintertokt\\Modified\\", "AkustikkTorskVinter" + year + "ed", null);
+        IModel bl = prj.getBaseline();
+        IProcess lDistPr = bl.getProcessByFunctionName(Functions.FN_STATIONLENGTHDIST);
+        lDistPr.setParameterValue(Functions.PM_STATIONLENGTHDIST_LENGTHDISTTYPE, Functions.LENGTHDISTTYPE_NORMLENGHTDIST);
+        IProcess rgrpPr = bl.getProcessByFunctionName(Functions.FN_REGROUPLENGTHDIST);
+        IProcess cPr = prj.getBaseline().getProcessByFunctionName(Functions.FN_CATCHABILITY);
+        if (cPr == null) {
+            cPr = prj.getBaseline().insertProcess(Functions.FN_CATCHABILITY, Functions.FN_CATCHABILITY, prj.getBaseline().getProcessList().indexOf(rgrpPr) + 1);
+        }
+        cPr.setParameterProcessValue(Functions.PM_CATCHABILITY_LENGTHDIST, rgrpPr.getName()).
+                setParameterValue(Functions.PM_CATCHABILITY_CATCHABILITYMETHOD, Functions.CATCHABILITYMETHOD_LENGTHDEPENDENTSWEEPWIDTH).
+                setParameterValue(Functions.PM_CATCHABILITY_TABLE, ";5.91;0.43;15;62");
+        IProcess relPr = prj.getBaseline().getProcessByFunctionName(Functions.FN_RELLENGTHDIST);
+        if (relPr == null) {
+            relPr = prj.getBaseline().insertProcess(Functions.FN_RELLENGTHDIST, Functions.FN_RELLENGTHDIST, prj.getBaseline().getProcessList().indexOf(cPr) + 1);
+        }
+        relPr.setParameterProcessValue(Functions.PM_RELLENGTHDIST_LENGTHDIST, rgrpPr.getName());
+        IProcess bswPr = prj.getBaseline().getProcessByFunctionName(Functions.FN_BIOSTATIONWEIGHTING);
+        bswPr.setParameterValue(Functions.PM_BIOSTATIONWEIGHTING_WEIGHTINGMETHOD, Functions.WEIGHTINGMETHOD_SUMWEIGHTEDCOUNT);
+
+        IProcess totPr = prj.getBaseline().getProcessByFunctionName(Functions.FN_TOTALLENGTHDIST);
+        totPr.setParameterProcessValue(Functions.PM_TOTALLENGTHDIST_LENGTHDIST, relPr.getName());
+        prj.save();
+
     }
 
     public void convertKystTokt(Integer year, Integer areaColumn, String species) {

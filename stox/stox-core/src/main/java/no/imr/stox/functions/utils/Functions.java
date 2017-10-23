@@ -224,10 +224,6 @@ public final class Functions {
     public static final String PM_CATCHABILITY_CATCHABILITYMETHOD = "CatchabilityMethod";
     public static final String PM_CATCHABILITY_LENGTHDIST = "LengthDist";
     public static final String PM_CATCHABILITY_BIOTICDATA = "BioticData";
-    public static final String PM_CATCHABILITY_ALPHA = "Alpha";
-    public static final String PM_CATCHABILITY_BETA = "Beta";
-    public static final String PM_CATCHABILITY_LMIN = "LMin";
-    public static final String PM_CATCHABILITY_LMAX = "LMax";
     public static final String PM_CATCHABILITY_TABLE = "Table";
 
     public static final String FN_DEFINEACOUSTICPSU = "DefineAcousticPSU";

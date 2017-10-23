@@ -63,12 +63,12 @@ public class NASC extends AbstractFunction {
             }
             result.getPosSampleSizeMatrix().addRowValue(distance, sampleHasValue ? sampleSize : 0);
         }
-        if (pelChThickness.size() > 1 && (asPChannel || asDepthLayer)) {
+        if (pelChThickness.size() > 1 && (asPChannel)) {
             logger.error("Different thichkness of pelagic channels requires layer type WaterColumn", null);
         }
-        if (botChThickness.size() > 1 && (asDepthLayer)) {
+        /*if (botChThickness.size() > 1 && (asDepthLayer)) {
             logger.error("Different thichkness of bottom channels requires layer type WaterColumn/PChannel", null);
-        }
+        }*/
 
         result.getResolutionMatrix().setRowValue(Functions.RES_SAMPLEUNITTYPE, Functions.SAMPLEUNIT_EDSU);
         result.getResolutionMatrix().setRowValue(Functions.RES_LAYERTYPE, layerType);
