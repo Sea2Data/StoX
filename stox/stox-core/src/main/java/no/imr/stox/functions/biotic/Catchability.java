@@ -47,6 +47,14 @@ public class Catchability extends AbstractFunction {
         result.getResolutionMatrix().setRowValue(Functions.RES_LENGTHINTERVAL, lenInterval);
         switch (catchabilityMethod) {
             case Functions.CATCHABILITYMETHOD_LENGTHDEPENDENTSWEEPWIDTH:
+            case Functions.CATCHABILITYMETHOD_LENGTHDEPENDENTSELECTIVITY:
+                // Adjuste the LFQ (number) directly by selection curve
+                if (tableM == null) {
+                    logger.error("Table parameter must be set", null);
+                }
+        }
+        switch (catchabilityMethod) {
+            case Functions.CATCHABILITYMETHOD_LENGTHDEPENDENTSWEEPWIDTH:
                 if (lengthDistType.equals(Functions.LENGTHDISTTYPE_PERCENTLENGHTDIST)) {
                     logger.error("LengthDist-LengthDistType cannot be in percent.", null);
                 }

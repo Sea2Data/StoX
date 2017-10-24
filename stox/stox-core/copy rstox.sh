@@ -4,11 +4,11 @@
 # 
 # add .ssh/id_rsa.pub content into GitHub as new SSH key
 
-read -rsp $'Press any key to continue...' -n 1 key
+#read -rsp $'Press any key to continue...' -n 1 key
 export HOME="C:/Users/aasmunds"
 cd c:/Projects/Git/RStox
 git pull
 cp C:/Projects/Git/StoX/stox/stox-core/target/rstox.jar C:/Projects/Git/RStox/inst/java/rstox.jar
 git commit -a -m "Updated rstox.jar"
 git push
-read -rsp $'Press any key to continue...' -n 1 key
+#read -rsp $'Press any key to continue...' -n 1 key

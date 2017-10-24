@@ -35,7 +35,7 @@ public final class ExportUtil {
         String res = "";
         for (int i = 0; i < params.length; i++) {
             Object p = params[i];
-            if (!res.isEmpty()) {
+            if (i > 0) {
                 res += sep;
             }
             if (p == null || p.toString().isEmpty()) {
