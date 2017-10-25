@@ -1,8 +1,8 @@
 package no.imr.sea2data.stox.components.model;
 
-import com.sun.glass.events.KeyEvent;
 import java.awt.event.ActionEvent;
 import java.awt.event.InputEvent;
+import java.awt.event.KeyEvent;
 import java.io.File;
 import java.util.List;
 import javax.swing.JComponent;

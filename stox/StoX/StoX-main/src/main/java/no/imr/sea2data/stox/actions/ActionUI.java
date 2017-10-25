@@ -5,8 +5,8 @@
  */
 package no.imr.sea2data.stox.actions;
 
-import com.sun.glass.events.KeyEvent;
 import java.awt.event.ActionEvent;
+import java.awt.event.KeyEvent;
 import java.util.function.Consumer;
 import java.util.function.Supplier;
 import javax.swing.AbstractAction;
