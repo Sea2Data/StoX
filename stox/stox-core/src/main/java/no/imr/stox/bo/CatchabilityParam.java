@@ -83,7 +83,8 @@ public class CatchabilityParam {
                 .filter(cells -> cells.length >= 5 && cells.length <= 6)
                 .map(cells -> {
                     int i = 0;
-                    String specCat = cells[i++];
+                    String s = cells[i++];
+                    String specCat = s.isEmpty() ? null : s;
                     Double alpha = Conversion.safeStringtoDoubleNULL(cells[i++]);
                     Double beta = Conversion.safeStringtoDoubleNULL(cells[i++]);
                     Double lmin = Conversion.safeStringtoDoubleNULL(cells[i++]);
@@ -103,4 +104,8 @@ public class CatchabilityParam {
                 .collect(Collectors.joining("/"));
     }
 
+    public static List<CatchabilityParam> find(List<CatchabilityParam> params, String specCat) {
+        List<CatchabilityParam> l = params.stream().filter(p -> p.getSpecCat() != null && p.getSpecCat().equals(specCat)).collect(Collectors.toList());
+        return l.isEmpty() ? null : l;
+    }
 }

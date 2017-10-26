@@ -8,7 +8,7 @@
 export HOME="C:/Users/aasmunds"
 cd c:/Projects/Git/RStox
 git pull
-cp C:/Projects/Git/StoX/stox/stox-core/target/rstox.jar C:/Projects/Git/RStox/inst/java/rstox.jar
-git commit -a -m "Updated rstox.jar"
+cp C:/Projects/Git/StoX/stox/stox-core/target/stox.jar C:/Projects/Git/RStox/inst/java/stox.jar
+git commit -a -m "Updated stox.jar"
 git push
 #read -rsp $'Press any key to continue...' -n 1 key

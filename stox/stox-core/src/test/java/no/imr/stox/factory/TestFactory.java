@@ -8,6 +8,7 @@ package no.imr.stox.factory;
 import java.util.List;
 import no.imr.stox.functions.utils.ProjectUtils;
 import no.imr.stox.library.IMetaFunction;
+import org.junit.Test;
 
 /**
  *
@@ -15,9 +16,9 @@ import no.imr.stox.library.IMetaFunction;
  */
 public class TestFactory {
 
-    //@Test
+    @Test
     public void test() {
-        List<String> l = FactoryUtil.getTemplateProcessNamesByModel(Factory.TEMPLATE_SWEPTAREA, ProjectUtils.BASELINE);
-        l.stream().forEach(System.out::println);
+        String[] l = FactoryUtil.getTemplateProcessNamesByModel(Factory.TEMPLATE_SWEPTAREA, ProjectUtils.BASELINE);
+        System.out.println(l);
     }
 }

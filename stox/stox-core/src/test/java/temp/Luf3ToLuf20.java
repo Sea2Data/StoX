@@ -9,12 +9,14 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
+import java.io.FilenameFilter;
 import java.io.IOException;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 import java.util.logging.Level;
@@ -36,26 +38,57 @@ import org.junit.Test;
 public class Luf3ToLuf20 {
 
     @Test
+    public void convertComScatterForNansis() {
+        for (String comScatterFolder : Arrays.asList(/*"ComScatter-2011-2014", */"ComScatter-1994-2010")) {
+            String comScatterRoot = "E:\\Bjørn Erik\\" + comScatterFolder + "\\ComScatter\\";
+            File[] fsCr = new File(comScatterRoot).listFiles();
+            for (File cruiseFolder : fsCr) {
+                String cruise = cruiseFolder.getName();
+                for (String subDir : Arrays.asList("", "Minisurvey", "other_freq")) {
+                    String root = comScatterRoot + cruise + subDir;
+                    File r = new File(root);
+                    if (!(r.exists() && r.isDirectory())) {
+                        continue;
+                    }
+                    File[] fs = new File(root).listFiles((File f, String name)
+                            -> !(name.contains("ListAll") || name.startsWith("LAS")) && (name.endsWith(".txt") || name.endsWith(".0")));
+                    Arrays.stream(fs).forEach(f -> {
+                        String fullname = root + "\\" + f.getName();
+                        boolean lcs = true;
+                        String dateformat = "dd.MM.yyyy";
+                        if (fullname.contains("wellformed")) {
+                            return;
+                        }
+                        System.out.println("converting " + fullname);
+                        List<DistanceBO> d = ReadAcousticLUF3.perform(fullname, lcs, dateformat);
+                        ListUser20Writer.export(cruise, "58", "1172", fullname + ".xml", d);
+                    });
+                }
+            }
+        }
+    }
+    //@Test
+
     public void convert() {
         convertMareksLUFData();
 //        Map<String, Object> input = new HashMap<>();
-//        input.put(Functions.PM_READACOUSTICLUF5_FILENAME, "C:\\Data\\stox\\ListUserFile05__F038000_T2_L105.0-2764.9_SIL.txt");
+//        input.put(Functions.PM_READACOUSTICLUF5_FILENAME, "C://Data//stox//ListUserFile05__F038000_T2_L105.0-2764.9_SIL.txt");
 //        List<DistanceBO> distances = (List<DistanceBO>) (new ReadAcousticLUF5()).perform(input);
-//        ListUser20Writer.export("tobistokt", "58", "1", "C:\\Data\\stox\\ListUserFile05__F038000_T2_L105.0-2764.9_SIL.xml", distances);
+//        ListUser20Writer.export("tobistokt", "58", "1", "C://Data//stox//ListUserFile05__F038000_T2_L105.0-2764.9_SIL.xml", distances);
 
         /*Map<String, Object> input = new HashMap<>();
-        input.put(Functions.PM_READACOUSTICLUF5_FILENAME, "C:\\Data\\Øyvind\\2006AA\\LUF5");
+        input.put(Functions.PM_READACOUSTICLUF5_FILENAME, "C://Data//Øyvind//2006AA//LUF5");
         List<DistanceBO> distances = (List<DistanceBO>) (new ReadAcousticLUF5()).perform(input);
-        ListUser20Writer.export("luf5", "58", "1", "C:\\Data\\Øyvind\\2006AA\\LUF5.xml", distances);*/
- /*String f = "F:\\Georg\\LUF3-Vilnyus.prn";
+        ListUser20Writer.export("luf5", "58", "1", "C://Data//Øyvind//2006AA//LUF5.xml", distances);*/
+ /*String f = "F://Georg//LUF3-Vilnyus.prn";
         List<DistanceBO> distances = ReadAcousticLUF3.perform(f, false);
         ListUser20Writer.export("vilnius", "RU", "vilnius", f + ".xml", distances);
-        f = "F:\\Georg\\lcsnftot_NF_2002";
+        f = "F://Georg//lcsnftot_NF_2002";
         distances = ReadAcousticLUF3.perform(f, true);
         ListUser20Writer.export("vilnius", "RU", "vilnius", f + ".xml", distances);*/
         //convertVintertokt("0123_2016_UANA_NANSE", "5004", "2016_Nansen.luf3");
         //convertVintertokt("0120_2015_UANA_NANSE", "5004", "2015_Nansen.luf3");
-        /*String d = "E:\\SigbjørnMehl\\2007203\\";
+        /*String d = "E://SigbjørnMehl//2007203//";
         String f = d + "ListComScatter_JH-del1-vin-2007-5840-9200.txt";//"2014_Nansen.luf3";
         List<DistanceBO> distances = ReadAcousticLUF3.perform(f, true, "yyyy.MM.dd");
         ListUser20Writer.export("2007203", "58", "1019", f + ".xml", distances);
@@ -78,14 +111,14 @@ public class Luf3ToLuf20 {
     }
 
     private static void convertVintertokt(String cruise, String platform, String file) {
-        String d = "E:\\SigbjørnMehl\\Vintertokt 2000-2016\\";
+        String d = "E://SigbjørnMehl//Vintertokt 2000-2016//";
         String f = d + file;//"2014_Nansen.luf3";
         List<DistanceBO> distances = ReadAcousticLUF3.performLUF3(f);
         ListUser20Writer.export(cruise, "RU", "5004", f + ".xml", distances);
     }
 
     private static void convertMareksLUFData() {
-        String lok = "E:\\Marek\\LUF";
+        String lok = "E://Marek//LUF";
         File fdir = new File(lok);
         File[] fl = fdir.listFiles();
         for (File f : fl) {
@@ -119,12 +152,12 @@ public class Luf3ToLuf20 {
                 if (line.isEmpty()) {
                     continue;
                 }
-                String[] elms = line.split("\t");
+                String[] elms = line.split("/t");
                 if (elms.length < 9) {
                     continue;
                 }
                 if (line.contains("JDAY")) {
-                    hdr = line.trim().split("\\s+");
+                    hdr = line.trim().split("//s+");
                     continue;
                 }
                 LocalDateTime dateTime = LocalDateTime.parse(elms[3], formatter);
@@ -158,7 +191,7 @@ public class Luf3ToLuf20 {
                     String acoStr = hdr[i];
                     Integer acoCat = ReadAcousticLUF3.acoCatFromAcoStr(acoStr);
                     if (acoCat == null) {
-                        throw new  Exception("Error missing " + acoStr);
+                        throw new Exception("Error missing " + acoStr);
                         //continue;
                     }
                     SABO sa = new SABO();

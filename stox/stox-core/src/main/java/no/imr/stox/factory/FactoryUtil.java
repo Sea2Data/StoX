@@ -44,12 +44,12 @@ public final class FactoryUtil {
         return acquireProject(projectRoot, projectName, template);
     }
 
-    public static List<String> getTemplateProcessNamesByModel(String template, String model) {
+    public static String[] getTemplateProcessNamesByModel(String template, String model) {
         IProject project = new Project();
         Factory.applyProjectTemplate(project, template);
         IModel m = project.getModel(model);
         if (m != null) {
-            return m.getProcessList().stream().map(p -> p.getName()).collect(Collectors.toList());
+            return m.getProcessList().stream().map(p -> p.getName()).collect(Collectors.toList()).toArray(new String[]{});
         }
         return null;
     }

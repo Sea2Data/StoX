@@ -266,8 +266,8 @@ public class ProcessNode extends AbstractNode {
         public PropertyEditor getPropertyEditor() {
             if (mp.getMetaFunction().getName().equals(Functions.FN_SPLITNASC) && mp.getName().equals(Functions.PM_SPLITNASC_SPECIESTS)) {
                 return new SpeciesTSPropertyEditor((String) process.getActualValue(Functions.PM_SPLITNASC_SPECIESTS));
-            } else if (mp.getMetaFunction().getName().equals(Functions.FN_CATCHABILITY) && mp.getName().equals(Functions.PM_CATCHABILITY_TABLE)) {
-                return new CatchabilityPropertyEditor((String) process.getActualValue(Functions.PM_CATCHABILITY_TABLE));
+            } else if (mp.getMetaFunction().getName().equals(Functions.FN_CATCHABILITY) && mp.getName().equals(Functions.PM_CATCHABILITY_PARAMETERTABLE)) {
+                return new CatchabilityPropertyEditor((String) process.getActualValue(Functions.PM_CATCHABILITY_PARAMETERTABLE));
             }
             if (mp.getName().toLowerCase().startsWith("filename")) {
                 String defPath = process.getModel().getProject().getProjectFolder() + "/"

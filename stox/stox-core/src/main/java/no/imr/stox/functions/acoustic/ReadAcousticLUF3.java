@@ -11,6 +11,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import java.util.stream.Stream;
 import no.imr.sea2data.echosounderbo.DistanceBO;
 import no.imr.sea2data.echosounderbo.FrequencyBO;
 import no.imr.sea2data.echosounderbo.SABO;
@@ -59,12 +60,23 @@ public class ReadAcousticLUF3 {
                 if (line.isEmpty() || line.contains("SHIP:") || line.contains("FREQUENCY:")) {
                     continue;
                 }
+                line = line.replace(" -10000.0 ", " - 10000.0 ");
+                line = line.replace(" E ", " E0");
+                line = line.replace(" S ", " S0");
+                line = line.replace(" N ", " N0");
+                line = line.replace(" W ", " W0");
+                line = line.replace(" V ", " V0");
                 String[] elms = line.split("\\s+");
-                if(elms.length < 9) {
+                if (elms.length < 9) {
                     continue;
                 }
-                if(line.contains("DATE")) {
+                if (line.contains("DATE")) {
                     hdr = fixHdr(line).trim().split("\\s+");
+                    continue;
+                }
+                Double startLog = Conversion.safeStringtoDoubleNULL(elms[lcs ? 2 : 4]);
+                Double stopLog = Conversion.safeStringtoDoubleNULL(elms[lcs ? 4 : 6]);
+                if (lcs && (startLog == null || stopLog == null)) {
                     continue;
                 }
                 Date da = df.parse(elms[0]);
@@ -74,8 +86,6 @@ public class ReadAcousticLUF3 {
                 dist.setStart_time(IMRdate.encodeDate(da, ti));
                 dist.setLat_start(lcs ? getLCSPos(elms[5]) : Conversion.safeStringtoDouble(elms[2]));
                 dist.setLon_start(lcs ? getLCSPos(elms[6]) : Conversion.safeStringtoDouble(elms[3]));
-                Double startLog = Conversion.safeStringtoDouble(elms[lcs ? 2 : 4]);
-                Double stopLog = Conversion.safeStringtoDouble(elms[lcs ? 4 : 6]);
                 dist.setLog_start(new BigDecimal(startLog));
                 dist.setIntegrator_dist(stopLog - startLog);
                 Double dep = Conversion.safeStringtoDouble(elms[7]);
@@ -94,9 +104,12 @@ public class ReadAcousticLUF3 {
                         continue;
                     }
                     String acoStr = hdr[i - (lcs ? 3 : 2)];
+                    if (acoStr.equals("SC")) {
+                        continue;
+                    }
                     Integer acoCat = acoCatFromAcoStr(acoStr);
                     if (acoCat == null) {
-                        continue;
+                        throw new RuntimeException(acoStr + " not found");
                     }
                     SABO sa = new SABO();
                     sa.setFrequency(f);
@@ -121,6 +134,9 @@ public class ReadAcousticLUF3 {
                 return 1;
             case "pelag":
                 return 3;
+            case "bunn":
+            case "bott":
+                return 2;
             case "plank":
                 return 6;
             case "polarcod":
@@ -171,21 +187,54 @@ public class ReadAcousticLUF3 {
             case "pel2":
                 return 5017;
             case "brac":
+            case "brach":
                 return 5018;
             case "sard":
                 return 5015;
             case "sardp":
             case "pilch":
                 return 5004;
+            case "sara":
+            case "sarda":
+                return 5019;
+            case "sarm":
+            case "sardm":
+                return 5020;
             case "hmack":
             case "horse":
+            case "tagg":
+            case "trmac":
+            case "tract":
                 return 5003;
             case "odfi":
                 return 5012;
             case "meso":
             case "mezo":
             case "mesfi":
-                return 5013;                
+                return 5013;
+            case "ot/bo":
+            case "otdem":
+                return 55;
+            case "va/sk":
+                return 10000;
+            case "decar":
+                return 10001;
+            case "hake":
+                return 5010;
+            case "roher":
+                return 5008;
+            case "ancho":
+                return 5041;
+            case "orang":
+                return 5842;
+            case "oreo":
+                return 5844;
+            case "shark":
+                return 5843;
+            case "ratta":
+                return 5039;
+            case "a/rh":
+                return 5014;
         }
         return null;
     }
@@ -200,6 +249,9 @@ public class ReadAcousticLUF3 {
     private static Double getLCSPos(String elm) {
         String c = elm.substring(1 - 1, 1);
         String[] s = elm.substring(2 - 1).split(":");
+        if (s.length < 2) {
+            System.out.println("error");
+        }
         Integer deg = Conversion.safeStringtoIntegerNULL(s[0]);
         Double m = Conversion.safeStringtoDoubleNULL(s[1]);
         return Calc.roundTo(LatLonUtil.getLatOrLon("SW".contains(c), deg, m), 3);

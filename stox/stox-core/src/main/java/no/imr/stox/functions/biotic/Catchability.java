@@ -8,6 +8,8 @@ package no.imr.stox.functions.biotic;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 import no.imr.sea2data.imrbase.math.ImrMath;
 import no.imr.sea2data.imrbase.matrix.MatrixBO;
 import no.imr.sea2data.imrbase.util.Conversion;
@@ -36,7 +38,7 @@ public class Catchability extends AbstractFunction {
             logger.error("LengthDist parameter must have LengthDistType.", null);
             return null;
         }
-        String table = (String) input.get(Functions.PM_CATCHABILITY_TABLE);
+        String table = (String) input.get(Functions.PM_CATCHABILITY_PARAMETERTABLE);
         List<CatchabilityParam> tableM = getTable(table, lengthDistMatrix.getData().getKeys());
         LengthDistMatrix result = new LengthDistMatrix();
         String catchabilityMethod = (String) input.get(Functions.PM_CATCHABILITY_CATCHABILITYMETHOD);
@@ -134,20 +136,39 @@ public class Catchability extends AbstractFunction {
 
     private List<CatchabilityParam> getTable(String table, List<String> specKeys) {
         List<CatchabilityParam> res = CatchabilityParam.fromString(table);
-        if (table != null) {
-            res.stream().forEach(cp -> {
-                String specCat = cp.getSpecCat();
-                if (specCat.equals("") && specKeys.size() == 1) {
-                    // Special case where we have only one species
-                    specCat = specKeys.get(0);
-                } else {
-                    // Wrap the spec cat to same case used by total length dist
-                    Optional<String> opt = specKeys.stream().filter(s -> s.equalsIgnoreCase(cp.getSpecCat())).findFirst();
-                    specCat = opt.isPresent() ? opt.get() : specCat;
-                }
-                cp.setSpecCat(specCat);
-            });
+        if (res == null) {
+            return null;
         }
-        return res;
+        // Correct case from specKeys in the res:
+        // And filter out those not found in specKeys
+        List<CatchabilityParam> resCorr = res.stream()
+                .map(cp -> {
+                    if (cp.getSpecCat() == null) {
+                        return cp;
+                    }
+                    Optional<String> opt = specKeys.stream().filter(cp.getSpecCat()::equalsIgnoreCase).findFirst();
+                    if (opt.isPresent()) {
+                        cp.setSpecCat(opt.get());
+                        return cp;
+                    }
+                    return null;
+                })
+                .filter(p -> p != null)
+                .collect(Collectors.toList());
+
+        // Get other species not listed in parameter table. Those will be used when SpecCat is empty
+        List<String> otherSpecs = specKeys.stream().filter(s -> CatchabilityParam.find(resCorr, s) == null).collect(Collectors.toList());
+
+        // Expand empty specCats to use other specs not listed originally.
+        // Use flat mapping to achieve this
+        List<CatchabilityParam> resExpanded = resCorr.stream()
+                .flatMap(p -> {
+                    if (p.getSpecCat() == null) {
+                        return otherSpecs.stream().map(s -> new CatchabilityParam(s, p.getAlpha(), p.getBeta(), p.getlMin(), p.getlMax()));
+                    }
+                    return Stream.of(p);
+                })
+                .collect(Collectors.toList());
+        return resExpanded;
     }
 }
