@@ -199,7 +199,8 @@ Description: <I>Catchability</I> changes a length frequency distribution accordi
 Class: no.imr.stox.functions.biotic.Catchability
 Parameter: Name=CatchabilityMethod, DefaultValue=LengthDependentSweepWidth, DataType=String, Values=LengthDependentSweepWidth~SizeDependentSweptArea;LengthDependentSelectivity, Description=The <I>CatchabilityMethod</I> parameter is used to determine which method to manipulate the length frequency.<BR>Two options&#58;<BR><U>LengthDependentSweepWidth</U>&#58;n&#61;n&#x22C5;1852&#x2215;(&#x3B1;&#x22C5;L<sup>&#x3B2;</sup>). Conversion is performed inside and outside Lmin..LMax. If outside - the L is replaced by Lmin or Lmax. <BR><U>LengthDependentSelectivity</U>&#58;n&#61;n&#x22C5;&#x3B1;&#x22C5;e<sup>L&#x3B2;</sup>. Conversion is performed inside Lmin..LMax
 Parameter: Name=LengthDist, DataType=LengthDist, Description=The <I>LengthDist</I> parameter is used to specify which previous process has generated the <U>LengthDist</U> input data.
-Parameter: Name=ParameterTable, Alias=Table, Required=false, DataType=String, Description=The <I>Table</I> parameter is storing the sets of Species, Alpha, Beta, LMin and Lmax.
+Parameter: Name=ParLengthDependentSweepWidth, Alias=Table;ParameterTable, Required=false, ParentTag=CatchabilityMethod.LengthDependentSweepWidth, DataType=String, Description=The <I>ParLengthDependentSweepWidth</I> parameter is storing the sets of Species, Alpha, Beta, LMin and Lmax.
+Parameter: Name=ParLengthDependentSelectivity, Required=false, ParentTag=CatchabilityMethod.LengthDependentSelectivity, DataType=String, Description=The <I>ParLengthDependentSelectivity</I> parameter is storing the sets of Species, Alpha, Beta, LMin and Lmax.
 DataStorage: no.imr.stox.datastorage.LengthDistMatrixStorage
 Output: LengthDist
 

@@ -9,6 +9,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.stream.Collectors;
 import no.imr.sea2data.echosounderbo.DistanceBO;
 import no.imr.stox.bo.LengthDistMatrix;
 import no.imr.sea2data.imrbase.matrix.MatrixBO;
@@ -173,18 +174,32 @@ public class SplitNASC extends AbstractFunction {
 
     private Map<String, MatrixBO> getSpecTS(String speciesTS, List<String> specKeys) {
         Map<String, MatrixBO> res2 = new HashMap<>();
+        // Correct case from specKeys in the res:
+        // And filter out those not found in specKeys
         List<SpeciesTSMix> lines = SpeciesTSMix.fromString(speciesTS);
-        lines.forEach(line -> {
+        List<SpeciesTSMix> linesCorr = lines.stream()
+                .map(st -> {
+                    if (st.getMixAcoCat() == null || st.getAcoCat() == null || st.getSpecCat() == null) {
+                        return null;
+                    }
+                    Optional<String> opt = specKeys.stream().filter(st.getSpecCat()::equalsIgnoreCase).findFirst();
+                    if (opt.isPresent()) {
+                        st.setSpecCat(opt.get());
+                        return st;
+                    }
+                    return null;
+                })
+                .filter(p -> p != null)
+                .collect(Collectors.toList());
+
+        linesCorr.forEach(line -> {
             MatrixBO res = res2.get(line.getMixAcoCat());
             if (res == null) {
                 res = new MatrixBO();
                 res2.put(line.getMixAcoCat(), res);
             }
             String acoCat = line.getAcoCat();
-            String specCatIn = line.getSpecCat();
             // Wrap the spec cat to same case used by total length dist
-            Optional<String> opt = specKeys.stream().filter(s -> s.equalsIgnoreCase(specCatIn)).findFirst();
-            String specCat = opt.isPresent() ? opt.get() : specCatIn;
             res.setRowColValue(acoCat, "SpecCat", line.getSpecCat());
             res.setRowColValue(acoCat, "m", line.getM());
             res.setRowColValue(acoCat, "a", line.getA());

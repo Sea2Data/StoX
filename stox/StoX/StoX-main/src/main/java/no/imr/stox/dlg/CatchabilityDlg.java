@@ -7,6 +7,8 @@ package no.imr.stox.dlg;
 
 import java.beans.PropertyEditor;
 import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 import javax.swing.table.DefaultTableModel;
 import no.imr.sea2data.imrbase.util.Conversion;
 import no.imr.sea2data.imrbase.util.ExportUtil;
@@ -37,7 +39,9 @@ public class CatchabilityDlg extends javax.swing.JDialog {
         dt.setRowCount(lines.size());
         for (int row = 0; row < lines.size(); row++) {
             CatchabilityParam line = lines.get(row);
-            dt.setValueAt(line.getSpecCat(), row, 0);
+            if (line.getSpecCat() != null) {
+                dt.setValueAt(line.getSpecCat(), row, 0);
+            }
             if (line.getAlpha() != null) {
                 dt.setValueAt(line.getAlpha(), row, 1);
             }
@@ -184,18 +188,18 @@ public class CatchabilityDlg extends javax.swing.JDialog {
     private void jOKActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jOKActionPerformed
         DefaultTableModel dt = (DefaultTableModel) jTable.getModel();
         String res = "";
-        for (int row = 0; row < dt.getRowCount(); row++) {
+        List<CatchabilityParam> c = IntStream.range(0, dt.getRowCount()).mapToObj(row -> {
             String specCat = (String) dt.getValueAt(row, 0);
             Double alpha = (Double) dt.getValueAt(row, 1);
             Double beta = (Double) dt.getValueAt(row, 2);
             Double lmin = (Double) dt.getValueAt(row, 3);
             Double lmax = (Double) dt.getValueAt(row, 4);
-            if (specCat == null && alpha == null && beta == null && lmin == null && lmax == null) {
-                continue;
+            if (alpha == null && beta == null && lmin == null && lmax == null) {
+                return null;
             }
-            String line = ExportUtil.separatedMissingStr(';', "", specCat, alpha, beta, lmin, lmax);
-            res += (res.isEmpty() ? "" : "/") + line;
-        }
+            return new CatchabilityParam(specCat, alpha, beta, lmin, lmax);
+        }).filter(ca -> ca != null).collect(Collectors.toList());
+        res = CatchabilityParam.toString(c);
         ed.setAsText(res);
         setVisible(false);
     }//GEN-LAST:event_jOKActionPerformed

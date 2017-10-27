@@ -70,7 +70,7 @@ public class ConvertBarentsHavTransects {
         }
         cPr.setParameterProcessValue(Functions.PM_CATCHABILITY_LENGTHDIST, rgrpPr.getName()).
                 setParameterValue(Functions.PM_CATCHABILITY_CATCHABILITYMETHOD, Functions.CATCHABILITYMETHOD_LENGTHDEPENDENTSWEEPWIDTH).
-                setParameterValue(Functions.PM_CATCHABILITY_PARAMETERTABLE, ";5.91;0.43;15;62");
+                setParameterValue(Functions.PM_CATCHABILITY_PARLENGTHDEPENDENTSWEEPWIDTH, ";5.91;0.43;15;62");
         IProcess relPr = prj.getBaseline().getProcessByFunctionName(Functions.FN_RELLENGTHDIST);
         if (relPr == null) {
             relPr = prj.getBaseline().insertProcess(Functions.FN_RELLENGTHDIST, Functions.FN_RELLENGTHDIST, prj.getBaseline().getProcessList().indexOf(cPr) + 1);

@@ -75,7 +75,7 @@ public final class MapTopComponent extends TopComponent implements LookupListene
     final MapPanel mapPanel = new MapPanel();
     StoXMapSetup setup = new StoXMapSetup(mapPanel);
     StoXBar stoxBar = new StoXBar(setup);
-    
+
     StrataEditBar strataEditBar = new StrataEditBar(setup.getMapPanel().getMap());
     List<ILatLonEvent> acousticData = null;
     List<ILatLonEvent> acousticAbsenceData = null;
@@ -215,7 +215,7 @@ public final class MapTopComponent extends TopComponent implements LookupListene
 
     private void onStopModel(IModel model) {
         IProcess process = model.getRunningProcess();
-        if(process == null) {
+        if (process == null) {
             return;
         }
         try {
@@ -435,9 +435,13 @@ public final class MapTopComponent extends TopComponent implements LookupListene
         }
         bioticAbsenceData
                 = bioticData.stream()
-                .map(d -> (FishstationBO) d)
-                .filter(fs -> fs.getCatchBOCollection().isEmpty())
-                .collect(Collectors.toList());
+                        .map(d -> (FishstationBO) d)
+                        .filter(fs -> {
+                            // Empty if no samples exists:
+                            return fs.getCatchBOCollection().isEmpty()
+                                    || fs.getCatchBOCollection().size() == 1 && fs.getCatchBOCollection().get(0).getSampleBOCollection().isEmpty();
+                        })
+                        .collect(Collectors.toList());
     }
 
 }

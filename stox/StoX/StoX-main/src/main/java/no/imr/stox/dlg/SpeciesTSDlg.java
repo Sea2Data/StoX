@@ -7,9 +7,12 @@ package no.imr.stox.dlg;
 
 import java.beans.PropertyEditor;
 import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 import javax.swing.table.DefaultTableModel;
 import no.imr.sea2data.imrbase.util.Conversion;
 import no.imr.sea2data.imrbase.util.ExportUtil;
+import no.imr.stox.bo.CatchabilityParam;
 import no.imr.stox.bo.SpeciesTSMix;
 
 /**
@@ -182,23 +185,19 @@ public class SpeciesTSDlg extends javax.swing.JDialog {
         if (jTable.getCellEditor() != null) {
             jTable.getCellEditor().stopCellEditing();
         }
-        String res = "";
-        for (int row = 0; row < dt.getRowCount(); row++) {
+        List<SpeciesTSMix> c = IntStream.range(0, dt.getRowCount()).mapToObj(row -> {
             String mixacoCat = (String) dt.getValueAt(row, 0);
-            if (mixacoCat == null) {
-                mixacoCat = "";
-            }
             String acoCat = (String) dt.getValueAt(row, 1);
-            if (acoCat == null || acoCat.isEmpty()) {
-                continue;
-            }
             String specCat = (String) dt.getValueAt(row, 2);
+            if (mixacoCat == null || acoCat == null || specCat.isEmpty()) {
+                return null;
+            }
             Double m = (Double) dt.getValueAt(row, 3);
             Double a = (Double) dt.getValueAt(row, 4);
             Double d = (Double) dt.getValueAt(row, 5);
-            String line = ExportUtil.separatedMissingStr(';', "", mixacoCat, acoCat, specCat, m, a, d);
-            res += (res.isEmpty() ? "" : "/") + line;
-        }
+            return new SpeciesTSMix(mixacoCat, acoCat, specCat, m, a, d);
+        }).filter(ca -> ca != null).collect(Collectors.toList());
+        String res = SpeciesTSMix.toString(c);
         ed.setAsText(res);
         setVisible(false);
     }//GEN-LAST:event_jOKActionPerformed

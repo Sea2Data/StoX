@@ -38,23 +38,27 @@ public class Catchability extends AbstractFunction {
             logger.error("LengthDist parameter must have LengthDistType.", null);
             return null;
         }
-        String table = (String) input.get(Functions.PM_CATCHABILITY_PARAMETERTABLE);
-        List<CatchabilityParam> tableM = getTable(table, lengthDistMatrix.getData().getKeys());
-        LengthDistMatrix result = new LengthDistMatrix();
         String catchabilityMethod = (String) input.get(Functions.PM_CATCHABILITY_CATCHABILITYMETHOD);
+        String tableParameter = null;
+        switch (catchabilityMethod) {
+            case Functions.CATCHABILITYMETHOD_LENGTHDEPENDENTSWEEPWIDTH:
+                tableParameter = Functions.PM_CATCHABILITY_PARLENGTHDEPENDENTSWEEPWIDTH;
+                break;
+            case Functions.CATCHABILITYMETHOD_LENGTHDEPENDENTSELECTIVITY:
+                tableParameter = Functions.PM_CATCHABILITY_PARLENGTHDEPENDENTSELECTIVITY;
+                break;
+        }
+        String table = (String) input.get(tableParameter);
+        List<CatchabilityParam> tableM = getTable(table, lengthDistMatrix.getData().getKeys());
+        if (tableM == null) {
+            logger.error(tableParameter + " is not properly set", null);
+        }
+        LengthDistMatrix result = new LengthDistMatrix();
         Double lenInterval = lengthDistMatrix.getResolutionMatrix().getRowValueAsDouble(Functions.RES_LENGTHINTERVAL);
         String lenDistTypeIn = (String) lengthDistMatrix.getResolutionMatrix().getRowValue(Functions.RES_LENGTHDISTTYPE);
         String lenDistTypeOut = lenDistTypeIn;
         result.getResolutionMatrix().setRowValue(Functions.RES_OBSERVATIONTYPE, Functions.OBSERVATIONTYPE_STATION);
         result.getResolutionMatrix().setRowValue(Functions.RES_LENGTHINTERVAL, lenInterval);
-        switch (catchabilityMethod) {
-            case Functions.CATCHABILITYMETHOD_LENGTHDEPENDENTSWEEPWIDTH:
-            case Functions.CATCHABILITYMETHOD_LENGTHDEPENDENTSELECTIVITY:
-                // Adjuste the LFQ (number) directly by selection curve
-                if (tableM == null) {
-                    logger.error("Table parameter must be set", null);
-                }
-        }
         switch (catchabilityMethod) {
             case Functions.CATCHABILITYMETHOD_LENGTHDEPENDENTSWEEPWIDTH:
                 if (lengthDistType.equals(Functions.LENGTHDISTTYPE_PERCENTLENGHTDIST)) {

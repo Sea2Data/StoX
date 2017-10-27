@@ -10,6 +10,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 import no.imr.sea2data.imrbase.util.Conversion;
 import no.imr.sea2data.imrbase.util.ExportUtil;
+import no.imr.stox.functions.utils.ReportUtil;
 
 /**
  *
@@ -82,13 +83,50 @@ public class CatchabilityParam {
                 .map(line -> line.split(";"))
                 .filter(cells -> cells.length >= 5 && cells.length <= 6)
                 .map(cells -> {
-                    int i = 0;
-                    String s = cells[i++];
-                    String specCat = s.isEmpty() ? null : s;
-                    Double alpha = Conversion.safeStringtoDoubleNULL(cells[i++]);
-                    Double beta = Conversion.safeStringtoDoubleNULL(cells[i++]);
-                    Double lmin = Conversion.safeStringtoDoubleNULL(cells[i++]);
-                    Double lmax = Conversion.safeStringtoDoubleNULL(cells[i++]);
+                    String specCat = null;
+                    Double alpha = null;
+                    Double beta = null;
+                    Double lmin = null;
+                    Double lmax = null;
+                    if (txt.contains("=")) {
+                        // tagged...
+                        for (String elm : cells) {
+                            String elms[] = elm.split("=");
+                            if (elms.length != 2) {
+                                continue;
+                            }
+                            String key = elms[0].toLowerCase().trim();
+                            String val = elms[1].trim();
+                            switch (key) {
+                                case "speccat":
+                                    specCat = val;
+                                    break;
+                                case "alpha":
+                                    alpha = Conversion.safeStringtoDoubleNULL(val);
+                                    break;
+                                case "beta":
+                                    beta = Conversion.safeStringtoDoubleNULL(val);
+                                    break;
+                                case "lmin":
+                                    lmin = Conversion.safeStringtoDoubleNULL(val);
+                                    break;
+                                case "lmax":
+                                    lmax = Conversion.safeStringtoDoubleNULL(val);
+                            }
+                        }
+                    } else {
+                        // untagged
+                        int i = 0;
+                        String s = cells[i++];
+                        specCat = s.isEmpty() ? null : s;
+                        alpha = Conversion.safeStringtoDoubleNULL(cells[i++]);
+                        beta = Conversion.safeStringtoDoubleNULL(cells[i++]);
+                        lmin = Conversion.safeStringtoDoubleNULL(cells[i++]);
+                        lmax = Conversion.safeStringtoDoubleNULL(cells[i++]);
+                    }
+                    if (specCat != null && specCat.isEmpty()) {
+                        specCat = null;
+                    }
                     return new CatchabilityParam(specCat, alpha, beta, lmin, lmax);
                 }
                 ).collect(Collectors.toList());
@@ -96,10 +134,18 @@ public class CatchabilityParam {
 
     @Override
     public String toString() {
-        return ExportUtil.separatedMissingStr(';', "", specCat, alpha, beta, lMin, lMax);
+        return ExportUtil.separatedMissingStr(';', "", 
+                ReportUtil.asgExpr("SpecCat", specCat), 
+                ReportUtil.asgExpr("Alpha", alpha), 
+                ReportUtil.asgExpr("Beta", beta), 
+                ReportUtil.asgExpr("LMin", lMin), 
+                ReportUtil.asgExpr("LMax", lMax));
     }
 
     public static String toString(List<CatchabilityParam> l) {
+        if(l == null) {
+            return null;
+        }
         return l.stream().map(s -> s.toString())
                 .collect(Collectors.joining("/"));
     }

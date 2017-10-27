@@ -49,4 +49,8 @@ public class ReportUtil {
         }
         return scaleStr;
     }
+    
+    public static String asgExpr(String key, Object value) {
+        return key + "=" + (value != null ? value.toString() : "");
+    }
 }

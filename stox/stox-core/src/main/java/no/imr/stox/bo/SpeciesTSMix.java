@@ -10,6 +10,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 import no.imr.sea2data.imrbase.util.Conversion;
 import no.imr.sea2data.imrbase.util.ExportUtil;
+import no.imr.stox.functions.utils.ReportUtil;
 
 /**
  *
@@ -92,16 +93,54 @@ public class SpeciesTSMix {
                 .map(line -> line.split(";"))
                 .filter(cells -> cells.length >= 5 && cells.length <= 6)
                 .map(cells -> {
-                    String mixacoCat = "";
-                    int i = 0;
-                    if (cells.length == 6) {
-                        mixacoCat = cells[i++];
+                    String mixacoCat = null;
+                    String acoCat = null;
+                    String specCat = null;
+                    Double m = null;
+                    Double a = null;
+                    Double d = null;
+                    if (txt.contains("=")) {
+                        // tagged...
+                        for (String elm : cells) {
+                            String elms[] = elm.split("=");
+                            if (elms.length != 2) {
+                                continue;
+                            }
+                            String key = elms[0].toLowerCase().trim();
+                            String val = elms[1].trim();
+                            switch (key) {
+                                case "mixacocat":
+                                    mixacoCat = val;
+                                    break;
+                                case "acocat":
+                                    acoCat = val;
+                                    break;
+                                case "speccat":
+                                    specCat = val;
+                                    break;
+                                case "m":
+                                    m = Conversion.safeStringtoDoubleNULL(val);
+                                    break;
+                                case "a":
+                                    a = Conversion.safeStringtoDoubleNULL(val);
+                                    break;
+                                case "d":
+                                    d = Conversion.safeStringtoDoubleNULL(val);
+                            }
+                        }
+
+                    } else {
+                        // untagged
+                        int i = 0;
+                        if (cells.length == 6) {
+                            mixacoCat = cells[i++];
+                        }
+                        acoCat = cells[i++];
+                        specCat = cells[i++];
+                        m = Conversion.safeStringtoDoubleNULL(cells[i++]);
+                        a = Conversion.safeStringtoDoubleNULL(cells[i++]);
+                        d = Conversion.safeStringtoDoubleNULL(cells[i++]);
                     }
-                    String acoCat = cells[i++];
-                    String specCat = cells[i++];
-                    Double m = Conversion.safeStringtoDoubleNULL(cells[i++]);
-                    Double a = Conversion.safeStringtoDoubleNULL(cells[i++]);
-                    Double d = Conversion.safeStringtoDoubleNULL(cells[i++]);
                     return new SpeciesTSMix(mixacoCat, acoCat, specCat, m, a, d);
                 }
                 ).collect(Collectors.toList());
@@ -109,10 +148,19 @@ public class SpeciesTSMix {
 
     @Override
     public String toString() {
-        return ExportUtil.separatedMissingStr(';', "", mixAcoCat, acoCat, specCat, m, a, d);
+        return ExportUtil.separatedMissingStr(';', "",
+                ReportUtil.asgExpr("MixAcoCat", mixAcoCat),
+                ReportUtil.asgExpr("AcoCat", acoCat),
+                ReportUtil.asgExpr("SpecCat", specCat),
+                ReportUtil.asgExpr("M", m),
+                ReportUtil.asgExpr("A", a),
+                ReportUtil.asgExpr("D", d));
     }
 
     public static String toString(List<SpeciesTSMix> l) {
+        if (l == null) {
+            return null;
+        }
         return l.stream().map(s -> s.toString())
                 .collect(Collectors.joining("/"));
     }

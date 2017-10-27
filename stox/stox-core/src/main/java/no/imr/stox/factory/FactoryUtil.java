@@ -3,6 +3,7 @@ package no.imr.stox.factory;
 import java.util.List;
 import java.util.stream.Collectors;
 import no.imr.sea2data.imrbase.util.Workspace;
+import no.imr.stox.bo.CatchabilityParam;
 import no.imr.stox.bo.SpeciesTSMix;
 import no.imr.stox.functions.utils.Functions;
 import no.imr.stox.functions.utils.ProjectUtils;
@@ -139,33 +140,48 @@ public final class FactoryUtil {
             // Resolve deprecation <-1.72v: swept area swept area sweep width method length dependent into catchability length dependent sweep width.
             //----------------------------------
             IProcess fbPr = prj.getBaseline().getProcessByFunctionName(Functions.FN_FILTERBIOTIC);
-//            IProcess cPr = prj.getBaseline().getProcessByFunctionName(Functions.FN_CATCHABILITY);
-//            IProcess totPr = prj.getBaseline().getProcessByFunctionName(Functions.FN_TOTALLENGTHDIST);
             IProcess swPr = prj.getBaseline().getProcessByFunctionName(Functions.FN_SWEPTAREADENSITY);
             if (swPr != null) {
-                /*if (cPr == null) {
-                    String sweepWidthMethod = (String) swPr.getParameterValue(Functions.PM_SWEPTAREADENSITY_SWEEPWIDTHMETHOD);
-                    if (sweepWidthMethod != null && sweepWidthMethod.equals(Functions.SWEEPWIDTH_LENGTHDEPENDENT)) {
-                        String lDistPName = (String) totPr.getProcessNameFromParameter(totPr.getMetaFunction().findMetaParameter(Functions.PM_TOTALLENGTHDIST_LENGTHDIST));
-                        IProcess lDistPr = prj.getBaseline().getProcessFromName(lDistPName);
-                        if (lDistPr != null) {
-                            cPr = prj.getBaseline().insertProcess(Functions.FN_CATCHABILITY, Functions.FN_CATCHABILITY, prj.getBaseline().getProcessList().indexOf(lDistPr) + 1);
-                            cPr.setParameterProcessValue(Functions.PM_CATCHABILITY_LENGTHDIST, lDistPr.getName()).
-                                    setParameterValue(Functions.PM_CATCHABILITY_CATCHABILITYMETHOD, Functions.CATCHABILITYMETHOD_LENGTHDEPENDENTSWEEPWIDTH).
-                                    setParameterValue(Functions.PM_CATCHABILITY_ALPHA, swPr.getParameterValue(Functions.PM_SWEPTAREADENSITY_ALPHA)).
-                                    setParameterValue(Functions.PM_CATCHABILITY_BETA, swPr.getParameterValue(Functions.PM_SWEPTAREADENSITY_BETA)).
-                                    setParameterValue(Functions.PM_CATCHABILITY_LMAX, swPr.getParameterValue(Functions.PM_SWEPTAREADENSITY_LMAX)).
-                                    setParameterValue(Functions.PM_CATCHABILITY_LMIN, swPr.getParameterValue(Functions.PM_SWEPTAREADENSITY_LMIN));
-                            swPr.setParameterValue(Functions.PM_SWEPTAREADENSITY_SWEEPWIDTHMETHOD, Functions.SWEEPWIDTH_PREDETERMINED);
-                            totPr.setParameterProcessValue(Functions.PM_TOTALLENGTHDIST_LENGTHDIST, cPr.getName());
-                        }
-                    }
-                }*/
                 if (fbPr != null) {
                     String bioticData = (String) swPr.getParameterValue(Functions.PM_SWEPTAREADENSITY_BIOTICDATA);
                     if (bioticData == null) {
                         swPr.setParameterProcessValue(Functions.PM_SWEPTAREADENSITY_BIOTICDATA, fbPr.getName());
                     }
+                }
+            }
+        }
+        if (prj.getResourceVersion() < 1.75) {
+            // Old Table aliased with sweepwidth should be associated with selectivity if method=selectivity
+            // This is true for only some few projects created by elena in alpha version.
+            // remove this conversion later
+            //----------------------------------
+            IProcess pr = prj.getBaseline().getProcessByFunctionName(Functions.FN_CATCHABILITY);
+            if (pr != null) {
+                String met = (String) pr.getParameterValue(Functions.PM_CATCHABILITY_CATCHABILITYMETHOD);
+                String par = (String) pr.getParameterValue(Functions.PM_CATCHABILITY_PARLENGTHDEPENDENTSWEEPWIDTH);
+                if (par != null) {
+                    par = CatchabilityParam.toString(CatchabilityParam.fromString(par));
+                    switch (met) {
+                        case Functions.CATCHABILITYMETHOD_LENGTHDEPENDENTSELECTIVITY: {
+                            if (par != null && met != null && met.equals(Functions.CATCHABILITYMETHOD_LENGTHDEPENDENTSELECTIVITY)) {
+                                pr.setParameterValue(Functions.PM_CATCHABILITY_PARLENGTHDEPENDENTSWEEPWIDTH, null);
+                                pr.setParameterValue(Functions.PM_CATCHABILITY_PARLENGTHDEPENDENTSELECTIVITY, par);
+                            }
+                            break;
+                        }
+                        case Functions.CATCHABILITYMETHOD_LENGTHDEPENDENTSWEEPWIDTH: {
+                            pr.setParameterValue(Functions.PM_CATCHABILITY_PARLENGTHDEPENDENTSWEEPWIDTH, par);
+                            break;
+                        }
+                    }
+                }
+            }
+            pr = prj.getBaseline().getProcessByFunctionName(Functions.FN_SPLITNASC);
+            if (pr != null) {
+                String par = (String) pr.getParameterValue(Functions.PM_SPLITNASC_SPECIESTS);
+                if (par != null) {
+                    par = SpeciesTSMix.toString(SpeciesTSMix.fromString(par));
+                    pr.setParameterValue(Functions.PM_SPLITNASC_SPECIESTS, par);
                 }
             }
         }
