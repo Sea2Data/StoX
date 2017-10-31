@@ -23,6 +23,8 @@ public class EchoXMLReader extends XMLReader {
     private String currentChType = null;
     private String currentAcousticCategory = null;
     private String currentCruise;
+    private String currentPlatform;
+    private String currentNation;
     private final List<DistanceBO> distances;
 
     public EchoXMLReader(final List<DistanceBO> distances) {
@@ -40,14 +42,20 @@ public class EchoXMLReader extends XMLReader {
     protected void onObjectValue(Object object, String key, String value) {
         if (key.equals("cruise")) {
             currentCruise = value;
+        } else if (key.equals("platform")) {
+            currentPlatform = value;
+        } else if (key.equals("nation")) {
+            currentNation = value;
         } else if (object instanceof DistanceBO) {
             DistanceBO d = (DistanceBO) object;
             d.setCruise(currentCruise);
+            d.setNation(currentNation);
+            d.setPlatform(currentPlatform);
             if (key.equals("log_start")) {
                 // convert double to one decimal place
                 BigDecimal val = new BigDecimal(Conversion.safeStringtoDouble(value));
                 val = val.setScale(1, RoundingMode.HALF_UP);
-                    d.setLog_start(val);
+                d.setLog_start(val);
             } else if (key.equals("start_time")) {
                 // set seconds and miliseconds to value 0
                 d.setStart_time(IMRdate.strToDateTime(value));

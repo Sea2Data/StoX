@@ -121,6 +121,8 @@ public class ReadAcousticLUF5 extends AbstractFunction {
         DistanceBO dist = new DistanceBO();
         dist.setId(UUID.randomUUID().toString().replace("-", ""));
         dist.setCruise(firstLine[0]);
+        dist.setNation(firstLine[1]);
+        dist.setPlatform(firstLine[2]);
         BigDecimal val = new BigDecimal(logStart);
         val = val.setScale(3, RoundingMode.HALF_UP);
         dist.setLog_start(val);
@@ -131,7 +133,6 @@ public class ReadAcousticLUF5 extends AbstractFunction {
             distances.add(dist);
         } else {
             dist = d;
-            dist.getFrequencies().clear();
         }
         dist.setIntegrator_dist(logStop - logStart);
         Double latStart = Conversion.safeStringtoDouble(firstLine[7]);
@@ -178,7 +179,6 @@ public class ReadAcousticLUF5 extends AbstractFunction {
             dist.getFrequencies().add(freq);
         } else {
             freq = ff;
-            freq.getSa().clear();
         }
         // Set the information fields
         freq.setMin_bot_depth(Conversion.safeStringtoDouble(headerElements[9]));

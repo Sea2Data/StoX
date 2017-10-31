@@ -31,10 +31,11 @@ public class ListUser05Writer {
      * @param fileName
      * @param distances
      * @param acocat
+     * @param transceiver
      * @param freq
      * @throws java.io.UncheckedIOException
      */
-    public static void export(String cruise, String nation, String platform, String fileName, List<DistanceBO> distances, Integer freq, Integer acocat) {
+    public static void export(String cruise, String nation, String platform, String fileName, List<DistanceBO> distances, Integer freq, Integer transceiver, Integer acocat) {
 
         try (OutputStream os = new FileOutputStream(fileName);
                 BufferedWriter bufferedWriter = new BufferedWriter(new OutputStreamWriter(os))) {
@@ -45,7 +46,7 @@ public class ListUser05Writer {
                 DistanceBO dist = distances.get(line);
                 FrequencyBO frequency = null;
                 for (FrequencyBO f : dist.getFrequencies()) {
-                    if (f.getFreq().equals(freq)) {
+                    if (f.getFreq().equals(freq) && f.getTranceiver().equals(transceiver)) {
                         frequency = f;
                         break;
                     }

@@ -37,6 +37,8 @@ public class DistanceBO implements Serializable, ILatLonEvent {
     private List<FrequencyBO> frequencies = new ArrayList<FrequencyBO>();
     private EchosounderDatasetBO echosounderDatasetBO;
     private String cruise;
+    private String platform;
+    private String nation;
     private LineString line = null;
     private Point point = null;
     String key = null;
@@ -66,6 +68,8 @@ public class DistanceBO implements Serializable, ILatLonEvent {
         lat_stop = bo.getLat_stop();
         lon_stop = bo.getLon_stop();
         cruise = bo.getCruise();
+        platform = bo.getPlatform();
+        nation = bo.getNation();
     }
 
     /**
@@ -386,6 +390,22 @@ public class DistanceBO implements Serializable, ILatLonEvent {
 
     public void setCruise(String cruise) {
         this.cruise = cruise;
+    }
+
+    public String getPlatform() {
+        return platform;
+    }
+
+    public void setPlatform(String platform) {
+        this.platform = platform;
+    }
+
+    public String getNation() {
+        return nation;
+    }
+
+    public void setNation(String nation) {
+        this.nation = nation;
     }
 
     @Override

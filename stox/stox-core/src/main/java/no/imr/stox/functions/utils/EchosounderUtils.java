@@ -11,7 +11,7 @@ import no.imr.stox.bo.ProcessDataBO;
 import no.imr.stox.bo.NASCMatrix;
 
 /**
- * TODO: what does this class do? 
+ * TODO: what does this class do?
  *
  * @author Åsmund
  */
@@ -230,4 +230,195 @@ public final class EchosounderUtils {
         return StoXMath.depthFromChannel(thickness, channel);
     }
 
+    public static Integer acoCatFromAcoStr(String acoStr) {
+        switch (acoStr.toLowerCase()) {
+            case "andre":
+            case "other":
+            case "others":
+                return 1;
+            case "bunn":
+            case "bott":
+                return 2;
+            case "pelag":
+                return 3;
+            case "plank":
+                return 6;
+            case "polarcod":
+            case "polar":
+                return 8;
+            case "her":
+            case "herr":
+            case "herring":
+            case "sild":
+                return 12;
+            case "cap":
+            case "capelin":
+            case "lodde":
+                return 16;
+            case "0-gr.":
+            case "0-group":
+                return 17;
+            case "brisl":
+                return 20;
+            case "sei":
+            case "saith":
+            case "saithe":
+                return 22;
+            case "kolmule":
+            case "kolmu":
+            case "blue":
+            case "blue-wh":
+                return 24;
+            case "oeyep":
+            case "oeyepaal":
+            case "n.pou":
+            case "norwayp":
+            case "norw-pou":
+                return 28;
+            case "uer":
+            case "red":
+            case "redfish":
+                return 29;
+            case "hyse":
+            case "haddo":
+            case "haddock":
+                return 30;
+            case "torsk":
+            case "cod":
+                return 31;
+            case "ot/bo":
+            case "an-bu":
+            case "otdem":
+                return 55;
+            case "total":
+                return 100;
+            case "hmack":
+            case "horse":
+            case "tagg":
+            case "trmac":
+            case "tract":
+                return 5003;
+            case "sardp":
+            case "pilch":
+                return 5004;
+            case "roher":
+                return 5008;
+            case "hake":
+                return 5010;
+            case "odfi":
+                return 5012;
+            case "meso":
+            case "mezo":
+            case "mesfi":
+                return 5013;
+            case "a/rh":
+                return 5014;
+            case "sard":
+                return 5015;
+            case "pel1":
+                return 5016;
+            case "pel2":
+                return 5017;
+            case "brac":
+            case "brach":
+                return 5018;
+            case "sara":
+            case "sarda":
+                return 5019;
+            case "sarm":
+            case "sardm":
+                return 5020;
+            case "ratta":
+                return 5039;
+            case "ancho":
+                return 5041;
+            case "orang":
+                return 5842;
+            case "oreo":
+                return 5844;
+            case "shark":
+                return 5843;
+            case "va/sk":
+                return 10000;
+            case "decar":
+                return 10001;
+        }
+        return null;
+    }
+
+    public static String acoCatToAcoStr(Integer acoCat) {
+        switch (acoCat) {
+            case 1:
+                return "andre";
+            case 2:
+                return "bunn";
+            case 3:
+                return "pelag";
+            case 6:
+                return "plank";
+            case 8:
+                return "polar";
+            case 12:
+                return "sild";
+            case 16:
+                return "lodde";
+            case 17:
+                return "0-group";
+            case 20:
+                return "brisl";
+            case 22:
+                return "sei";
+            case 24:
+                return "kolmule";
+            case 28:
+                return "oeyep";
+            case 29:
+                return "uer";
+            case 30:
+                return "hyse";
+            case 31:
+                return "torsk";
+            case 55:
+                return "an-bu";
+            case 100:
+                return "total";
+            case 5003:
+                return "tagg";
+            case 5004:
+                return "pilch";
+            case 5008:
+                return "roher";
+            case 5010:
+                return "hake";
+            case 5012:
+                return "odfi";
+            case 5013:
+                return "mesfi";
+            case 5014:
+                return "a/rh";
+            case 5015:
+                return "sard";
+            case 5016:
+                return "pel1";
+            case 5017:
+                return "pel2";
+            case 5018:
+                return "brac";
+            case 5019:
+                return "sarda";
+            case 5020:
+                return "sardm";
+            case 5039:
+                return "ratta";
+            case 5041:
+                return "ancho";
+            case 5842:
+                return "orang";
+            case 5843:
+                return "shark";
+            case 5844:
+                return "oreo";
+        }
+        return acoCat.toString();
+    }
 }

@@ -27,6 +27,7 @@ import no.imr.sea2data.echosounderbo.SABO;
 import no.imr.sea2data.imrbase.util.Conversion;
 import no.imr.stox.functions.acoustic.ListUser20Writer;
 import no.imr.stox.functions.acoustic.ReadAcousticLUF3;
+import no.imr.stox.functions.utils.EchosounderUtils;
 import org.junit.Ignore;
 import org.junit.Test;
 
@@ -189,7 +190,7 @@ public class Luf3ToLuf20 {
                         continue;
                     }
                     String acoStr = hdr[i];
-                    Integer acoCat = ReadAcousticLUF3.acoCatFromAcoStr(acoStr);
+                    Integer acoCat = EchosounderUtils.acoCatFromAcoStr(acoStr);
                     if (acoCat == null) {
                         throw new Exception("Error missing " + acoStr);
                         //continue;

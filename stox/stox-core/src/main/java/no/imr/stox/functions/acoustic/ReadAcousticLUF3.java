@@ -19,6 +19,7 @@ import no.imr.sea2data.imrbase.map.LatLonUtil;
 import no.imr.sea2data.imrbase.math.Calc;
 import no.imr.sea2data.imrbase.util.Conversion;
 import no.imr.sea2data.imrbase.util.IMRdate;
+import no.imr.stox.functions.utils.EchosounderUtils;
 
 /**
  * Method to read the LUF5 into Acoustic data
@@ -107,7 +108,7 @@ public class ReadAcousticLUF3 {
                     if (acoStr.equals("SC")) {
                         continue;
                     }
-                    Integer acoCat = acoCatFromAcoStr(acoStr);
+                    Integer acoCat = EchosounderUtils.acoCatFromAcoStr(acoStr);
                     if (acoCat == null) {
                         throw new RuntimeException(acoStr + " not found");
                     }
@@ -126,118 +127,6 @@ public class ReadAcousticLUF3 {
         return distances;
     }
 
-    public static Integer acoCatFromAcoStr(String acoStr) {
-        switch (acoStr.toLowerCase()) {
-            case "andre":
-            case "other":
-            case "others":
-                return 1;
-            case "pelag":
-                return 3;
-            case "bunn":
-            case "bott":
-                return 2;
-            case "plank":
-                return 6;
-            case "polarcod":
-            case "polar":
-                return 8;
-            case "her":
-            case "herr":
-            case "herring":
-            case "sild":
-                return 12;
-            case "cap":
-            case "capelin":
-            case "lodde":
-                return 16;
-            case "0-gr.":
-            case "0-group":
-                return 17;
-            case "sei":
-            case "saith":
-            case "saithe":
-                return 22;
-            case "kolmule":
-            case "kolmu":
-            case "blue":
-            case "blue-wh":
-                return 24;
-            case "oeyep":
-            case "oeyepaal":
-            case "n.pou":
-            case "norwayp":
-            case "norw-pou":
-                return 28;
-            case "uer":
-            case "red":
-            case "redfish":
-                return 29;
-            case "hyse":
-            case "haddo":
-            case "haddock":
-                return 30;
-            case "torsk":
-            case "cod":
-                return 31;
-            case "total":
-                return 100;
-            case "pel1":
-                return 5016;
-            case "pel2":
-                return 5017;
-            case "brac":
-            case "brach":
-                return 5018;
-            case "sard":
-                return 5015;
-            case "sardp":
-            case "pilch":
-                return 5004;
-            case "sara":
-            case "sarda":
-                return 5019;
-            case "sarm":
-            case "sardm":
-                return 5020;
-            case "hmack":
-            case "horse":
-            case "tagg":
-            case "trmac":
-            case "tract":
-                return 5003;
-            case "odfi":
-                return 5012;
-            case "meso":
-            case "mezo":
-            case "mesfi":
-                return 5013;
-            case "ot/bo":
-            case "otdem":
-                return 55;
-            case "va/sk":
-                return 10000;
-            case "decar":
-                return 10001;
-            case "hake":
-                return 5010;
-            case "roher":
-                return 5008;
-            case "ancho":
-                return 5041;
-            case "orang":
-                return 5842;
-            case "oreo":
-                return 5844;
-            case "shark":
-                return 5843;
-            case "ratta":
-                return 5039;
-            case "a/rh":
-                return 5014;
-        }
-        return null;
-    }
 
     private static String fixHdr(String hdr) {
         hdr = hdr.replaceAll("Blue wh", "Blue-wh");
