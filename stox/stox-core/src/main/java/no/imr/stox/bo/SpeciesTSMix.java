@@ -152,9 +152,9 @@ public class SpeciesTSMix {
                 ReportUtil.asgExpr("MixAcoCat", mixAcoCat),
                 ReportUtil.asgExpr("AcoCat", acoCat),
                 ReportUtil.asgExpr("SpecCat", specCat),
-                ReportUtil.asgExpr("M", m),
-                ReportUtil.asgExpr("A", a),
-                ReportUtil.asgExpr("D", d));
+                ReportUtil.asgExpr("m", m),
+                ReportUtil.asgExpr("a", a),
+                ReportUtil.asgExpr("d", d));
     }
 
     public static String toString(List<SpeciesTSMix> l) {

@@ -33,7 +33,7 @@ public class AppCatDlg extends javax.swing.JDialog {
         initComponents();
         jCurrentVersion.setText(currentVersion);
         setLocationRelativeTo(null);
-        setTitle("Update application");
+        setTitle("Update StoX");
         List<AppCat.AppCatEntry> l = appCat.getEntries();
         if (!l.isEmpty()) {
             jComboBox1.setModel(new DefaultComboBoxModel(l.toArray()));

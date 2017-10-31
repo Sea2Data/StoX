@@ -208,9 +208,11 @@ public final class Process implements IProcess {
         }
         Object formalValue = getParameterValue(parameter);
         Object actualValue = formalValue;
+        // Do not transalte null to default value
+        /*
         if (actualValue == null) {
             actualValue = mp.getDefaultValue();
-        }
+        }*/
         if (actualValue != null) {
             if (mp.getMetaDataType().isReference()) {
                 String procName = getProcessNameFromParameter(mp);
