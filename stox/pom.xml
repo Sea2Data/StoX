@@ -13,6 +13,8 @@
         <commons.io.version>2.4</commons.io.version>
         <netbeans.version>RELEASE82</netbeans.version>
         <brandingToken>stox</brandingToken>
+        <stox.util.version>1.0.0</stox.util.version>
+        <stox.core.version>1.0.0</stox.core.version>
     </properties>
     <repositories>
         <repository>
