@@ -27,12 +27,12 @@
         <dependency>
             <groupId>${project.groupId}</groupId>
             <artifactId>stox-core</artifactId>
-            <version>${project.version}</version>
+            <version>${stox.core.version}</version>
         </dependency>
         <dependency>
             <groupId>${project.groupId}</groupId>
             <artifactId>stox-util</artifactId>
-            <version>${project.version}</version>
+            <version>${stox.util.version}</version>
         </dependency>
     </dependencies>
     <build>
