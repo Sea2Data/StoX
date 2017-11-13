@@ -478,6 +478,13 @@ public final class Functions {
     public static final String PM_RUNBOOTSTRAP_SEED = "seed";
     public static final String PM_RUNBOOTSTRAP_CORES = "cores";
 
+    public static final String FN_RUNBOOTSTRAP_1_6 = "runBootstrap_1.6";
+    public static final String PM_RUNBOOTSTRAP_1_6_ACOUSTICMETHOD = "acousticMethod";
+    public static final String PM_RUNBOOTSTRAP_1_6_BIOTICMETHOD = "bioticMethod";
+    public static final String PM_RUNBOOTSTRAP_1_6_NBOOT = "nboot";
+    public static final String PM_RUNBOOTSTRAP_1_6_SEED = "seed";
+    public static final String PM_RUNBOOTSTRAP_1_6_CORES = "cores";
+
     public static final String FN_BASELINE2ECA = "baseline2eca";
 
     public static final String FN_ECA = "eca";

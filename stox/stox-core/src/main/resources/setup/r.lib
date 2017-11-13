@@ -15,6 +15,17 @@ Parameter: Name=cores, DataType=Integer, DefaultValue=1, Description=number of c
 Output: RObject
 
 [Function]
+Name: runBootstrap_1.6
+Description: Resample (bootstrap) trawl stations based on swept area data and possibly also acoustic data to estimate uncertainty in estimates.
+Parameter: Name=acousticMethod, Required=false, DefaultValue=PSU~Stratum, DataType=String, Description=What acoustic level to bootstrap within: stratum psu edsu sample
+Parameter: Name=bioticMethod, Required=false, DefaultValue=PSU~Stratum, DataType=String, Description=What biotic level to bootstrap within: stratum psu edsu sample
+Parameter: Name=nboot, DataType=Integer, DefaultValue=50, Description=Number of bootstrap replicates
+Parameter: Name=seed, DataType=Integer, DefaultValue=1, Description=a integer value indicating seed for the random number generator for reproducibility
+Parameter: Name=cores, DataType=Integer, DefaultValue=1, Description=number of cores to run parallell execution
+Output: RObject
+
+
+[Function]
 Name: imputeByAge
 Description: Impute bootstrapped superindividuals by age. The reportEnv is modified by reference, not as return value.
 Parameter: Name=seed, DataType=Integer, DefaultValue=1, Description=a integer value indicating seed for the random number generator for reproducibility

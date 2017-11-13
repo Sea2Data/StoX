@@ -432,6 +432,7 @@ public class Factory {
             case TEMPLATE_SWEPTAREA:
                 m.addProcess(Functions.FN_SWEPTAREADENSITY, Functions.FN_SWEPTAREADENSITY).
                         setParameterProcessValue(Functions.PM_SWEPTAREADENSITY_PROCESSDATA, Functions.FN_READPROCESSDATA).
+                        setParameterProcessValue(Functions.PM_SWEPTAREADENSITY_BIOTICDATA, Functions.FN_FILTERBIOTIC).
                         setParameterProcessValue(Functions.PM_SWEPTAREADENSITY_LENGTHDIST, Functions.FN_TOTALLENGTHDIST).
                         setParameterValue(Functions.PM_SWEPTAREADENSITY_SWEEPWIDTHMETHOD, 25.0);
                 break;

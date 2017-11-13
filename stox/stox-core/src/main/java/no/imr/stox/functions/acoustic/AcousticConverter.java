@@ -117,4 +117,20 @@ public class AcousticConverter {
         });
 
     }
+
+    public static void convertLUF3FileToLuf20(String fName, String outFileName, String cruise, String nation, String platform) {
+        convertLUF3FileToLuf20(fName, outFileName, cruise, nation, platform, false, null);
+    }
+
+    public static void convertLCSFileToLuf20(String fName, String outFileName, String cruise, String nation, String platform) {
+        convertLUF3FileToLuf20(fName, outFileName, cruise, nation, platform, true, null);
+    }
+
+    public static void convertLUF3FileToLuf20(String fName, String outFileName, String cruise, String nation, String platform, Boolean lcs, String dateFormat) {
+        List<DistanceBO> distances = dateFormat == null ? ReadAcousticLUF3.perform(fName, lcs) : ReadAcousticLUF3.perform(fName, lcs, dateFormat);
+        if (outFileName == null) {
+            outFileName = fName + ".xml";
+        }
+        ListUser20Writer.export(cruise, nation, platform, outFileName, distances);
+    }
 }
