@@ -472,8 +472,11 @@ public final class Functions {
     public static final String PM_LOADENV_OUTPUTFOLDER = "outputFolder";
      */
     public static final String FN_RUNBOOTSTRAP = "runBootstrap";
+    public static final String PM_RUNBOOTSTRAP_BOOTSTRAPMETHOD = "bootstrapMethod";
     public static final String PM_RUNBOOTSTRAP_ACOUSTICMETHOD = "acousticMethod";
     public static final String PM_RUNBOOTSTRAP_BIOTICMETHOD = "bioticMethod";
+    public static final String PM_RUNBOOTSTRAP_STARTPROCESS = "startProcess";
+    public static final String PM_RUNBOOTSTRAP_ENDPROCESS = "endProcess";
     public static final String PM_RUNBOOTSTRAP_NBOOT = "nboot";
     public static final String PM_RUNBOOTSTRAP_SEED = "seed";
     public static final String PM_RUNBOOTSTRAP_CORES = "cores";
@@ -780,6 +783,10 @@ public final class Functions {
     // Transient process data table
     public static final String REPORT_FETCH_LEVEL_IMPUTE = "impute";
     public static final String REPORT_FETCH_LEVEL_BOOTSTRAP = "bootstrap";
+
+    public static final String BOOTSTRAPMETHOD_ACOUSTICTRAWL = "AcousticTrawl";
+    public static final String BOOTSTRAPMETHOD_SWEPTAREALENGTH = "SweptAreaLength";
+    public static final String BOOTSTRAPMETHOD_SWEPTAREATOTAL = "SweptAreaTotal";
 
     public static final int WARNINGLEVEL_STRICT = 0;
     public static final int WARNINGLEVEL_MEDIUM = 1;

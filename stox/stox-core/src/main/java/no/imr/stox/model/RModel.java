@@ -127,7 +127,7 @@ public class RModel extends Model {
                 if (paramValue.toString().contains("Process(")) {
                     String processValue = ((String) paramValue).substring("Process(".length(), ((String) paramValue).length() - 1);
                     // Reference actualization
-                    actualValue = processValue + ".out";
+                    actualValue = processValue;
                 } else if (actualValue.toString().equalsIgnoreCase("false") || actualValue.toString().equalsIgnoreCase("true")) {
                     // The value is a boolean
                     actualValue = actualValue.toString().toUpperCase();

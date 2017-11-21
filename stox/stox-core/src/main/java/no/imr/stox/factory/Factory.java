@@ -83,7 +83,7 @@ public class Factory {
             case TEMPLATE_ACOUSTICABUNDANCETRANSECT:
                 createAcousticAbundanceTransectProject(p.getBaseline());
                 createAbundanceReport(p.getBaselineReport(), true, 1.0, 1000, Functions.COL_IND_AGE);
-                createRWithUncertainty(p.getRModel(), true, true);
+                createRWithUncertainty(p.getRModel(), true, Functions.BOOTSTRAPMETHOD_ACOUSTICTRAWL);
                 createRReport(p.getRModelReport());
                 break;
             case TEMPLATE_ACOUSTICABUNDANCERECTANGLE:
@@ -99,19 +99,19 @@ public class Factory {
             case TEMPLATE_SWEPTAREA_TOTAL:
                 createSweptAreaTotalCatchTemplateProject(p.getBaseline());
                 createSweptAreaTotalCatchReport(p.getBaselineReport());
-                createRWithUncertainty(p.getRModel(), false, false);
+                createRWithUncertainty(p.getRModel(), false, Functions.BOOTSTRAPMETHOD_SWEPTAREATOTAL);
                 createRReport(p.getRModelReport());
                 break;
             case TEMPLATE_SWEPTAREA:
                 createSweptAreaTemplateProject(p.getBaseline(), template, Functions.LENGTHDISTTYPE_NORMLENGHTDIST, 1.0);
                 createAbundanceReport(p.getBaselineReport(), true, 1.0, 1000, Functions.COL_IND_AGE);
-                createRWithUncertainty(p.getRModel(), true, false);
+                createRWithUncertainty(p.getRModel(), true, Functions.BOOTSTRAPMETHOD_SWEPTAREALENGTH);
                 createRReport(p.getRModelReport());
                 break;
             case TEMPLATE_LARVAESWEPTAREA:
                 createSweptAreaTemplateProject(p.getBaseline(), template, Functions.LENGTHDISTTYPE_LENGHTDIST, 0.1);
                 createAbundanceReport(p.getBaselineReport(), false, 0.1, 1000000, Functions.COL_IND_DEVELOPMENTALSTAGE);
-                createRWithUncertainty(p.getRModel(), false, false);
+                createRWithUncertainty(p.getRModel(), false, Functions.BOOTSTRAPMETHOD_SWEPTAREALENGTH);
                 createRReport(p.getRModelReport());
                 break;
             case TEMPLATE_SPLITNASC:
@@ -489,7 +489,7 @@ public class Factory {
                 setParameterProcessValue(Functions.PM_DEFINESWEPTAREAPSU_BIOTICDATA, Functions.FN_FILTERBIOTIC).
                 setParameterValue(Functions.PM_DEFINESWEPTAREAPSU_METHOD, Functions.SWEPTAREAPSUMETHOD_STATION);
 
-        Stream.of(Functions.CATCHVARIABLE_WEIGHT, Functions.CATCHVARIABLE_COUNT).forEach(var -> {
+        Stream.of(Functions.CATCHVARIABLE_COUNT, Functions.CATCHVARIABLE_WEIGHT).forEach(var -> {
             String densProc = "SweptArea" + var + "Density";
             m.addProcess(densProc, Functions.FN_SWEPTAREADENSITY).
                     setParameterProcessValue(Functions.PM_SWEPTAREADENSITY_PROCESSDATA, Functions.FN_READPROCESSDATA).
@@ -723,11 +723,15 @@ public class Factory {
      *
      * @param m
      */
-    public static void createRWithUncertainty(IModel m, boolean imputeByAge, Boolean acousticBootstrap) {
-
+    public static void createRWithUncertainty(IModel m, boolean imputeByAge, String bootstrapType) {
+        boolean acousticTrawl = bootstrapType.equals(Functions.BOOTSTRAPMETHOD_ACOUSTICTRAWL);
+        boolean sweptAreaTotal = bootstrapType.equals(Functions.BOOTSTRAPMETHOD_SWEPTAREATOTAL);
         IProcess p = m.addProcess(Functions.FN_RUNBOOTSTRAP, Functions.FN_RUNBOOTSTRAP).
-                setParameterValue(Functions.PM_RUNBOOTSTRAP_ACOUSTICMETHOD, acousticBootstrap ? "PSU~Stratum" : "").
+                setParameterValue(Functions.PM_RUNBOOTSTRAP_BOOTSTRAPMETHOD, bootstrapType).
+                setParameterValue(Functions.PM_RUNBOOTSTRAP_ACOUSTICMETHOD, acousticTrawl ? "PSU~Stratum" : "").
                 setParameterValue(Functions.PM_RUNBOOTSTRAP_BIOTICMETHOD, "PSU~Stratum").
+                setParameterProcessValue(Functions.PM_RUNBOOTSTRAP_STARTPROCESS, sweptAreaTotal ? "SweptAreaCountDensity" : Functions.FN_TOTALLENGTHDIST).
+                setParameterProcessValue(Functions.PM_RUNBOOTSTRAP_ENDPROCESS, sweptAreaTotal ? "SweptAreaCountDensity" : Functions.FN_SUPERINDABUNDANCE).
                 setParameterValue(Functions.PM_RUNBOOTSTRAP_NBOOT, 5).
                 setParameterValue(Functions.PM_RUNBOOTSTRAP_SEED, 1).
                 setParameterValue(Functions.PM_RUNBOOTSTRAP_CORES, 1);

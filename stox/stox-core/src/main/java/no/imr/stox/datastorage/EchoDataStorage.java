@@ -69,12 +69,12 @@ public class EchoDataStorage extends FileDataStorage {
                 break;
 
             case 2:
-                ImrIO.write(wr, ExportUtil.carrageReturnLineFeed(ExportUtil.tabbed("cruise", "log_start", "start_time", "acocat", "ch_type", "ch", "sa")));
+                ImrIO.write(wr, ExportUtil.carrageReturnLineFeed(ExportUtil.tabbed("cruise", "log_start", "start_time", "freq", "transceiver", "acocat", "ch_type", "ch", "sa")));
                 for (DistanceBO d : list) {
                     for (FrequencyBO f : d.getFrequencies()) {
                         for (SABO nasc : f.getSa()) {
                             ImrIO.write(wr, ExportUtil.carrageReturnLineFeed(ExportUtil.tabbed(d.getCruise(), d.getLog_start(), IMRdate.formatDate(d.getStart_time(),
-                                    "yyyy-MM-dd HH:mm:ss"), nasc.getAcoustic_category(), nasc.getCh_type(), nasc.getCh(), nasc.getSa())));
+                                    "yyyy-MM-dd HH:mm:ss"), f.getFreq(), f.getTranceiver(), nasc.getAcoustic_category(), nasc.getCh_type(), nasc.getCh(), nasc.getSa())));
                         }
                     }
                 }

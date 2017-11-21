@@ -63,8 +63,6 @@ public final class Process implements IProcess {
         this.processName = processName;
     }
 
-    public static final String PROCESS_START_LITERAL = "Process("; 
-
     /**
      * Get input values where referenced datastorage output object from Source
      * processes are reworked to actual parameter values. In this way the
@@ -103,10 +101,7 @@ public final class Process implements IProcess {
     public String getProcessNameFromParameter(IMetaParameter mp) {
         if (mp.getMetaDataType() != null && mp.getMetaDataType().isReference()) {
             Object inputVal = input.get(mp.getName());
-            String pr = (String) inputVal;
-            if (pr != null && pr.contains(PROCESS_START_LITERAL)) {
-                return pr.substring(PROCESS_START_LITERAL.length(), pr.length() - 1);
-            }
+            return ProjectUtils.getProcessNameFromParameter((String) inputVal);
         }
         return null;
     }
@@ -164,7 +159,7 @@ public final class Process implements IProcess {
 
     @Override
     public IProcess setParameterProcessValue(String name, String processName) {
-        setParameterValue(name, "Process(" + processName + ")");
+        setParameterValue(name, ProjectUtils.PROCESS_START_LITERAL + processName + ")");
         return this;
     }
 
@@ -264,10 +259,10 @@ public final class Process implements IProcess {
             if (pValue != null && mp.getMetaDataType().isReference()) {
                 // Process(AggregateVertical_2)
                 String outputRef = (String) pValue;
-                if (!outputRef.contains(PROCESS_START_LITERAL)) {
+                if (!outputRef.contains(ProjectUtils.PROCESS_START_LITERAL)) {
                     return paramDescr + "Reference parameter must refer to process.";
                 }
-                String procName = outputRef.substring(PROCESS_START_LITERAL.length(), outputRef.length() - 1);
+                String procName = outputRef.substring(ProjectUtils.PROCESS_START_LITERAL.length(), outputRef.length() - 1);
                 IProcess proc = model.isReportModel() ? model.getProject().findProcess(procName)
                         : model.findProcess(procName, model.getProcessList().indexOf(this) - 1);
                 if (proc == null) {

@@ -7,8 +7,11 @@ Description: Save r data - bootstrap object
 Name: runBootstrap
 Alias: bootstrapBioticAcoustic;bootstrapBioticSweptArea
 Description: Resample (bootstrap) trawl stations based on swept area data and possibly also acoustic data to estimate uncertainty in estimates.
+Parameter: Name=bootstrapMethod, DefaultValue=AcousticTrawl, DataType=String, Values=AcousticTrawl;SweptAreaLength;SweptAreaTotal, Description=The <I>bootstrapMethod</I> parameter is used to specify which type of bootstrap to use. The following ways of bootstrapping exist&#58; <BR><BR><U>AcousticTrawl</U><BR>Bootstrap of acoustic tralw surveys, where both acoustic and biotic data are resampled.<BR><BR><U>SweptAreaLength</U><BR>Bootstrap only biotic data with length information.<BR><BR><U>SweptAreaTotal</U><BR>For surveys with information only about total catch (count or weight), bootstrap biotic stations
 Parameter: Name=acousticMethod, Required=false, DefaultValue=PSU~Stratum, DataType=String, Description=What acoustic level to bootstrap within: stratum psu edsu sample
 Parameter: Name=bioticMethod, Required=false, DefaultValue=PSU~Stratum, DataType=String, Description=What biotic level to bootstrap within: stratum psu edsu sample
+Parameter: Name=startProcess, DefaultValue=Process(TotalLengthDist), DataType=String, Description=The process where to start bootstrap
+Parameter: Name=endProcess, DefaultValue=Process(SuperIndAbundance), DataType=String, Description=The process where to end bootstrap
 Parameter: Name=nboot, Alias=numIterations, Required=true, DataType=Integer, DefaultValue=50, Description=Number of bootstrap replicates
 Parameter: Name=seed, DataType=Integer, DefaultValue=1, Description=a integer value indicating seed for the random number generator for reproducibility
 Parameter: Name=cores, DataType=Integer, DefaultValue=1, Description=number of cores to run parallell execution

@@ -23,7 +23,7 @@ public class ProjectUtils {
     public static final String R_REPORT = "r-report";
     public static final String INPUT = "input";
     public static final String OUTPUT = "output";
-    
+
     public static final String PROJECT = "project";
     public static final String PROJECT_INPUT_FOLDER = INPUT;
     public static final String PROJECT_ACOUSTICINPUT_FOLDER = INPUT + "/" + "acoustic";
@@ -41,7 +41,7 @@ public class ProjectUtils {
     public static final String PROJECT_OUTPUTR_DATA_TRASH = PROJECT_OUTPUTR_DATA + "/" + TRASH;
     public static final String PROJECT_OUTPUTR_REPORT = PROJECT_OUTPUTR + "/" + REPORT;
     public static final String PROJECT_OUTPUTR_REPORT_TRASH = PROJECT_OUTPUTR_REPORT + "/" + TRASH;
-    
+
     public static final String PROCESS_FOLDER = "process";
     public static final String PROCESS_FILE = "process";
     public static final String RPROCESS_FILE = "rprocess";
@@ -156,5 +156,15 @@ public class ProjectUtils {
             }
         }
         return fullPath;
+    }
+    
+    public static final String PROCESS_START_LITERAL = "Process(";
+
+    public static String getProcessNameFromParameter(String inputVal) {
+        String pr = (String) inputVal;
+        if (pr != null && pr.contains(PROCESS_START_LITERAL)) {
+            return pr.substring(PROCESS_START_LITERAL.length(), pr.length() - 1);
+        }
+        return null;
     }
 }

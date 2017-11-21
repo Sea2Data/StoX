@@ -222,6 +222,10 @@ public class ProcessNode extends AbstractNode {
             this.mp = mp;
         }
 
+        boolean isReferencingBaselineFromR() {
+            return mp != null && mp.getName().equalsIgnoreCase(Functions.PM_RUNBOOTSTRAP_STARTPROCESS) || mp.getName().equalsIgnoreCase(Functions.PM_RUNBOOTSTRAP_ENDPROCESS);
+        }
+
         @Override
         public Object getValue() {
             Object val = process.getValue(mp);
@@ -229,6 +233,8 @@ public class ProcessNode extends AbstractNode {
                 val = val != null && val instanceof String ? Boolean.valueOf((String) val) : false;
             } else if (mp.getMetaDataType() != null && mp.getMetaDataType().isReference()) {
                 val = process.getModel().getProject().findProcess(process.getProcessNameFromParameter(mp));
+            } else if (isReferencingBaselineFromR()) {
+                val = process.getModel().getProject().findProcess(ProjectUtils.getProcessNameFromParameter((String)val));
             }
             if (val == null) {
                 val = ""; // null represented as empty string
@@ -246,7 +252,7 @@ public class ProcessNode extends AbstractNode {
                 } else if (t instanceof Boolean) {
                     t = String.valueOf((Boolean) t);
                 } else if (t instanceof IProcess) {
-                    t = "Process(" + ((IProcess) t).getName() + ")";
+                    t = ProjectUtils.PROCESS_START_LITERAL + ((IProcess) t).getName() + ")";
                 }
             }
             process.setValue(mp, t);
@@ -266,8 +272,8 @@ public class ProcessNode extends AbstractNode {
         public PropertyEditor getPropertyEditor() {
             if (mp.getMetaFunction().getName().equals(Functions.FN_SPLITNASC) && mp.getName().equals(Functions.PM_SPLITNASC_SPECIESTS)) {
                 return new SpeciesTSPropertyEditor((String) process.getActualValue(Functions.PM_SPLITNASC_SPECIESTS));
-            } else if (mp.getMetaFunction().getName().equals(Functions.FN_CATCHABILITY) && 
-                    (mp.getName().equals(Functions.PM_CATCHABILITY_PARLENGTHDEPENDENTSWEEPWIDTH) || mp.getName().equals(Functions.PM_CATCHABILITY_PARLENGTHDEPENDENTSELECTIVITY))) {
+            } else if (mp.getMetaFunction().getName().equals(Functions.FN_CATCHABILITY)
+                    && (mp.getName().equals(Functions.PM_CATCHABILITY_PARLENGTHDEPENDENTSWEEPWIDTH) || mp.getName().equals(Functions.PM_CATCHABILITY_PARLENGTHDEPENDENTSELECTIVITY))) {
                 return new CatchabilityPropertyEditor((String) process.getActualValue(Functions.PM_CATCHABILITY_PARLENGTHDEPENDENTSWEEPWIDTH));
             }
             if (mp.getName().toLowerCase().startsWith("filename")) {
@@ -288,7 +294,7 @@ public class ProcessNode extends AbstractNode {
                 return new ProjectFileNameEditor(process.getModel().getProject(), defPath);
             } else if (mp.getValues() != null && !mp.getValues().isEmpty()) {
                 return new ListPropertyEditor(mp.getValues());
-            } else if (mp.getMetaDataType().isReference()) {
+            } else if (mp.getMetaDataType().isReference() || isReferencingBaselineFromR()) {
                 return new ListPropertyEditor(getBackwardCompatibleProcesses(process, mp));
             }
             PropertyEditor pe = new TextPropertyEditor();
@@ -306,6 +312,12 @@ public class ProcessNode extends AbstractNode {
          */
         private List<IProcess> getBackwardCompatibleProcesses(IProcess process, IMetaParameter mp) {
             List<IProcess> procList = new ArrayList<>();
+            if (isReferencingBaselineFromR()) {
+                // Refer to baseline processes
+                procList.addAll(process.getModel().getProject().getBaseline().getProcessList());
+                return procList;
+            }
+
             Boolean isBaselineReport = process.getModel().equals(process.getModel().getProject().getBaselineReport());
             if (isBaselineReport) {
                 // Add from the baseline model into the report
@@ -409,7 +421,7 @@ public class ProcessNode extends AbstractNode {
                     for (IMetaParameter mp : p.getMetaFunction().getMetaParameters()) {
                         String pn = p.getProcessNameFromParameter(mp);
                         if (pn != null && pn.equalsIgnoreCase(sourceName)) {
-                            p.setValue(mp, no.imr.stox.model.Process.PROCESS_START_LITERAL + newProcessRef + ")");
+                            p.setValue(mp, ProjectUtils.PROCESS_START_LITERAL + newProcessRef + ")");
                         }
                     }
                 }
