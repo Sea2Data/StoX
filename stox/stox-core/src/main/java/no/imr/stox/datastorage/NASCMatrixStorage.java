@@ -38,6 +38,7 @@ public class NASCMatrixStorage extends FileDataStorage {
                 Functions.RES_LAYERTYPE, colHdr, var)));
         String sampleUnitType = (String) nascMatrix.getResolutionMatrix().getRowValue(Functions.RES_SAMPLEUNITTYPE);
         String layerType = (String) nascMatrix.getResolutionMatrix().getRowValue(Functions.RES_LAYERTYPE);
+        int precisionLevel = getProcess().getModel().getProject().getPrecisionLevel();
         for (String acoCat : nascMatrix.getData().getSortedKeys()) {
             for (String dist : nascMatrix.getData().getSortedGroupRowKeys(acoCat)) {
                 Integer sampleSize = nascMatrix.getSampleSizeMatrix().getRowValueAsInteger(dist);
@@ -45,11 +46,12 @@ public class NASCMatrixStorage extends FileDataStorage {
                 Double distance = nascMatrix.getDistanceMatrix().getRowValueAsDouble(dist);
                 for (String layer : nascMatrix.getData().getSortedColKeys(acoCat, dist)) {
                     Double nascVal = nascMatrix.getData().getGroupRowColValueAsDouble(acoCat, dist, layer);
-                    if(nascVal != null) {
-                        nascVal = Calc.roundToWithTrailingZeros(nascVal, 5);
+
+                    if (nascVal != null) {
+                        nascVal = precisionLevel >= 1 ? Calc.roundToWithTrailingZeros(nascVal, 5) : Calc.roundTo(nascVal, 5);
                     }
-                    String s = ExportUtil.carrageReturnLineFeed(ExportUtil.tabbed(acoCat, 
-                            sampleUnitType, dist, sampleSize, posSampleSize, Conversion.formatDoubletoDecimalString(distance, 3),
+                    String s = ExportUtil.carrageReturnLineFeed(ExportUtil.tabbed(acoCat,
+                            sampleUnitType, dist, sampleSize, posSampleSize, precisionLevel >= 1 ? Conversion.formatDoubletoDecimalString(distance, 3) : distance,
                             layerType, layer, nascVal));
                     ImrIO.write(wr, s);
                 }

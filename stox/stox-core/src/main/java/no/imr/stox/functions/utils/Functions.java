@@ -505,12 +505,12 @@ public final class Functions {
     public static final String PM_IMPUTEBYAGE_CORES = "cores";
 
     public static final String FN_GETPLOTS = "getPlots";
-    public static final String FN_GETPLOTS_OUT = "out";
-    public static final String FN_GETPLOTS_OPTIONS = "options";
+    public static final String PM_GETPLOTS_OUT = "out";
+    public static final String PM_GETPLOTS_OPTIONS = "options";
 
     public static final String FN_GETREPORTS = "getReports";
-    public static final String FN_GETREPORTS_OUT = "out";
-    public static final String FN_GETREPORTS_OPTIONS = "options";
+    public static final String PM_GETREPORTS_OUT = "out";
+    public static final String PM_GETREPORTS_OPTIONS = "options";
 
     public static final String COL_POLVAR_INCLUDEINTOTAL = "includeintotal";
     public static final String COL_POLVAR_POLYGON = "polygon";

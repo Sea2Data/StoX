@@ -84,7 +84,7 @@ public class Factory {
                 createAcousticAbundanceTransectProject(p.getBaseline());
                 createAbundanceReport(p.getBaselineReport(), true, 1.0, 1000, Functions.COL_IND_AGE);
                 createRWithUncertainty(p.getRModel(), true, Functions.BOOTSTRAPMETHOD_ACOUSTICTRAWL);
-                createRReport(p.getRModelReport());
+                createRReport(p.getRModelReport(), null);
                 break;
             case TEMPLATE_ACOUSTICABUNDANCERECTANGLE:
                 createAcousticAbundanceRectangleProject(p.getBaseline());
@@ -100,19 +100,19 @@ public class Factory {
                 createSweptAreaTotalCatchTemplateProject(p.getBaseline());
                 createSweptAreaTotalCatchReport(p.getBaselineReport());
                 createRWithUncertainty(p.getRModel(), false, Functions.BOOTSTRAPMETHOD_SWEPTAREATOTAL);
-                createRReport(p.getRModelReport());
+                createRReport(p.getRModelReport(), "bootstrapMethod='SweptAreaTotal'");
                 break;
             case TEMPLATE_SWEPTAREA:
                 createSweptAreaTemplateProject(p.getBaseline(), template, Functions.LENGTHDISTTYPE_NORMLENGHTDIST, 1.0);
                 createAbundanceReport(p.getBaselineReport(), true, 1.0, 1000, Functions.COL_IND_AGE);
                 createRWithUncertainty(p.getRModel(), true, Functions.BOOTSTRAPMETHOD_SWEPTAREALENGTH);
-                createRReport(p.getRModelReport());
+                createRReport(p.getRModelReport(), null);
                 break;
             case TEMPLATE_LARVAESWEPTAREA:
                 createSweptAreaTemplateProject(p.getBaseline(), template, Functions.LENGTHDISTTYPE_LENGHTDIST, 0.1);
                 createAbundanceReport(p.getBaselineReport(), false, 0.1, 1000000, Functions.COL_IND_DEVELOPMENTALSTAGE);
                 createRWithUncertainty(p.getRModel(), false, Functions.BOOTSTRAPMETHOD_SWEPTAREALENGTH);
-                createRReport(p.getRModelReport());
+                createRReport(p.getRModelReport(), null);
                 break;
             case TEMPLATE_SPLITNASC:
                 createSplitNASCProject(p.getBaseline());
@@ -743,8 +743,11 @@ public class Factory {
         m.addProcess(Functions.FN_SAVEPROJECTDATA, Functions.FN_SAVEPROJECTDATA);
     }
 
-    public static void createRReport(IModel m) {
-        m.addProcess(Functions.FN_GETREPORTS, Functions.FN_GETREPORTS);
-        m.addProcess(Functions.FN_GETPLOTS, Functions.FN_GETPLOTS);
+    public static void createRReport(IModel m, String options) {
+        m.addProcess(Functions.FN_GETREPORTS, Functions.FN_GETREPORTS).
+                setParameterValue(Functions.PM_GETREPORTS_OPTIONS, options);
+        
+        m.addProcess(Functions.FN_GETPLOTS, Functions.FN_GETPLOTS).
+                setParameterValue(Functions.PM_GETPLOTS_OPTIONS, options);
     }
 }

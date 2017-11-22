@@ -38,10 +38,12 @@ public class LengthDistMatrixStorage extends FileDataStorage {
         ImrIO.write(wr, ExportUtil.carrageReturnLineFeed(ExportUtil.tabbed(groupHdr, rowHdr, cellHdr + unitAdd, Functions.RES_LENGTHINTERVAL + unitAdd, var, "LengthDistType")));
         // Length dist: Matrix Matrix[GROUP~Species / ROW~Observation / CELL~LengthGroup / VAR~WeightedCount]
         Double lengthInterval = ldMatrix.getResolutionMatrix().getRowValueAsDouble(Functions.RES_LENGTHINTERVAL);
+        int precisionLevel = getProcess().getModel().getProject().getPrecisionLevel();
         for (String species : ldMatrix.getData().getKeys()) {
             for (String observation : ldMatrix.getData().getSortedGroupRowKeys(species)) {
                 for (String lengthGroup : ldMatrix.getData().getSortedGroupRowCellKeys(species, observation)) {
-                    Double wCount = Calc.roundToWithTrailingZeros(ldMatrix.getData().getGroupRowCellValueAsDouble(species, observation, lengthGroup), 5);
+                    Double wCount = ldMatrix.getData().getGroupRowCellValueAsDouble(species, observation, lengthGroup);
+                    wCount = precisionLevel >= 1 ? Calc.roundToWithTrailingZeros(wCount, 5) : Calc.roundTo(wCount, 5);
                     ImrIO.write(wr, ExportUtil.carrageReturnLineFeed(ExportUtil.tabbed(species, observation, lengthGroup, lengthInterval, wCount, lDistType)));
                 }
             }
