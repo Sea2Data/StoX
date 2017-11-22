@@ -79,4 +79,8 @@ public interface IProject {
 
     void setTemplate(String template);
 
+    int getPrecisionLevel();
+
+    void setPrecisionLevel(int precisionLevel);
+
 }

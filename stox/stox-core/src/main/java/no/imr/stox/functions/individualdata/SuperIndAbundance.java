@@ -18,6 +18,7 @@ import no.imr.stox.functions.utils.BioticUtils;
 import no.imr.stox.functions.utils.Functions;
 import no.imr.stox.functions.utils.StoXMath;
 import no.imr.stox.log.ILogger;
+import no.imr.stox.model.IModel;
 
 /**
  * This function class is used to calculate a weight factor (abundance) for each
@@ -43,6 +44,8 @@ public class SuperIndAbundance extends AbstractFunction {
     @Override
     public Object perform(Map<String, Object> input) {
         ILogger logger = (ILogger) input.get(Functions.PM_LOGGER);
+        IModel model = (IModel)input.get(Functions.PM_MODEL);
+        int precisionLevel = model != null ? model.getProject().getPrecisionLevel() : 1;
         // result = Matrix[ROW~Individual / COL~IndVariable / VAR~Value]
         // indData = DataType=Matrix[GROUP~Species / ROW~Stratum / COL~EstLayer / CELL~LengthGroup / VAR~Individuals]
         IndividualDataMatrix indData = (IndividualDataMatrix) input.get(Functions.PM_SUPERINDABUNDANCE_INDIVIDUALDATA);
@@ -150,7 +153,7 @@ public class SuperIndAbundance extends AbstractFunction {
                             }
                             Double abundance = totAbundance * p;
                             String indKey = (++idx).toString();
-                            addSuperindividual(resData, indKey, specCatKey, stratumKey, estLayerKey, lenGrp, lenIntv, abundance);
+                            addSuperindividual(resData, indKey, specCatKey, stratumKey, estLayerKey, lenGrp, lenIntv, abundance, precisionLevel);
                             /*if (indBO.getWeight() != null) {
                              resData.setRowColValue(indKey, Functions.COL_ABNDBYIND_BIOMASS, Calc.roundTo(StoXMath.safeMult(abundance, StoXMath.gramsToKg(indBO.getWeight())), 4));
                              }*/
@@ -191,13 +194,15 @@ public class SuperIndAbundance extends AbstractFunction {
      * @param lenGrp
      * @param abundance
      */
-    private void addSuperindividual(MatrixBO resData, String indKey, String specCat, String stratum, String estLayer, String lenGrp, Double lenIntv, Double abundance) {
+    private void addSuperindividual(MatrixBO resData, String indKey, String specCat, String stratum, String estLayer, String lenGrp, Double lenIntv, Double abundance, int precisionLevel) {
         //resData.setRowColValue(indKey, Functions.COL_ABNDBYIND_SPECCAT, specCat); now added as individual variable
         resData.setRowColValue(indKey, Functions.COL_ABNDBYIND_STRATUM, stratum);
         resData.setRowColValue(indKey, Functions.COL_ABNDBYIND_ESTLAYER, estLayer);
         resData.setRowColValue(indKey, Functions.COL_ABNDBYIND_LENGRP, lenGrp);
         resData.setRowColValue(indKey, Functions.COL_ABNDBYIND_LENINTV, lenIntv);
-        resData.setRowColValue(indKey, Functions.COL_ABNDBYIND_ABUNDANCE, Calc.roundToWithTrailingZeros(abundance, 4));
+        // Round with trailing zeros to achieve a higher precision level
+        abundance = precisionLevel >= 1 ? Calc.roundToWithTrailingZeros(abundance, 4) : Calc.roundTo(abundance, 4);
+        resData.setRowColValue(indKey, Functions.COL_ABNDBYIND_ABUNDANCE, abundance);
     }
 
     /**

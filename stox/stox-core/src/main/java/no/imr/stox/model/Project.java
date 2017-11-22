@@ -36,7 +36,7 @@ public class Project implements IProject {
 
     private String rootFolder;
     private String projectName;
-    public static final double RESOURCE_VERSION = 1.75; // System version at current program
+    public static final double RESOURCE_VERSION = 1.76; // System version at current program
     private Double resourceVersion = 1.00;                   // System version at program used to create the project file
     private final Map<String, IModel> models = new HashMap<>();
     private final ILibrary library;
@@ -46,6 +46,7 @@ public class Project implements IProject {
     private String rStoxVersion = "";
     private String stoxVersion = "";
     private String template = "";
+    int precisionLevel = 1; // Precision level for back compability. Can be used to go back to earlier precision levels.
 
     private static final String[] modelNames = new String[]{
         ProjectUtils.BASELINE,
@@ -335,6 +336,16 @@ public class Project implements IProject {
     @Override
     public void setTemplate(String template) {
         this.template = template;
+    }
+
+    @Override
+    public int getPrecisionLevel() {
+        return precisionLevel;
+    }
+
+    @Override
+    public void setPrecisionLevel(int precisionLevel) {
+        this.precisionLevel = precisionLevel;
     }
 
 }
