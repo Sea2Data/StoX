@@ -223,6 +223,7 @@ public class InstallerUtil {
             }
             String server = s[0];
             String subPath = s[1];
+            ftpClient.setConnectTimeout(5000);
             ftpClient.connect(server);
             ftpClient.setFileType(FTPClient.BINARY_FILE_TYPE);
             if (!ftpClient.login("anonymous", "")) {

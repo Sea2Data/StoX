@@ -90,6 +90,16 @@ public class RModel extends Model {
         }
     }
 
+    private static String getRelativeProjectFolder(IProject pr) {
+        // return project name.
+        String res = pr.getProjectFolder().replace("\\", "/");
+        String root = ProjectUtils.getSystemProjectRoot();
+        if (res.contains(root)) {
+            res = res.substring(root.length() + 1, res.length());
+        }
+        return res;
+    }
+
     /**
      * Create process script in r from java
      *
@@ -102,6 +112,7 @@ public class RModel extends Model {
         /* Project prj = new Project(rootFolder, projectName, modelName);
          prj.openProject();
          IModel m = prj.getModel(modelName);*/
+        String projectName = getRelativeProjectFolder(m.getProject());
         for (IProcess p : m.getProcessList()) {
             if (!p.isEnabled()) {
                 continue;
@@ -114,7 +125,7 @@ public class RModel extends Model {
             String functionName = fnc.getName();
             String functionCall = functionName + "(";
             // Add hidden projectName parameter for all r calls.
-            functionCall += "projectName=\"" + m.getProject().getProjectName() + "\"";
+            functionCall += "projectName=\"" + projectName + "\"";
             Boolean subSequentArguments = true;
             for (IMetaParameter pm : fnc.getMetaParameters()) {
                 String paramName = pm.getName();

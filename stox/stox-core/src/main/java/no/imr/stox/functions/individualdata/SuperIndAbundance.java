@@ -62,12 +62,12 @@ public class SuperIndAbundance extends AbstractFunction {
         }
         if (splitByStationDens) {
             if (lenData == null) {
-                logger.error("Length distributaion parameter not set when splitting by station densities", null);
+                logger.error("Length distribution parameter not set when splitting by station densities", null);
                 return null;
             }
             String lenDistType = (String) lenData.getResolutionMatrix().getRowValue(Functions.RES_LENGTHDISTTYPE);
             if (lenDistType == null || !lenDistType.contains(Functions.LENGTHDISTTYPE_STD_NORM)) {
-                logger.error("Length distributaion not normalized to 1 nautical mile", null);
+                logger.error("Length distribution not normalized to 1 nautical mile", null);
                 return null;
             }
         }
