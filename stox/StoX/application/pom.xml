@@ -63,7 +63,6 @@
                 <configuration>
                     <etcConfFile>src/main/resources/stox.conf</etcConfFile>
                     <installerOsSolaris>false</installerOsSolaris>
-                    <installerOsLinux>false</installerOsLinux>
                     <templateFile>${basedir}/installation/template.xml</templateFile>
                     <brandingToken>${brandingToken}</brandingToken>
                     <finalName>${brandingToken}</finalName>

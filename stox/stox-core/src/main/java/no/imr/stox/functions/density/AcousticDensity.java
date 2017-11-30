@@ -83,7 +83,8 @@ public class AcousticDensity extends AbstractFunction {
             return null;
         }
         if (!layerTypeNASC.equals(layerTypePd)) {
-            logger.error("Different layer type for NASC input data and assignment resolution such as NASC LayerType and BioStationAssignment EstLayers", null);
+            logger.error("The layer type " + layerTypeNASC + " given in the NASC is different from the layer type " + layerTypePd +  
+                    " derived from the estimation layer definition BioStationAssignment EstLayers. ", null);
             return null;
         }
         if (d != null && d != 0d && !layerTypeNASC.equals(Functions.LAYERTYPE_PCHANNEL)) {

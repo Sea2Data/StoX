@@ -8,6 +8,7 @@ package no.imr.sea2data.stox.components.table;
 import no.imr.sea2data.stox.providers.DistancePSUHandler;
 import java.awt.Color;
 import java.awt.Component;
+import java.awt.SystemColor;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.Collection;
@@ -254,6 +255,8 @@ public final class DistanceTableTopComponent extends TopComponent implements IPr
                 Boolean selected = getDistPSUHandler().isSelected(rowIndex);//distancePsu.contains((String) value);
                 selColor = selected ? new Color(225, 213, 216) : table.getBackground();
                 cell.setBackground(selColor);
+                // Since the background selectio is overridden, override the foreground to permanent control text color
+                cell.setForeground(SystemColor.controlText); 
                 return this;
             }
         }

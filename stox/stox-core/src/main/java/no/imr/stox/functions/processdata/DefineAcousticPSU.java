@@ -73,7 +73,7 @@ public class DefineAcousticPSU extends AbstractFunction {
                 .map(edsu -> EchosounderUtils.findDistance(acousticData, edsu) == null ? edsu : null)
                 .filter(d -> d != null).findFirst().orElse(null);
         if (errorStr != null && !errorStr.isEmpty()) {
-            logger.log("Warning: The following EDSU in the EDSUPSU processdata table is not found in the data:\n" + errorStr + ".");
+            logger.log("Warning: The following EDSU in the EDSUPSU processdata table is not found in the data:\n" + errorStr + ". The EDSU tag can be removed in the process.xml EDSUPSU section");
         }
         // Break in gui at onEndProcess to redefine...
         return pd;
