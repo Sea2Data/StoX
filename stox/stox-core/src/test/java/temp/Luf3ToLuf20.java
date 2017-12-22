@@ -25,6 +25,7 @@ import no.imr.sea2data.echosounderbo.DistanceBO;
 import no.imr.sea2data.echosounderbo.FrequencyBO;
 import no.imr.sea2data.echosounderbo.SABO;
 import no.imr.sea2data.imrbase.util.Conversion;
+import no.imr.stox.functions.acoustic.AcousticConverter;
 import no.imr.stox.functions.acoustic.ListUser20Writer;
 import no.imr.stox.functions.acoustic.ReadAcousticLUF3;
 import no.imr.stox.functions.utils.EchosounderUtils;
@@ -35,10 +36,17 @@ import org.junit.Test;
  *
  * @author aasmunds
  */
-@Ignore
+//@Ignore
 public class Luf3ToLuf20 {
 
     @Test
+    public void test() {
+        //String path = "\\\\ces.imr.no\\cruise_data\\2004\\S2004109_PGOSARS_4174\\ACOUSTIC_DATA\\LSSS\\REPORTS\\ListUserFile03__F038000_T1_L1210.0-4806.0.txt";
+        String path = "\\\\ces.imr.no\\cruise_data\\2017\\S2017113_PGOSARS_4174\\ACOUSTIC_DATA\\LSSS\\Reports\\ListComScatter_F038000_T2_L2040.0-2124.0.txt";
+        AcousticConverter.convertAcousticCSVFileToLuf20(path, "E:/Data/test.xml");
+    }
+
+//  @Test
     public void convertComScatterForNansis() {
         for (String comScatterFolder : Arrays.asList(/*"ComScatter-2011-2014", */"ComScatter-1994-2010")) {
             String comScatterRoot = "E:\\Bjørn Erik\\" + comScatterFolder + "\\ComScatter\\";
@@ -55,13 +63,11 @@ public class Luf3ToLuf20 {
                             -> !(name.contains("ListAll") || name.startsWith("LAS")) && (name.endsWith(".txt") || name.endsWith(".0")));
                     Arrays.stream(fs).forEach(f -> {
                         String fullname = root + "\\" + f.getName();
-                        boolean lcs = true;
-                        String dateformat = "dd.MM.yyyy";
                         if (fullname.contains("wellformed")) {
                             return;
                         }
                         System.out.println("converting " + fullname);
-                        List<DistanceBO> d = ReadAcousticLUF3.perform(fullname, lcs, dateformat);
+                        List<DistanceBO> d = ReadAcousticLUF3.perform(fullname);
                         ListUser20Writer.export(cruise, "58", "1172", fullname + ".xml", d);
                     });
                 }
@@ -114,7 +120,7 @@ public class Luf3ToLuf20 {
     private static void convertVintertokt(String cruise, String platform, String file) {
         String d = "E://SigbjørnMehl//Vintertokt 2000-2016//";
         String f = d + file;//"2014_Nansen.luf3";
-        List<DistanceBO> distances = ReadAcousticLUF3.performLUF3(f);
+        List<DistanceBO> distances = ReadAcousticLUF3.perform(f);
         ListUser20Writer.export(cruise, "RU", "5004", f + ".xml", distances);
     }
 
@@ -172,7 +178,7 @@ public class Luf3ToLuf20 {
                 dist.setLon_start(Conversion.safeStringtoDouble(elms[1]));
                 Double startLog = Conversion.safeStringtoDouble(elms[4]);
                 Double stopLog = Conversion.safeStringtoDouble(elms[5]);
-                dist.setLog_start(new BigDecimal(startLog));
+                dist.setLog_start(startLog);
                 dist.setIntegrator_dist(stopLog - startLog);
                 //Double dep = Conversion.safeStringtoDouble(elms[7]);
                 /*if (dep != null && !dep.equals(999d)) {

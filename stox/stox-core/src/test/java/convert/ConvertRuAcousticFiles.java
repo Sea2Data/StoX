@@ -43,7 +43,7 @@ public class ConvertRuAcousticFiles {
         readRUFileWithChannels(ac, true, "F:\\SigbjørnMehl\\akustikk\\Had Pelagic-11881301.txt", 38000, "41");
         ListUser20Writer.export("2015-RU", "RU", "UANA", "F:\\SigbjørnMehl\\akustikk\\2015-RU.xml", ac);
         
-        ac = ReadAcousticLUF3.perform("F:\\SigbjørnMehl\\akustikk\\Rus2016.luf3.txt", false);
+        ac = ReadAcousticLUF3.perform("F:\\SigbjørnMehl\\akustikk\\Rus2016.luf3.txt");
         ListUser20Writer.export("2016-RU", "RU", "UANA", "F:\\SigbjørnMehl\\akustikk\\2016-RU.xml", ac);
     }
 
@@ -66,7 +66,7 @@ public class ConvertRuAcousticFiles {
                 if (iL > ac.size() - 1) {
                     d = new DistanceBO();
                     ac.add(d);
-                    d.setLog_start(BigDecimal.valueOf(Conversion.safeStringtoDoubleNULL(s[0])));
+                    d.setLog_start(Conversion.safeStringtoDoubleNULL(s[0]));
                     d.setStart_time(IMRdate.encodeDate(IMRdate.strToDate(s[1]), IMRdate.strToTime(s[2])));
                     d.setLat_start(Conversion.safeStringtoDoubleNULL(s[3]));
                     d.setLon_start(Conversion.safeStringtoDoubleNULL(s[4]));

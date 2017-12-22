@@ -5,7 +5,6 @@ import com.vividsolutions.jts.geom.GeometryFactory;
 import com.vividsolutions.jts.geom.LineString;
 import com.vividsolutions.jts.geom.Point;
 import java.io.Serializable;
-import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -23,7 +22,7 @@ import no.imr.sea2data.jts.FeaturePojo;
 public class DistanceBO implements Serializable, ILatLonEvent {
 
     private String id;
-    private BigDecimal log_start;
+    private Double log_start;
     private Date start_time;
     private Date stop_time;
     private Double integrator_dist;
@@ -75,14 +74,14 @@ public class DistanceBO implements Serializable, ILatLonEvent {
     /**
      * @return the log_start
      */
-    public BigDecimal getLog_start() {
+    public Double getLog_start() {
         return log_start;
     }
 
     /**
      * @param log_start the log_start to set
      */
-    public void setLog_start(BigDecimal log_start) {
+    public void setLog_start(Double log_start) {
         this.log_start = log_start;
     }
 

@@ -61,14 +61,14 @@ public class DefineRectangleTest {
         String cruise = "2013101";
         DistanceBO d = new DistanceBO();
         d.setCruise(cruise);
-        d.setLog_start(new BigDecimal(100d));
+        d.setLog_start(100d);
         d.setStart_time(IMRdate.encodeDate(2013, 1, 1, 12, 0, 0, true));
         d.setLat_start(0.25);
         d.setLon_start(-0.25);
         distances.add(d);
         d = new DistanceBO();
         d.setCruise(cruise);
-        d.setLog_start(new BigDecimal(101d));
+        d.setLog_start(101d);
         d.setStart_time(IMRdate.encodeDate(2013, 1, 1, 12, 1, 0, true));
         d.setLat_start(-0.25);
         d.setLon_start(0.25);

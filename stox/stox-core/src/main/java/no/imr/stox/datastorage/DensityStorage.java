@@ -6,7 +6,6 @@
 package no.imr.stox.datastorage;
 
 import java.io.Writer;
-import java.math.BigDecimal;
 import no.imr.sea2data.imrbase.math.Calc;
 import no.imr.sea2data.imrbase.util.Conversion;
 import no.imr.stox.bo.VariableWithEstimationLayer;

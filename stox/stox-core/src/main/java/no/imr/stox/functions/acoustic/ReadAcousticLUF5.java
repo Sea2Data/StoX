@@ -4,8 +4,6 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
-import java.math.BigDecimal;
-import java.math.RoundingMode;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.util.ArrayList;
@@ -123,8 +121,7 @@ public class ReadAcousticLUF5 extends AbstractFunction {
         dist.setCruise(firstLine[0]);
         dist.setNation(firstLine[1]);
         dist.setPlatform(firstLine[2]);
-        BigDecimal val = new BigDecimal(logStart);
-        val = val.setScale(3, RoundingMode.HALF_UP);
+        Double val = logStart;
         dist.setLog_start(val);
         dist.setStart_time(startTime);
 

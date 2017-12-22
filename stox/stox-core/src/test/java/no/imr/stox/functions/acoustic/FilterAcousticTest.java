@@ -57,7 +57,7 @@ public class FilterAcousticTest {
         List<DistanceBO> distances = new ArrayList<DistanceBO>();
 
         DistanceBO d = new DistanceBO();
-        d.setLog_start(new BigDecimal(2276.0));
+        d.setLog_start(2276.0);
         distances.add(d);
         FrequencyBO frequencyBO = new FrequencyBO();
         frequencyBO.setFreq(38000);

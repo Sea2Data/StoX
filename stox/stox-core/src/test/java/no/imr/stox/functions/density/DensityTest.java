@@ -74,7 +74,7 @@ public class DensityTest {
         List<DistanceBO> distances = new ArrayList<>();
         DistanceBO d = new DistanceBO();
         d.setCruise("2013101");
-        d.setLog_start(new BigDecimal(100d));
+        d.setLog_start(100d);
         d.setStart_time(IMRdate.encodeDate(2013, 1, 1, 12, 0, 0, 0, true));
         distances.add(d);
         FrequencyBO f = new FrequencyBO();

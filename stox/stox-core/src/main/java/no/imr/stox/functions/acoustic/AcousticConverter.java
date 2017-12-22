@@ -6,7 +6,6 @@
 package no.imr.stox.functions.acoustic;
 
 import java.io.File;
-import java.math.BigDecimal;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -106,8 +105,8 @@ public class AcousticConverter {
                         return;
                     }
                     acCats.forEach(acoCat -> {
-                        BigDecimal startLog = distancesfreqtr.get(0).getLog_start();
-                        BigDecimal stopLog = distancesfreqtr.get(distancesfreqtr.size() - 1).getLog_start();
+                        Double startLog = distancesfreqtr.get(0).getLog_start();
+                        Double stopLog = distancesfreqtr.get(distancesfreqtr.size() - 1).getLog_start();
                         String fout = (new File(fName)).getParent() + "/ListUserFile05__F" + freq + "_T" + transceiver + "_L" + Conversion.safeStr(startLog.toString())
                                 + "-" + Conversion.safeStr(stopLog.toString()) + "_" + EchosounderUtils.acoCatToAcoStr(acoCat).toUpperCase() + ".txt";
                         ListUser05Writer.export(cruise, nation, platform, fout, distancesfreqtr, freq, transceiver, acoCat);
@@ -118,18 +117,25 @@ public class AcousticConverter {
 
     }
 
-    public static void convertLUF3FileToLuf20(String fName, String outFileName, String cruise, String nation, String platform) {
-        convertLUF3FileToLuf20(fName, outFileName, cruise, nation, platform, false, null);
+    public static void convertAcousticCSVFileToLuf20(String fName, String outFileName) {
+        convertAcousticCSVFileToLuf20(fName, outFileName, null, null, null);
     }
 
-    public static void convertLCSFileToLuf20(String fName, String outFileName, String cruise, String nation, String platform) {
-        convertLUF3FileToLuf20(fName, outFileName, cruise, nation, platform, true, null);
-    }
-
-    public static void convertLUF3FileToLuf20(String fName, String outFileName, String cruise, String nation, String platform, Boolean lcs, String dateFormat) {
-        List<DistanceBO> distances = dateFormat == null ? ReadAcousticLUF3.perform(fName, lcs) : ReadAcousticLUF3.perform(fName, lcs, dateFormat);
+    public static void convertAcousticCSVFileToLuf20(String fName, String outFileName, String cruise, String nation, String platform) {
+        List<DistanceBO> distances = ReadAcousticLUF3.perform(fName);
         if (outFileName == null) {
             outFileName = fName + ".xml";
+        }
+        if (distances.size() > 0) {
+            if (cruise == null) {
+                cruise = distances.get(0).getCruise();
+            }
+            if (platform == null) {
+                platform = distances.get(0).getPlatform();
+            }
+            if (nation == null) {
+                nation = distances.get(0).getNation();
+            }
         }
         ListUser20Writer.export(cruise, nation, platform, outFileName, distances);
     }

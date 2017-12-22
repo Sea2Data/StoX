@@ -1,7 +1,5 @@
 package no.imr.stox.functions.acoustic;
 
-import java.math.BigDecimal;
-import java.math.RoundingMode;
 import java.util.List;
 import no.imr.sea2data.echosounderbo.DistanceBO;
 import no.imr.sea2data.echosounderbo.FrequencyBO;
@@ -53,8 +51,7 @@ public class EchoXMLReader extends XMLReader {
             d.setPlatform(currentPlatform);
             if (key.equals("log_start")) {
                 // convert double to one decimal place
-                BigDecimal val = new BigDecimal(Conversion.safeStringtoDouble(value));
-                val = val.setScale(1, RoundingMode.HALF_UP);
+                Double val = Conversion.safeStringtoDouble(value);
                 d.setLog_start(val);
             } else if (key.equals("start_time")) {
                 // set seconds and miliseconds to value 0
