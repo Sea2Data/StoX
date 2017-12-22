@@ -283,7 +283,6 @@ public class DistanceBO implements Serializable, ILatLonEvent {
                 .append(this.log_start, otherFr.log_start)
                 .toComparison();
     }*/
-
     /**
      * @return the id
      */
@@ -374,7 +373,15 @@ public class DistanceBO implements Serializable, ILatLonEvent {
         } else if (echosounderDatasetBO != null && echosounderDatasetBO.getCruise() != null) {
             res += echosounderDatasetBO.getCruise();
         }
-        key = res + "/" + (log_start != null ? log_start.toString() : "") + "/" + (start_time != null ? IMRdate.formatDate(start_time, "yyyy-MM-dd/HH:mm:ss") : "");
+        String logKey = "";
+        if (log_start != null) {
+            if (log_start % 1 == 0) {
+                logKey = Integer.toString(log_start.intValue());
+            } else {
+                logKey = log_start.toString();
+            }
+        }
+        key = res + "/" + logKey + "/" + (start_time != null ? IMRdate.formatDate(start_time, "yyyy-MM-dd/HH:mm:ss") : "");
         return key;
     }
 
