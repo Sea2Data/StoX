@@ -36,14 +36,15 @@ import org.junit.Test;
  *
  * @author aasmunds
  */
-//@Ignore
+@Ignore
 public class Luf3ToLuf20 {
 
     @Test
     public void test() {
         //String path = "\\\\ces.imr.no\\cruise_data\\2004\\S2004109_PGOSARS_4174\\ACOUSTIC_DATA\\LSSS\\REPORTS\\ListUserFile03__F038000_T1_L1210.0-4806.0.txt";
-        String path = "\\\\ces.imr.no\\cruise_data\\2017\\S2017113_PGOSARS_4174\\ACOUSTIC_DATA\\LSSS\\Reports\\ListComScatter_F038000_T2_L2040.0-2124.0.txt";
-        AcousticConverter.convertAcousticCSVFileToLuf20(path, "E:/Data/test.xml");
+        //String path = "\\\\ces.imr.no\\cruise_data\\2017\\S2017113_PGOSARS_4174\\ACOUSTIC_DATA\\LSSS\\Reports\\ListComScatter_F038000_T2_L2040.0-2124.0.txt";
+        String path = "E:/Ibrahim/luf.txt";
+        AcousticConverter.convertAcousticCSVFileToLuf20(path, "E:/Ibrahim/luf.xml");
     }
 
 //  @Test

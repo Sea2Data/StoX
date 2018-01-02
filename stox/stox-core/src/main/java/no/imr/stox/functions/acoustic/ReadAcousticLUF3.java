@@ -145,7 +145,10 @@ public class ReadAcousticLUF3 {
                 }
                 Integer transceiver = Conversion.safeStringtoIntegerNULL(getElm(elms, hdrList, "transceiver"));
                 if (transceiver == null) {
-                    transceiver = transceiver_def;
+                    transceiver = Conversion.safeStringtoIntegerNULL(getElm(elms, hdrList, "tr"));
+                    if (transceiver == null) {
+                        transceiver = transceiver_def;
+                    }
                 }
                 DistanceBO dist = new DistanceBO();
                 dist.setCruise(survey);
