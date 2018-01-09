@@ -9,6 +9,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import no.imr.sea2data.imrbase.map.ILatLonEvent;
+import no.imr.sea2data.imrbase.math.Calc;
 import no.imr.sea2data.imrbase.util.IMRdate;
 import no.imr.sea2data.jts.FeaturePojo;
 
@@ -375,11 +376,7 @@ public class DistanceBO implements Serializable, ILatLonEvent {
         }
         String logKey = "";
         if (log_start != null) {
-            if (log_start % 1 == 0) {
-                logKey = Integer.toString(log_start.intValue());
-            } else {
-                logKey = log_start.toString();
-            }
+            logKey = log_start.toString();
         }
         key = res + "/" + logKey + "/" + (start_time != null ? IMRdate.formatDate(start_time, "yyyy-MM-dd/HH:mm:ss") : "");
         return key;

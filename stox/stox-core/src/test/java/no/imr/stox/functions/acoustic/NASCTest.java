@@ -28,9 +28,9 @@ public class NASCTest {
 
     @Test
     public void test() {
-        assertEquals(perform(Functions.LAYERTYPE_PCHANNEL).getData().getGroupRowColValueAsDouble("12", "2013101/100/2013-01-01/12:00:00", "20"), 7.0, 0);
+        assertEquals(perform(Functions.LAYERTYPE_PCHANNEL).getData().getGroupRowColValueAsDouble("12", "2013101/100.0/2013-01-01/12:00:00", "20"), 7.0, 0);
         // Here we miss the estimation layer aggregations, ask Atle
-        assertEquals(perform(Functions.LAYERTYPE_DEPTHLAYER).getData().getGroupRowColValueAsDouble("12", "2013101/100/2013-01-01/12:00:00", "PEL"), 3.0, 0);
+        assertEquals(perform(Functions.LAYERTYPE_DEPTHLAYER).getData().getGroupRowColValueAsDouble("12", "2013101/100.0/2013-01-01/12:00:00", "PEL"), 3.0, 0);
     }
 
     NASCMatrix perform(String layerType) {

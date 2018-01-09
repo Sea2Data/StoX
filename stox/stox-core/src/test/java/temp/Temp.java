@@ -5,6 +5,9 @@
  */
 package temp;
 
+import java.math.BigDecimal;
+import java.math.RoundingMode;
+import no.imr.sea2data.imrbase.util.Conversion;
 import org.junit.Ignore;
 import org.junit.Test;
 
@@ -17,5 +20,8 @@ public class Temp {
 
     @Test
     public void test() {
+        BigDecimal val = new BigDecimal(Conversion.safeStringtoDouble("100"));
+        val = val.setScale(1, RoundingMode.HALF_UP);
+        System.out.println("=" + val);
     }
 }

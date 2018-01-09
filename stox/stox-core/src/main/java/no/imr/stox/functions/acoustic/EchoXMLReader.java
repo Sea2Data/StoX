@@ -50,9 +50,8 @@ public class EchoXMLReader extends XMLReader {
             d.setNation(currentNation);
             d.setPlatform(currentPlatform);
             if (key.equals("log_start")) {
-                // convert double to one decimal place
                 Double val = Conversion.safeStringtoDouble(value);
-                d.setLog_start(val);
+                d.setLog_start(Calc.roundTo(val, 1));
             } else if (key.equals("start_time")) {
                 // set seconds and miliseconds to value 0
                 d.setStart_time(IMRdate.strToDateTime(value));
