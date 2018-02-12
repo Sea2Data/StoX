@@ -280,6 +280,7 @@ public final class EchosounderUtils {
             case "redfish":
                 return 29;
             case "hyse":
+            case "had":
             case "haddo":
             case "haddock":
                 return 30;

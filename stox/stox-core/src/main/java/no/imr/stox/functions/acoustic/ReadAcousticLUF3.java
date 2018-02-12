@@ -33,12 +33,16 @@ import no.imr.sea2data.imrbase.util.IMRdate;
  */
 public class ReadAcousticLUF3 {
 
+    public static List<DistanceBO> perform(String fileName) {
+        return perform(fileName, null, null);
+    }
+
     /**
      *
      * @param fileName
      * @return
      */
-    public static List<DistanceBO> perform(String fileName) {
+    public static List<DistanceBO> perform(String fileName, Integer frequency_def, Integer transceiver_def) {
         // Try as absolute file first, then as relative to workpath
         List<DistanceBO> distances = new ArrayList<>();
         DateFormat df = null;
@@ -46,11 +50,9 @@ public class ReadAcousticLUF3 {
         String ship_def = null;
         String nation_def = null;
         String survey_def = null;
-        Integer frequency_def = null;
-        Integer transceiver_def = null;
         Integer depthIdx = -1;
         List<String> hdrList = null;
-        Pattern lcsMetaPattern = Pattern.compile("(SHIP|NATION|SURVEY|FREQUENCY|TRANSCEIVER)\\s*:\\s*([\\w\\.]+)");
+        Pattern lcsMetaPattern = Pattern.compile("(ship|nation|survey|frequency|transceiver)\\s*:\\s*([\\w\\.]+)");
         List<AcoEntry> entries = AcoEntry.get();
         try (BufferedReader reader = new BufferedReader(new FileReader(fileName))) {
             String line;
@@ -59,30 +61,30 @@ public class ReadAcousticLUF3 {
             int lineNo = 0;
             while ((line = reader.readLine()) != null) {
                 lineNo++;
-                line = line.trim();
+                line = line.trim().toLowerCase();
                 if (line.isEmpty()) {
                     continue;
                 }
-                if (line.contains("SHIP:") || line.contains("FREQUENCY:")) {
+                if (line.contains("ship:") || line.contains("frequency:")) {
                     // List com scatter metalines
                     Matcher m = lcsMetaPattern.matcher(line);
                     while (m.find()) {
                         String key = m.group(1);
                         String value = m.group(2);
                         switch (key) {
-                            case "SHIP":
+                            case "ship":
                                 ship_def = value;
                                 break;
-                            case "NATION":
+                            case "nation":
                                 nation_def = value;
                                 break;
-                            case "SURVEY":
+                            case "survey":
                                 survey_def = value;
                                 break;
-                            case "FREQUENCY":
+                            case "frequency":
                                 frequency_def = Conversion.safeStringtoIntegerNULL(value);
                                 break;
-                            case "TRANSCEIVER":
+                            case "transceiver":
                                 transceiver_def = Conversion.safeStringtoIntegerNULL(value);
                                 break;
                         }
@@ -90,7 +92,7 @@ public class ReadAcousticLUF3 {
                     continue;
                 }
 
-                boolean isHdr = line.contains("DATE");
+                boolean isHdr = line.contains("date");
                 if (isHdr) {
                     line = fixHdr(line);
                 } else {
@@ -110,7 +112,7 @@ public class ReadAcousticLUF3 {
                         dateFormat = "yyyy.MM.dd";
                     }
                 }
-                if (elms.length < 9) {
+                if (elms.length < 8) {
                     System.out.println("Too few elements in line " + lineNo + ": " + line);
                     continue;
                 }
@@ -118,6 +120,7 @@ public class ReadAcousticLUF3 {
                 Double stopLog = Conversion.safeStringtoDoubleNULL(getElm(elms, hdrList, "logstop"));
                 if (startLog == null || stopLog == null) {
                     System.out.println("Missing log at line no " + lineNo + ": " + line);
+                    continue;
                 }
                 if (df == null) {
                     df = IMRdate.getDateFormat(dateFormat, true);
@@ -159,7 +162,11 @@ public class ReadAcousticLUF3 {
                 dist.setLat_start(getPos(getElm(elms, hdrList, "latitude")));
                 dist.setLon_start(getPos(getElm(elms, hdrList, "longitude")));
                 dist.setLog_start(startLog);
-                dist.setIntegrator_dist(Calc.roundTo(stopLog - startLog, 7));
+                try {
+                    dist.setIntegrator_dist(Calc.roundTo(stopLog - startLog, 7));
+                } catch (Exception ex) {
+                    System.out.println("");
+                }
                 Double dep = Conversion.safeStringtoDouble(getElm(elms, hdrList, "depth"));
                 if (dep != null && !dep.equals(999d)) {
                     dist.setPel_ch_thickness(dep);
@@ -220,13 +227,15 @@ public class ReadAcousticLUF3 {
 
     private static String fixHdr(String hdr) {
         List<Entry<String, String>> l = Stream.of(
-                ofPair("log", "LOGSTART\tLOGSTOP"),
-                ofPair("position", "LATITUDE\tLONGITUDE"),
-                ofPair("lat", "LATITUDE"),
-                ofPair("lon", "LONGITUDE"),
-                ofPair("Blue wh", "Blue-wh"),
-                ofPair("Polar cod", "Polarcod"),
-                ofPair("pol cod", "Polarcod")
+                ofPair("log", "logstart\tlogstop"),
+                ofPair("position", "latitude\tlongitude"),
+                ofPair("lat", "latitude"),
+                ofPair("lon", "longitude"),
+                ofPair("lat.", "latitude"),
+                ofPair("lon.", "longitude"),
+                ofPair("blue wh", "blue-wh"),
+                ofPair("polar cod", "polarcod"),
+                ofPair("pol cod", "polarcod")
         ).collect(Collectors.toList());
         for (Entry<String, String> e : l) {
             hdr = hdr.replaceFirst("(?i)(" + e.getKey() + "[\\s,]+)", e.getValue() + "\t");
@@ -238,11 +247,11 @@ public class ReadAcousticLUF3 {
         line = line.replaceFirst("\\s?-\\s?", "\t");
         // other variants:
         line = line.replace(" -10000.0 ", " - 10000.0 ");
-        line = line.replace(" E ", " E0");
-        line = line.replace(" S ", " S0");
-        line = line.replace(" N ", " N0");
-        line = line.replace(" W ", " W0");
-        line = line.replace(" V ", " V0");
+        line = line.replace(" e ", " e0");
+        line = line.replace(" s ", " s0");
+        line = line.replace(" n ", " n0");
+        line = line.replace(" w ", " w0");
+        line = line.replace(" v ", " v0");
         return line;
     }
 

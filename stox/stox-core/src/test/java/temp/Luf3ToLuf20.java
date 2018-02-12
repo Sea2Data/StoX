@@ -39,7 +39,7 @@ import org.junit.Test;
 @Ignore
 public class Luf3ToLuf20 {
 
-    @Test
+    //@Test
     public void test() {
         //String path = "\\\\ces.imr.no\\cruise_data\\2004\\S2004109_PGOSARS_4174\\ACOUSTIC_DATA\\LSSS\\REPORTS\\ListUserFile03__F038000_T1_L1210.0-4806.0.txt";
         //String path = "\\\\ces.imr.no\\cruise_data\\2017\\S2017113_PGOSARS_4174\\ACOUSTIC_DATA\\LSSS\\Reports\\ListComScatter_F038000_T2_L2040.0-2124.0.txt";
@@ -75,10 +75,11 @@ public class Luf3ToLuf20 {
             }
         }
     }
-    //@Test
+
+    @Test
 
     public void convert() {
-        convertMareksLUFData();
+        //convertMareksLUFData();
 //        Map<String, Object> input = new HashMap<>();
 //        input.put(Functions.PM_READACOUSTICLUF5_FILENAME, "C://Data//stox//ListUserFile05__F038000_T2_L105.0-2764.9_SIL.txt");
 //        List<DistanceBO> distances = (List<DistanceBO>) (new ReadAcousticLUF5()).perform(input);
@@ -101,8 +102,7 @@ public class Luf3ToLuf20 {
         List<DistanceBO> distances = ReadAcousticLUF3.perform(f, true, "yyyy.MM.dd");
         ListUser20Writer.export("2007203", "58", "1019", f + ".xml", distances);
          */
-
- /* convertVintertokt("0114_2014_UANA_NANSE", "5004", "2014_Nansen.luf3");
+        convertVintertokt("0114_2014_UANA_NANSE", "5004", "2014_Nansen.luf3");
         convertVintertokt("0113_2013_UFJN_VILNY", "5481", "2013_Vilnyus.luf3");
         convertVintertokt("0111_2012_UANA_NANSE", "5004", "2012_Nansen.luf3");
         convertVintertokt("0108_2011_UANA_NANSE", "5004", "2011_Nansen.luf3");
@@ -121,7 +121,7 @@ public class Luf3ToLuf20 {
     private static void convertVintertokt(String cruise, String platform, String file) {
         String d = "E://SigbjørnMehl//Vintertokt 2000-2016//";
         String f = d + file;//"2014_Nansen.luf3";
-        List<DistanceBO> distances = ReadAcousticLUF3.perform(f);
+        List<DistanceBO> distances = ReadAcousticLUF3.perform(f, 38000, 1);
         ListUser20Writer.export(cruise, "RU", "5004", f + ".xml", distances);
     }
 
