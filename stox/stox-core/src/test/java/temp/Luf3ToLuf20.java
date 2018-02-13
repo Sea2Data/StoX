@@ -36,7 +36,7 @@ import org.junit.Test;
  *
  * @author aasmunds
  */
-@Ignore
+//@Ignore
 public class Luf3ToLuf20 {
 
     //@Test
@@ -102,7 +102,8 @@ public class Luf3ToLuf20 {
         List<DistanceBO> distances = ReadAcousticLUF3.perform(f, true, "yyyy.MM.dd");
         ListUser20Writer.export("2007203", "58", "1019", f + ".xml", distances);
          */
-        convertVintertokt("0114_2014_UANA_NANSE", "5004", "2014_Nansen.luf3");
+        convertVintertokt("0120_2015_UANA_NANSE", "5004", "2015_Nansen.luf3");
+        /*convertVintertokt("0114_2014_UANA_NANSE", "5004", "2014_Nansen.luf3");
         convertVintertokt("0113_2013_UFJN_VILNY", "5481", "2013_Vilnyus.luf3");
         convertVintertokt("0111_2012_UANA_NANSE", "5004", "2012_Nansen.luf3");
         convertVintertokt("0108_2011_UANA_NANSE", "5004", "2011_Nansen.luf3");
