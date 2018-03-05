@@ -92,6 +92,7 @@ public class MoveHandler {
                     }
                 }
                 if (e.isAltDown()) {
+                        s = s + "<br>Pel. thickness: " + d.getPel_ch_thickness();
                     for (FrequencyBO f : d.getFrequencies()) {
                         s = s + "<br>Freq/Tr: " + f.getFreq() + "/" + f.getTranceiver();
                         s = s + "<br>Lat/Lon: " + d.getLat_start() + "/" + d.getLon_start();

@@ -98,7 +98,7 @@ public class ReadAcousticLUF3 {
                 } else {
                     line = fixLine(line);
                 }
-                String[] elms = line.split("[\\s,]+");
+                String[] elms = line.split("[\\t,]|[\\s]+");
                 String dateStr;
                 if (isHdr) {
                     hdr = elms;

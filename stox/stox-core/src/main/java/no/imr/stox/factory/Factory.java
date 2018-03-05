@@ -199,7 +199,6 @@ public class Factory {
 
         // Density related:
         m.addProcess(Functions.FN_ACOUSTICDENSITY, Functions.FN_ACOUSTICDENSITY).
-                setParameterProcessValue(Functions.PM_ACOUSTICDENSITY_ACOUSTICDATA, Functions.FN_FILTERACOUSTIC).
                 setParameterProcessValue(Functions.PM_ACOUSTICDENSITY_LENGTHDIST, Functions.FN_TOTALLENGTHDIST).
                 setParameterProcessValue(Functions.PM_ACOUSTICDENSITY_PROCESSDATA, Functions.FN_READPROCESSDATA).
                 setParameterProcessValue(Functions.PM_ACOUSTICDENSITY_NASC, Functions.FN_MEANNASC).
@@ -267,7 +266,6 @@ public class Factory {
                 setParameterProcessValue(Functions.PM_TOTALLENGTHDIST_PROCESSDATA, Functions.FN_READPROCESSDATA);
         // Density related:
         m.addProcess(Functions.FN_ACOUSTICDENSITY, Functions.FN_ACOUSTICDENSITY).
-                setParameterProcessValue(Functions.PM_ACOUSTICDENSITY_ACOUSTICDATA, Functions.FN_FILTERACOUSTIC).
                 setParameterProcessValue(Functions.PM_ACOUSTICDENSITY_LENGTHDIST, Functions.FN_TOTALLENGTHDIST).
                 setParameterProcessValue(Functions.PM_ACOUSTICDENSITY_PROCESSDATA, Functions.FN_READPROCESSDATA).
                 setParameterProcessValue(Functions.PM_ACOUSTICDENSITY_NASC, Functions.FN_MEANNASC).

@@ -54,9 +54,19 @@ public class MeanNASC extends MeanDensity {
                 targetSU = AbndEstProcessDataUtil.getPSUStratum(pd, targetSU);
             }
             targetMatrix.setRowValue(sourceSU, targetSU);
+            Double sourceChannelThickness = nasc.getChannelThicknessMatrix().getRowValueAsDouble(sourceSU);
+            Double targetChannelThickness = result.getChannelThicknessMatrix().getRowValueAsDouble(targetSU);
+            if (targetChannelThickness != null && !targetChannelThickness.equals(sourceChannelThickness)) {
+                String s = (sourceIsEDSU ? "EDSU" : "PSU");
+                String msg = "Channel thickness=" + sourceChannelThickness + " for " + s + " " + sourceSU
+                        + " and is " + targetChannelThickness + " for the other " + s + "s at " + 
+                        AbndEstProcessDataUtil.getSampleUnitPath(pd, targetSU, sampleUnitType);
+                logger.error(msg, null);
+            }
             result.getSampleSizeMatrix().addRowValue(targetSU, nasc.getSampleSizeMatrix().getRowValueAsInteger(sourceSU));
             result.getPosSampleSizeMatrix().addRowValue(targetSU, nasc.getPosSampleSizeMatrix().getRowValueAsInteger(sourceSU));
             result.getDistanceMatrix().addRowValue(targetSU, nasc.getDistanceMatrix().getRowValueAsDouble(sourceSU));
+            result.getChannelThicknessMatrix().setRowValue(targetSU, sourceChannelThickness);
         }
         // Iterate the source samples and apply the densities to the mean
         List<String> rowKeys = targetMatrix.getRowKeys();

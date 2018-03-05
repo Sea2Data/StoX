@@ -103,7 +103,7 @@ public class SplitNASC extends AbstractFunction {
             MatrixBO specTS = acospecTS.get(mixAcoCat);
             for (String edsu : nascValues.getGroupRowKeys(mixAcoCat)) {
                 // When using pchannels on each distance, depth correction can be performed; Get depth from distance and channel
-                DistanceBO depthRepDist = EchosounderUtils.findDistance(distances, edsu);
+                Double channelThickness = nascMatrix.getChannelThicknessMatrix().getRowValueAsDouble(edsu);
                 // For each layer in NASC matrix
                 for (String channel : nascValues.getGroupRowColKeys(mixAcoCat, edsu)) {
                     // Lookup assignment from sampleUnit and layer
@@ -118,7 +118,7 @@ public class SplitNASC extends AbstractFunction {
                     if (asgID == null) {
                         continue;
                     }
-                    Double depth = depthRepDist != null ? EchosounderUtils.getDepth(depthRepDist, channel) : null;
+                    Double depth = EchosounderUtils.getDepth(channelThickness, channel);
                     Double nasc = (Double) nascValues.getGroupRowColValue(mixAcoCat, edsu, channel);
                     if (nasc == null || nasc == 0d) {
                         continue;

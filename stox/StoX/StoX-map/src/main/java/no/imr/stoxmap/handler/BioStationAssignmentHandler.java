@@ -22,6 +22,7 @@ import no.imr.sea2data.imrbase.matrix.MatrixBO;
 import no.imr.stox.bo.ProcessDataBO;
 import no.imr.stox.exception.UserErrorException;
 import no.imr.stox.functions.utils.AbndEstProcessDataUtil;
+import no.imr.stox.functions.utils.Functions;
 import no.imr.stox.nodes.PSUNode;
 import no.imr.stoxmap.utils.FeatureBO;
 import no.imr.stoxmap.utils.FeatureUtil;
@@ -228,7 +229,12 @@ public class BioStationAssignmentHandler extends BaseHandler {
         ////////////////////
         // Update process data:
         String asgKey = selectedAssignment.toString();
-        AbndEstProcessDataUtil.setSUAssignment(pd, selectedPSU, "1", asgKey);
+        //AbndEstProcessDataUtil.setSUAssignment(pd, selectedPSU, "1", asgKey);
+        // Allocate to all layers in the process data estimation layer definition.
+        MatrixBO estLayer = pd.getMatrices().get(Functions.TABLE_ESTLAYERDEF);
+        for (String layer : estLayer.getRowKeys()) {
+            AbndEstProcessDataUtil.setSUAssignment(pd, selectedPSU, layer, asgKey);
+        }
 
         MatrixBO trawlAsg = AbndEstProcessDataUtil.getBioticAssignments(pd);
         // remove all currently assigned stations

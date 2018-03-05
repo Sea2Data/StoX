@@ -224,9 +224,8 @@ public final class EchosounderUtils {
         return result;
     }
 
-    public static Double getDepth(DistanceBO distance, String channelKey) {
+    public static Double getDepth(Double thickness, String channelKey) {
         Integer channel = Conversion.safeStringtoIntegerNULL(channelKey);
-        Double thickness = distance.getPel_ch_thickness();
         return StoXMath.depthFromChannel(thickness, channel);
     }
 

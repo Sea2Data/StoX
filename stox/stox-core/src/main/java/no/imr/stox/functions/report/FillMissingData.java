@@ -50,7 +50,7 @@ public class FillMissingData extends AbstractFunction {
             if (seed == null) {
                 seed = 1;
             }
-            DistributeAbundance.distributeAbundance(abnd, seed);
+            DistributeAbundance.distributeAbundance(abnd, seed, isSortedAbundance());
         }
         if (fillWeight != null) {
             AbndFillMissingWeights.fillMissingWeights(abnd, fillWeight, a, b, fileNameLengthWeight);
@@ -101,5 +101,9 @@ public class FillMissingData extends AbstractFunction {
         } catch (IOException e) {
         }
         return res;
+    }
+
+    protected Boolean isSortedAbundance() {
+        return true;
     }
 }

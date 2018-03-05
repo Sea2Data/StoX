@@ -42,11 +42,11 @@ public class AcousticDensity extends AbstractFunction {
         Double a = (Double) input.get(Functions.PM_ACOUSTICDENSITY_A);
         Double d = (Double) input.get(Functions.PM_ACOUSTICDENSITY_D);
         // Acoustic data used in channel to depth calculation (formula with upper int.dep. and pel.thickness)
-        List<DistanceBO> distances = (List<DistanceBO>) input.get(Functions.PM_ACOUSTICDENSITY_ACOUSTICDATA);
+        /*List<DistanceBO> distances = (List<DistanceBO>) input.get(Functions.PM_ACOUSTICDENSITY_ACOUSTICDATA);
         if (d != null && distances == null) {
             logger.error("AcousticDensity is blank when d is set", null);
             return null;
-        }
+        }*/
         // totLengthDist = Matrix[GROUP~Species / ROW~Assignment / CELL~LengthGroup / VAR~WeightedCount]
         LengthDistMatrix totLengthDist = (LengthDistMatrix) input.get(Functions.PM_ACOUSTICDENSITY_LENGTHDIST);
         // NASCMatrix = Matrix[ROW~Distance / COL~Layer / VAR~NASC]
@@ -83,8 +83,8 @@ public class AcousticDensity extends AbstractFunction {
             return null;
         }
         if (!layerTypeNASC.equals(layerTypePd)) {
-            logger.error("The layer type " + layerTypeNASC + " given in the NASC is different from the layer type " + layerTypePd +  
-                    " derived from the estimation layer definition BioStationAssignment EstLayers. ", null);
+            logger.error("The layer type " + layerTypeNASC + " given in the NASC is different from the layer type " + layerTypePd
+                    + " derived from the estimation layer definition BioStationAssignment EstLayers. ", null);
             return null;
         }
         if (d != null && d != 0d && !layerTypeNASC.equals(Functions.LAYERTYPE_PCHANNEL)) {
@@ -97,7 +97,7 @@ public class AcousticDensity extends AbstractFunction {
         }
         MatrixBO sampleUnitAssignment = AbndEstProcessDataUtil.getSUAssignments(pd);
         // Check input sources before calculation
-        if (distances == null || sampleUnitAssignment == null) {
+        if (/*distances == null || */sampleUnitAssignment == null) {
             return null;
         }
         // The following iterates dimensions GROUP, COL, ROW and CELL according to the function diagram from Atle.
@@ -118,14 +118,12 @@ public class AcousticDensity extends AbstractFunction {
         String error = "";
         for (String sampleUnit : nascValues.getGroupRowKeys(acoCat)) {
             // When using pchannels on each distance, depth correction can be performed; Get depth from distance and channel
-            DistanceBO depthRepDist = null;
-            if (asPChannel && d != null && d != 0d) {
-                depthRepDist = getDepthRepresentativeDistance(pd, distances, sampleUnitType, sampleUnit);
-                if (depthRepDist == null) {
-                    error += "\n" + "Depth correction on TS is not possible for " + getSampleUnitPath(pd, sampleUnit, sampleUnitType)
-                            + ". Reason: Channel thickness must be equal inside sample unit "
-                            + ". Solution: Choose a smaller sampleunit type or set d constant to blank";
-                }
+            //DistanceBO depthRepDist = null;
+            Double channelThickness = nascMatrix.getChannelThicknessMatrix().getRowValueAsDouble(sampleUnit);
+            if (asPChannel && (channelThickness == null || channelThickness <= 0d)) {
+                error += "\n" + "Depth correction on TS is not possible for " + AbndEstProcessDataUtil.getSampleUnitPath(pd, sampleUnit, sampleUnitType)
+                        + ". Reason: Channel thickness must be equal inside sample unit "
+                        + ". Solution: Choose a smaller sampleunit type or set d constant to blank";
             }
             // For each layer in NASC matrix
             for (String layer : nascValues.getGroupRowColKeys(acoCat, sampleUnit)) {
@@ -138,7 +136,7 @@ public class AcousticDensity extends AbstractFunction {
 
                 if (asgID == null) {
                     if (sampleUnitType.equals(Functions.SAMPLEUNIT_PSU)) {
-                        error += "\n" + getSampleUnitPath(pd, sampleUnit, sampleUnitType) + " have no assignments";
+                        error += "\n" + AbndEstProcessDataUtil.getSampleUnitPath(pd, sampleUnit, sampleUnitType) + " have no assignments for layer " + layer;
                     }
                     continue;
                 }
@@ -155,14 +153,14 @@ public class AcousticDensity extends AbstractFunction {
                     // No nasc to calculate density from
                     continue;
                 }
-                Double depth = depthRepDist != null ? EchosounderUtils.getDepth(depthRepDist, layer) : null;
+                Double depth = EchosounderUtils.getDepth(channelThickness, layer);
 
                 // For each species in total length distributions group dimension
                 for (String specCat : totLengthDist.getData().getKeys()) {
                     MatrixBO lDist = totLengthDist.getData().getGroupRowDefaultValueAsMatrix(specCat, asgID);
                     if (lDist == null && nasc > 0d) {
                         if (model.getWarningLevel().equals(Functions.WARNINGLEVEL_STRICT)) {
-                            error += "\n" + getSampleUnitPath(pd, sampleUnit, sampleUnitType) + ": missing length distribution for mean nasc value " + nasc;
+                            error += "\n" + AbndEstProcessDataUtil.getSampleUnitPath(pd, sampleUnit, sampleUnitType) + ": missing length distribution for mean nasc value " + nasc;
                         }
                         continue;
                     }
@@ -177,25 +175,6 @@ public class AcousticDensity extends AbstractFunction {
             logger.error(error, null);
         }
         return result;
-    }
-
-    String getSampleUnitPath(ProcessDataBO pd, String sampleUnit, String sampleUnitType) {
-        String s1 = sampleUnitType + " '" + sampleUnit + "'";
-        String s2 = "";
-        switch (sampleUnitType) {
-            case Functions.SAMPLEUNIT_EDSU: {
-                String psu = AbndEstProcessDataUtil.getPSUBySampleUnit(pd, sampleUnit);
-                String stratum = AbndEstProcessDataUtil.getPSUStratum(pd, psu);
-                s2 = " in PSU '" + psu + "' in Stratum '" + stratum + "'";
-                break;
-            }
-            case Functions.SAMPLEUNIT_PSU: {
-                String stratum = AbndEstProcessDataUtil.getPSUStratum(pd, sampleUnit);
-                s2 = " in Stratum '" + stratum + "'";
-                break;
-            }
-        }
-        return s1 + s2;
     }
 
     /*

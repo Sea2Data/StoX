@@ -8,7 +8,7 @@ import no.imr.sea2data.imrbase.matrix.MatrixBO;
 import no.imr.stox.functions.utils.Functions;
 import no.imr.stox.functions.AbstractFunction;
 import no.imr.sea2data.echosounderbo.DistanceBO;
-import no.imr.sea2data.echosounderbo.FrequencyBO; 
+import no.imr.sea2data.echosounderbo.FrequencyBO;
 import no.imr.sea2data.echosounderbo.SABO;
 import no.imr.sea2data.imrbase.math.ImrMath;
 import no.imr.stox.bo.NASCMatrix;
@@ -37,15 +37,18 @@ public class NASC extends AbstractFunction {
         // Raw data includes ChannelType P (P+B), and B, P (over bottom) is missing in the raw data.
         NASCMatrix result = new NASCMatrix();
         // Generate the raw layers in a intermediate grouped matrix
-        Set<Double> pelChThickness = new HashSet<>();
-        Set<Double> botChThickness = new HashSet<>();
+        //Set<Double> pelChThickness = new HashSet<>();
+        //Set<Double> botChThickness = new HashSet<>();
         for (DistanceBO d : distances) {
             String distance = d.getKey();
             Integer sampleSize = 1;
             result.getSampleSizeMatrix().addRowValue(distance, sampleSize);
             result.getDistanceMatrix().addRowValue(distance, d.getIntegrator_dist());
-            pelChThickness.add(d.getPel_ch_thickness());
-            botChThickness.add(d.getBot_ch_thickness());
+            if (asPChannel) {
+                result.getChannelThicknessMatrix().addRowValue(distance, d.getPel_ch_thickness());
+            }
+            //pelChThickness.add(d.getPel_ch_thickness());
+            //botChThickness.add(d.getBot_ch_thickness());
             boolean sampleHasValue = false;
             for (FrequencyBO f : d.getFrequencies()) {
                 for (SABO s : f.getSa()) {
@@ -63,9 +66,9 @@ public class NASC extends AbstractFunction {
             }
             result.getPosSampleSizeMatrix().addRowValue(distance, sampleHasValue ? sampleSize : 0);
         }
-        if (pelChThickness.size() > 1 && (asPChannel)) {
+        /*if (pelChThickness.size() > 1 && (asPChannel)) {
             logger.error("Different thichkness of pelagic channels requires layer type WaterColumn", null);
-        }
+        }*/
         /*if (botChThickness.size() > 1 && (asDepthLayer)) {
             logger.error("Different thichkness of bottom channels requires layer type WaterColumn/PChannel", null);
         }*/

@@ -289,7 +289,6 @@ public final class Functions {
 //    public static final String PM_TOTALLENGTHDIST_AGGREGATION = "Aggregation";
 
     public static final String FN_ACOUSTICDENSITY = "AcousticDensity";
-    public static final String PM_ACOUSTICDENSITY_ACOUSTICDATA = "AcousticData";
     public static final String PM_ACOUSTICDENSITY_LENGTHDIST = "LengthDist";
     public static final String PM_ACOUSTICDENSITY_PROCESSDATA = "ProcessData";
     public static final String PM_ACOUSTICDENSITY_NASC = "NASC";
@@ -383,6 +382,15 @@ public final class Functions {
     public static final String PM_FILLMISSINGDATA_A = "a";
     public static final String PM_FILLMISSINGDATA_B = "b";
     public static final String PM_FILLMISSINGDATA_SEED = "Seed";
+    
+    public static final String FN_FILLMISSINGDATA_2_4 = "FillMissingData_2_4";
+    public static final String PM_FILLMISSINGDATA_SUPERINDIVIDUALS_2_4 = "SuperIndividuals";
+    public static final String PM_FILLMISSINGDATA_FILLVARIABLES_2_4 = "FillVariables";
+    public static final String PM_FILLMISSINGDATA_FILLWEIGHT_2_4 = "FillWeight";
+    public static final String PM_FILLMISSINGDATA_FILENAME_2_4 = "FileName";
+    public static final String PM_FILLMISSINGDATA_A_2_4 = "a";
+    public static final String PM_FILLMISSINGDATA_B_2_4 = "b";
+    public static final String PM_FILLMISSINGDATA_SEED_2_4 = "Seed";
 
     public static final String FN_ESTIMATEBYPOPULATIONCATEGORY = "EstimateByPopulationCategory";
     public static final String PM_ESTIMATEBYPOPCATEGORY_SUPERINDIVIDUALS = "SuperIndividuals";

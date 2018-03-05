@@ -34,7 +34,7 @@ public class NASCMatrixStorage extends FileDataStorage {
         String colHdr = nascMatrix.getData().getMetaMatrix().getHeader(IMetaMatrix.COL);
         String var = nascMatrix.getData().getMetaMatrix().getVariable();
         ImrIO.write(wr, ExportUtil.carrageReturnLineFeed(ExportUtil.tabbed(groupHdr,
-                Functions.RES_SAMPLEUNITTYPE, "SampleUnit", "SampleSize", "PosSampleSize", "Distance",
+                Functions.RES_SAMPLEUNITTYPE, "SampleUnit", "SampleSize", "PosSampleSize", "Distance", "ChannelThickness",
                 Functions.RES_LAYERTYPE, colHdr, var)));
         String sampleUnitType = (String) nascMatrix.getResolutionMatrix().getRowValue(Functions.RES_SAMPLEUNITTYPE);
         String layerType = (String) nascMatrix.getResolutionMatrix().getRowValue(Functions.RES_LAYERTYPE);
@@ -44,6 +44,7 @@ public class NASCMatrixStorage extends FileDataStorage {
                 Integer sampleSize = nascMatrix.getSampleSizeMatrix().getRowValueAsInteger(dist);
                 Integer posSampleSize = nascMatrix.getPosSampleSizeMatrix().getRowValueAsInteger(dist);
                 Double distance = nascMatrix.getDistanceMatrix().getRowValueAsDouble(dist);
+                Double channelThickness = nascMatrix.getChannelThicknessMatrix().getRowValueAsDouble(dist);
                 for (String layer : nascMatrix.getData().getSortedColKeys(acoCat, dist)) {
                     Double nascVal = nascMatrix.getData().getGroupRowColValueAsDouble(acoCat, dist, layer);
 
@@ -52,7 +53,7 @@ public class NASCMatrixStorage extends FileDataStorage {
                     }
                     String s = ExportUtil.carrageReturnLineFeed(ExportUtil.tabbed(acoCat,
                             sampleUnitType, dist, sampleSize, posSampleSize, precisionLevel >= 1 ? Conversion.formatDoubletoDecimalString(distance, 3) : distance,
-                            layerType, layer, nascVal));
+                            channelThickness, layerType, layer, nascVal));
                     ImrIO.write(wr, s);
                 }
             }

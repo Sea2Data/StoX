@@ -35,17 +35,16 @@ public class DensityTest {
 //        assertEquals(100 / (4 * Math.PI), perform(null, -68d, 20d - 68d, 1.0d, 4d, 5d, 10d, 8, 9), 0);
     }
 
-    private Double perform(Double m, Double a, Double d, Double nasc, Double intv, Double upper, Double pelThick, Integer len, Integer ch) {
-        DensityMatrix result = (DensityMatrix) (new AcousticDensity()).perform(getInput(m, a, d, nasc, intv, upper, pelThick, len, ch));
+    private Double perform(Double m, Double a, Double d, Double nasc, Double intv, Integer len, Integer ch) {
+        DensityMatrix result = (DensityMatrix) (new AcousticDensity()).perform(getInput(m, a, d, nasc, intv, len, ch));
         return result.getData().getGroupRowColCellValueAsDouble("havsil", "2013101/100/2013-01-01/12:00:00", ch.toString(), len.toString());
     }
 
-    private Map<String, Object> getInput(Double m, Double a, Double d, Double sa, Double intv, Double upper, Double pelThick, Integer len, Integer ch) {
+    private Map<String, Object> getInput(Double m, Double a, Double d, Double sa, Double intv, Integer len, Integer ch) {
         Map<String, Object> input = new HashMap<>();
         input.put(Functions.PM_ACOUSTICDENSITY_M, m);
         input.put(Functions.PM_ACOUSTICDENSITY_A, a);
         input.put(Functions.PM_ACOUSTICDENSITY_D, d);
-        input.put(Functions.PM_ACOUSTICDENSITY_ACOUSTICDATA, getDistances(upper, pelThick));
         LengthDistMatrix lengthDist = new LengthDistMatrix();
         lengthDist.getData().setGroupRowCellValue("havsil", "1", len.toString(), 100d);
         lengthDist.getResolutionMatrix().setRowValue(Functions.RES_LENGTHINTERVAL, intv);

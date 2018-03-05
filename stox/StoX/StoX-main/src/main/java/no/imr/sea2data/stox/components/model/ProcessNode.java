@@ -181,12 +181,12 @@ public class ProcessNode extends AbstractNode {
             return true;
         }
         if (mp.getParentTags() == null || mp.getParentTags().isEmpty()) {
-            if (mp.getMetaFunction().getName().equals(Functions.FN_ACOUSTICDENSITY)
+            /*if (mp.getMetaFunction().getName().equals(Functions.FN_ACOUSTICDENSITY)
                     && mp.getName().equals(Functions.PM_ACOUSTICDENSITY_ACOUSTICDATA)) {
                 // Hide acsoustic data parameter if d is missing or 0 (hardcoded rule)
                 Double d = Conversion.safeObjectToDouble(process.getParameterValue(Functions.PM_ACOUSTICDENSITY_D));
                 return d != null && d != 0d;
-            }
+            }*/
             if (mp.getMetaFunction().getName().equals(Functions.FN_DEFINESTRATA)
                     && mp.getName().equals(Functions.PM_DEFINESTRATA_FILENAME)) {
                 // Hide filename if not use processdata

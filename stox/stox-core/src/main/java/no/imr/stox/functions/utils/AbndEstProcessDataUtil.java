@@ -671,4 +671,23 @@ public final class AbndEstProcessDataUtil {
         return AbndEstProcessDataUtil.getSUAssignment(pd, pdSampleUnit, estLayer);
     }
 
+    public static String getSampleUnitPath(ProcessDataBO pd, String sampleUnit, String sampleUnitType) {
+        String s1 = sampleUnitType + " '" + sampleUnit + "'";
+        String s2 = "";
+        switch (sampleUnitType) {
+            case Functions.SAMPLEUNIT_EDSU: {
+                String psu = AbndEstProcessDataUtil.getPSUBySampleUnit(pd, sampleUnit);
+                String stratum = AbndEstProcessDataUtil.getPSUStratum(pd, psu);
+                s2 = " in PSU '" + psu + "' in Stratum '" + stratum + "'";
+                break;
+            }
+            case Functions.SAMPLEUNIT_PSU: {
+                String stratum = AbndEstProcessDataUtil.getPSUStratum(pd, sampleUnit);
+                s2 = " in Stratum '" + stratum + "'";
+                break;
+            }
+        }
+        return s1 + s2;
+    }
+
 }
