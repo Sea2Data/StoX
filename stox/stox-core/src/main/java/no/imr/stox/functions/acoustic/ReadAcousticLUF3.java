@@ -37,16 +37,21 @@ public class ReadAcousticLUF3 {
         return perform(fileName, null, null);
     }
 
+    public static List<DistanceBO> perform(String fileName, Integer frequency_def, Integer transceiver_def) {
+        return perform(fileName, frequency_def, transceiver_def, "dd.MM.yyyy");
+    }
+
     /**
      *
      * @param fileName
+     * @param frequency_def
+     * @param transceiver_def
      * @return
      */
-    public static List<DistanceBO> perform(String fileName, Integer frequency_def, Integer transceiver_def) {
+    public static List<DistanceBO> perform(String fileName, Integer frequency_def, Integer transceiver_def, String dateFormat) {
         // Try as absolute file first, then as relative to workpath
         List<DistanceBO> distances = new ArrayList<>();
         DateFormat df = null;
-        String dateFormat = "dd.MM.yyyy";;
         String ship_def = null;
         String nation_def = null;
         String survey_def = null;
@@ -98,11 +103,11 @@ public class ReadAcousticLUF3 {
                 } else {
                     line = fixLine(line);
                 }
-                String[] elms = line.split("[\\t,]|[\\s]+");
+                String[] elms = line.split(line.contains("\t") || line.contains(",") ? "[\\t,]" : "[\\s]+");
                 String dateStr;
                 if (isHdr) {
                     hdr = elms;
-                    hdrList = Stream.of(hdr).collect(Collectors.toList());
+                    hdrList = Stream.of(hdr).map(s->s.trim()).collect(Collectors.toList());
                     depthIdx = indexOfStr(hdrList, "depth");
                     continue;
                 } else {
@@ -127,7 +132,11 @@ public class ReadAcousticLUF3 {
                 }
                 Date da = null;
                 if (df != null) {
-                    da = df.parse(dateStr);
+                    try {
+                        da = df.parse(dateStr);
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
                 }
                 Date ti = IMRdate.strToTime(getElm(elms, hdrList, "time"));
                 String ship = getElm(elms, hdrList, "ship");
@@ -178,7 +187,7 @@ public class ReadAcousticLUF3 {
                 f.setTranceiver(transceiver);
                 f.setNum_pel_ch(1);
                 for (int i = depthIdx + 1; i < elms.length; i++) {
-                    String acoStr = hdr[i];
+                    String acoStr = hdrList.get(i);
                     if (acoStr.equalsIgnoreCase("sc") || acoStr.equalsIgnoreCase("total")) {
                         continue;
                     }
@@ -188,7 +197,7 @@ public class ReadAcousticLUF3 {
                     }
                     AcoEntry acoCat = AcoEntry.byName(entries, acoStr);
                     if (acoCat == null) {
-                        throw new RuntimeException("Acoustic gategory " + acoStr + " not found");
+                        throw new RuntimeException("Acoustic category " + acoStr + " not found");
                     }
                     SABO sa = new SABO();
                     sa.setFrequency(f);
@@ -199,7 +208,7 @@ public class ReadAcousticLUF3 {
                     sa.setSa(saval);
                 }
             }
-        } catch (ParseException | IOException ex) {
+        } catch (IOException ex) {
             Logger.getLogger(ReadAcousticLUF3.class.getName()).log(Level.SEVERE, null, ex);
         }
         return distances;
@@ -218,7 +227,7 @@ public class ReadAcousticLUF3 {
         if (idx < 0 || idx > elms.length - 1) {
             return null;
         }
-        return elms[idx];
+        return elms[idx].trim();
     }
 
     private static Entry<String, String> ofPair(String key, String val) {

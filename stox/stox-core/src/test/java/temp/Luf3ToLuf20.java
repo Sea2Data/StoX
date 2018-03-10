@@ -39,12 +39,12 @@ import org.junit.Test;
 //@Ignore
 public class Luf3ToLuf20 {
 
-    //@Test
+    @Test
     public void test() {
         //String path = "\\\\ces.imr.no\\cruise_data\\2004\\S2004109_PGOSARS_4174\\ACOUSTIC_DATA\\LSSS\\REPORTS\\ListUserFile03__F038000_T1_L1210.0-4806.0.txt";
         //String path = "\\\\ces.imr.no\\cruise_data\\2017\\S2017113_PGOSARS_4174\\ACOUSTIC_DATA\\LSSS\\Reports\\ListComScatter_F038000_T2_L2040.0-2124.0.txt";
-        String path = "E:/Ibrahim/luf.txt";
-        AcousticConverter.convertAcousticCSVFileToLuf20(path, "E:/Ibrahim/luf.xml");
+        String path = "E:\\SigbjørnMehl\\Vintertokt 2000-2016\\2018_Nansen.luf3";
+        AcousticConverter.convertAcousticCSVFileToLuf20(path, "E:\\SigbjørnMehl\\Vintertokt 2000-2016\\2018_Nansen.luf3.xml");
     }
 
 //  @Test
@@ -122,7 +122,7 @@ public class Luf3ToLuf20 {
     private static void convertVintertokt(String cruise, String platform, String file) {
         String d = "E://SigbjørnMehl//Vintertokt 2000-2016//";
         String f = d + file;//"2014_Nansen.luf3";
-        List<DistanceBO> distances = ReadAcousticLUF3.perform(f, 38000, 1);
+        List<DistanceBO> distances = ReadAcousticLUF3.perform(f, 38000, 1, "yyyy.MM.dd");
         ListUser20Writer.export(cruise, "RU", "5004", f + ".xml", distances);
     }
 

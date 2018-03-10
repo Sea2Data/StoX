@@ -41,8 +41,8 @@ public class DistributeAbundance {
     private static final int MAXLEVELS = 3;
     private static final String KNOWNCRITERIAVAR = Functions.COL_IND_AGE;
 
-    public static void distributeAbundance(MatrixBO abnd, Integer seed) {
-        Collection<String> abndRowKeys = abnd.getSortedRowKeys();
+    public static void distributeAbundance(MatrixBO abnd, Integer seed, Boolean sortedAbundance) {
+        Collection<String> abndRowKeys = sortedAbundance ? abnd.getSortedRowKeys() : abnd.getRowKeys();
         Collection<String> specList = abndRowKeys.stream().parallel().map(rowKey -> {
             MatrixBO row = abnd.getRowValueAsMatrix(rowKey);
             String species = (String) row.getValue(Functions.COL_IND_SPECIES);
@@ -71,13 +71,13 @@ public class DistributeAbundance {
                 }
             }
             /*System.out.println("Data have " + abndDistrKnown.size() + " aged individuals.");
-            System.out.println("Data have " + abndDistrUnknown.size() + " length sampled individuals without known age.");
+        System.out.println("Data have " + abndDistrUnknown.size() + " length sampled individuals without known age.");
 
             int[] countImpLevels = new int[MAXLEVELS];
-            int[] missingImputes = new int[1];
-            missingImputes[0] = 0;
-            for (int i = 0; i < countImpLevels.length; i++) {
-                countImpLevels[i] = 0;
+        int[] missingImputes = new int[1];
+        missingImputes[0] = 0;
+        for (int i = 0; i < countImpLevels.length; i++) {
+            countImpLevels[i] = 0;
             }*/
             // Unknown loop (nonseed for parallelization, seed for reproducability)
             abndDistrUnknown.stream().forEach(row -> {
@@ -124,9 +124,9 @@ public class DistributeAbundance {
                 }
             });
             /*System.out.println(countImpLevels[0] + " individual ages were imputed at station level.");
-            System.out.println(countImpLevels[1] + " individual ages were imputed at strata level.");
-            System.out.println(countImpLevels[2] + " individual ages were imputed at survey level.");
-            System.out.println(missingImputes[0] + " individual ages were not possible to impute.");*/
+        System.out.println(countImpLevels[1] + " individual ages were imputed at strata level.");
+        System.out.println(countImpLevels[2] + " individual ages were imputed at survey level.");
+        System.out.println(missingImputes[0] + " individual ages were not possible to impute.");*/
         }
     }
 }
