@@ -48,8 +48,8 @@ public class AbundanceByPopCategoryDataStorage extends FileDataStorage {
         }
         MatrixBO mReport = reports.getMatrix(Functions.REPORT_XCATBYLENGTH);
         int widthCell = getMaxWidthCell(mReport);
-        ImrIO.write(wr, ExportUtil.tabbedCRLF("Time", IMRdate.formatDate(new Date(), "yyyy-MM-dd HH:mm:ss", false)));
-        ImrIO.write(wr, ExportUtil.carrageReturnLineFeed(""));
+        //ImrIO.write(wr, ExportUtil.tabbedCRLF("Time", IMRdate.formatDate(new Date(), "yyyy-MM-dd HH:mm:ss", false)));
+        //ImrIO.write(wr, ExportUtil.carrageReturnLineFeed(""));
         String dim1 = (String) getProcess().getParameterValue(Functions.PM_ESTIMATEBYPOPCATEGORY_DIM1);
         String dim2 = (String) getProcess().getParameterValue(Functions.PM_ESTIMATEBYPOPCATEGORY_DIM2);
         String dim3 = (String) getProcess().getParameterValue(Functions.PM_ESTIMATEBYPOPCATEGORY_DIM3);
