@@ -75,6 +75,7 @@ public class AbundanceByPopCategoryDataStorage extends FileDataStorage {
                         int trailingZ = Calc.getNumTrailingZeros((Double) val);
                         int numDec = trailingZ + (trailingZ == 0 ? 0 : 1) + (var.equals("Abundance") ? 0 : 1);
                         String str = String.format("%25." + numDec + "f", (Double) val).trim();
+                        str = str.replace(",", ".");
                         s = Math.max(s, str.length());
                     }
                 }
