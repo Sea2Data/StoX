@@ -1,0 +1,19 @@
+Managing maven repository at github com 
+--------------------------------------------
+ 
+Copy jar file from C:\Users\aasmunds\.m2\repository\no\imr\sea2data\stox-core\1.0.0
+to C:\Projects\Git\StoX-repos\no\imr\sea2data\stox-core\1.0.0
+
+open git bash in the Git\StoX branched to repository
+git status
+Copy the stox-core.jar fie over to the Git`toX\no....\
+git add .
+git commit -m "update"
+git push
+
+pom repository reference from other projects using >https://raw.githubusercontent.com/<ProjectName>/<repos>
+example:
+        <repository>
+            <id>stox</id>
+            <url>https://raw.githubusercontent.com/Sea2Data/StoX/repository/</url>
+        </repository>
