@@ -197,13 +197,13 @@ public final class IMRdate {
     }
 
     public static LocalDateTime encodeLocalDateTime(Date date, Date time) {
-        if (date == null && time == null) {
+        if (date == null || time == null) {
             return null;
         }
         return getLocalTime(time).atDate(getLocalDate(date));
     }
     public static Date encodeDate(Date date, Date time) {
-        if (date == null && time == null) {
+        if (date == null || time == null) {
             return null;
         }
         return Date.from(encodeLocalDateTime(date, time).toInstant(ZoneOffset.UTC));
