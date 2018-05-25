@@ -43,18 +43,19 @@ import org.junit.Test;
  *
  * @author aasmunds
  */
-@Ignore
+//@Ignore
 public class ConvertBarentsHavTransects {
 
     @Test
     public void test() {
         //convertVinterTokt();
         IntStream
-                .range(1994, 2013 + 1).boxed()
+                .range(2010, 2010 + 1).boxed()
                 .sorted(Collections.reverseOrder())
                 .forEach(year -> {
-                    //   convertKystTokt(year, 6, "Sei");
-                    appendCatchability(year);
+                    //convertKystTokt(year, 6, "Saithe");
+                    convertKystTokt(year, 7, "Cod");
+                    // appendCatchability(year);
                 });
     }
 
@@ -87,11 +88,12 @@ public class ConvertBarentsHavTransects {
 
     public void convertKystTokt(Integer year, Integer areaColumn, String species) {
         try {
-            String pName = "Akustikk" + species + "Kyst" + year;
+            String pName = "Varanger Stad Northeast Arctic " + species + " acoustic index in autumn " + year;
             IProject pr = acquireProject(ProjectUtils.getSystemProjectRoot(), pName, null);
             IModel bl = pr.getBaseline();
             IProcess p = bl.getProcessByFunctionName(Functions.FN_FILTERBIOTIC);
-            p.setParameterValue(Functions.PM_FILTERBIOTIC_FISHSTATIONEXPR, "fs.getLengthSampleCount('SEI') > 5");
+            p.setParameterValue(Functions.PM_FILTERBIOTIC_FISHSTATIONEXPR, "fs.getLengthSampleCount('TORSK') > 5");
+            p.setParameterValue(Functions.PM_FILTERBIOTIC_CATCHEXPR, "species == '164712'"); // cod=164712, sei=164727
             p = bl.getProcessByFunctionName(Functions.FN_STRATUMAREA);
             p.setParameterValue(Functions.PM_STRATUMAREA_AREAMETHOD, Functions.AREAMETHOD_ACCURATE);
             bl.run(1, pr.getBaseline().getProcessList().indexOf(pr.getBaseline().getProcessByFunctionName(Functions.FN_DEFINESTRATA)) + 1, Boolean.FALSE);
@@ -120,6 +122,10 @@ public class ConvertBarentsHavTransects {
                     .map(s -> {
                         String[] str = s.split("\t");
                         if (str.length < 7) {
+                            return null;
+                        }
+                        if (str[0].trim().isEmpty() || str[1].trim().isEmpty() || str[2].trim().isEmpty()
+                                || str[3].trim().isEmpty() || str[4].trim().isEmpty() || str[5].trim().isEmpty()) {
                             return null;
                         }
                         Integer from = Integer.valueOf(str[5]);
@@ -177,7 +183,8 @@ public class ConvertBarentsHavTransects {
                             List<DistanceBO> dTr = distList.stream().filter(d -> d.getCruise().equals(cruise) && startLog <= Math.round(d.getLog_start().doubleValue())
                                     && Math.round(d.getLog_start().doubleValue()) <= toLog).collect(Collectors.toList());
                             if (dTr.isEmpty()) {
-                                throw new RuntimeException("Transect " + cruise + ":" + startLog + "-" + toLog + "not found in data");
+                                System.out.println("Transect " + cruise + ":" + startLog + "-" + toLog + "not found in data");
+                                return;
                             }
                             // Check if used before
 

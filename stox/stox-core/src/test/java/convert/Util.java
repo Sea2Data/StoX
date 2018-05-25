@@ -18,7 +18,7 @@ public class Util {
     public static String getStratumEng(String stratum) {
         return stratum.replace("æ", "ae").replace("Æ", "Ae")
                 .replace("å", "aa").replace("Å", "Aa")
-                .replace("ø", "oe").replace("Ø", "Oe");
+                .replace("ø", "oe").replace("Ø", "Oe").replace("/", "_");
     }
 
 }

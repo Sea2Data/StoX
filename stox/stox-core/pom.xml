@@ -18,7 +18,7 @@
         <dependency>
             <groupId>${project.groupId}</groupId>
             <artifactId>stox-util</artifactId>
-            <version>${project.version}</version>
+            <version>${stox.util.version}</version>
         </dependency>
         <dependency>
             <groupId>com.vividsolutions</groupId>
