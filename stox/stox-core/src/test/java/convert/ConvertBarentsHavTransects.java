@@ -50,11 +50,11 @@ public class ConvertBarentsHavTransects {
     public void test() {
         //convertVinterTokt();
         IntStream
-                .range(2010, 2010 + 1).boxed()
+                .range(2011, 2011 + 1).boxed()
                 .sorted(Collections.reverseOrder())
                 .forEach(year -> {
                     //convertKystTokt(year, 6, "Saithe");
-                    convertKystTokt(year, 7, "Cod");
+                    convertKystTokt(year, 7, "Cod", false);
                     // appendCatchability(year);
                 });
     }
@@ -62,31 +62,34 @@ public class ConvertBarentsHavTransects {
     public void appendCatchability(Integer year) {
         IProject prj = acquireProject("R:\\alle\\stox\\Akustikk Vintertokt\\Modified\\", "AkustikkTorskVinter" + year + "ed", null);
         IModel bl = prj.getBaseline();
+        appendCatchability(bl);
+        prj.save();
+    }
+
+    public void appendCatchability(IModel bl) {
         IProcess lDistPr = bl.getProcessByFunctionName(Functions.FN_STATIONLENGTHDIST);
         lDistPr.setParameterValue(Functions.PM_STATIONLENGTHDIST_LENGTHDISTTYPE, Functions.LENGTHDISTTYPE_NORMLENGHTDIST);
         IProcess rgrpPr = bl.getProcessByFunctionName(Functions.FN_REGROUPLENGTHDIST);
-        IProcess cPr = prj.getBaseline().getProcessByFunctionName(Functions.FN_CATCHABILITY);
+        IProcess cPr = bl.getProcessByFunctionName(Functions.FN_CATCHABILITY);
         if (cPr == null) {
-            cPr = prj.getBaseline().insertProcess(Functions.FN_CATCHABILITY, Functions.FN_CATCHABILITY, prj.getBaseline().getProcessList().indexOf(rgrpPr) + 1);
+            cPr = bl.insertProcess(Functions.FN_CATCHABILITY, Functions.FN_CATCHABILITY, bl.getProcessList().indexOf(rgrpPr) + 1);
         }
         cPr.setParameterProcessValue(Functions.PM_CATCHABILITY_LENGTHDIST, rgrpPr.getName()).
                 setParameterValue(Functions.PM_CATCHABILITY_CATCHABILITYMETHOD, Functions.CATCHABILITYMETHOD_LENGTHDEPENDENTSWEEPWIDTH).
                 setParameterValue(Functions.PM_CATCHABILITY_PARLENGTHDEPENDENTSWEEPWIDTH, ";5.91;0.43;15;62");
-        IProcess relPr = prj.getBaseline().getProcessByFunctionName(Functions.FN_RELLENGTHDIST);
+        IProcess relPr = bl.getProcessByFunctionName(Functions.FN_RELLENGTHDIST);
         if (relPr == null) {
-            relPr = prj.getBaseline().insertProcess(Functions.FN_RELLENGTHDIST, Functions.FN_RELLENGTHDIST, prj.getBaseline().getProcessList().indexOf(cPr) + 1);
+            relPr = bl.insertProcess(Functions.FN_RELLENGTHDIST, Functions.FN_RELLENGTHDIST, bl.getProcessList().indexOf(cPr) + 1);
         }
-        relPr.setParameterProcessValue(Functions.PM_RELLENGTHDIST_LENGTHDIST, rgrpPr.getName());
-        IProcess bswPr = prj.getBaseline().getProcessByFunctionName(Functions.FN_BIOSTATIONWEIGHTING);
+        relPr.setParameterProcessValue(Functions.PM_RELLENGTHDIST_LENGTHDIST, cPr.getName());
+        IProcess bswPr = bl.getProcessByFunctionName(Functions.FN_BIOSTATIONWEIGHTING);
         bswPr.setParameterValue(Functions.PM_BIOSTATIONWEIGHTING_WEIGHTINGMETHOD, Functions.WEIGHTINGMETHOD_SUMWEIGHTEDCOUNT);
 
-        IProcess totPr = prj.getBaseline().getProcessByFunctionName(Functions.FN_TOTALLENGTHDIST);
+        IProcess totPr = bl.getProcessByFunctionName(Functions.FN_TOTALLENGTHDIST);
         totPr.setParameterProcessValue(Functions.PM_TOTALLENGTHDIST_LENGTHDIST, relPr.getName());
-        prj.save();
-
     }
 
-    public void convertKystTokt(Integer year, Integer areaColumn, String species) {
+    public void convertKystTokt(Integer year, Integer areaColumn, String species, Boolean checkDistance) {
         try {
             String pName = "Varanger Stad Northeast Arctic " + species + " acoustic index in autumn " + year;
             IProject pr = acquireProject(ProjectUtils.getSystemProjectRoot(), pName, null);
@@ -94,8 +97,11 @@ public class ConvertBarentsHavTransects {
             IProcess p = bl.getProcessByFunctionName(Functions.FN_FILTERBIOTIC);
             p.setParameterValue(Functions.PM_FILTERBIOTIC_FISHSTATIONEXPR, "fs.getLengthSampleCount('TORSK') > 5");
             p.setParameterValue(Functions.PM_FILTERBIOTIC_CATCHEXPR, "species == '164712'"); // cod=164712, sei=164727
+            p = bl.getProcessByFunctionName(Functions.FN_FILTERACOUSTIC);
+            p.setParameterValue(Functions.PM_FILTERACOUSTIC_NASCEXPR, "acocat == 31"); // 22=sei, 31=torsk
             p = bl.getProcessByFunctionName(Functions.FN_STRATUMAREA);
             p.setParameterValue(Functions.PM_STRATUMAREA_AREAMETHOD, Functions.AREAMETHOD_ACCURATE);
+            appendCatchability(bl);
             bl.run(1, pr.getBaseline().getProcessList().indexOf(pr.getBaseline().getProcessByFunctionName(Functions.FN_DEFINESTRATA)) + 1, Boolean.FALSE);
             Map<String, String> ycMap = Files.readAllLines(Paths.get("E:/SigbjørnMehl/Kysttokt/tokt.txt")).stream().sequential().skip(1)
                     .map(s -> {
@@ -114,7 +120,20 @@ public class ConvertBarentsHavTransects {
                         if (areaColumn > str.length - 1) {
                             System.out.println("");
                         }
-                        return Integer.valueOf(str[areaColumn]) == 1 ? Util.getMissionStratumKey(Integer.valueOf(str[0]), str[3]) : null;
+                        Integer oppdrag = Integer.valueOf(str[0]);
+                        String stratum = str[3];
+                        String stratumKey = Util.getMissionStratumKey(oppdrag, stratum);
+                        Integer incl = Integer.valueOf(str[areaColumn]);
+                        if (incl == 0 && year >= 2003 && year <= 2017) {
+                            // Error in excel sheet
+                            switch (stratumKey) {
+                                case "Oppdrag4_Fugloeybanken1":
+                                case "Oppdrag4_Fugloeybanken2":
+                                case "Oppdrag5_Ullsfjord ytre":
+                                    incl = 1;
+                            }
+                        }
+                        return incl == 1 ? stratumKey : null;
                     })
                     .filter(t -> t != null)
                     .collect(Collectors.toSet());
@@ -136,6 +155,7 @@ public class ConvertBarentsHavTransects {
                         return new Transect(Integer.valueOf(str[0]), Integer.valueOf(str[1]), str[2], Integer.valueOf(str[1]), str[4].trim(), from, to);
                     })
                     .filter(t -> t != null)
+                    .map(t -> correctPunchErrors(year, t))
                     .collect(Collectors.toList());
             Map<String, List<Integer>> asgMap = Files.readAllLines(Paths.get("E:/SigbjørnMehl/Kysttokt/" + year + "_trål.txt")).stream().sequential().skip(1)
                     .map(s -> {
@@ -182,14 +202,19 @@ public class ConvertBarentsHavTransects {
                             psuStrata.setRowValue(psu, stratum);
                             List<DistanceBO> dTr = distList.stream().filter(d -> d.getCruise().equals(cruise) && startLog <= Math.round(d.getLog_start().doubleValue())
                                     && Math.round(d.getLog_start().doubleValue()) <= toLog).collect(Collectors.toList());
+                            String stratumRef = "Year " + year + ", Stratum " + stratum + "/vessel " + tr.getShip() + "(" + cruise + ")";
                             if (dTr.isEmpty()) {
-                                System.out.println("Transect " + cruise + ":" + startLog + "-" + toLog + "not found in data");
+                                System.out.println(stratumRef + ":" + " Log " + startLog + "-" + toLog + " not found in echosounder xml file");
                                 return;
                             }
-                            // Check if used before
 
                             dTr.forEach(d -> {
                                 AbndEstProcessDataUtil.setEDSUPSU(pr.getProcessData(), d.getKey(), psu);
+                                // Check distance - within - polygon
+                                MultiPolygon stratumPol = (MultiPolygon) polygons.getRowColValue(stratum, Functions.COL_POLVAR_POLYGON);
+                                if (checkDistance && !isInsidePolygon(d, stratumPol)) {
+                                    System.out.println(stratumRef + ":" + " Log " + d.getLog_start() + " not inside stratum polygon for transect " + psu);
+                                }
                             });
                             List<Integer> serialNo = asgMap.get(stratum);
                             if (serialNo != null) {
@@ -345,6 +370,46 @@ public class ConvertBarentsHavTransects {
         // Set transect definition method to "use process data"
         bl.getProcessByFunctionName(Functions.FN_DEFINEACOUSTICPSU).setParameterValue(Functions.PM_DEFINEACOUSTICPSU_USEPROCESSDATA, String.valueOf(true));
         pr.save();
+    }
+
+    private Transect correctPunchErrors(Integer year, Transect t) {
+        switch (year + "_" + t.getMissionStratumKey() + "_" + t.getFrom() + "_" + t.getTo()) {
+            case "2012_Oppdrag5_Ullsfjord Soerfjord_6253_6256":
+                t.setMission(6);
+                t.setStratumNo(1);
+                t.setStratum("Balsfjord");
+            // drop
+            case "2012_Oppdrag6_Balsfjord_6260_6272":
+            case "2012_Oppdrag6_Balsfjord_6277_6282":
+            case "2012_Oppdrag6_Balsfjord_6287_6290":
+                t.setFrom(t.getFrom() - 200);
+                t.setTo(t.getTo() - 200);
+                break;
+            case "2012_Oppdrag6_Malangen indre_6180_6495":
+                t.setTo(6195);
+                break;
+            case "2013_Oppdrag9_Saltfjord_4863_4868":
+                t.setFrom(t.getFrom() + 100);
+                t.setTo(t.getTo() + 100);
+                break;
+        }
+        return t;
+    }
+
+    private boolean isInsidePolygon(DistanceBO d, MultiPolygon stratumPol) {
+        // Return true if neither start, middle or stop is inside polygon
+        Coordinate dStart = new Coordinate(d.getStartLon(), d.getStartLat());
+        Boolean startInside = JTSUtils.within(dStart, stratumPol);
+        Boolean stopInside = startInside;
+        Boolean middleInside = startInside;
+        if (d.getStopLon() != null && d.getStopLat() != null) {
+            Coordinate dStop = new Coordinate(d.getStopLon(), d.getStopLat());
+            Coordinate dMiddle = new Coordinate(d.getStopLon() != null ? (d.getStartLon() + d.getStopLon()) * 0.5 : d.getStartLon(),
+                    d.getStopLat() != null ? (d.getStartLat() + d.getStopLat()) * 0.5 : d.getStartLat());
+            stopInside = JTSUtils.within(dStop, stratumPol);
+            middleInside = JTSUtils.within(dMiddle, stratumPol);
+        }
+        return startInside || stopInside || middleInside;
     }
 
 }

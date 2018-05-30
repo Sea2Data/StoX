@@ -103,7 +103,7 @@ public class ReadAcousticLUF3 {
                 } else {
                     line = fixLine(line);
                 }
-                String[] elms = line.split(line.contains("\t") || line.contains(",") ? "[\\t,]" : "[\\s]+");
+                String[] elms = line.split("[\\t,]|[\\s]+");
                 String dateStr;
                 if (isHdr) {
                     hdr = elms;
@@ -253,7 +253,7 @@ public class ReadAcousticLUF3 {
     }
 
     private static String fixLine(String line) {
-        line = line.replaceFirst("\\s?-\\s?", "\t");
+        line = line.replaceFirst("\\s+-\\s+", "\t");
         // other variants:
         line = line.replace(" -10000.0 ", " - 10000.0 ");
         line = line.replace(" e ", " e0");

@@ -63,5 +63,27 @@ public class Transect {
     public Integer getTo() {
         return to;
     }
+
+    public void setFrom(Integer from) {
+        this.from = from;
+    }
+
+    public void setTo(Integer to) {
+        this.to = to;
+    }
+
+    public void setMission(Integer mission) {
+        this.mission = mission;
+    }
+
+    public void setStratumNo(Integer stratumNo) {
+        this.stratumNo = stratumNo;
+    }
+
+    public void setStratum(String stratum) {
+        this.stratum = stratum;
+    }
+    
+    
     
 }

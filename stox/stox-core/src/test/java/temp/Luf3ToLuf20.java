@@ -43,8 +43,10 @@ public class Luf3ToLuf20 {
     public void test() {
         //String path = "\\\\ces.imr.no\\cruise_data\\2004\\S2004109_PGOSARS_4174\\ACOUSTIC_DATA\\LSSS\\REPORTS\\ListUserFile03__F038000_T1_L1210.0-4806.0.txt";
         //String path = "\\\\ces.imr.no\\cruise_data\\2017\\S2017113_PGOSARS_4174\\ACOUSTIC_DATA\\LSSS\\Reports\\ListComScatter_F038000_T2_L2040.0-2124.0.txt";
-        String path = "E:\\SigbjørnMehl\\Vintertokt 2000-2016\\2016_Nansen.luf3";
-        AcousticConverter.convertAcousticCSVFileToLuf20(path, "E:\\SigbjørnMehl\\Vintertokt 2000-2016\\2016_Nansen.luf3.xml");
+//        String path = "E:\\SigbjørnMehl\\Vintertokt 2000-2016\\2016_Nansen.luf3";
+//        AcousticConverter.convertAcousticCSVFileToLuf20(path, "E:\\SigbjørnMehl\\Vintertokt 2000-2016\\2016_Nansen.luf3.xml");
+        List<DistanceBO> d = ReadAcousticLUF3.perform("E:\\SigbjørnMehl\\2013010\\echo.txt");
+        ListUser20Writer.export("2013010", "58", "1172", "E:\\SigbjørnMehl\\2013010\\201010" + ".xml", d);
     }
 
 //  @Test
