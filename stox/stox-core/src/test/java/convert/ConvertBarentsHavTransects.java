@@ -57,6 +57,7 @@ public class ConvertBarentsHavTransects {
                     convertKystTokt(year, 7, "Cod", false);
                     // appendCatchability(year);
                 });
+        
     }
 
     public void appendCatchability(Integer year) {
