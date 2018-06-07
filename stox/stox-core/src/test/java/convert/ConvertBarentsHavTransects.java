@@ -50,6 +50,7 @@ public class ConvertBarentsHavTransects {
     public void test() {
         //convertVinterTokt();
         IntStream
+                
                 .range(2007, 2007 + 1).boxed()
                 .sorted(Collections.reverseOrder())
                 .forEach(year -> {
