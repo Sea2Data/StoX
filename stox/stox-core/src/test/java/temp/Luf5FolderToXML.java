@@ -21,7 +21,7 @@ import org.junit.Test;
  *
  * @author aasmunds
  */
-@Ignore
+//@Ignore
 public class Luf5FolderToXML {
 
     //@Test
@@ -33,10 +33,10 @@ public class Luf5FolderToXML {
 
     @Test
     public void test() {
-//        AcousticConverter.convertLUF5DirToLuf20("E:\\Data\\luf5\\test");
+        AcousticConverter.convertLUF5DirToLuf20("E:\\SigbjørnMehl\\2010704\\luf");
 //        AcousticConverter.convertLUF5DirToLuf20("E:\\Data\\luf5\\luf5files");
         //AcousticConverter.convertLUF5FileToLuf20("E:\\Data\\luf5\\luf5files\\ListUserFile05.F017986_T1_R10_L7245.0-7999.9", null);
         //AcousticConverter.convertLUF5FileToLuf20("E:\\Data\\luf5\\luf5files\\ListUserFile05.F017986_T1_R10_L7245.0-7999.9", "E:\\Data\\luf5\\luf5files\\ListUserFile05.F017986_T1_R10_L7245.0-7999.xml");
-        AcousticConverter.convertLUF20FileToLuf5Files("E:\\Data\\luf5\\luf5files\\2000208.xml");
+        //AcousticConverter.convertLUF20FileToLuf5Files("E:\\Data\\luf5\\luf5files\\2000208.xml");
     }
 }

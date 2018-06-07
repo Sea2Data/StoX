@@ -50,7 +50,7 @@ public class ConvertBarentsHavTransects {
     public void test() {
         //convertVinterTokt();
         IntStream
-                .range(2011, 2011 + 1).boxed()
+                .range(2007, 2007 + 1).boxed()
                 .sorted(Collections.reverseOrder())
                 .forEach(year -> {
                     //convertKystTokt(year, 6, "Saithe");
@@ -196,7 +196,7 @@ public class ConvertBarentsHavTransects {
                                 //System.out.println("Year " + year + " Stratum " + stratum + " not found in process data");
                                 throw new RuntimeException("Stratum " + stratum + " not found in process data");
                             }
-                            String cruise = ycMap.get(tr.getShip());
+                            String cruise = getCruiseFromTransect(year, ycMap, tr);
                             Integer startLog = tr.getFrom();
                             Integer toLog = tr.getTo();
                             psuStrata.setRowValue(psu, stratum);
@@ -219,11 +219,19 @@ public class ConvertBarentsHavTransects {
                             List<Integer> serialNo = asgMap.get(stratum);
                             if (serialNo != null) {
                                 suAsg.setRowColValue(psu, "1", asgId);
-                                serialNo.stream().forEach(ser -> {
-                                    if (ser < 10000 || ser > 99999) {
-                                        throw new RuntimeException("Feil serienr " + ser);
+
+                                serialNo.stream().forEach(ser1 -> {
+                                    Integer ser = correctAsgError(stratum, ser1);
+                                    if (ser == null) {
+                                        return;
                                     }
                                     FishstationBO bo = BioticUtils.findStationBySerialNo(fList, ser);
+                                    if (bo == null) {
+                                        System.out.println("Stratum " + stratum + ", Serienr " + ser + " not found in data");
+                                    }
+                                    if (ser < 10000 || ser > 99999) {
+                                        System.out.println(bo.getKey() + ": Feil serienr " + ser);
+                                    }
                                     if (bo != null) {
                                         bAsg.setRowColValue(asgId, bo.getKey(), 1);
                                     }
@@ -410,6 +418,27 @@ public class ConvertBarentsHavTransects {
             middleInside = JTSUtils.within(dMiddle, stratumPol);
         }
         return startInside || stopInside || middleInside;
+    }
+
+    private String getCruiseFromTransect(Integer year, Map<String, String> ycMap, Transect tr) {
+        if (year == 2009 && tr.getFrom() > 7000 && tr.getTo() < 8000) {
+            return "2009704";
+        }
+        if (year == 2011 && tr.getMission() == 5) {
+            return "2011723";
+        }
+        return ycMap.get(tr.getShip());
+    }
+
+    private Integer correctAsgError(String stratum, Integer ser) {
+        switch (stratum + "_" + ser) {
+            case "Oppdrag17_Stadthavet1_55082":
+            case "Oppdrag17_Stadthavet2_55082":
+                return 55081; // feil i allokering
+            case "Oppdrag16_Storfjorden_55426":
+                return null; // Dette er en feil i opprinnelig spd fil, hvor stasjon er merket Storseisund. tatt bort i allokering 
+        }
+        return ser;
     }
 
 }

@@ -28,6 +28,7 @@ import no.imr.sea2data.imrbase.util.Conversion;
 import no.imr.stox.functions.acoustic.AcousticConverter;
 import no.imr.stox.functions.acoustic.ListUser20Writer;
 import no.imr.stox.functions.acoustic.ReadAcousticLUF3;
+import no.imr.stox.functions.acoustic.ReadAcousticXML;
 import no.imr.stox.functions.utils.EchosounderUtils;
 import org.junit.Ignore;
 import org.junit.Test;
@@ -45,9 +46,9 @@ public class Luf3ToLuf20 {
         //String path = "\\\\ces.imr.no\\cruise_data\\2017\\S2017113_PGOSARS_4174\\ACOUSTIC_DATA\\LSSS\\Reports\\ListComScatter_F038000_T2_L2040.0-2124.0.txt";
 //        String path = "E:\\SigbjørnMehl\\Vintertokt 2000-2016\\2016_Nansen.luf3";
 //        AcousticConverter.convertAcousticCSVFileToLuf20(path, "E:\\SigbjørnMehl\\Vintertokt 2000-2016\\2016_Nansen.luf3.xml");
-        List<DistanceBO> d = ReadAcousticLUF3.perform("E:\\SigbjørnMehl\\2013010\\echo.txt");
-        ListUser20Writer.export("2013010", "58", "1172", "E:\\SigbjørnMehl\\2013010\\201010" + ".xml", d);
-    }
+        List<DistanceBO> d = ReadAcousticLUF3.perform("E:\\SigbjørnMehl\\2009704\\lcs1-2009-jms(1).dat");
+        ListUser20Writer.export("2009704", "58", "1173", "E:\\SigbjørnMehl\\2009704\\echo-2009704" + ".xml", d);
+            }
 
 //  @Test
     public void convertComScatterForNansis() {
