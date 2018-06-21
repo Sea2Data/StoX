@@ -334,13 +334,31 @@ public final class IMRdate {
                 }
             }
         } else {
-            if (s.length() > 4) {
-                ss = Conversion.safeStringtoInteger(s.substring(4, s.length()));
+            s = s.trim();
+            switch(s.length()) {
+                case 1:
+                case 2:
+                    hh = Conversion.safeStringtoInteger(s);
+                    break;
+                case 3:
+                    hh = Conversion.safeStringtoInteger(s.substring(0, 1));
+                    mm = Conversion.safeStringtoInteger(s.substring(1, 3));
+                    break;
+                case 4:
+                    hh = Conversion.safeStringtoInteger(s.substring(0, 2));
+                    mm = Conversion.safeStringtoInteger(s.substring(2, 4));
+                    break;
+                case 5:
+                    hh = Conversion.safeStringtoInteger(s.substring(0, 1));
+                    mm = Conversion.safeStringtoInteger(s.substring(1, 3));
+                    ss = Conversion.safeStringtoInteger(s.substring(3, 5));
+                    break;
+                case 6:
+                    hh = Conversion.safeStringtoInteger(s.substring(0, 2));
+                    mm = Conversion.safeStringtoInteger(s.substring(2, 4));
+                    ss = Conversion.safeStringtoInteger(s.substring(4, 6));
+                    break;
             }
-            if (s.length() > 2) {
-                mm = Conversion.safeStringtoInteger(s.substring(2, Math.min(4, s.length())));
-            }
-            hh = Conversion.safeStringtoInteger(s.substring(0, Math.min(2, s.length())));
         }
         if (hh == null) {
             hh = 0;
