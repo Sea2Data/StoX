@@ -51,7 +51,7 @@ public class ConvertBarentsHavTransects {
         //convertVinterTokt();
         IntStream
                 
-                .range(2007, 2007 + 1).boxed()
+                .range(2004, 2004 + 1).boxed()
                 .sorted(Collections.reverseOrder())
                 .forEach(year -> {
                     //convertKystTokt(year, 6, "Saithe");
