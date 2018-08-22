@@ -252,7 +252,7 @@ public class DATRASDataStorage extends FileDataStorage {
                             // BycSpecRecCode
                             1,
                             // DataType
-                            "C",
+                            "R",
                             // Netopening
                             fs.getTrawlOpening(),
                             // Rigging
@@ -333,7 +333,7 @@ public class DATRASDataStorage extends FileDataStorage {
                     String haulVal = (fs.getGearCondition() == null || fs.getGearCondition().equals("1") || fs.getGearCondition().equals("2"))
                             && (fs.getTrawlQuality() == null || fs.getTrawlQuality().equals("0") || fs.getTrawlQuality().equals("1")) ? "V" : "I";
 
-                    Double raiseFac = 60.0 / IMRdate.minutesDiffD(IMRdate.encodeDate(fs.getStartDate(), fs.getStartTime()), IMRdate.encodeDate(fs.getStopDate(), fs.getStopTime()));
+                    //Double raiseFac = 60.0 / IMRdate.minutesDiffD(IMRdate.encodeDate(fs.getStartDate(), fs.getStartTime()), IMRdate.encodeDate(fs.getStopDate(), fs.getStopTime()));
                     MatrixBO hlNoAtLngth = new MatrixBO();
                     MatrixBO specValTot = new MatrixBO();
                     MatrixBO lsCountTot = new MatrixBO();
@@ -346,7 +346,7 @@ public class DATRASDataStorage extends FileDataStorage {
                             if (s.getWeight() == null || s.getCount() == null) {
                                 continue;
                             }
-                            weightTot.addDoubleValue(c.getAphia(), raiseFac * s.getWeight() * 1000);
+                            weightTot.addDoubleValue(c.getAphia(), s.getWeight() * 1000);
                             Integer specVal = haulVal.equals("I") ? 0 : s.getCount() != null && s.getLengthSampleCount() != null ? 1 : s.getCount() != null ? 4 : 5;
                             if (specValTot.getValue(c.getAphia()) == null) {
                                 specValTot.setValue(c.getAphia(), specVal);
@@ -363,7 +363,7 @@ public class DATRASDataStorage extends FileDataStorage {
                             if (s.getIndividualBOCollection().isEmpty()) {
                                 String lngtClass = "-9";
                                 String sex = "-9";
-                                hlNoAtLngth.addGroupRowColValue(c.getAphia(), sex, lngtClass, s.getCount() * raiseFac);
+                                hlNoAtLngth.addGroupRowColValue(c.getAphia(), sex, lngtClass, s.getCount() * 1.0);
                             } else {
                                 if (s.getLengthSampleWeight() == null) {
                                     continue;
@@ -380,7 +380,7 @@ public class DATRASDataStorage extends FileDataStorage {
                                     String lngtClass = "" + ImrMath.trunc(length, lenInterval.doubleValue());
                                     String sex = i.getSex() == null || i.getSex().trim().isEmpty()
                                             ? "-9" : i.getSex().equals("1") ? "F" : "M";
-                                    hlNoAtLngth.addGroupRowColValue(c.getAphia(), sex, lngtClass, 1.0 * raiseFac * sampleFac);
+                                    hlNoAtLngth.addGroupRowColValue(c.getAphia(), sex, lngtClass, 1.0 * sampleFac);
                                 }
                             }
                         }
