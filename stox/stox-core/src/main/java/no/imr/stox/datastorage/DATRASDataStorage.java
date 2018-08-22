@@ -134,12 +134,13 @@ public class DATRASDataStorage extends FileDataStorage {
                 return "ST"; // Strapping
             }
         }
-        switch (sweep) {
-            case 110:
-                return "D";
-            default:
-                return "S";
-        }
+        //switch (sweep) {
+        //    case 110:
+        //        return "D";
+        //    default:
+        //        return "S";
+        //}
+        return "S";
     }
     /*
      ICES survey protocol for IBTS
