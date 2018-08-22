@@ -340,7 +340,7 @@ public class DATRASDataStorage extends FileDataStorage {
                     MatrixBO lengthCodeTot = new MatrixBO();
                     MatrixBO weightTot = new MatrixBO();
                     for (CatchBO c : fs.getCatchBOCollection()) {
-                        boolean isHerringOrSprat = c.getNoname().startsWith("SILD") || c.getNoname().startsWith("BRISLING");
+                        boolean isHerringOrSprat = c.getNoname().toUpperCase().startsWith("SILD") || c.getNoname().toUpperCase().startsWith("BRISLING");
                         for (SampleBO s : c.getSampleBOCollection()) {
                             //Double sampleFac = s.getCount().doubleValue() / s.getLengthSampleCount();
                             if (s.getWeight() == null || s.getCount() == null) {
@@ -439,7 +439,7 @@ public class DATRASDataStorage extends FileDataStorage {
                     String areaLoc = fs.getArea() != null && fs.getLocation() != null ? fs.getArea() + fs.getLocation() : "";
 
                     for (CatchBO c : fs.getCatchBOCollection()) {
-                        boolean isHerringOrSprat = c.getNoname().startsWith("SILD") || c.getNoname().startsWith("BRISLING");
+                        boolean isHerringOrSprat = c.getNoname().toUpperCase().startsWith("SILD") || c.getNoname().toUpperCase().startsWith("BRISLING");
                         for (SampleBO s : c.getSampleBOCollection()) {
                             if (s.getIndividualBOCollection().isEmpty()) {
                                 continue;
