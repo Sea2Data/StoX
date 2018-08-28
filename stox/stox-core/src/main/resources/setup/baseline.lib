@@ -630,6 +630,18 @@ Parameter: Name=Var2, Required=false, DefaultValue=Location, DataType=String, Pa
 Output: ProcessData
 
 [Function]
+Name: DefinePlatform
+Description: Define platform covariate for ECA cells.
+Class: no.imr.stox.functions.processdata.DefinePlatform
+Respondable:true
+Parameter: Name=ProcessData, DataType=ProcessData, Description=The <I>ProcessData</I> parameter is used to identify the covariate for the CovariateType and Source given.
+Parameter: Name=SourceType, DataType=String, Values=Biotic, Description=The <I>SourceType</I> The type of source of the covariates defined.
+Parameter: Name=CovariateType, DefaultValue=Fixed, DataType=String, Values=Fixed;Random;Dependency, Description=The <I>CovariateDependenytype</I> The type of error structure dependencies <BR>Fixed: covariate will be treated as fixed effect.<BR>Random: covariate will be treated as random effect.<BR>Dependency: missing documentation
+Parameter: Name=DefinitionMethod, DefaultValue=UseData, DataType=String, Values=UseData;UseProcessData, Description=The <I>DefinitionMethod</I> is how to define the coveriates
+Parameter: Name=BioticData, Required=false, DataType=BioticData, ParentTag=SourceType.Biotic, Description=The <I>BioticData</I> parameter is used to specify which previous process has generated the <U>BioticData</U> input data.
+Output: ProcessData
+
+[Function]
 Name: DefineAgeErrorMatrix
 Description: Reads error matrix for age determination from the parameter FileName. This file should be a tab delimited file with probabilities of read age (row) given true age (column). Ages are given as first row and first column.
 Class: no.imr.stox.functions.processdata.DefineAgeErrorMatrix

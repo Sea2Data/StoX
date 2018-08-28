@@ -42,6 +42,7 @@ public class DefineStratumNeighbour extends AbstractFunction {
             // Use existing, do not read from file.
             return pd;
         }
+        stratumNeighbour.clear();
         String fileName = ProjectUtils.resolveParameterFileName((String) input.get(Functions.PM_DEFINESTRATUMNEIGHBOUR_FILENAME), (String) input.get(Functions.PM_PROJECTFOLDER));
         if (fileName == null) {
             return pd;

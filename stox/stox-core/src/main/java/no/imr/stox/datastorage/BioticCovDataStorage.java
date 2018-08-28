@@ -33,14 +33,15 @@ public class BioticCovDataStorage extends FileDataStorage {
             seasonal = CovariateUtils.isCovariateSeasonal(cov);
             break;
         }
-        String temporalHdr = seasonal ? ExportUtil.tabbed("Year", "Season") : ExportUtil.tabbed("Temporal");
+        // fix stox-153
+        String temporalHdr =  ExportUtil.tabbed("Temporal");//seasonal ? ExportUtil.tabbed("Temporal") : ExportUtil.tabbed("Temporal");
         ImrIO.write(wr, ExportUtil.carrageReturnLineFeed(ExportUtil.tabbed(temporalHdr, "GearFactor", "Spatial", ExportUtil.tabbed(Functions.INDIVIDUALS_FULL))));
         // GROUP: For each temporal 
         for (String cov : indData.getData().getSortedKeys()) {
             // At this point we can extract the year from the covariate, since it is aggregated into a year.season covariate
-            Integer year = Conversion.safeStringtoIntegerNULL(Conversion.safeSubstring(cov, 0, 4));
-            Integer season = CovariateUtils.getSeasonByCovariate(cov);
-            String temporalCov = seasonal ? ExportUtil.tabbed(year, season) : cov;
+            //Integer year = Conversion.safeStringtoIntegerNULL(Conversion.safeSubstring(cov, 0, 4));
+            //Integer season = CovariateUtils.getSeasonByCovariate(cov);
+            String temporalCov = cov;//seasonal ? ExportUtil.tabbed(year, season) : cov;
             MatrixBO covM = indData.getData().getValueAsMatrix(cov);
             // ROW: For each gear
             for (String covGearKey : covM.getSortedKeys()) {

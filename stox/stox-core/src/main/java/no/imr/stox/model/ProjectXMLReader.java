@@ -209,6 +209,7 @@ public class ProjectXMLReader extends XMLReader {
                     case AbndEstProcessDataUtil.TABLE_TEMPORAL:
                     case AbndEstProcessDataUtil.TABLE_GEARFACTOR:
                     case AbndEstProcessDataUtil.TABLE_SPATIAL:
+                    case AbndEstProcessDataUtil.TABLE_PLATFORM:
                         if (elmName.equalsIgnoreCase("value")) {
                             String sourceType = getCurrentAttributeValue("covariatesourcetype");
                             String covariate = getCurrentAttributeValue("covariate");

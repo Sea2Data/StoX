@@ -61,7 +61,11 @@ public class CovariateUtils {
             default:
                 Integer season = CovariateUtils.getSeasonByDate(d, timeInterval);
                 String seasonType = CovariateUtils.getSeasonTypeByTimeInterval(timeInterval);
-                return year + "." + seasonType + season;
+                String code = seasonType + season;
+                if (!seasonal) {
+                    code = year + "." + code;
+                }
+                return code;
         }
         return null;
     }

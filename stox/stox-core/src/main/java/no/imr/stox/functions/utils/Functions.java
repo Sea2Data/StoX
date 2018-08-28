@@ -444,6 +444,13 @@ public final class Functions {
     public static final String PM_DEFINESPATIAL_VAR1 = PM_VAR1;
     public static final String PM_DEFINESPATIAL_VAR2 = PM_VAR2;
 
+    public static final String FN_DEFINEPLATFORM = "DefinePlatform";
+    public static final String PM_DEFINEPLATFORM_PROCESSDATA = "ProcessData";
+    public static final String PM_DEFINEPLATFORM_SOURCETYPE = "SourceType";
+    public static final String PM_DEFINEPLATFORM_COVARIATETYPE = "CovariateType";
+    public static final String PM_DEFINEPLATFORM_DEFINITIONMETHOD = "DefinitionMethod";
+    public static final String PM_DEFINEPLATFORM_BIOTICDATA = "BioticData";
+
     public static final String FN_BIOTICCOVDATA = "BioticCovData";
     public static final String PM_BIOTICCOVDATA_PROCESSDATA = "ProcessData";
     public static final String PM_BIOTICCOVDATA_BIOTICDATA = "BioticData";
