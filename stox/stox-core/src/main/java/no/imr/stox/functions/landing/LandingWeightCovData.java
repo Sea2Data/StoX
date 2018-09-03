@@ -30,23 +30,19 @@ public class LandingWeightCovData extends AbstractFunction {
         LandingCovDataMatrix landCovData = (LandingCovDataMatrix) input.get(Functions.PM_LANDINGWEIGHTCOVDATA_LANDINGCOVDATA);
         LandingWeightCovDataMatrix landWeight = new LandingWeightCovDataMatrix();
         // Default handling (Define by given time interval:
-        for (String tempKey : landCovData.getData().getKeys()) {
-            for (String gearKey : landCovData.getData().getGroupRowKeys(tempKey)) {
-                for (String spatialKey : landCovData.getData().getGroupRowColKeys(tempKey, gearKey)) {
-                    List<FiskeLinje> fls = (List) landCovData.getData().getGroupRowColValue(tempKey, gearKey, spatialKey);
-                    for (FiskeLinje fl : fls) {
-                        Double rw = fl.getRundVekt();
-                        if (rw == null) {
-                            continue;
-                        }
-                        Double w = landWeight.getData().getGroupRowColValueAsDouble(tempKey, gearKey, spatialKey);
-                        if (w == null) {
-                            w = 0d;
-                        }
-                        w += rw;
-                        landWeight.getData().setGroupRowColValue(tempKey, gearKey, spatialKey, w);
-                    }
+        for (String covKey : landCovData.getData().getRowKeys()) {
+            List<FiskeLinje> fls = (List) landCovData.getData().getRowValue(covKey);
+            for (FiskeLinje fl : fls) {
+                Double rw = fl.getRundVekt();
+                if (rw == null) {
+                    continue;
                 }
+                Double w = landWeight.getData().getRowValueAsDouble(covKey);
+                if (w == null) {
+                    w = 0d;
+                }
+                w += rw;
+                landWeight.getData().setRowValue(covKey, w);
             }
         }
         return landWeight;

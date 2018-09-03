@@ -187,7 +187,7 @@ public class CovariateUtils {
         return false;
     }
 
-    public static String getSpatialCovValue(SluttSeddel sl, String var1, String var2) {
+/*    public static String getSpatialCovValue(SluttSeddel sl, String var1, String var2) {
         if (var1 != null && var1.equals(Functions.SPATIALVARIABLE_NONE)) {
             var1 = null;
         }
@@ -218,10 +218,11 @@ public class CovariateUtils {
             return val2;
         }
         return null;
-    }
+    }*/
 
-    public static String getSpatialCovValue(SluttSeddel sl, String dim) {
-        if (dim == null) {
+    public static String getSpatialCovValue(SluttSeddel sl/*, String dim*/) {
+                return sl.getStratum();
+        /*if (dim == null) {
             return null;
         }
         switch (dim) {
@@ -234,10 +235,10 @@ public class CovariateUtils {
             case Functions.SPATIALVARIABLE_LANDINGSITE:
                 return sl.getLandingsMottak();
         }
-        return null;
+        return null;*/
     }
 
-    public static String getSpatialCovValue(FishstationBO fs, String var1, String var2) {
+    /*public static String getSpatialCovValue(FishstationBO fs, String var1, String var2) {
         if (var1 != null && var1.equals(Functions.SPATIALVARIABLE_NONE)) {
             var1 = null;
         }
@@ -268,10 +269,11 @@ public class CovariateUtils {
             return val2;
         }
         return null;
-    }
+    }*/
 
-    public static String getSpatialCovValue(FishstationBO fs, String dim) {
-        if (dim == null) {
+    public static String getSpatialCovValue(FishstationBO fs/*, String dim*/) {
+                return fs.getStratum();
+/*        if (dim == null) {
             return null;
         }
         switch (dim) {
@@ -284,7 +286,7 @@ public class CovariateUtils {
             case Functions.SPATIALVARIABLE_LANDINGSITE:
                 return null; // Not supported
         }
-        return null;
+        return null;*/
     }
 
     public static String getCovKeyByDefElm(String covSourceType, String elm, MatrixBO covM, boolean startsWidth) {

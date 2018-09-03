@@ -10,6 +10,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.Map;
 import no.imr.sea2data.imrbase.matrix.MatrixBO;
+import no.imr.sea2data.imrbase.util.ExportUtil;
 import no.imr.stox.bo.LandingCovDataMatrix;
 import no.imr.stox.bo.ProcessDataBO;
 import no.imr.stox.bo.landing.FiskeLinje;
@@ -34,8 +35,8 @@ public class LandingCovData extends AbstractFunction {
     @Override
     public Object perform(Map<String, Object> input) {
         ProcessDataBO pd = (ProcessDataBO) input.get(Functions.PM_LANDINGCOVDATA_PROCESSDATA);
-        String var1 = (String) pd.getMatrix(Functions.TABLE_SPATIALVAR).getRowValue(Functions.PM_VAR1);
-        String var2 = (String) pd.getMatrix(Functions.TABLE_SPATIALVAR).getRowValue(Functions.PM_VAR2);
+        //String var1 = (String) pd.getMatrix(Functions.TABLE_SPATIALVAR).getRowValue(Functions.PM_VAR1);
+        //String var2 = (String) pd.getMatrix(Functions.TABLE_SPATIALVAR).getRowValue(Functions.PM_VAR2);
         LandingCovDataMatrix landCovData = new LandingCovDataMatrix();
         // Default handling (Define by given time interval:
         List<SluttSeddel> landData = (List) input.get(Functions.PM_LANDINGCOVDATA_LANDINGDATA);
@@ -54,16 +55,17 @@ public class LandingCovData extends AbstractFunction {
             if (gearKey == null) {
                 gearKey = "";
             }
-            String spatCovValue = CovariateUtils.getSpatialCovValue(sl, var1, var2);
+            String spatCovValue = CovariateUtils.getSpatialCovValue(sl/*, var1, var2*/);
             String spatialKey = CovariateUtils.getCovKeyByDefElm(Functions.SOURCETYPE_LANDING, spatCovValue, spatialM, false);
             if (spatialKey == null) {
                 spatialKey = "";
             }
             for (FiskeLinje fl : sl.getFiskelinjer()) {
-                List<FiskeLinje> l = (List<FiskeLinje>) landCovData.getData().getGroupRowColValue(tempKey, gearKey, spatialKey);
+                String cov = ExportUtil.separated('/', tempKey, gearKey, spatialKey);
+                List<FiskeLinje> l = (List<FiskeLinje>) landCovData.getData().getRowValue(cov);
                 if (l == null) {
                     l = new ArrayList<>();
-                    landCovData.getData().setGroupRowColValue(tempKey, gearKey, spatialKey, l);
+                    landCovData.getData().setRowValue(cov, l);
                 }
                 l.add(fl);
             }

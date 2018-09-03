@@ -224,6 +224,14 @@ public class ProjectXMLReader extends XMLReader {
                             project.getProcessData().getMatrix(currentTable).setRowValue(var, valueS);
                         }
                         break;
+                    case AbndEstProcessDataUtil.TABLE_COVPARAM:
+                        if (elmName.equalsIgnoreCase("value")) {
+                            String covariatetable = getCurrentAttributeValue("covariatetable");
+                            String parameter = stratumName(getCurrentAttributeValue("parameter"));
+                            String valueS = getCurrentElementValue();
+                            project.getProcessData().getMatrix(currentTable).setRowColValue(covariatetable, parameter, valueS);
+                        }
+                        break;
                     case AbndEstProcessDataUtil.TABLE_AGEERROR:
                         if (elmName.equalsIgnoreCase("probability")) {
                             String readAge = getCurrentAttributeValue("readage");

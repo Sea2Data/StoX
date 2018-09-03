@@ -244,16 +244,16 @@ public class FeatureUtil {
             Double lon2 = p.getStopLon();
             Double lat2 = p.getStopLat();
             if (lon2 == null || lat2 == null || (lon1.equals(lon2) && lat1.equals(lat2))) {
-                /*if (i < pos.size() - 1) {
+                if (i < pos.size() - 1) {
                     // Use start of next
                     ILatLonEvent p1 = pos.get(i + 1);
                     lon2 = p1.getStartLon();
                     lat2 = p1.getStartLat() + 0.000000001;
-                } else {*/
+                } else {
                     // Last point use the point only
                     lon2 = lon1 + 0.000000001;
                     lat2 = lat1 + 0.000000001;
-                //}
+                }
             }
             /*if (lon2 == null ) {
                 continue;

@@ -44,6 +44,7 @@ public final class AbndEstProcessDataUtil {
     public static final String TABLE_GEARFACTOR = "gearfactor";
     public static final String TABLE_SPATIAL = "spatial";
     public static final String TABLE_PLATFORM = "platform";
+    public static final String TABLE_COVPARAM = "covparam";
     public static final String TABLE_AGEERROR = "ageerror";
     public static final String TABLE_STRATUMNEIGHBOUR = "stratumneighbour";
 
@@ -412,6 +413,9 @@ public final class AbndEstProcessDataUtil {
 
     public static MatrixBO getPlatform(ProcessDataBO pd) {
         return pd.getMatrix(TABLE_PLATFORM);
+    }
+    public static MatrixBO getCovParam(ProcessDataBO pd) {
+        return pd.getMatrix(TABLE_COVPARAM);
     }
     /**
      * This function assumes there are only one assignment per transect and all

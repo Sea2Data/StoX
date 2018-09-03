@@ -35,15 +35,35 @@ Parameter: Name=seed, DataType=Integer, DefaultValue=1, Description=a integer va
 Parameter: Name=cores, DataType=Integer, DefaultValue=1, Description=number of cores to run parallell execution
 
 [Function]
-Name: baseline2eca
-Description: Prepare for eca return data list object
-Output: RObject
+Name: prepareRECA
+Alias: baseline2eca
+Parameter: Name=minage, Required=false, DataType=Integer, DefaultValue=1, Description=Minimum age
+Parameter: Name=maxage, Required=false, DataType=Integer, DefaultValue=20, Description=Maximumage
+Parameter: Name=delta.age, Required=false, DataType=Double, DefaultValue=0.001, Description=Delta age
+Parameter: Name=maxlength, Required=false, DataType=Double, Description=Max length
+Parameter: Name=use_otolithtype, Required=false, DataType=Boolean, DefaultValue=true, Description=Use otolith type
+Parameter: Name=hatchDaySlashMonth, DataType=String, DefaultValue=01/01, Values=fit, Description=Hatching day and month
+Description: Prepare for eca 
 
 [Function]
-Name: eca
-Description: Call eca
-Parameter: Name=data, DataType=RObject, Description=Data list object 
-Output: RObject
+Name: runRECA
+Alias: eca
+Description: Run RECA
+Parameter: Name=burnin, Required=false, DataType=Integer, DefaultValue=100, Description=Burnin
+Parameter: Name=caa.burnin, Required=false, DataType=Integer, DefaultValue=100, Description=Caa Burnin
+Parameter: Name=nSamples, Required=false, DataType=Integer, DefaultValue=1000, Description=Number of samples
+Parameter: Name=thin, Required=false, DataType=Integer, DefaultValue=1, Description=Thin
+Parameter: Name=fitfile, DataType=String, DefaultValue=fit, Description=fitfile
+Parameter: Name=predfile, DataType=String, DefaultValue=pred, Description=fitfile
+Parameter: Name=lgamodel, DataType=String, DefaultValue=log-linear, Values=log-linear, Description=LGA Model
+Parameter: Name=CC, Required=false, DataType=Boolean, DefaultValue=false, Description=CC
+Parameter: Name=CCError, Required=false, DataType=Boolean, DefaultValue=false, Description=CC Error
+Parameter: Name=seed, Required=false, DataType=Integer, Description=Seed
+Parameter: Name=age.error, Required=false, DataType=Boolean, DefaultValue=false, Description=Age error
+
+[Function]
+Name: diagnosticsRECA
+Description: Perform RECA diagnostics
 
 [Function]
 Name: loadEnv

@@ -39,6 +39,9 @@ public class DefinePlatform extends AbstractFunction {
         }
         // Default handling (by data)
         String sourceType = (String) input.get(Functions.PM_DEFINESPATIAL_SOURCETYPE);
+        MatrixBO covParam = AbndEstProcessDataUtil.getCovParam(pd);
+        String covariateType = (String) input.get(Functions.PM_DEFINESPATIAL_COVARIATETYPE);
+        covParam.setRowColValue(AbndEstProcessDataUtil.TABLE_PLATFORM, Functions.PM_DEFINEPLATFORM_COVARIATETYPE, covariateType);
         List<FishstationBO> biotic = (List) input.get(Functions.PM_DEFINESPATIAL_BIOTICDATA);
         MatrixBO covP = AbndEstProcessDataUtil.getPlatform(pd);
 
@@ -55,7 +58,10 @@ public class DefinePlatform extends AbstractFunction {
                 if (biotic == null) {
                     return pd;
                 }
-                biotic.stream().map((fs) -> fs.getPlatform()).filter((def) -> (def != null)).forEach((def) -> {
+                biotic.stream().map((fs) -> {
+                    //fs.
+                    return fs.getPlatform();
+                }).filter((def) -> (def != null)).forEach((def) -> {
                     covP.setRowColValue(sourceType, def, def);
                 });
             }
