@@ -364,7 +364,8 @@ public class DATRASDataStorage extends FileDataStorage {
                             if (specValTot.getValue(c.getAphia()) == null) {
                                 specValTot.setValue(c.getAphia(), specVal);
                             }
-                            lsCountTot.addDoubleValue(c.getAphia(), s.getLengthSampleCount() != null ? s.getLengthSampleCount().doubleValue() : -9);
+                            //IU: TODO: Need to check below (else -9), consider a condition where the first sample count is x then the second is null, this would be x-9
+                            lsCountTot.addDoubleValue(c.getAphia(), s.getLengthSampleCount() != null ? s.getLengthSampleCount().doubleValue() : 0);
                             String lngtCode = s.getSampletype() != null ? isCrustacean ? "."/*1mm*/ : isHerringOrSprat ? "0"/*5mm*/ : "1"/*1cm*/ : "-9"/*1cm*/;
                             Integer lenInterval = lngtCode.equals("0") ? 5 : 1;
                             if (lengthCodeTot.getValue(c.getAphia()) != null) {
@@ -424,7 +425,7 @@ public class DATRASDataStorage extends FileDataStorage {
                                         sex,
                                         unkD(totalNo, "0.00"), // n per Hour
                                         specVal == null || specVal == 0 ? "-9" : "1", // CatIdentifier
-                                        Math.round(lsCountTot.getValueAsDouble(aphia)), // n measured as individual
+                                        Math.round(lsCountTot.getValueAsDouble(aphia)) <= 0 ? -9.0 : Math.round(lsCountTot.getValueAsDouble(aphia)), // n measured as individual
                                         unkD(1d, "0.0000"), // SubFactor
                                         -9,
                                         catCatchWgt == null ? -9 : Math.round(catCatchWgt), /*g per Hour*/
