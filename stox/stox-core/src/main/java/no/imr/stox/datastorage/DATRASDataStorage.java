@@ -405,6 +405,8 @@ public class DATRASDataStorage extends FileDataStorage {
                         String lngtCode = (String) lengthCodeTot.getValue(aphia);
                         Double catCatchWgt = weightTot.getValueAsDouble(aphia);
                         for (String sex : hlNoAtLngth.getGroupRowKeys(aphia)) {
+                            // IU: For CatIdentifier, since it has to be separated between sexes
+                            Integer CatIdentifier = 1;
                             Double totalNo = hlNoAtLngth.getGroupRowValueAsMatrix(aphia, sex).getSum();
                             for (String lngtClass : hlNoAtLngth.getGroupRowColKeys(aphia, sex)) {
                                 ImrIO.write(wr, ExportUtil.carrageReturnLineFeed(ExportUtil.csv(
@@ -424,7 +426,7 @@ public class DATRASDataStorage extends FileDataStorage {
                                         specVal,
                                         sex,
                                         unkD(totalNo, "0.00"), // n per Hour
-                                        specVal == null || specVal == 0 ? "-9" : "1", // CatIdentifier
+                                        specVal == null ? -9 : CatIdentifier++,
                                         Math.round(lsCountTot.getValueAsDouble(aphia)) <= 0 ? -9.0 : Math.round(lsCountTot.getValueAsDouble(aphia)), // n measured as individual
                                         unkD(1d, "0.0000"), // SubFactor
                                         -9,
