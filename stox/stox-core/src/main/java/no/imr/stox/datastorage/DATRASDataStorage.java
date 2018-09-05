@@ -8,6 +8,7 @@ package no.imr.stox.datastorage;
 import java.io.Writer;
 import java.text.DecimalFormat;
 import java.util.List;
+import java.util.Arrays;
 import no.imr.sea2data.biotic.bo.CatchBO;
 import no.imr.sea2data.biotic.bo.FishstationBO;
 import no.imr.sea2data.biotic.bo.IndividualBO;
@@ -341,7 +342,13 @@ public class DATRASDataStorage extends FileDataStorage {
                     MatrixBO lengthCodeTot = new MatrixBO();
                     MatrixBO weightTot = new MatrixBO();
                     for (CatchBO c : fs.getCatchBOCollection()) {
-                        boolean isHerringOrSprat = c.getNoname().toUpperCase().startsWith("SILD") || c.getNoname().toUpperCase().startsWith("BRISLING");
+
+                        // IU: Use aphia for comparison and add crustacean boolean
+                        boolean isHerringOrSprat = (c.getAphia()== "126417") || (c.getAphia()== "126425");
+
+                        List<String> crustList = Arrays.asList( "107275", "107276", "107369", "107253", "107703", "107704", "107350", "107254", "107205", "140712", "140687", "140658" );
+                        boolean isCrustacean = crustList.contains(c.getAphia());
+
                         for (SampleBO s : c.getSampleBOCollection()) {
                             //Double sampleFac = s.getCount().doubleValue() / s.getLengthSampleCount();
                             if (s.getWeight() == null || s.getCount() == null) {
@@ -353,7 +360,7 @@ public class DATRASDataStorage extends FileDataStorage {
                                 specValTot.setValue(c.getAphia(), specVal);
                             }
                             lsCountTot.addDoubleValue(c.getAphia(), s.getLengthSampleCount() != null ? s.getLengthSampleCount().doubleValue() : -9);
-                            String lngtCode = s.getSampletype() != null ? s.getSampletype() >= 90 ? "."/*1mm*/ : isHerringOrSprat ? "0"/*5mm*/ : "1"/*1cm*/ : "1"/*1cm*/;
+                            String lngtCode = s.getSampletype() != null ? isCrustacean ? "."/*1mm*/ : isHerringOrSprat ? "0"/*5mm*/ : "1"/*1cm*/ : "-9"/*1cm*/;
                             Integer lenInterval = lngtCode.equals("0") ? 5 : 1;
                             if (lengthCodeTot.getValue(c.getAphia()) != null) {
                                 lngtCode = (String) lengthCodeTot.getValue(c.getAphia());
@@ -440,7 +447,12 @@ public class DATRASDataStorage extends FileDataStorage {
                     String areaLoc = fs.getArea() != null && fs.getLocation() != null ? fs.getArea() + fs.getLocation() : "";
 
                     for (CatchBO c : fs.getCatchBOCollection()) {
-                        boolean isHerringOrSprat = c.getNoname().toUpperCase().startsWith("SILD") || c.getNoname().toUpperCase().startsWith("BRISLING");
+                        // IU: Use aphia for comparison and add crustacean boolean
+                        boolean isHerringOrSprat = (c.getAphia()== "126417") || (c.getAphia()== "126425");
+
+                        List<String> crustList = Arrays.asList( "107275", "107276", "107369", "107253", "107703", "107704", "107350", "107254", "107205", "140712", "140687", "140658" );
+                        boolean isCrustacean = crustList.contains(c.getAphia());
+
                         for (SampleBO s : c.getSampleBOCollection()) {
                             if (s.getIndividualBOCollection().isEmpty()) {
                                 continue;
@@ -448,7 +460,7 @@ public class DATRASDataStorage extends FileDataStorage {
                             MatrixBO nInd = new MatrixBO();
                             MatrixBO nWithWeight = new MatrixBO();
                             MatrixBO totWeight = new MatrixBO();
-                            String lngtCode = s.getSampletype() != null ? s.getSampletype() >= 90 ? "."/*1mm*/ : isHerringOrSprat ? "0"/*5mm*/ : "1"/*1cm*/ : "1"/*1cm*/;
+                            String lngtCode = s.getSampletype() != null ? isCrustacean ? "."/*1mm*/ : isHerringOrSprat ? "0"/*5mm*/ : "1"/*1cm*/ : "-9"/*1cm*/;
                             Integer lenInterval = lngtCode.equals("0") ? 5 : 1;
                             Boolean reportInMM = !lngtCode.equals("1");
                             for (IndividualBO i : s.getIndividualBOCollection()) {
@@ -518,7 +530,7 @@ public class DATRASDataStorage extends FileDataStorage {
     private static String getDATRASMaturity(IndividualBO i) {
         CatchBO c = i.getSample().getCatchBO();
         String noName = c.getNoname().toUpperCase();
-        boolean isHerringOrSpratOrMackerel = noName.startsWith("SILD") || noName.startsWith("BRISLING") || noName.startsWith("MAKRELL");
+        boolean isHerringOrSpratOrMackerel = (c.getAphia()== "126417") || (c.getAphia()== "126425") || (c.getAphia()== "127023");
         Integer res = -9;
         if (i.getSpecialStage() != null) {
             Integer sp = Conversion.safeStringtoIntegerNULL(i.getSpecialStage());
