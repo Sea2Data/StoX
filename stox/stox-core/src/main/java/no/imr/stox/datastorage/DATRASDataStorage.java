@@ -355,7 +355,12 @@ public class DATRASDataStorage extends FileDataStorage {
                                 continue;
                             }
                             weightTot.addDoubleValue(c.getAphia(), s.getWeight() * 1000);
-                            Integer specVal = haulVal.equals("I") ? 0 : s.getCount() != null && s.getLengthSampleCount() != null ? 1 : s.getCount() != null ? 4 : 5;
+                            Integer specVal = haulVal.equals("I") ? 0 :
+                                s.getCount() != null && s.getLengthSampleCount() != null && s.getTotalWeight() != null ? 1 :
+                                s.getCount() != null && s.getLengthSampleCount() == null && s.getTotalWeight() == null ? 4 :
+                                s.getCount() == null && s.getLengthSampleCount() == null && s.getTotalWeight() != null ? 6 :
+                                s.getCount() != null && s.getLengthSampleCount() == null && s.getTotalWeight() != null ? 7 :
+                                haulVal.equals("V") && s.getCount() == null && s.getLengthSampleCount() == null && s.getTotalWeight() == null ? 5 : -9;
                             if (specValTot.getValue(c.getAphia()) == null) {
                                 specValTot.setValue(c.getAphia(), specVal);
                             }
