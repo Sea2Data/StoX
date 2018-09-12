@@ -132,7 +132,17 @@ public class JTSUtils {
     }
 
     public static Boolean within(Coordinate c, MultiPolygon mp) {
-        return createPoint(c).within(mp);
+        Point pt = createPoint(c);
+        boolean within = pt.within(mp);
+        if(!within) {
+            if(pt.coveredBy(mp)) {
+                // the point is on line
+                // recheck a small replacement
+                pt = createPoint(new Coordinate(c.x - 0.000000001, c.y - 0.000000001));
+                within = pt.within(mp);
+            }
+        }
+        return within;
     }
 
     public static Boolean within(Coordinate c, LinearRing lr) {
