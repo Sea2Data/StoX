@@ -54,12 +54,19 @@ public class DefineTemporal extends AbstractFunction {
         }
         // Default handling (Define by given time interval:
         String sourceType = (String) input.get(Functions.PM_DEFINETEMPORAL_SOURCETYPE);
+        Boolean conditionalAutoRegression = (Boolean) input.get(Functions.PM_DEFINETEMPORAL_CONDITIONALAUTOREGRESSION);
         String timeInterval = (String) input.get(Functions.PM_DEFINETEMPORAL_TIMEINTERVAL);
         Boolean seasonal = Conversion.safeObjectToBoolean((Boolean) input.get(Functions.PM_DEFINETEMPORAL_SEASONAL));
         List<SluttSeddel> landingData = (List) input.get(Functions.PM_DEFINETEMPORAL_LANDINGDATA);
         List<FishstationBO> bioticData = (List) input.get(Functions.PM_DEFINETEMPORAL_BIOTICDATA);
         MatrixBO covM = AbndEstProcessDataUtil.getTemporal(pd);
         MatrixBO m = covM.getRowValueAsMatrix(sourceType);
+        MatrixBO covParam = AbndEstProcessDataUtil.getCovParam(pd);
+        String covariateType = (String) input.get(Functions.PM_DEFINETEMPORAL_COVARIATETYPE);
+        covParam.setRowColValue(AbndEstProcessDataUtil.TABLE_TEMPORAL, Functions.PM_DEFINETEMPORAL_COVARIATETYPE, covariateType);
+        if (conditionalAutoRegression != null) {
+            covParam.setRowColValue("temporal", "conditionalautoregression", conditionalAutoRegression.toString());
+        }
         if (m != null) {
             m.clear(); // Clear covariates 
         }

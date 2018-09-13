@@ -37,6 +37,9 @@ public class DefineGearFactor extends AbstractFunction {
         String defMethod = (String) input.get(Functions.PM_DEFINEGEARFACTOR_DEFINITIONMETHOD);
         MatrixBO covM = AbndEstProcessDataUtil.getGear(pd);
         String covariateSourceType = (String) input.get(Functions.PM_DEFINEGEARFACTOR_SOURCETYPE);
+        MatrixBO covParam = AbndEstProcessDataUtil.getCovParam(pd);
+        String covariateType = (String) input.get(Functions.PM_DEFINETEMPORAL_COVARIATETYPE);
+        covParam.setRowColValue(AbndEstProcessDataUtil.TABLE_GEARFACTOR, Functions.PM_DEFINEGEARFACTOR_COVARIATETYPE, covariateType);
         if (defMethod == null || defMethod.equals(Functions.DEFINITIONMETHOD_USEPROCESSDATA) ||
                 covariateSourceType == null) {
             // Use existing, do not read from file.

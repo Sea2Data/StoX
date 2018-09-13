@@ -690,11 +690,19 @@ public class Factory {
         }
         for (String covariateSourceType : new String[]{Functions.SOURCETYPE_LANDING, Functions.SOURCETYPE_BIOTIC}) {
             m.addProcess(Functions.FN_DEFINESPATIAL + covariateSourceType, Functions.FN_DEFINESPATIAL).
-                    setParameterProcessValue(Functions.PM_DEFINETEMPORAL_PROCESSDATA, Functions.FN_READPROCESSDATA).
+                    setParameterProcessValue(Functions.PM_DEFINESPATIAL_PROCESSDATA, Functions.FN_READPROCESSDATA).
                     setParameterValue(Functions.PM_DEFINESPATIAL_COVARIATETYPE, Functions.COVARIATETYPE_FIXED).
                     setParameterValue(Functions.PM_DEFINESPATIAL_SOURCETYPE, covariateSourceType).
                     setParameterValue(Functions.PM_DEFINESPATIAL_DEFINITIONMETHOD, covariateSourceType.equals(Functions.SOURCETYPE_LANDING)
                             ? Functions.DEFINITIONMETHOD_USEDATA : Functions.DEFINITIONMETHOD_INHERIT).
+                    setRespondInGUI(true).setBreakInGUI(true);
+        }
+        for (String covariateSourceType : new String[]{Functions.SOURCETYPE_BIOTIC}) {
+            m.addProcess(Functions.FN_DEFINEPLATFORM + covariateSourceType, Functions.FN_DEFINEPLATFORM).
+                    setParameterProcessValue(Functions.PM_DEFINEPLATFORM_PROCESSDATA, Functions.FN_READPROCESSDATA).
+                    setParameterValue(Functions.PM_DEFINEPLATFORM_COVARIATETYPE, Functions.COVARIATETYPE_FIXED).
+                    setParameterValue(Functions.PM_DEFINEPLATFORM_SOURCETYPE, covariateSourceType).
+                    setParameterValue(Functions.PM_DEFINESPATIAL_DEFINITIONMETHOD, Functions.DEFINITIONMETHOD_USEDATA).
                     setRespondInGUI(true).setBreakInGUI(true);
         }
         m.addProcess(Functions.FN_BIOTICCOVDATA, Functions.FN_BIOTICCOVDATA).

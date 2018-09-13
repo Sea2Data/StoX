@@ -588,7 +588,7 @@ Class: no.imr.stox.functions.processdata.DefineTemporal
 Respondable:true
 Parameter: Name=ProcessData, DataType=ProcessData, Description=The <I>ProcessData</I> parameter is used to identify the covariate for the CovariateType and Source given.
 Parameter: Name=SourceType, DataType=String, Values=Landing;Biotic, Description=The <I>SourceType</I> The type of source of the covariates defined.
-Parameter: Name=CovariateType, DefaultValue=Fixed, DataType=String, Values=Fixed;Random;Dependency, Description=The <I>CovariateDependenytype</I> The type of error structure dependencies <BR>Fixed: covariate will be treated as fixed effect.<BR>Random: covariate will be treated as random effect.<BR>Dependency: missing documentation
+Parameter: Name=CovariateType, DefaultValue=Fixed, DataType=String, ParentTag=SourceType.Biotic, Values=Fixed;Random, Description=The <I>CovariateDependenytype</I> The type of error structure dependencies <BR>Fixed: covariate will be treated as fixed effect.<BR>Random: covariate will be treated as random effect.<BR>Dependency: missing documentation
 Parameter: Name=ConditionalAutoRegression, DefaultValue=false, DataType=Boolean, ParentTag=CovariateType.Random, Description=The <I>ConditionalAutoRegression</I> if random covariates are correlated
 Parameter: Name=DefinitionMethod, DefaultValue=UseData, DataType=String, Values=Inherit;UseData;ResourceFile;UseProcessData, Description=The <I>DefinitionMethod</I> is how to define the coveriates
 Parameter: Name=LandingData, Required=false, DataType=LandingData, ParentTag=SourceType.Landing, Description=Landing data
@@ -606,7 +606,7 @@ Class: no.imr.stox.functions.processdata.DefineGearFactor
 Respondable:true
 Parameter: Name=ProcessData, DataType=ProcessData, Description=The <I>ProcessData</I> parameter is used to identify the covariate for the CovariateType and Source given.
 Parameter: Name=SourceType, DataType=String, Values=Landing;Biotic, Description=The <I>SourceType</I> The type of source of the covariates defined.
-Parameter: Name=CovariateType, DefaultValue=Fixed, DataType=String, Values=Fixed;Random;Dependency, Description=The <I>CovariateDependenytype</I> The type of error structure dependencies <BR>Fixed: covariate will be treated as fixed effect.<BR>Random: covariate will be treated as random effect.<BR>Dependency: missing documentation
+Parameter: Name=CovariateType, DefaultValue=Fixed, DataType=String, ParentTag=SourceType.Biotic, Values=Fixed;Random, Description=The <I>CovariateDependenytype</I> The type of error structure dependencies <BR>Fixed: covariate will be treated as fixed effect.<BR>Random: covariate will be treated as random effect.<BR>Dependency: missing documentation
 Parameter: Name=ConditionalAutoRegression, DefaultValue=false, DataType=Boolean, ParentTag=CovariateType.Random, Description=The <I>ConditionalAutoRegression</I> if random covariates are correlated
 Parameter: Name=DefinitionMethod, DefaultValue=UseProcessData, DataType=String, Values=InheritCovarId;ResourceFile;UseProcessData, Description=The <I>DefinitionMethod</I> is how to define the coveriates
 Parameter: Name=FileName, Required=false, DataType=String, ParentTag=DefinitionMethod.ResourceFile, Description=The <I>FileName</I> parameter is used to give the complete path including filename to the WKT strata system file to be used
@@ -614,19 +614,29 @@ Output: ProcessData
 
 [Function]
 Name: DefineSpatial
-Description: Define spatial covariate for ECA cells, as a concatenation of var1 and var2. Must be chosen in correspondance with DefineStratumNeighbour.
+Description: Define spatial covariate for ECA cells, using stratum chosen in DefinStratum. Must be chosen in correspondance with DefineStratumNeighbour.
 Class: no.imr.stox.functions.processdata.DefineSpatial
 Respondable:true
 Parameter: Name=ProcessData, DataType=ProcessData, Description=The <I>ProcessData</I> parameter is used to identify the covariate for the CovariateType and Source given.
 Parameter: Name=SourceType, DataType=String, Values=Landing;Biotic, Description=The <I>SourceType</I> The type of source of the covariates defined.
-Parameter: Name=CovariateType, DefaultValue=Fixed, DataType=String, Values=Fixed;Random;Dependency, Description=The <I>CovariateDependenytype</I> The type of error structure dependencies <BR>Fixed: covariate will be treated as fixed effect.<BR>Random: covariate will be treated as random effect.<BR>Dependency: missing documentation
+Parameter: Name=CovariateType, DefaultValue=Fixed, DataType=String, ParentTag=SourceType.Biotic, Values=Fixed;Random, Description=The <I>CovariateDependenytype</I> The type of error structure dependencies <BR>Fixed: covariate will be treated as fixed effect.<BR>Random: covariate will be treated as random effect.<BR>Dependency: missing documentation
 Parameter: Name=ConditionalAutoRegression, DefaultValue=false, DataType=Boolean, ParentTag=CovariateType.Random, Description=The <I>ConditionalAutoRegression</I> if random covariates are correlated
 Parameter: Name=DefinitionMethod, DefaultValue=UseData, DataType=String, Values=Inherit;UseData;UseProcessData, Description=The <I>DefinitionMethod</I> is how to define the coveriates
 Parameter: Name=LandingData, Required=false, DataType=LandingData, ParentTag=SourceType.Landing, Description=Landing data
 Parameter: Name=BioticData, Required=false, DataType=BioticData, ParentTag=SourceType.Biotic, Description=The <I>BioticData</I> parameter is used to specify which previous process has generated the <U>BioticData</U> input data.
 Parameter: Name=FileName, Required=false, DataType=String, ParentTag=DefinitionMethod.ResourceFile, Description=The <I>FileName</I> parameter is used to give the complete path including filename to the WKT strata system file to be used
-Parameter: Name=Var1, Required=false, DefaultValue=MainArea, DataType=String, ParentTag=DefinitionMethod.UseData, Values=None;Stratum;MainArea;Location;LandingSite, Description=The <I>dimension 1</I> in the spatial covariate
-Parameter: Name=Var2, Required=false, DefaultValue=Location, DataType=String, ParentTag=DefinitionMethod.UseData, Values=None;Stratum;MainArea;Location;LandingSite, Description=The <I>dimension 2</I> in the spatial covariate
+Output: ProcessData
+
+[Function]
+Name: DefinePlatform
+Description: Define platform covariate for ECA cells.
+Class: no.imr.stox.functions.processdata.DefinePlatform
+Respondable:true
+Parameter: Name=ProcessData, DataType=ProcessData, Description=The <I>ProcessData</I> parameter is used to identify the covariate for the CovariateType and Source given.
+Parameter: Name=SourceType, DataType=String, Values=Biotic, Description=The <I>SourceType</I> The type of source of the covariates defined.
+Parameter: Name=CovariateType, DefaultValue=Fixed, DataType=String, ParentTag=SourceType.Biotic, Values=Fixed;Random, Description=The <I>CovariateDependenytype</I> The type of error structure dependencies <BR>Fixed: covariate will be treated as fixed effect.<BR>Random: covariate will be treated as random effect.<BR>Dependency: missing documentation
+Parameter: Name=DefinitionMethod, DefaultValue=UseData, DataType=String, Values=UseData;UseProcessData, Description=The <I>DefinitionMethod</I> is how to define the coveriates
+Parameter: Name=BioticData, Required=false, DataType=BioticData, ParentTag=SourceType.Biotic, Description=The <I>BioticData</I> parameter is used to specify which previous process has generated the <U>BioticData</U> input data.
 Output: ProcessData
 
 [Function]

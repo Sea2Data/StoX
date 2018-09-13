@@ -30,6 +30,8 @@ public class ProcessDataBO extends MatricesBO {
         getMatrix(AbndEstProcessDataUtil.TABLE_TEMPORAL).setMetaMatrix(Functions.MM_COVARIATE_MATRIX);
         getMatrix(AbndEstProcessDataUtil.TABLE_GEARFACTOR).setMetaMatrix(Functions.MM_COVARIATE_MATRIX);
         getMatrix(AbndEstProcessDataUtil.TABLE_SPATIAL).setMetaMatrix(Functions.MM_COVARIATE_MATRIX);
+        getMatrix(AbndEstProcessDataUtil.TABLE_PLATFORM).setMetaMatrix(Functions.MM_COVARIATE_MATRIX);
+        getMatrix(AbndEstProcessDataUtil.TABLE_COVPARAM).setMetaMatrix(Functions.MM_COVARIATEPARAMETER_MATRIX);
         getMatrix(AbndEstProcessDataUtil.TABLE_AGEERROR).setMetaMatrix(Functions.MM_AGEERROR_MATRIX);
         getMatrix(AbndEstProcessDataUtil.TABLE_STRATUMNEIGHBOUR).setMetaMatrix(Functions.MM_VARIABLE_MATRIX);
     }
@@ -50,6 +52,8 @@ public class ProcessDataBO extends MatricesBO {
                 AbndEstProcessDataUtil.TABLE_TEMPORAL,
                 AbndEstProcessDataUtil.TABLE_GEARFACTOR,
                 AbndEstProcessDataUtil.TABLE_SPATIAL,
+                AbndEstProcessDataUtil.TABLE_PLATFORM,
+                AbndEstProcessDataUtil.TABLE_COVPARAM,
                 AbndEstProcessDataUtil.TABLE_AGEERROR,
                 AbndEstProcessDataUtil.TABLE_STRATUMNEIGHBOUR
                 );

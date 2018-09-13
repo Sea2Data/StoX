@@ -11,4 +11,4 @@ git pull
 cp C:/Projects/Git/StoX/stox/stox-core/target/stox.jar C:/Projects/Git/RStox/inst/java/stox.jar
 git commit -a -m "Updated stox.jar"
 git push
-#read -rsp $'Press any key to continue...' -n 1 key
+read -rsp $'Press any key to continue...' -n 1 key

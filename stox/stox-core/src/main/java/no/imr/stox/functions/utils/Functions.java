@@ -36,8 +36,8 @@ public final class Functions {
     // Stratum is the main area with psus
     public static final String DIM_STRATUM = "Stratum";
     // Dimension 1 && 2
-    public static final String PM_VAR1 = "Var1";
-    public static final String PM_VAR2 = "Var2";
+    //public static final String PM_VAR1 = "Var1";
+    //public static final String PM_VAR2 = "Var2";
 
     // Variables used as matrix content
     // Densities are used in length distributions grouped by taxa, channelleyer and sample unit (edsu or psu).
@@ -73,6 +73,7 @@ public final class Functions {
     public static final String MM_POLYGON_MATRIX = "Matrix[ROW~PolygonKey / COL~PolygonVariable / VAR~Value]";
     public static final String MM_COVARIATE_MATRIX = "Matrix[ROW~CovariateSourceType / COL~Covariate / VAR~Value]";
     public static final String MM_AGEERROR_MATRIX = "Matrix[ROW~ReadAge / COL~RealAge / VAR~Probability]";
+    public static final String MM_COVARIATEPARAMETER_MATRIX = "Matrix[ROW~CovariateTable / COL~Parameter / VAR~Value]";
 
     // Baseline matrix
     public static final String MM_NASC_MATRIX = "Matrix[GROUP~AcoCat / ROW~SampleUnit / COL~Layer / VAR~NASC]";
@@ -93,8 +94,8 @@ public final class Functions {
     public static final String MM_XCATBYLENGTH_MATRIX = "Matrix[GROUP~SPEC_ESTL_STRATA / ROW~LengthGroup / COL~XCat / CELL~Variable / VAR~Value]";
     public static final String MM_TOTALABUNDANCEREPORT_MATRIX = "Matrix[GROUP~SpecCat / ROW~EstLayer / COL~Stratum / CELL~Variable / VAR~Value]";
 
-    public static final String MM_BIOTICCOVDATA_MATRIX = "Matrix[GROUP~Temporal / ROW~GearFactor / COL~Spatial / VAR~Individuals]";
-    public static final String MM_LANDINGCOVDATA_MATRIX = "Matrix[GROUP~Temporal / ROW~GearFactor / COL~Spatial / VAR~Landings]";
+    public static final String MM_BIOTICCOVDATA_MATRIX = "Matrix[ROW~CovariateKeys / VAR~Individuals]";
+    public static final String MM_LANDINGCOVDATA_MATRIX = "Matrix[ROW~CovariateKeys / VAR~Landings]";
     public static final String MM_LANDINGWEIGHTCOVDATA_MATRIX = "Matrix[GROUP~Temporal / ROW~GearFactor / COL~Spatial / VAR~Weight]";
     // Data resolution types
     public static final String RES_SAMPLEUNITTYPE = "SampleUnitType";
@@ -441,8 +442,15 @@ public final class Functions {
     public static final String PM_DEFINESPATIAL_LANDINGDATA = "LandingData";
     public static final String PM_DEFINESPATIAL_BIOTICDATA = "BioticData";
     public static final String PM_DEFINESPATIAL_FILENAME = "FileName";
-    public static final String PM_DEFINESPATIAL_VAR1 = PM_VAR1;
-    public static final String PM_DEFINESPATIAL_VAR2 = PM_VAR2;
+//    public static final String PM_DEFINESPATIAL_VAR1 = PM_VAR1;
+//    public static final String PM_DEFINESPATIAL_VAR2 = PM_VAR2;
+
+    public static final String FN_DEFINEPLATFORM = "DefinePlatform";
+    public static final String PM_DEFINEPLATFORM_PROCESSDATA = "ProcessData";
+    public static final String PM_DEFINEPLATFORM_SOURCETYPE = "SourceType";
+    public static final String PM_DEFINEPLATFORM_COVARIATETYPE = "CovariateType";
+    public static final String PM_DEFINEPLATFORM_DEFINITIONMETHOD = "DefinitionMethod";
+    public static final String PM_DEFINEPLATFORM_BIOTICDATA = "BioticData";
 
     public static final String FN_BIOTICCOVDATA = "BioticCovData";
     public static final String PM_BIOTICCOVDATA_PROCESSDATA = "ProcessData";
@@ -780,14 +788,14 @@ public final class Functions {
     public static final String COVARIATETIMEINTERVAL_WEEK = "Week";
     public static final String COVARIATETIMEINTERVAL_PERIOD = "Period";
     // Spatial covariate dimension
-    public static final String SPATIALVARIABLE_NONE = "None";
+    /*public static final String SPATIALVARIABLE_NONE = "None";
     public static final String SPATIALVARIABLE_STRATUM = "Stratum";
     public static final String SPATIALVARIABLE_MAINAREA = "MainArea";
     public static final String SPATIALVARIABLE_LOCATION = "Location";
-    public static final String SPATIALVARIABLE_LANDINGSITE = "LandingSite";
+    public static final String SPATIALVARIABLE_LANDINGSITE = "LandingSite";*/
     // Transient process data table
     public static final String TABLE_ESTLAYERDEF = "ESTLAYERDEF";
-    public static final String TABLE_SPATIALVAR = "SPATIALDIM";
+    //public static final String TABLE_SPATIALVAR = "SPATIALDIM";
     // Transient process data table
     public static final String REPORT_FETCH_LEVEL_IMPUTE = "impute";
     public static final String REPORT_FETCH_LEVEL_BOOTSTRAP = "bootstrap";

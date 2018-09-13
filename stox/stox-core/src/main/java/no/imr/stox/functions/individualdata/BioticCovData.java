@@ -14,6 +14,7 @@ import no.imr.sea2data.biotic.bo.FishstationBO;
 import no.imr.sea2data.biotic.bo.IndividualBO;
 import no.imr.sea2data.biotic.bo.SampleBO;
 import no.imr.sea2data.imrbase.matrix.MatrixBO;
+import no.imr.sea2data.imrbase.util.ExportUtil;
 import no.imr.stox.bo.BioticCovDataMatrix;
 import no.imr.stox.bo.ProcessDataBO;
 import no.imr.stox.functions.AbstractFunction;
@@ -36,8 +37,8 @@ public class BioticCovData extends AbstractFunction {
     @Override
     public Object perform(Map<String, Object> input) {
         ProcessDataBO pd = (ProcessDataBO) input.get(Functions.PM_BIOTICCOVDATA_PROCESSDATA);
-        String var1 = (String) pd.getMatrix(Functions.TABLE_SPATIALVAR).getRowValue(Functions.PM_VAR1);
-        String var2 = (String) pd.getMatrix(Functions.TABLE_SPATIALVAR).getRowValue(Functions.PM_VAR2);
+        //String var1 = (String) pd.getMatrix(Functions.TABLE_SPATIALVAR).getRowValue(Functions.PM_VAR1);
+        //String var2 = (String) pd.getMatrix(Functions.TABLE_SPATIALVAR).getRowValue(Functions.PM_VAR2);
         BioticCovDataMatrix indData = new BioticCovDataMatrix();
         // Default handling (Define by given time interval:
         List<FishstationBO> bioticData = (List) input.get(Functions.PM_BIOTICCOVDATA_BIOTICDATA);
@@ -57,18 +58,23 @@ public class BioticCovData extends AbstractFunction {
                 gearKey = "";
             }
             
-            String spatCovValue = CovariateUtils.getSpatialCovValue(fs, var1, var2);
+            String spatCovValue = CovariateUtils.getSpatialCovValue(fs/*, var1, var2*/);
             String spatialKey = CovariateUtils.getCovKeyByDefElm(Functions.SOURCETYPE_BIOTIC, spatCovValue, spatialM, false);
             if (spatialKey == null) {
                 spatialKey = "";
             }
+            String platformKey = fs.getPlatform();
+            if (platformKey == null) {
+                platformKey = "";
+            }
             for (CatchBO cs : fs.getCatchBOCollection()) {
                 for (SampleBO s : cs.getSampleBOCollection()) {
                     for (IndividualBO i : s.getIndividualBOCollection()) {
-                        List<IndividualBO> l = (List<IndividualBO>) indData.getData().getGroupRowColValue(tempKey, gearKey, spatialKey);
+                        String cov = ExportUtil.separated('/', tempKey, gearKey, spatialKey, platformKey);
+                        List<IndividualBO> l = (List<IndividualBO>) indData.getData().getRowValue(cov);
                         if (l == null) {
                             l = new ArrayList<>();
-                            indData.getData().setGroupRowColValue(tempKey, gearKey, spatialKey, l);
+                            indData.getData().setRowValue(cov, l);
                         }
                         l.add(i);
                     }

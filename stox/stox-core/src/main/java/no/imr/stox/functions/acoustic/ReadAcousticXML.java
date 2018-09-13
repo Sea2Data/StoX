@@ -36,7 +36,7 @@ public class ReadAcousticXML extends AbstractFunction {
     @Override
     public Object perform(Map<String, Object> input) {
         Object distances = Functions.XMLDATA ? new AcousticXMLData() : new ArrayList<>();
-        for (int i = 1; i <= 6; i++) {
+        for (int i = 1; i <= 20; i++) {
             String fileName = (String) input.get("FileName" + i);
             if (fileName == null) {
                 continue;

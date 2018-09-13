@@ -27,20 +27,24 @@ public class SelectWorkspaceProjectDialog extends javax.swing.JDialog {
 
     private void updateProjectList() {
         File fStox = new File(getProjectRoot());
-        String names[] = fStox.list();
-        DefaultListModel lm = new DefaultListModel();
-        for (String name : names) {
-            String projectFolder = getProjectRoot() + "/" + name;
-            File fSub = new File(projectFolder);
-            if (fSub.isDirectory()) {
-                File f = new File(ProjectUtils.getProcessPath(projectFolder));
-                if (f.exists()) {
-                    lm.addElement(name);
+        if (fStox.exists()) {
+            String names[] = fStox.list();
+            DefaultListModel lm = new DefaultListModel();
+            if (names != null) {
+                for (String name : names) {
+                    String projectFolder = getProjectRoot() + "/" + name;
+                    File fSub = new File(projectFolder);
+                    if (fSub.isDirectory()) {
+                        File f = new File(ProjectUtils.getProcessPath(projectFolder));
+                        if (f.exists()) {
+                            lm.addElement(name);
+                        }
+                    }
                 }
             }
+            jList1.setModel(lm);
+            jList1.repaint();
         }
-        jList1.setModel(lm);
-        jList1.repaint();
     }
 
     /**

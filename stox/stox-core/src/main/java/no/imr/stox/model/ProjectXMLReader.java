@@ -209,6 +209,7 @@ public class ProjectXMLReader extends XMLReader {
                     case AbndEstProcessDataUtil.TABLE_TEMPORAL:
                     case AbndEstProcessDataUtil.TABLE_GEARFACTOR:
                     case AbndEstProcessDataUtil.TABLE_SPATIAL:
+                    case AbndEstProcessDataUtil.TABLE_PLATFORM:
                         if (elmName.equalsIgnoreCase("value")) {
                             String sourceType = getCurrentAttributeValue("covariatesourcetype");
                             String covariate = getCurrentAttributeValue("covariate");
@@ -221,6 +222,14 @@ public class ProjectXMLReader extends XMLReader {
                             String var = stratumName(getCurrentAttributeValue("variable"));
                             String valueS = getCurrentElementValue();
                             project.getProcessData().getMatrix(currentTable).setRowValue(var, valueS);
+                        }
+                        break;
+                    case AbndEstProcessDataUtil.TABLE_COVPARAM:
+                        if (elmName.equalsIgnoreCase("value")) {
+                            String covariatetable = getCurrentAttributeValue("covariatetable");
+                            String parameter = stratumName(getCurrentAttributeValue("parameter"));
+                            String valueS = getCurrentElementValue();
+                            project.getProcessData().getMatrix(currentTable).setRowColValue(covariatetable, parameter, valueS);
                         }
                         break;
                     case AbndEstProcessDataUtil.TABLE_AGEERROR:

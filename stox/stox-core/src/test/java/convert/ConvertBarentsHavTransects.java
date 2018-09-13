@@ -50,15 +50,14 @@ public class ConvertBarentsHavTransects {
     public void test() {
         //convertVinterTokt();
         IntStream
-                
                 .range(2004, 2004 + 1).boxed()
                 .sorted(Collections.reverseOrder())
                 .forEach(year -> {
                     //convertKystTokt(year, 6, "Saithe");
-                    convertKystTokt(year, 7, "Cod", false);
+                    convertKystTokt(year, 7, "Cod", true);
                     // appendCatchability(year);
                 });
-        
+
     }
 
     public void appendCatchability(Integer year) {
@@ -401,6 +400,12 @@ public class ConvertBarentsHavTransects {
             case "2013_Oppdrag9_Saltfjord_4863_4868":
                 t.setFrom(t.getFrom() + 100);
                 t.setTo(t.getTo() + 100);
+                break;
+            case "2006_Oppdrag2_Nordkyn_8735_8722":
+            case "2007_Oppdrag6_Malangen_804_805":
+                Integer f = t.getFrom();
+                t.setFrom(t.getTo());
+                t.setTo(f);
                 break;
         }
         return t;

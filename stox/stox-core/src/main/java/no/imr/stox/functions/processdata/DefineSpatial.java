@@ -38,13 +38,13 @@ public class DefineSpatial extends AbstractFunction {
         ProcessDataBO pd = (ProcessDataBO) input.get(Functions.PM_DEFINESPATIAL_PROCESSDATA);
         String defMethod = (String) input.get(Functions.PM_DEFINESPATIAL_DEFINITIONMETHOD);
         // Apply transient dimension info to process data about spatial dimensions (used in cell translation/aggregation):
-        String var1 = (String) input.get(Functions.PM_DEFINESPATIAL_VAR1);
-        String var2 = (String) input.get(Functions.PM_DEFINESPATIAL_VAR2);
+        //String var1 = (String) input.get(Functions.PM_DEFINESPATIAL_VAR1);
+        //String var2 = (String) input.get(Functions.PM_DEFINESPATIAL_VAR2);
         if (defMethod == null || defMethod.equals(Functions.DEFINITIONMETHOD_USEPROCESSDATA)) {
             // Use existing, do not read from file.
             return pd;
         }
-        switch (defMethod) {
+        /*switch (defMethod) {
             case Functions.DEFINITIONMETHOD_USEDATA:
             case Functions.DEFINITIONMETHOD_RESOURCEFILE:
                 if (var1 != null) {
@@ -53,13 +53,16 @@ public class DefineSpatial extends AbstractFunction {
                 if (var2 != null) {
                     pd.getMatrix(Functions.TABLE_SPATIALVAR).setRowValue(Functions.PM_VAR2, var2);
                 }
-        }
+        }*/
 
         if (defMethod.equals(Functions.DEFINITIONMETHOD_RESOURCEFILE)) {
             return pd;
         }
         // Default handling (by data)
         String sourceType = (String) input.get(Functions.PM_DEFINESPATIAL_SOURCETYPE);
+        MatrixBO covParam = AbndEstProcessDataUtil.getCovParam(pd);
+        String covariateType = (String) input.get(Functions.PM_DEFINESPATIAL_COVARIATETYPE);
+        covParam.setRowColValue(AbndEstProcessDataUtil.TABLE_SPATIAL, Functions.PM_DEFINESPATIAL_COVARIATETYPE, covariateType);
         List<SluttSeddel> landingData = (List) input.get(Functions.PM_DEFINESPATIAL_LANDINGDATA);
         List<FishstationBO> biotic = (List) input.get(Functions.PM_DEFINESPATIAL_BIOTICDATA);
         MatrixBO covM = AbndEstProcessDataUtil.getSpatial(pd);
@@ -84,14 +87,14 @@ public class DefineSpatial extends AbstractFunction {
                 if (landingData == null) {
                     return pd;
                 }
-                landingData.stream().map((sl) -> CovariateUtils.getSpatialCovValue(sl, var1, var2)).filter((def) -> (def != null)).forEach((def) -> {
+                landingData.stream().map((sl) -> CovariateUtils.getSpatialCovValue(sl/*, var1, var2*/)).filter((def) -> (def != null)).forEach((def) -> {
                     covs.add(def);
                 });
             } else {
                 if (biotic == null) {
                     return pd;
                 }
-                biotic.stream().map((fs) -> CovariateUtils.getSpatialCovValue(fs, var1, var2)).filter((def) -> (def != null)).forEach((def) -> {
+                biotic.stream().map((fs) -> CovariateUtils.getSpatialCovValue(fs/*, var1, var2*/)).filter((def) -> (def != null)).forEach((def) -> {
                     covs.add(def);
                 });
             }
