@@ -350,17 +350,38 @@ public class RUtils {
             pw.println("invisible(apply(cbind(cbind(pol[1,], apply(cbind(pol[2,]), MARGIN=1,");
             pw.println("FUN=function(p) polyArea(p)))), MARGIN=1,");
             pw.println("FUN=function(x) cat(x[1],':', x[2],sep='', ';')))");
+            pw.println("quit()");
         } catch (FileNotFoundException ex) {
             throw new UncheckedIOException(ex);
         }
-        Process proc = callR(rFolder, fileName, false);
-        java.io.InputStream is = proc.getInputStream();
+        fileName = fileName.replace("\\", "/");
+        String fileNameOut = fileName + ".out";
+        String fileName2 = fileName + ".call";
+        try (PrintWriter pw = new PrintWriter(fileName2)) {
+            pw.println("sink('" + fileNameOut + "')");
+            pw.println("source('" + fileName + "')");
+        } catch (FileNotFoundException ex) {
+            throw new UncheckedIOException(ex);
+        }
+        callR(rFolder, fileName2, false);
+        try {
+            Files.lines(Paths.get(fileNameOut)).forEach(s -> {
+                String[] strs = s.split(";");
+                Arrays.stream(strs).forEach(str_1 -> {
+                    String[] str = str_1.split(":");
+                    res.getData().setRowValue(str[0], Double.valueOf(str[1]));
+                });
+            });
+        } catch (IOException ex) {
+            Logger.getLogger(RUtils.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        /*        java.io.InputStream is = proc.getInputStream();
         java.util.Scanner s = new java.util.Scanner(is).useDelimiter(";");
         while (s.hasNext()) {
             String[] str = s.next().split(":");
             res.getData().setRowValue(str[0], Double.valueOf(str[1]));
             //System.out.println(s.next());
-        }
+        }*/
         return res;
     }
 
