@@ -103,6 +103,7 @@ public class DATRASDataStorage extends FileDataStorage {
     }
 
     public static Integer getGOVSweepByEquipment(String eqp) {
+        if(eqp == null) return -9;
         switch (eqp) {
             case "3120":
                 return -9;
@@ -187,6 +188,8 @@ public class DATRASDataStorage extends FileDataStorage {
                     if (!(fs.getFishStationType() == null || fs.getFishStationType().equals(""))) {
                         continue;
                     }
+                    if(fs.getStartDate() == null)
+                        continue;
                     Integer year = IMRdate.getYear(fs.getStartDate(), true);
                     Integer month = IMRdate.getMonth(fs.getStartDate(), true);
                     Integer day = IMRdate.getDayOfMonth(fs.getStartDate(), true);
@@ -329,6 +332,8 @@ public class DATRASDataStorage extends FileDataStorage {
                     if (sweep == null) { // Sweep filter
                         continue;
                     }
+                    if(fs.getStartDate() == null)
+                        continue;
                     Integer year = IMRdate.getYear(fs.getStartDate(), true);
                     Integer month = IMRdate.getMonth(fs.getStartDate(), true);
                     Integer quarter = (int) Math.ceil(month / 3.0);
@@ -449,6 +454,8 @@ public class DATRASDataStorage extends FileDataStorage {
                     if (sweep == null) { // Sweep filter
                         continue;
                     }
+                    if(fs.getStartDate() == null)
+                        continue;
                     Integer year = IMRdate.getYear(fs.getStartDate(), true);
                     Integer month = IMRdate.getMonth(fs.getStartDate(), true);
                     Integer quarter = (int) Math.ceil(month / 3.0);
