@@ -344,7 +344,7 @@ public class DATRASDataStorage extends FileDataStorage {
                     for (CatchBO c : fs.getCatchBOCollection()) {
 
                         // IU: Use aphia for comparison and add crustacean boolean
-                        boolean isHerringOrSprat = (c.getAphia()== "126417") || (c.getAphia()== "126425");
+                        boolean isHerringOrSprat = c.getAphia().equals("126417") || c.getAphia().equals("126425");
 
                         List<String> crustList = Arrays.asList( "107275", "107276", "107369", "107253", "107703", "107704", "107350", "107254", "107205", "140712", "140687", "140658" );
                         boolean isCrustacean = crustList.contains(c.getAphia());
@@ -456,7 +456,7 @@ public class DATRASDataStorage extends FileDataStorage {
 
                     for (CatchBO c : fs.getCatchBOCollection()) {
                         // IU: Use aphia for comparison and add crustacean boolean
-                        boolean isHerringOrSprat = (c.getAphia()== "126417") || (c.getAphia()== "126425");
+                        boolean isHerringOrSprat = c.getAphia().equals("126417") || c.getAphia().equals("126425");
 
                         List<String> crustList = Arrays.asList( "107275", "107276", "107369", "107253", "107703", "107704", "107350", "107254", "107205", "140712", "140687", "140658" );
                         boolean isCrustacean = crustList.contains(c.getAphia());
@@ -538,7 +538,8 @@ public class DATRASDataStorage extends FileDataStorage {
     private static String getDATRASMaturity(IndividualBO i) {
         CatchBO c = i.getSample().getCatchBO();
         String noName = c.getNoname().toUpperCase();
-        boolean isHerringOrSpratOrMackerel = (c.getAphia()== "126417") || (c.getAphia()== "126425") || (c.getAphia()== "127023");
+        boolean isHerringOrSpratOrMackerel = c.getAphia().equals("126417") || c.getAphia().equals("126425") || c.getAphia().equals("127023");
+
         Integer res = -9;
         if (i.getSpecialStage() != null) {
             Integer sp = Conversion.safeStringtoIntegerNULL(i.getSpecialStage());
