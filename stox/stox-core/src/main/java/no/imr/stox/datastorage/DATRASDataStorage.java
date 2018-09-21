@@ -370,8 +370,6 @@ public class DATRASDataStorage extends FileDataStorage {
                             if (specValTot.getValue(c.getAphia()) == null) {
                                 specValTot.setValue(c.getAphia(), specVal);
                             }
-                            //IU: TODO: Need to check below (else -9), consider a condition where the first sample count is x then the second is null, this would be x-9
-                            lsCountTot.addDoubleValue(c.getAphia(), s.getLengthSampleCount() != null ? s.getLengthSampleCount().doubleValue() : 0);
                             String lngtCode = s.getSampletype() != null ? isCrustacean ? "."/*1mm*/ : isHerringOrSprat ? "0"/*5mm*/ : "1"/*1cm*/ : "-9"/*1cm*/;
                             Integer lenInterval = lngtCode.equals("0") ? 5 : 1;
                             if (lengthCodeTot.getValue(c.getAphia()) != null) {
@@ -384,6 +382,7 @@ public class DATRASDataStorage extends FileDataStorage {
                                 String lngtClass = "-9";
                                 String sex = "-9";
                                 hlNoAtLngth.addGroupRowColValue(c.getAphia(), sex, lngtClass, s.getCount() * 1.0);
+                                lsCountTot.addGroupRowColValue(c.getAphia(), sex, lngtClass, (s.getLengthSampleCount() != null ? s.getLengthSampleCount() : 0) * 1.0);
                             } else {
                                 if (s.getLengthSampleWeight() == null) {
                                     continue;
@@ -401,6 +400,7 @@ public class DATRASDataStorage extends FileDataStorage {
                                     String sex = i.getSex() == null || i.getSex().trim().isEmpty()
                                             ? "-9" : i.getSex().equals("1") ? "F" : "M";
                                     hlNoAtLngth.addGroupRowColValue(c.getAphia(), sex, lngtClass, 1.0 * sampleFac);
+                                    lsCountTot.addGroupRowColValue(c.getAphia(), sex, lngtClass, 1.0);
                                 }
                             }
                         }
@@ -411,9 +411,8 @@ public class DATRASDataStorage extends FileDataStorage {
                         String lngtCode = (String) lengthCodeTot.getValue(aphia);
                         Double catCatchWgt = weightTot.getValueAsDouble(aphia);
                         for (String sex : hlNoAtLngth.getGroupRowKeys(aphia)) {
-                            // IU: For CatIdentifier, since it has to be separated between sexes
-                            Integer CatIdentifier = 1;
                             Double totalNo = hlNoAtLngth.getGroupRowValueAsMatrix(aphia, sex).getSum();
+                            Double noMeas = lsCountTot.getGroupRowValueAsMatrix(aphia, sex).getSum();
                             for (String lngtClass : hlNoAtLngth.getGroupRowColKeys(aphia, sex)) {
                                 ImrIO.write(wr, ExportUtil.carrageReturnLineFeed(ExportUtil.csv(
                                         "HL",
@@ -432,14 +431,14 @@ public class DATRASDataStorage extends FileDataStorage {
                                         specVal,
                                         sex,
                                         unkD(totalNo, "0.00"), // n per Hour
-                                        specVal == null ? -9 : CatIdentifier++,
-                                        Math.round(lsCountTot.getValueAsDouble(aphia)) <= 0 ? -9.0 : Math.round(lsCountTot.getValueAsDouble(aphia)), // n measured as individual
+                                        specVal == null ? -9 : 1,
+                                        noMeas == 0 ? -9 : Math.round(noMeas), // n measured as individual
                                         unkD(1d, "0.0000"), // SubFactor
                                         -9,
                                         catCatchWgt == null ? -9 : Math.round(catCatchWgt), /*g per Hour*/
                                         lngtCode,
                                         lngtClass,
-                                        unkD(hlNoAtLngth.getGroupRowColValueAsDouble(aphia, sex, lngtClass), "0.00"))));
+                                        lsCountTot.getGroupRowColValueAsDouble(aphia, sex, lngtClass) > 0 ? unkD(lsCountTot.getGroupRowColValueAsDouble(aphia, sex, lngtClass), "0.00") : -9.00 )));
                             }
                         }
                     }
