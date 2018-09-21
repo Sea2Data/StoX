@@ -365,7 +365,8 @@ public class DATRASDataStorage extends FileDataStorage {
                                 s.getCount() != null && s.getLengthSampleCount() == null && s.getTotalWeight() == null ? 4 :
                                 s.getCount() == null && s.getLengthSampleCount() == null && s.getTotalWeight() != null ? 6 :
                                 s.getCount() != null && s.getLengthSampleCount() == null && s.getTotalWeight() != null ? 7 :
-                                haulVal.equals("V") && s.getCount() == null && s.getLengthSampleCount() == null && s.getTotalWeight() == null ? 5 : -9;
+                                haulVal.equals("V") && s.getCount() == null && s.getLengthSampleCount() == null && s.getTotalWeight() == null ? 5 :
+                                s.getCount() != null && s.getLengthSampleCount() != null && s.getTotalWeight() == null ? 10 : -9;
                             if (specValTot.getValue(c.getAphia()) == null) {
                                 specValTot.setValue(c.getAphia(), specVal);
                             }
