@@ -394,7 +394,7 @@ public class DATRASDataStorage extends FileDataStorage {
                                         continue;
                                     }
                                     if (reportInMM) {
-                                        length *= 10;
+                                        if (length > 0) length *= 10;
                                     }
                                     String lngtClass = "" + ImrMath.trunc(length, lenInterval.doubleValue());
                                     String sex = i.getSex() == null || i.getSex().trim().isEmpty()
@@ -484,7 +484,7 @@ public class DATRASDataStorage extends FileDataStorage {
                                     continue;
                                 }
                                 if (reportInMM) {
-                                    length *= 10;
+                                    if (length > 0) length *= 10;
                                 }
                                 String lngtClass = "" + ImrMath.trunc(length, lenInterval.doubleValue());
                                 String sex = i.getSex() == null || i.getSex().trim().isEmpty() ? "-9" : i.getSex().equals("1") ? "F" : "M";
