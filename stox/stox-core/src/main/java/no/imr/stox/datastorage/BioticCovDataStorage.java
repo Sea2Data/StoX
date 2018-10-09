@@ -6,7 +6,10 @@
 package no.imr.stox.datastorage;
 
 import java.io.Writer;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 import no.imr.sea2data.biotic.bo.IndividualBO;
 import no.imr.sea2data.imrbase.util.ExportUtil;
 import no.imr.sea2data.imrbase.util.ImrIO;
@@ -22,7 +25,11 @@ public class BioticCovDataStorage extends FileDataStorage {
     @Override
     public <T> void asTable(T data, Integer level, Writer wr, Boolean withUnits) {
         BioticCovDataMatrix indData = (BioticCovDataMatrix) data;
-        ImrIO.write(wr, ExportUtil.carrageReturnLineFeed(ExportUtil.tabbed("Temporal", "GearFactor", "Spatial", "PlatformFactor", ExportUtil.tabbed(Functions.INDIVIDUALS_FULL))));
+        List<String> indFields = Stream.concat(
+                // Add trawlquality, group and sampletype to standard full  individual field list
+                Stream.of(Functions.COL_IND_TRAWLQUALITY, Functions.COL_IND_GROUP, Functions.COL_IND_SAMPLETYPE), 
+                Functions.INDIVIDUALS_FULL.stream()).collect(Collectors.toList());
+        ImrIO.write(wr, ExportUtil.carrageReturnLineFeed(ExportUtil.tabbed("Temporal", "GearFactor", "Spatial", "PlatformFactor", ExportUtil.tabbed(indFields))));
         // GROUP: For each temporal 
         for (String cov : indData.getData().getSortedRowKeys()) {
             String[] keys = cov.split("/");
@@ -31,7 +38,7 @@ public class BioticCovDataStorage extends FileDataStorage {
             if (indList == null) {
                 ImrIO.write(wr, ExportUtil.carrageReturnLineFeed(context));
             } else {
-                BioticDataStorage.asTable(Functions.INDIVIDUALS_FULL, context, indList, wr);
+                BioticDataStorage.asTable(indFields, context, indList, wr);
             }
         }
     }

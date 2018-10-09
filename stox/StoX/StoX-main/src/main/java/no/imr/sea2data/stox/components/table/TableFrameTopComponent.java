@@ -4,10 +4,14 @@ import java.awt.BorderLayout;
 import java.io.File;
 import java.io.FileFilter;
 import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+import javax.swing.JTabbedPane;
+import javax.swing.JTextArea;
 import no.imr.guibase.controls.ImagePanel;
 import no.imr.sea2data.imrbase.util.Workspace;
 import no.imr.stox.functions.utils.Functions;
 import no.imr.stox.functions.utils.ProjectUtils;
+import no.imr.stox.model.IModel;
 import no.imr.stox.model.IModelListenerService;
 import no.imr.stox.model.IProcess;
 import no.imr.stox.model.ModelListenerAdapter;
@@ -53,64 +57,12 @@ public final class TableFrameTopComponent extends TopComponent {
     private void initComponents() {
 
         jTabbedPane1 = new javax.swing.JTabbedPane();
-        jPanel1 = new javax.swing.JPanel();
-        jScrollPane2 = new javax.swing.JScrollPane();
-        jAbundance = new javax.swing.JTextArea();
-        jPanel2 = new javax.swing.JPanel();
-        jScrollPane3 = new javax.swing.JScrollPane();
-        jBiomass = new javax.swing.JTextArea();
-        jPanel3 = new javax.swing.JPanel();
-        jScrollPane4 = new javax.swing.JScrollPane();
-        jMeanWeight = new javax.swing.JTextArea();
 
         setLayout(new java.awt.BorderLayout());
-
-        jPanel1.setLayout(new java.awt.BorderLayout());
-
-        jAbundance.setColumns(20);
-        jAbundance.setFont(new java.awt.Font("Courier New", 0, 12)); // NOI18N
-        jAbundance.setRows(5);
-        jScrollPane2.setViewportView(jAbundance);
-
-        jPanel1.add(jScrollPane2, java.awt.BorderLayout.CENTER);
-
-        jTabbedPane1.addTab(org.openide.util.NbBundle.getMessage(TableFrameTopComponent.class, "TableFrameTopComponent.jPanel1.TabConstraints.tabTitle"), jPanel1); // NOI18N
-
-        jPanel2.setLayout(new java.awt.BorderLayout());
-
-        jBiomass.setColumns(20);
-        jBiomass.setFont(new java.awt.Font("Courier New", 0, 12)); // NOI18N
-        jBiomass.setRows(5);
-        jScrollPane3.setViewportView(jBiomass);
-
-        jPanel2.add(jScrollPane3, java.awt.BorderLayout.CENTER);
-
-        jTabbedPane1.addTab(org.openide.util.NbBundle.getMessage(TableFrameTopComponent.class, "TableFrameTopComponent.jPanel2.TabConstraints.tabTitle"), jPanel2); // NOI18N
-
-        jPanel3.setLayout(new java.awt.BorderLayout());
-
-        jMeanWeight.setColumns(20);
-        jMeanWeight.setFont(new java.awt.Font("Courier New", 0, 12)); // NOI18N
-        jMeanWeight.setRows(5);
-        jScrollPane4.setViewportView(jMeanWeight);
-
-        jPanel3.add(jScrollPane4, java.awt.BorderLayout.CENTER);
-
-        jTabbedPane1.addTab(org.openide.util.NbBundle.getMessage(TableFrameTopComponent.class, "TableFrameTopComponent.jPanel3.TabConstraints.tabTitle"), jPanel3); // NOI18N
-
         add(jTabbedPane1, java.awt.BorderLayout.CENTER);
     }// </editor-fold>//GEN-END:initComponents
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JTextArea jAbundance;
-    private javax.swing.JTextArea jBiomass;
-    private javax.swing.JTextArea jMeanWeight;
-    private javax.swing.JPanel jPanel1;
-    private javax.swing.JPanel jPanel2;
-    private javax.swing.JPanel jPanel3;
-    private javax.swing.JScrollPane jScrollPane2;
-    private javax.swing.JScrollPane jScrollPane3;
-    private javax.swing.JScrollPane jScrollPane4;
     private javax.swing.JTabbedPane jTabbedPane1;
     // End of variables declaration//GEN-END:variables
     @Override
@@ -118,6 +70,16 @@ public final class TableFrameTopComponent extends TopComponent {
         // TODO add custom code on component opening
         IModelListenerService fls = (IModelListenerService) Lookup.getDefault().lookup(IModelListenerService.class);
         fls.getModelListeners().add(new ModelListenerAdapter() {
+
+            @Override
+            public void onModelStart(IModel model) {
+                TableFrameTopComponent.this.onModelStart(model);
+            }
+
+            @Override
+            public void onModelStop(IModel model) {
+                TableFrameTopComponent.this.onModelStop(model);
+            }
 
             @Override
             public void onProcessEnd(IProcess process) {
@@ -154,40 +116,58 @@ public final class TableFrameTopComponent extends TopComponent {
          */
     }
 
+    public JTextArea createTextTab(JTabbedPane pane, String tabText) {
+        JPanel panel = new JPanel();
+        panel.setLayout(new BorderLayout());
+        JTextArea textArea = new JTextArea();
+        textArea.setColumns(20);
+        textArea.setFont(new java.awt.Font("Courier New", 0, 12)); // NOI18N
+        textArea.setRows(5);
+        JScrollPane sp = new JScrollPane();
+        sp.setViewportView(textArea);
+        panel.add(sp, java.awt.BorderLayout.CENTER);
+        pane.addTab(tabText, panel);
+        return textArea;
+    }
+
+    public void onModelStart(IModel model) {
+        for (int tc = jTabbedPane1.getTabCount() - 1; tc >= 0; tc--) {
+            jTabbedPane1.removeTabAt(tc);
+        }
+    }
+
+    public void onModelStop(IModel model) {
+        if (model.getModelName().equals(ProjectUtils.R_REPORT)) {
+            String reportDir = Workspace.getDir(model.getProject().getProjectFolder(), ProjectUtils.PROJECT_OUTPUTR_REPORT);
+            File f = new File(reportDir);
+            File[] plotFiles = f.listFiles(new FileFilter() {
+
+                @Override
+                public boolean accept(File pathname) {
+                    return pathname.isFile() && (pathname.getPath().endsWith("png"));
+                }
+            });
+            for (File pl : plotFiles) {
+                String plotName = pl.getName().replaceFirst("[.][^.]+$", "");
+                JPanel imagePanel = new JPanel();
+                ImagePanel imagePanel1 = new ImagePanel();
+                imagePanel.add(imagePanel1, BorderLayout.CENTER);
+                imagePanel1.setImage(pl.getPath());
+                jTabbedPane1.addTab(plotName, imagePanel1);
+            }
+        }
+    }
+
     public void onProcessEnd(IProcess process) {
         switch (process.getMetaFunction().getName()) {
             case Functions.FN_TOTALABUNDANCE:
-                jAbundance.setText(process.getDataStorage().asTable(process.getOutput(), 1));
+                createTextTab(jTabbedPane1, "Abundance").setText(process.getDataStorage().asTable(process.getOutput(), 1));
                 break;
             case Functions.FN_ESTIMATEBYPOPULATIONCATEGORY:
-                jAbundance.setText(process.getDataStorage().asTable(process.getOutput(), 1));
-                jBiomass.setText(process.getDataStorage().asTable(process.getOutput(), 2));
-                jMeanWeight.setText(process.getDataStorage().asTable(process.getOutput(), 3));
+                createTextTab(jTabbedPane1, "Abundance").setText(process.getDataStorage().asTable(process.getOutput(), 1));
+                createTextTab(jTabbedPane1, "Biomass").setText(process.getDataStorage().asTable(process.getOutput(), 2));
+                createTextTab(jTabbedPane1, "Mean Weight").setText(process.getDataStorage().asTable(process.getOutput(), 3));
                 break;
-            case Functions.FN_GETPLOTS:
-            case Functions.FN_GETREPORTS:
-            case Functions.FN_PLOTABUNDANCE:
-                String reportDir = Workspace.getDir(process.getModel().getProject().getProjectFolder(), ProjectUtils.PROJECT_OUTPUTR_REPORT);
-                File f = new File(reportDir);
-                File[] plotFiles = f.listFiles(new FileFilter() {
-
-                    @Override
-                    public boolean accept(File pathname) {
-                        return pathname.isFile() && (pathname.getPath().endsWith("png"));
-                    }
-                });
-                // Remove dynamic created tabs
-                for (int tc = jTabbedPane1.getTabCount() - 1; tc >= 3; tc--) {
-                    jTabbedPane1.removeTabAt(tc);
-                }
-                for (File pl : plotFiles) {
-                    String plotName = pl.getName().replaceFirst("[.][^.]+$", "");
-                    JPanel imagePanel = new JPanel();
-                    ImagePanel imagePanel1 = new ImagePanel();
-                    imagePanel.add(imagePanel1, BorderLayout.CENTER);
-                    imagePanel1.setImage(pl.getPath());
-                    jTabbedPane1.addTab(plotName, imagePanel1);
-                }
         }
     }
 }

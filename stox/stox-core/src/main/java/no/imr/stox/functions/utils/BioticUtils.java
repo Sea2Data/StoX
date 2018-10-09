@@ -51,6 +51,12 @@ public final class BioticUtils {
 
     public static Object getIndVar(IndividualBO i, String code) {
         switch (code) {
+            case Functions.COL_IND_TRAWLQUALITY:
+                return i.getSample().getCatchBO().getStationBO().getTrawlQuality();
+            case Functions.COL_IND_GROUP:
+                return i.getSample().getGroup();
+            case Functions.COL_IND_SAMPLETYPE:
+                return i.getSample().getSampletype();
             case Functions.COL_IND_CRUISE:
                 return i.getSample().getCatchBO().getStationBO().getCruise();
             case Functions.COL_IND_SERIALNO:

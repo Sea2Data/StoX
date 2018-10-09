@@ -49,12 +49,11 @@ public class DefineTemporal extends AbstractFunction {
             return pd;
         }
         if (defMethod.equals(Functions.DEFINITIONMETHOD_RESOURCEFILE)) {
-            // TODO: Read from file into process data.
+            // Future: Read from file into process data.
             return pd;
         }
         // Default handling (Define by given time interval:
         String sourceType = (String) input.get(Functions.PM_DEFINETEMPORAL_SOURCETYPE);
-        Boolean conditionalAutoRegression = (Boolean) input.get(Functions.PM_DEFINETEMPORAL_CONDITIONALAUTOREGRESSION);
         String timeInterval = (String) input.get(Functions.PM_DEFINETEMPORAL_TIMEINTERVAL);
         Boolean seasonal = Conversion.safeObjectToBoolean((Boolean) input.get(Functions.PM_DEFINETEMPORAL_SEASONAL));
         List<SluttSeddel> landingData = (List) input.get(Functions.PM_DEFINETEMPORAL_LANDINGDATA);
@@ -64,8 +63,12 @@ public class DefineTemporal extends AbstractFunction {
         MatrixBO covParam = AbndEstProcessDataUtil.getCovParam(pd);
         String covariateType = (String) input.get(Functions.PM_DEFINETEMPORAL_COVARIATETYPE);
         covParam.setRowColValue(AbndEstProcessDataUtil.TABLE_TEMPORAL, Functions.PM_DEFINETEMPORAL_COVARIATETYPE, covariateType);
-        if (conditionalAutoRegression != null) {
-            covParam.setRowColValue("temporal", "conditionalautoregression", conditionalAutoRegression.toString());
+        Boolean conditionalAutoRegression = (Boolean) input.get(Functions.PM_DEFINETEMPORAL_CONDITIONALAUTOREGRESSION);
+        if(conditionalAutoRegression == null) {
+            conditionalAutoRegression = false;
+        }
+        if (covariateType != null && covariateType.equalsIgnoreCase(Functions.COVARIATETYPE_RANDOM)) {
+            covParam.setRowColValue(AbndEstProcessDataUtil.TABLE_TEMPORAL, Functions.PM_DEFINETEMPORAL_CONDITIONALAUTOREGRESSION, conditionalAutoRegression.toString());
         }
         if (m != null) {
             m.clear(); // Clear covariates 

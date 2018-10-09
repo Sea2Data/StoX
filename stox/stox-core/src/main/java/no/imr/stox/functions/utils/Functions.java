@@ -419,7 +419,7 @@ public final class Functions {
     public static final String PM_DEFINETEMPORAL_DEFINITIONMETHOD = "DefinitionMethod";
     public static final String PM_DEFINETEMPORAL_LANDINGDATA = "LandingData";
     public static final String PM_DEFINETEMPORAL_BIOTICDATA = "BioticData";
-    public static final String PM_DEFINETEMPORAL_FILENAME = "FileName";
+    //public static final String PM_DEFINETEMPORAL_FILENAME = "FileName";
     public static final String PM_DEFINETEMPORAL_TIMEINTERVAL = "TimeInterval";
     public static final String PM_DEFINETEMPORAL_SEASONAL = "Seasonal";
 
@@ -563,6 +563,9 @@ public final class Functions {
     public static final String COL_IND_LENGTHSAMPLECOUNT = "lengthsamplecount";
     public static final String COL_IND_FREQUENCY = "frequency";
     public static final String COL_IND_NO = "no";
+    public static final String COL_IND_TRAWLQUALITY = "trawlquality";
+    public static final String COL_IND_GROUP = "group";
+    public static final String COL_IND_SAMPLETYPE = "sampletype";
 
     public static final String COL_IND_WEIGHT = "weight";
     public static final String COL_IND_LENGTH = "length";

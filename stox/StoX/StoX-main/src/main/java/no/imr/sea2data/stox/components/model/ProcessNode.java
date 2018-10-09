@@ -177,9 +177,9 @@ public class ProcessNode extends AbstractNode {
 
     /*Determine if parameter is visible*/
     private boolean isParameterVisibleByProcess(IProcess process, IMetaParameter mp) {
-        if (mp.isParentParameter()) {
+        /*if (mp.isParentParameter()) {
             return true;
-        }
+        }*/
         if (mp.getParentTags() == null || mp.getParentTags().isEmpty()) {
             /*if (mp.getMetaFunction().getName().equals(Functions.FN_ACOUSTICDENSITY)
                     && mp.getName().equals(Functions.PM_ACOUSTICDENSITY_ACOUSTICDATA)) {
@@ -206,11 +206,11 @@ public class ProcessNode extends AbstractNode {
             if (value == null) {
                 continue;
             }
-            if (value.equals(token[1])) {
-                return true;
+            if (!value.equals(token[1])) {
+                return false;
             }
         }
-        return false;
+        return true;
     }
 
     class ParamPropertySupport extends PropertySupport {

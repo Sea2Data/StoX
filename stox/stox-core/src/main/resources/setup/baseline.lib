@@ -150,7 +150,7 @@ Parameter: Name=FileName, Required=false, DataType=String, Description=The <I>Fi
 
 [Function]
 Name: AssignDataToStratum
-Description: <I>AssignStratumToLanding</I> applies stratum to landing based on process data strata
+Description: <I>AssignDataToStratum</I> applies data to stratum based on process data strata
 Class: no.imr.stox.functions.data.AssignDataToStratum
 Parameter: Name=ProcessData, DataType=ProcessData, Description=The <I>ProcessData</I> parameter is used to specify which previous process has generated the <U>ProcessData</U> input data.<BR><BR>Process data contains information which cannot necessarily be created programmatically&#44; but may be a result of subjective user choices. These data makes it possible to reuse previous manual&#44; subjective data in a new execution. Normally&#44; the function ReadProcessData is the owner of data type <U>ProcessData</U>&#44; but other functions may have modified the content of this memory object during the model execution
 Parameter: Name=SourceType, DataType=String, Values=Landing;Biotic, Description=The <I>SourceType</I> The type of source of the covariates defined.
@@ -590,10 +590,10 @@ Parameter: Name=ProcessData, DataType=ProcessData, Description=The <I>ProcessDat
 Parameter: Name=SourceType, DataType=String, Values=Landing;Biotic, Description=The <I>SourceType</I> The type of source of the covariates defined.
 Parameter: Name=CovariateType, DefaultValue=Fixed, DataType=String, ParentTag=SourceType.Biotic, Values=Fixed;Random, Description=The <I>CovariateDependenytype</I> The type of error structure dependencies <BR>Fixed: covariate will be treated as fixed effect.<BR>Random: covariate will be treated as random effect.<BR>Dependency: missing documentation
 Parameter: Name=ConditionalAutoRegression, DefaultValue=false, DataType=Boolean, ParentTag=CovariateType.Random, Description=The <I>ConditionalAutoRegression</I> if random covariates are correlated
-Parameter: Name=DefinitionMethod, DefaultValue=UseData, DataType=String, Values=Inherit;UseData;ResourceFile;UseProcessData, Description=The <I>DefinitionMethod</I> is how to define the coveriates
+Parameter: Name=DefinitionMethod, DefaultValue=UseData, DataType=String, Values=Inherit;UseData;UseProcessData, Description=The <I>DefinitionMethod</I> is how to define the coveriates
 Parameter: Name=LandingData, Required=false, DataType=LandingData, ParentTag=SourceType.Landing, Description=Landing data
-Parameter: Name=BioticData, Required=false, DataType=BioticData, ParentTag=SourceType.Biotic, Description=The <I>BioticData</I> parameter is used to specify which previous process has generated the <U>BioticData</U> input data.
-Parameter: Name=FileName, Required=false, DataType=String, ParentTag=DefinitionMethod.ResourceFile, Description=The <I>FileName</I> parameter is used to give the complete path including filename to the WKT strata system file to be used
+Parameter: Name=BioticData, Required=false, DataType=BioticData, ParentTag=SourceType.Biotic;DefinitionMethod.UseData, Description=The <I>BioticData</I> parameter is used to specify which previous process has generated the <U>BioticData</U> input data.
+#Parameter: Name=FileName, Required=false, DataType=String, ParentTag=DefinitionMethod.ResourceFile, Description=The <I>FileName</I> parameter is used to give the complete path including filename to the WKT strata system file to be used
 Parameter: Name=TimeInterval, Required=false, DataType=String, ParentTag=DefinitionMethod.UseData, Values=Year;Quarter;Month;Week;Period, Description=The time interval period for temporal covariates
 Parameter: Name=Seasonal, DefaultValue=false, DataType=Boolean, ParentTag=DefinitionMethod.UseData, Description=The <I>Seasonal</I> 
 Output: ProcessData
@@ -623,7 +623,7 @@ Parameter: Name=CovariateType, DefaultValue=Fixed, DataType=String, ParentTag=So
 Parameter: Name=ConditionalAutoRegression, DefaultValue=false, DataType=Boolean, ParentTag=CovariateType.Random, Description=The <I>ConditionalAutoRegression</I> if random covariates are correlated
 Parameter: Name=DefinitionMethod, DefaultValue=UseData, DataType=String, Values=Inherit;UseData;UseProcessData, Description=The <I>DefinitionMethod</I> is how to define the coveriates
 Parameter: Name=LandingData, Required=false, DataType=LandingData, ParentTag=SourceType.Landing, Description=Landing data
-Parameter: Name=BioticData, Required=false, DataType=BioticData, ParentTag=SourceType.Biotic, Description=The <I>BioticData</I> parameter is used to specify which previous process has generated the <U>BioticData</U> input data.
+Parameter: Name=BioticData, Required=false, DataType=BioticData, ParentTag=SourceType.Biotic;DefinitionMethod.UseData, Description=The <I>BioticData</I> parameter is used to specify which previous process has generated the <U>BioticData</U> input data.
 Parameter: Name=FileName, Required=false, DataType=String, ParentTag=DefinitionMethod.ResourceFile, Description=The <I>FileName</I> parameter is used to give the complete path including filename to the WKT strata system file to be used
 Output: ProcessData
 

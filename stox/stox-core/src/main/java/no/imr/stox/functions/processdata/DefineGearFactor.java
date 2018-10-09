@@ -40,6 +40,13 @@ public class DefineGearFactor extends AbstractFunction {
         MatrixBO covParam = AbndEstProcessDataUtil.getCovParam(pd);
         String covariateType = (String) input.get(Functions.PM_DEFINETEMPORAL_COVARIATETYPE);
         covParam.setRowColValue(AbndEstProcessDataUtil.TABLE_GEARFACTOR, Functions.PM_DEFINEGEARFACTOR_COVARIATETYPE, covariateType);
+        Boolean conditionalAutoRegression = (Boolean) input.get(Functions.PM_DEFINEGEARFACTOR_CONDITIONALAUTOREGRESSION);
+        if(conditionalAutoRegression == null) {
+            conditionalAutoRegression = false;
+        }
+        if (covariateType != null && covariateType.equalsIgnoreCase(Functions.COVARIATETYPE_RANDOM)) {
+            covParam.setRowColValue(AbndEstProcessDataUtil.TABLE_GEARFACTOR, Functions.PM_DEFINEGEARFACTOR_CONDITIONALAUTOREGRESSION, conditionalAutoRegression.toString());
+        }
         if (defMethod == null || defMethod.equals(Functions.DEFINITIONMETHOD_USEPROCESSDATA) ||
                 covariateSourceType == null) {
             // Use existing, do not read from file.

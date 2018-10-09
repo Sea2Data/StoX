@@ -63,6 +63,13 @@ public class DefineSpatial extends AbstractFunction {
         MatrixBO covParam = AbndEstProcessDataUtil.getCovParam(pd);
         String covariateType = (String) input.get(Functions.PM_DEFINESPATIAL_COVARIATETYPE);
         covParam.setRowColValue(AbndEstProcessDataUtil.TABLE_SPATIAL, Functions.PM_DEFINESPATIAL_COVARIATETYPE, covariateType);
+        Boolean conditionalAutoRegression = (Boolean) input.get(Functions.PM_DEFINESPATIAL_CONDITIONALAUTOREGRESSION);
+        if(conditionalAutoRegression == null) {
+            conditionalAutoRegression = false;
+        }
+        if (covariateType != null && covariateType.equalsIgnoreCase(Functions.COVARIATETYPE_RANDOM)) {
+            covParam.setRowColValue(AbndEstProcessDataUtil.TABLE_SPATIAL, Functions.PM_DEFINESPATIAL_CONDITIONALAUTOREGRESSION, conditionalAutoRegression.toString());
+        }
         List<SluttSeddel> landingData = (List) input.get(Functions.PM_DEFINESPATIAL_LANDINGDATA);
         List<FishstationBO> biotic = (List) input.get(Functions.PM_DEFINESPATIAL_BIOTICDATA);
         MatrixBO covM = AbndEstProcessDataUtil.getSpatial(pd);

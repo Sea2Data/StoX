@@ -62,10 +62,6 @@ Parameter: Name=seed, Required=false, DataType=Integer, Description=Seed
 Parameter: Name=age.error, Required=false, DataType=Boolean, DefaultValue=false, Description=Age error
 
 [Function]
-Name: diagnosticsRECA
-Description: Perform RECA diagnostics
-
-[Function]
 Name: loadEnv
 Deprecated: true
 Description: Load R Image into R environment 

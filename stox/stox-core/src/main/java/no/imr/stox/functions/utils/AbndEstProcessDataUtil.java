@@ -43,7 +43,7 @@ public final class AbndEstProcessDataUtil {
     public static final String TABLE_TEMPORAL = "temporal";
     public static final String TABLE_GEARFACTOR = "gearfactor";
     public static final String TABLE_SPATIAL = "spatial";
-    public static final String TABLE_PLATFORM = "platform";
+    public static final String TABLE_PLATFORM = "platformfactor";
     public static final String TABLE_COVPARAM = "covparam";
     public static final String TABLE_AGEERROR = "ageerror";
     public static final String TABLE_STRATUMNEIGHBOUR = "stratumneighbour";

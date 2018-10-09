@@ -1,8 +1,11 @@
 package no.imr.stox.functions.processdata;
 
 import java.util.Map;
+import no.imr.sea2data.imrbase.matrix.MatrixBO;
+import no.imr.stox.bo.ProcessDataBO;
 import no.imr.stox.functions.utils.Functions;
 import no.imr.stox.functions.AbstractFunction;
+import no.imr.stox.functions.utils.AbndEstProcessDataUtil;
 import no.imr.stox.model.IModel;
 
 /**
@@ -20,6 +23,12 @@ public class ReadProcessData extends AbstractFunction {
     @Override
     public Object perform(Map<String, Object> input) {
         IModel m = (IModel) input.get(Functions.PM_MODEL);
+        ProcessDataBO pd = m.getProject().getProcessData();
+        
+        // Clear on the fly tables:
+        MatrixBO covParam = AbndEstProcessDataUtil.getCovParam(pd);
+        covParam.clear();
+        
         return m.getProject().getProcessData();
     }
 }
