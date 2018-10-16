@@ -1,0 +1,129 @@
+<?xml version="1.0"?>
+<!--
+ Påbegynt xsd for cruise v1 
+-->
+<xs:schema version="1.0"
+           xmlns:xs="http://www.w3.org/2001/XMLSchema"
+           elementFormDefault="qualified"
+           targetNamespace="http://www.imr.no/formats/nmddocumentation/v1_0"
+           xmlns="http://www.imr.no/formats/nmddocumentation/v1_0">
+
+    <xs:element name="imrApp" type="ImrAppType">
+        <xs:annotation>
+            <xs:documentation>
+                <imrDoc xmlns="http://www.imr.no/formats/nmddocumentation/v1_0">
+                    <description lang="en">
+                        This is the root node required for machine-readable annotation. This is intended to structure metainfo in xs:appinfo.
+                    </description>
+                    <description lang="no">
+                        Dette er rotnoden påkrevd for maskinlesbare annoteringer. Denne er ment for å strukturere metainformasjon i xs:appinfo.
+                    </description>                    
+                </imrDoc>
+            </xs:documentation>
+        </xs:annotation>
+    </xs:element>
+    
+    <xs:element name="imrDoc" type="ImrDocType">
+        <xs:annotation>
+            <xs:documentation>
+                <imrDoc xmlns="http://www.imr.no/formats/nmddocumentation/v1_0">
+                    <description lang="en">
+                        This is the root node required for documentation. This is intended to structure annotations in xs:documentation.
+                    </description>
+                    <description lang="no">
+                        Dette er rot noden påkrevd for dokumentasjon. Denne er ment for å strukturere informasjon i xs:documentation.
+                    </description>                    
+                </imrDoc>
+            </xs:documentation>
+        </xs:annotation>
+    </xs:element>
+    
+    <xs:complexType name="ImrAppType">
+        <xs:sequence>
+            <xs:element name="key" minOccurs="0" maxOccurs="1">
+                <xs:annotation>
+                    <xs:documentation>
+                        <imrDoc xmlns="http://www.imr.no/formats/nmddocumentation/v1_0">
+                            <description lang="en">
+                                Key tag. Presence of this tag indicates that the annotated node is a key node. It also indicates that all non-key siblings can be uniquely identified by the combination of all sibling and ancestor keys. Used for mapping to relational data model
+                            </description>
+                            <description lang="no">
+                                Nøkkeltag. Indikerer at den annoterte noden er en nøkkelnode. Indikerer også at all søskennoder som ikke er nøkler kan unikt identifiseres ved kombinasjonen av alle nøkkelnoder som er sibling eller ancestor til den annoterte noden. Used for mapping to relational data model.
+                            </description>           
+                        </imrDoc>
+                    </xs:documentation>
+                </xs:annotation>                
+            </xs:element>
+        </xs:sequence>
+    </xs:complexType>
+
+    <xs:complexType name="ImrDocType">
+        <xs:sequence>
+            <xs:element name="description" type="StringWithLanguageAttribute" minOccurs="0" maxOccurs="unbounded">
+                <xs:annotation>
+                    <xs:documentation>
+                        <imrDoc xmlns="http://www.imr.no/formats/nmddocumentation/v1_0">
+                            <description lang="en">
+                                Description element. Specifies the definition of the annotated node.
+                            </description>
+                            <description lang="no">
+                                Beskrivelseselement. Spesifiserer definisjonen av den annoterte node.
+                            </description>           
+                        </imrDoc>
+                    </xs:documentation>
+                </xs:annotation>                
+            </xs:element>
+            <xs:element name="name" type="StringWithLanguageAttribute" minOccurs="0" maxOccurs="unbounded">
+                <xs:annotation>
+                    <xs:documentation>
+                        <imrDoc xmlns="http://www.imr.no/formats/nmddocumentation/v1_0">
+                            <description lang="en">
+                                Short description of annoatated node. Should be suitable for column headers etc.
+                            </description>
+                            <description lang="no">
+                                Kort beskrivelse av annotert node. Brukes til kollonneoverskrift, etc.
+                            </description>           
+                        </imrDoc>
+                    </xs:documentation>
+                </xs:annotation>      
+            </xs:element>
+
+            <xs:element name="referenceTable" type="referenceTableType" minOccurs="0" maxOccurs="1">
+                <xs:annotation>
+                    <xs:documentation>
+                        <imrDoc xmlns="http://www.imr.no/formats/nmddocumentation/v1_0">
+                            <description lang="en">
+                                A reference table describing allowed values for the annotated node.                     
+                            </description>
+                            <description lang="no">
+                                Referensetabell som beskriver lovlige verdier for den annoterte node.
+                            </description>           
+                        </imrDoc>
+                    </xs:documentation>
+                </xs:annotation>      
+            </xs:element>
+        </xs:sequence>
+    </xs:complexType>
+
+
+    <xs:complexType name="referenceTableType">
+        <xs:simpleContent>
+            <xs:extension base="xs:string">
+                <xs:attribute name="href" type="xs:anyURI" use="required"/>
+            </xs:extension>
+        </xs:simpleContent>
+    </xs:complexType>
+
+    <xs:complexType name="StringWithLanguageAttribute">
+        <xs:simpleContent>
+            <xs:extension base="xs:string">
+                <xs:attribute name="lang" type="xs:string" use="required"/>
+            </xs:extension>
+        </xs:simpleContent>
+    </xs:complexType>
+    
+    
+
+</xs:schema>
+
+

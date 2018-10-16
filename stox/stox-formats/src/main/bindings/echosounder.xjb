@@ -1,0 +1,62 @@
+<jxb:bindings version="2.1"
+              xmlns:jxb="http://java.sun.com/xml/ns/jaxb"
+              xmlns:xs="http://www.w3.org/2001/XMLSchema"
+              xmlns:annox="http://annox.dev.java.net"
+              xmlns:namespace="http://jaxb2-commons.dev.java.net/namespace-prefix"
+              xmlns:xjc="http://java.sun.com/xml/ns/jaxb/xjc"
+              xmlns:inheritance="http://jaxb2-commons.dev.java.net/basic/inheritance"
+              jxb:extensionBindingPrefixes="xjc annox">
+    <!-- By Kjetil Fjellheim (IMR) -->
+    <!--
+    This document is referenced from the pom and is used to change the generated classes.
+    The following has been added. -->
+    <jxb:bindings schemaLocation="../resources/echov1.xsd" node="/xs:schema">
+        <jxb:globalBindings generateElementProperty="false">
+            <jxb:serializable uid="1" />
+        </jxb:globalBindings>
+        <jxb:schemaBindings>
+            <jxb:package name="EchoSounderTypes.v1" />
+        </jxb:schemaBindings>
+        <jxb:bindings>
+            <namespace:prefix name="" />
+        </jxb:bindings>
+
+        <!-- Bind the root element and change its name to echosounder_dataset -->
+        <jxb:bindings node="//xs:complexType[@name='echosounderDatasetType']">
+            <inheritance:extends> HierarchicalData.HierarchicalData </inheritance:extends>
+            <annox:annotate>
+                <annox:annotate annox:class="javax.xml.bind.annotation.XmlRootElement" name="echosounder_dataset" />
+            </annox:annotate>
+        </jxb:bindings>
+
+        <jxb:bindings node="//xs:complexType[@name='distanceList']">
+            <inheritance:extends> HierarchicalData.HierarchicalData </inheritance:extends>
+        </jxb:bindings>
+        
+        <jxb:bindings node="//xs:complexType[@name='distance']">
+            <inheritance:extends> HierarchicalData.HierarchicalData </inheritance:extends>
+        </jxb:bindings>
+        
+        <jxb:bindings node="//xs:complexType[@name='frequencyType']">
+            <inheritance:extends> HierarchicalData.HierarchicalData </inheritance:extends>
+        </jxb:bindings>
+        
+        <jxb:bindings node="//xs:complexType[@name='chTypeType']">
+            <inheritance:extends> HierarchicalData.HierarchicalData </inheritance:extends>
+        </jxb:bindings>
+        
+        <jxb:bindings node="//xs:complexType[@name='saByAcocatType']">
+            <inheritance:extends> HierarchicalData.HierarchicalData </inheritance:extends>
+        </jxb:bindings>
+                
+        <jxb:bindings node="//xs:complexType[@name='acocatListType']">
+            <inheritance:extends> HierarchicalData.HierarchicalData </inheritance:extends>
+        </jxb:bindings>
+
+        <jxb:bindings node="//xs:complexType[@name='acocatType']">
+            <jxb:class name="acocatType" />
+            <inheritance:extends> HierarchicalData.HierarchicalData </inheritance:extends>
+        </jxb:bindings>
+
+    </jxb:bindings>
+</jxb:bindings>

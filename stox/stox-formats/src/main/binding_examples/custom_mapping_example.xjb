@@ -1,0 +1,100 @@
+<jxb:bindings version="2.1"
+              xmlns:jxb="http://java.sun.com/xml/ns/jaxb"
+              xmlns:xs="http://www.w3.org/2001/XMLSchema"
+              xmlns:annox="http://annox.dev.java.net"
+              xmlns:namespace="http://jaxb2-commons.dev.java.net/namespace-prefix"
+              xmlns:xjc="http://java.sun.com/xml/ns/jaxb/xjc"
+              xmlns:bio="http://www.imr.no/formats/nmdbiotic/v1.4"
+              xmlns:inheritance="http://jaxb2-commons.dev.java.net/basic/inheritance"
+              jxb:extensionBindingPrefixes="xjc annox">
+    <!-- By Kjetil Fjellheim (IMR) -->
+    <!--
+    This document is referenced from the pom and is used to change the generated classes.
+    The following has been added. -->
+
+        
+    <jxb:bindings schemaLocation="../resources/bioticv1_4.xsd" node="/xs:schema">
+        <jxb:schemaBindings>
+            <jxb:package name="BioticTypes.v1_4" />
+        </jxb:schemaBindings>
+        
+        <-- bind xs:integer and xs:decimal to lang.Integer and lang.Double -->
+        <jxb:globalBindings>
+            <jxb:javaType name="java.lang.Integer" xmlType="xs:integer"
+            parseMethod="javax.xml.bind.DatatypeConverter.parseInt"
+            printMethod="javax.xml.bind.DatatypeConverter.printInt"/>
+                        <jxb:javaType name="java.lang.Double" xmlType="xs:decimal"
+            parseMethod="javax.xml.bind.DatatypeConverter.parseDouble"
+            printMethod="javax.xml.bind.DatatypeConverter.printDouble"/>
+
+        </jxb:globalBindings>
+        <jxb:bindings>
+            <namespace:prefix name="" />
+        </jxb:bindings>
+        <jxb:bindings node="//xs:complexType[@name='ListType']">
+            <annox:annotate>
+                <annox:annotate annox:class="javax.xml.bind.annotation.XmlRootElement" name="list" />
+            </annox:annotate>
+        </jxb:bindings>
+        <jxb:bindings node="//xs:complexType[@name='MissionsType']">
+            <inheritance:extends> HierarchicalData.HierarchicalData </inheritance:extends>
+            <annox:annotate>
+                <annox:annotate annox:class="javax.xml.bind.annotation.XmlRootElement" name="missions"/>
+            </annox:annotate>
+        </jxb:bindings>
+        <jxb:bindings node="//xs:complexType[@name='MissionType']">
+            <inheritance:extends> HierarchicalData.HierarchicalData </inheritance:extends>
+            <annox:annotate>
+                <annox:annotate annox:class="javax.xml.bind.annotation.XmlRootElement" name="mission"/>
+            </annox:annotate>
+        </jxb:bindings>
+        <jxb:bindings node="//xs:complexType[@name='FishstationType']">
+            <inheritance:extends> HierarchicalData.HierarchicalData </inheritance:extends>
+            <annox:annotate>
+                <annox:annotate annox:class="javax.xml.bind.annotation.XmlRootElement" name="fishstation"/>
+            </annox:annotate>
+        </jxb:bindings>      
+        <jxb:bindings node="//xs:complexType[@name='CatchsampleType']">
+            <inheritance:extends> HierarchicalData.HierarchicalData </inheritance:extends>
+            <annox:annotate>
+                <annox:annotate annox:class="javax.xml.bind.annotation.XmlRootElement" name="catchsample"/>
+            </annox:annotate>
+        </jxb:bindings>  
+        <jxb:bindings node="//xs:complexType[@name='IndividualType']">
+            <inheritance:extends> HierarchicalData.HierarchicalData </inheritance:extends>
+            <annox:annotate>
+                <annox:annotate annox:class="javax.xml.bind.annotation.XmlRootElement" name="individual"/>
+            </annox:annotate>
+        </jxb:bindings>                        
+        <jxb:bindings node="//xs:complexType[@name='AgedeterminationType']">
+            <inheritance:extends> HierarchicalData.HierarchicalData </inheritance:extends>
+            <annox:annotate>
+                <annox:annotate annox:class="javax.xml.bind.annotation.XmlRootElement" name="agedetermination"/>
+            </annox:annotate>
+        </jxb:bindings>   
+        <jxb:bindings node="//xs:complexType[@name='TagType']">
+            <inheritance:extends> HierarchicalData.HierarchicalData </inheritance:extends>
+            <annox:annotate>
+                <annox:annotate annox:class="javax.xml.bind.annotation.XmlRootElement" name="tag"/>
+            </annox:annotate>
+        </jxb:bindings>
+        <jxb:bindings node="//xs:complexType[@name='PreyType']">
+            <inheritance:extends> HierarchicalData.HierarchicalData </inheritance:extends>
+            <annox:annotate>
+                <annox:annotate annox:class="javax.xml.bind.annotation.XmlRootElement" name="prey"/>
+            </annox:annotate>
+        </jxb:bindings>  
+        <jxb:bindings node="//xs:complexType[@name='PreylengthType']">
+            <inheritance:extends> HierarchicalData.HierarchicalData </inheritance:extends>
+            <annox:annotate>
+                <annox:annotate annox:class="javax.xml.bind.annotation.XmlRootElement" name="preylength"/>
+            </annox:annotate>
+        </jxb:bindings> 
+        <jxb:bindings node="//xs:complexType[@name='CopepodedevstageType']">
+            <inheritance:extends> HierarchicalData.HierarchicalData </inheritance:extends>
+            <annox:annotate>
+                <annox:annotate annox:class="javax.xml.bind.annotation.XmlRootElement" name="copepodedevstage"/>
+            </annox:annotate>
+        </jxb:bindings>
+    </jxb:bindings>
+</jxb:bindings>

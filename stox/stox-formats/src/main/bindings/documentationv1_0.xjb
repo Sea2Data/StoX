@@ -1,0 +1,22 @@
+<jxb:bindings version="2.1"
+              xmlns:jxb="http://java.sun.com/xml/ns/jaxb"
+              xmlns:xs="http://www.w3.org/2001/XMLSchema"
+              xmlns:annox="http://annox.dev.java.net"
+              xmlns:namespace="http://jaxb2-commons.dev.java.net/namespace-prefix"
+              xmlns:xjc="http://java.sun.com/xml/ns/jaxb/xjc"
+              xmlns:ds="http://www.imr.no/formats/nmdcruise/v1"
+              jxb:extensionBindingPrefixes="xjc annox"              >
+    <!-- By Kjetil Fjellheim (IMR) -->
+    <!--
+    This document is referenced from the pom and is used to change the generated classes.
+    The following has been added. -->
+    <jxb:bindings schemaLocation="../resources/documentationv1_0.xsd" node="/xs:schema">
+        <jxb:schemaBindings>
+            <jxb:package name="DocumentationTypes" />
+        </jxb:schemaBindings>
+        <jxb:bindings>
+            <namespace:prefix name="" />
+        </jxb:bindings>
+    </jxb:bindings>
+
+</jxb:bindings>

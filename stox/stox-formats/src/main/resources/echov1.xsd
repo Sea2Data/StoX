@@ -1,0 +1,101 @@
+<?xml version="1.0"?>
+
+<xs:schema version="1.0"
+           xmlns:xs="http://www.w3.org/2001/XMLSchema"
+           elementFormDefault="qualified"
+           targetNamespace="http://www.imr.no/formats/nmdechosounder/v1"
+           xmlns:echosounder_dataset="http://www.imr.no/formats/nmdechosounder/v1">
+
+    <!-- xsd document that represents the Luf20 echosounder format -->
+
+    <xs:element name="echosounder_dataset" type="echosounder_dataset:echosounderDatasetType" />
+
+    <xs:complexType name="echosounderDatasetType">
+        <xs:sequence>
+            <xs:element name="report_time" type="xs:string" minOccurs="1" maxOccurs="1" />
+            <xs:element name="lsss_version" type="xs:string" minOccurs="1" maxOccurs="1" />
+            <xs:element name="nation" type="xs:integer" minOccurs="1" maxOccurs="1" />
+            <xs:element name="platform" type="xs:integer" minOccurs="1" maxOccurs="1" />
+            <xs:element name="cruise" type="xs:integer" minOccurs="1" maxOccurs="1" />
+            <xs:element name="distance_list" type="echosounder_dataset:distanceList" minOccurs="1" maxOccurs="1" />
+            <xs:element name="acocat_list" type="echosounder_dataset:acocatListType" minOccurs="0" maxOccurs="1" />
+        </xs:sequence>
+    </xs:complexType>
+
+    <xs:complexType name="distanceList">
+        <xs:sequence>
+            <xs:element name="distance" type="echosounder_dataset:distance" minOccurs="1" maxOccurs="unbounded" />
+        </xs:sequence>
+    </xs:complexType>
+
+    <xs:complexType name="distance">
+        <xs:sequence>
+            <xs:element name="stop_time" type="xs:string" minOccurs="1" maxOccurs="1" />
+            <xs:element name="integrator_dist" type="xs:double" minOccurs="1" maxOccurs="1" />
+            <xs:element name="pel_ch_thickness" type="xs:double" minOccurs="1" maxOccurs="1" />
+            <xs:element name="bot_ch_thickness" type="xs:string" minOccurs="1" maxOccurs="1" />
+            <xs:element name="include_estimate" type="xs:integer" minOccurs="1" maxOccurs="1" />
+            <xs:element name="lat_start" type="xs:double" minOccurs="1" maxOccurs="1" />
+            <xs:element name="lat_stop" type="xs:string" minOccurs="1" maxOccurs="1" />
+            <xs:element name="lon_start" type="xs:double" minOccurs="1" maxOccurs="1" />
+            <xs:element name="lon_stop" type="xs:string" minOccurs="1" maxOccurs="1" />
+            <xs:element name="frequency" type="echosounder_dataset:frequencyType" minOccurs="0" maxOccurs="unbounded" />
+        </xs:sequence>
+        <xs:attribute name="log_start" type="xs:double" />
+        <xs:attribute name="start_time" type="xs:string" />
+    </xs:complexType>
+
+    <xs:complexType name="frequencyType">
+        <xs:sequence>
+            <xs:element name="threshold" type="xs:double" minOccurs="1" maxOccurs="1" />
+            <xs:element name="num_pel_ch" type="xs:integer" minOccurs="1" maxOccurs="1" />
+            <xs:element name="num_bot_ch" type="xs:integer" minOccurs="1" maxOccurs="1" />
+            <xs:element name="min_bot_depth" type="xs:double" minOccurs="1" maxOccurs="1" />
+            <xs:element name="max_bot_depth" type="xs:double" minOccurs="1" maxOccurs="1" />
+            <xs:element name="upper_interpret_depth" type="xs:double" minOccurs="1" maxOccurs="1" />
+            <xs:element name="lower_interpret_depth" type="xs:double" minOccurs="1" maxOccurs="1" />
+            <xs:element name="upper_integrator_depth" type="xs:double" minOccurs="1" maxOccurs="1" />
+            <xs:element name="lower_integrator_depth" type="xs:double" minOccurs="1" maxOccurs="1" />
+            <xs:element name="quality" type="xs:integer" minOccurs="1" maxOccurs="1" />
+            <xs:element name="bubble_corr" type="xs:double" minOccurs="1" maxOccurs="1" />
+            <xs:element name="ch_type" type="echosounder_dataset:chTypeType" minOccurs="1" maxOccurs="2" />
+        </xs:sequence>
+        <xs:attribute name="freq" type="xs:integer" />
+        <xs:attribute name="tranceiver" type="xs:integer" />
+    </xs:complexType>
+
+    <xs:complexType name="chTypeType">
+        <xs:sequence>
+            <xs:element name="sa_by_acocat" type="echosounder_dataset:saByAcocatType" minOccurs="0" maxOccurs="unbounded" />
+        </xs:sequence>
+        <xs:attribute name="type" type="xs:string" />
+    </xs:complexType>
+
+    <xs:complexType name="saByAcocatType">
+        <xs:sequence>
+            <xs:element name="sa" type="echosounder_dataset:saType" minOccurs="0" maxOccurs="unbounded" />
+        </xs:sequence>
+        <xs:attribute name="acocat" type="xs:integer" />
+    </xs:complexType>
+
+    <xs:complexType name="saType">
+        <xs:simpleContent>
+            <xs:extension base="xs:double">
+                <xs:attribute name="ch" type="xs:integer" />
+            </xs:extension>
+        </xs:simpleContent>
+    </xs:complexType>
+
+    <xs:complexType name="acocatListType">
+        <xs:sequence>
+            <xs:element name="acocat" type="echosounder_dataset:acocatType" minOccurs="0" maxOccurs="unbounded" />
+        </xs:sequence>
+    </xs:complexType>
+
+    <xs:complexType name="acocatType">
+        <xs:sequence>
+            <xs:element name="purpose" type="xs:integer" minOccurs="1" maxOccurs="1" />
+        </xs:sequence>
+        <xs:attribute name="acocat" type="xs:integer" />
+    </xs:complexType>
+</xs:schema>

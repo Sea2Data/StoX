@@ -1,0 +1,391 @@
+<?xml version="1.0"?>
+<xs:schema version="1.0"
+           xmlns:xs="http://www.w3.org/2001/XMLSchema"
+           elementFormDefault="qualified"
+           targetNamespace="http://www.imr.no/formats/nmdbiotic/v1"
+           xmlns="http://www.imr.no/formats/nmdbiotic/v1"
+           xmlns:imrd="http://www.imr.no/formats/nmddocumentation/v1_0">
+
+    <xs:element name="missions" type="MissionsType" />
+
+    <xs:element name="mission" type="MissionType" />
+
+    <!--
+        Missions type.
+    -->
+    <xs:complexType name="MissionsType">
+        <xs:sequence>
+            <xs:element name="mission" type="MissionType" minOccurs="0" maxOccurs="unbounded" />
+        </xs:sequence>
+    </xs:complexType>
+
+    <!--
+        Mission type.
+    -->
+    <xs:complexType name="MissionType">
+        <xs:sequence>
+            <xs:element name="cruise" type="xs:string" />
+            <xs:element name="startdate" type="xs:string" />
+            <xs:element name="stopdate" type="xs:string" />
+            <xs:element name="purpose" type="xs:string" />
+            <xs:element name="fishstation" type="FishStationType" minOccurs="0" maxOccurs="unbounded" />
+        </xs:sequence>
+        <xs:attribute name="year" type="xs:string" use="optional" >
+            <xs:annotation>
+                <xs:appinfo>
+                    <imrd:imrApp>
+                        <imrd:key/>
+                    </imrd:imrApp>
+                </xs:appinfo>
+            </xs:annotation>
+        </xs:attribute>
+        <xs:attribute name="missiontype" type="xs:string" use="optional">
+            <xs:annotation>
+                <xs:appinfo>
+                    <imrd:imrApp>
+                        <imrd:key/>
+                    </imrd:imrApp>
+                </xs:appinfo>
+            </xs:annotation>
+        </xs:attribute>
+        <xs:attribute name="missiontypename" type="xs:string" use="optional" />
+        <xs:attribute name="callsignal" type="xs:string" use="optional" />
+        <xs:attribute name="platform" type="xs:string" use="optional" >
+            <xs:annotation>
+                <xs:appinfo>
+                    <imrd:imrApp>
+                        <imrd:key/>
+                    </imrd:imrApp>
+                </xs:appinfo>
+            </xs:annotation>
+        </xs:attribute>
+        <xs:attribute name="missionnumber" type="xs:string" use="optional" >
+            <xs:annotation>
+                <xs:appinfo>
+                    <imrd:imrApp>
+                        <imrd:key/>
+                    </imrd:imrApp>
+                </xs:appinfo>
+            </xs:annotation>
+        </xs:attribute>
+    </xs:complexType>
+
+    <!--
+        Fishstation type.
+    -->
+    <xs:complexType name="FishStationType">
+        <xs:sequence>
+            <xs:element name="nation" type="StringDescriptionType" minOccurs="0"/>
+            <xs:element name="platform" type="StringDescriptionType" minOccurs="0"/>
+            <xs:element name="station" type="xs:integer" minOccurs="0"/>
+            <xs:element name="startdate" type="xs:string" minOccurs="0" />
+            <xs:element name="starttime" type="xs:string" minOccurs="0"/>
+            <xs:element name="stopdate" type="xs:string" minOccurs="0" />
+            <xs:element name="stoptime" type="xs:string" minOccurs="0"/>
+            <xs:element name="stationtype" type="StringDescriptionType" minOccurs="0"/>
+            <xs:element name="latitudestart" type="xs:decimal" minOccurs="0"/>
+            <xs:element name="longitudestart" type="xs:decimal" minOccurs="0"/>
+            <xs:element name="latitudeend" type="xs:decimal" minOccurs="0"/>
+            <xs:element name="longitudeend" type="xs:decimal" minOccurs="0"/>
+            <xs:element name="system" type="StringDescriptionType" minOccurs="0"/>
+            <xs:element name="area" type="StringDescriptionType" minOccurs="0"/>
+            <xs:element name="location" type="StringDescriptionType" minOccurs="0"/>
+            <xs:element name="bottomdepthstart" type="xs:decimal" minOccurs="0"/>
+            <xs:element name="bottomdepthstop" type="xs:decimal" minOccurs="0"/>
+            <xs:element name="fishingdepthmax" type="xs:decimal" minOccurs="0"/>
+            <xs:element name="fishingdepthmin" type="xs:decimal" minOccurs="0"/>
+            <xs:element name="fishingdepthmean" type="xs:decimal" minOccurs="0"/>
+            <xs:element name="gearno" type="StringDescriptionType" minOccurs="0"/>
+            <xs:element name="gear" type="StringDescriptionType" minOccurs="0"/>
+            <xs:element name="gearcount" type="xs:integer" minOccurs="0"/>
+            <xs:element name="direction" type="xs:decimal" minOccurs="0"/>
+            <xs:element name="gearspeed" type="xs:decimal" minOccurs="0"/>
+            <xs:element name="startlog" type="xs:decimal" minOccurs="0"/>
+            <xs:element name="stoplog" type="xs:decimal" minOccurs="0"/>
+            <xs:element name="distance" type="xs:decimal" minOccurs="0"/>
+            <xs:element name="gearcondition" type="StringDescriptionType" minOccurs="0"/>
+            <xs:element name="trawlquality" type="StringDescriptionType" minOccurs="0"/>
+            <xs:element name="trawlopening" type="xs:decimal" minOccurs="0"/>
+            <xs:element name="trawlopeningsd" type="xs:decimal" minOccurs="0"/>
+            <xs:element name="doorspread" type="xs:decimal" minOccurs="0"/>
+            <xs:element name="doorspreadsd" type="xs:decimal" minOccurs="0"/>
+            <xs:element name="wirelength" type="xs:integer" minOccurs="0"/>
+            <xs:element name="fishabundance" type="StringDescriptionType" minOccurs="0"/>
+            <xs:element name="fishdistribution" type="StringDescriptionType" minOccurs="0"/>
+            <xs:element name="fishingground" type="StringDescriptionType" minOccurs="0"/>
+            <xs:element name="countofvessels" type="xs:integer" minOccurs="0"/>
+            <xs:element name="dataquality" type="StringDescriptionType" minOccurs="0"/>
+            <xs:element name="comment" type="xs:string" minOccurs="0"/>
+            <xs:element name="catchsample" type="CatchSampleType" minOccurs="0" maxOccurs="unbounded" />
+        </xs:sequence>
+        <xs:attribute name="serialno" type="xs:integer" use="required" >
+            <xs:annotation>
+                <xs:appinfo>
+                    <imrd:imrApp>
+                        <imrd:key/>
+                    </imrd:imrApp>
+                </xs:appinfo>
+            </xs:annotation>
+        </xs:attribute>
+    </xs:complexType>
+
+    <!--
+        Sample type.
+    -->
+    <xs:complexType name="CatchSampleType">
+        <xs:sequence>
+            <xs:element name="sampletype" type="StringDescriptionType" minOccurs="0"/>
+            <xs:element name="group" type="StringDescriptionType" minOccurs="0"/>
+            <xs:element name="conservation" type="StringDescriptionType" minOccurs="0"/>
+            <xs:element name="producttype" type="StringDescriptionType" minOccurs="0"/>
+            <xs:element name="weight" type="xs:decimal" minOccurs="0"/>
+            <xs:element name="volume" type="xs:decimal" minOccurs="0"/>
+            <xs:element name="count" type="xs:integer" minOccurs="0"/>
+            <xs:element name="sampleproducttype" type="StringDescriptionType" minOccurs="0"/>
+            <xs:element name="lengthmeasurement" type="StringDescriptionType" minOccurs="0"/>
+            <xs:element name="lengthsampleweight" type="xs:decimal" minOccurs="0"/>
+            <xs:element name="lengthsamplevolume" type="xs:decimal" minOccurs="0"/>
+            <xs:element name="lengthsamplecount" type="xs:integer" minOccurs="0"/>
+            <xs:element name="specimensamplecount" type="xs:integer" minOccurs="0"/>
+            <xs:element name="raisingfactor" type="xs:decimal" minOccurs="0"/>
+            <xs:element name="agingstructure" type="StringDescriptionType" minOccurs="0"/>
+            <xs:element name="parasite" type="StringDescriptionType" minOccurs="0"/>
+            <xs:element name="stomach" type="StringDescriptionType" minOccurs="0"/>
+            <xs:element name="genetics" type="StringDescriptionType" minOccurs="0"/>
+            <xs:element name="foreignobject" type="StringDescriptionType" minOccurs="0"/>
+            <xs:element name="comment" type="xs:string" minOccurs="0"/>
+            <xs:element name="individual" type="IndividualType" minOccurs="0" maxOccurs="unbounded" />
+            <xs:element name="prey" type="PreyType" minOccurs="0" maxOccurs="unbounded" />
+        </xs:sequence>
+        <xs:attribute name="samplenumber" type="xs:integer" use="required" >
+            <xs:annotation>
+                <xs:appinfo>
+                    <imrd:imrApp>
+                        <imrd:key/>
+                    </imrd:imrApp>
+                </xs:appinfo>
+            </xs:annotation>
+        </xs:attribute>
+        <xs:attribute name="species" type="xs:string" use="required" >
+            <xs:annotation>
+                <xs:appinfo>
+                    <imrd:imrApp>
+                        <imrd:key/>
+                    </imrd:imrApp>
+                </xs:appinfo>
+            </xs:annotation>
+        </xs:attribute>
+        <xs:attribute name="noname" type="xs:string" use="required" />
+        <xs:attribute name="aphia" type="xs:integer" use="required" />
+    </xs:complexType>
+
+    <!--
+        Individual type.
+    -->
+    <xs:complexType name="IndividualType">
+        <xs:sequence>
+            <xs:element name="producttype" type="StringDescriptionType" minOccurs="0"/>
+            <xs:element name="weight" type="xs:decimal" minOccurs="0"/>
+            <xs:element name="volume" type="xs:decimal" minOccurs="0"/>
+            <xs:element name="lengthunit" type="StringDescriptionType" minOccurs="0"/>
+            <xs:element name="length" type="xs:decimal" minOccurs="0"/>
+            <xs:element name="fat" type="StringDescriptionType" minOccurs="0"/>
+            <xs:element name="sex" type="StringDescriptionType" minOccurs="0"/>
+            <xs:element name="stage" type="StringDescriptionType" minOccurs="0"/>
+            <xs:element name="specialstage" type="StringDescriptionType" minOccurs="0"/>
+            <xs:element name="eggstage" type="StringDescriptionType" minOccurs="0"/>
+            <xs:element name="moultingstage" type="StringDescriptionType" minOccurs="0"/>
+            <xs:element name="stomachfillfield" type="StringDescriptionType" minOccurs="0"/>
+            <xs:element name="stomachfilllab" type="StringDescriptionType" minOccurs="0"/>
+            <xs:element name="digestion" type="StringDescriptionType" minOccurs="0"/>
+            <xs:element name="liver" type="StringDescriptionType" minOccurs="0"/>
+            <xs:element name="liverparasite" type="StringDescriptionType" minOccurs="0"/>
+            <xs:element name="gillworms" type="xs:integer" minOccurs="0"/>
+            <xs:element name="swollengills" type="StringDescriptionType" minOccurs="0"/>
+            <xs:element name="fungusheart" type="StringDescriptionType" minOccurs="0"/>
+            <xs:element name="fungusspores" type="StringDescriptionType" minOccurs="0"/>
+            <xs:element name="fungusouter" type="StringDescriptionType" minOccurs="0"/>
+            <xs:element name="blackspot" type="xs:integer" minOccurs="0"/>
+            <xs:element name="vertebrae" type="StringDescriptionType" minOccurs="0"/>
+            <xs:element name="gonadweight" type="xs:decimal" minOccurs="0"/>
+            <xs:element name="liverweight" type="xs:decimal" minOccurs="0"/>
+            <xs:element name="stomachweight" type="xs:decimal" minOccurs="0"/>
+            <xs:element name="diameter" type="xs:decimal" minOccurs="0"/>
+            <xs:element name="mantlelength" type="xs:decimal" minOccurs="0"/>
+            <xs:element name="carapacelength" type="xs:decimal" minOccurs="0"/>
+            <xs:element name="headlength" type="xs:decimal" minOccurs="0"/>
+            <xs:element name="snouttoendoftail" type="xs:decimal" minOccurs="0"/>
+            <xs:element name="snouttoendsqueezed" type="xs:decimal" minOccurs="0"/>
+            <xs:element name="snouttoanalfin" type="xs:decimal" minOccurs="0"/>
+            <xs:element name="snouttodorsalfin" type="xs:decimal" minOccurs="0"/>
+            <xs:element name="forklength" type="xs:decimal" minOccurs="0"/>
+            <xs:element name="snouttoboneknob" type="xs:decimal" minOccurs="0"/>
+            <xs:element name="lengthwithouthead" type="xs:decimal" minOccurs="0"/>
+            <xs:element name="carapacewidth" type="xs:decimal" minOccurs="0"/>
+            <xs:element name="rightclawwidth" type="xs:decimal" minOccurs="0"/>
+            <xs:element name="rightclawlength" type="xs:decimal" minOccurs="0"/>
+            <xs:element name="meroswidth" type="xs:decimal" minOccurs="0"/>
+            <xs:element name="meroslength" type="xs:decimal" minOccurs="0"/>
+            <xs:element name="japanesecut" type="xs:decimal" minOccurs="0"/>
+            <xs:element name="comment" type="xs:string" minOccurs="0"/>
+            <xs:element name="agedetermination" type="AgeDeterminationType" minOccurs="0" maxOccurs="unbounded" />
+            <xs:element name="tag" type="TagType" minOccurs="0"  />
+        </xs:sequence>
+        <xs:attribute name="specimenno" type="xs:integer" use="required" >
+            <xs:annotation>
+                <xs:appinfo>
+                    <imrd:imrApp>
+                        <imrd:key/>
+                    </imrd:imrApp>
+                </xs:appinfo>
+            </xs:annotation>
+        </xs:attribute>
+    </xs:complexType>
+
+    <!--
+        Age determination type.
+    -->
+    <xs:complexType name="AgeDeterminationType">
+        <xs:sequence>
+            <xs:element name="age" type="xs:integer" minOccurs="0" />
+            <xs:element name="spawningage" type="xs:integer" minOccurs="0"/>
+            <xs:element name="spawningzones" type="xs:integer" minOccurs="0"/>
+            <xs:element name="readability" type="StringDescriptionType" minOccurs="0"/>
+            <xs:element name="otolithtype" type="StringDescriptionType" minOccurs="0"/>
+            <xs:element name="otolithedge" type="StringDescriptionType" minOccurs="0"/>
+            <xs:element name="otolithcentre" type="StringDescriptionType" minOccurs="0"/>
+            <xs:element name="calibration" type="StringDescriptionType" minOccurs="0"/>
+            <xs:element name="growthzone1" type="xs:integer" minOccurs="0"/>
+            <xs:element name="growthzone2" type="xs:integer" minOccurs="0"/>
+            <xs:element name="growthzone3" type="xs:integer" minOccurs="0"/>
+            <xs:element name="growthzone4" type="xs:integer" minOccurs="0"/>
+            <xs:element name="growthzone5" type="xs:integer" minOccurs="0"/>
+            <xs:element name="growthzone6" type="xs:integer" minOccurs="0"/>
+            <xs:element name="growthzone7" type="xs:integer" minOccurs="0"/>
+            <xs:element name="growthzone8" type="xs:integer" minOccurs="0"/>
+            <xs:element name="growthzone9" type="xs:integer" minOccurs="0"/>
+            <xs:element name="growthzonestotal" type="xs:integer" minOccurs="0"/>
+        </xs:sequence>
+        <xs:attribute name="no" type="xs:integer" use="required" >
+            <xs:annotation>
+                <xs:appinfo>
+                    <imrd:imrApp>
+                        <imrd:key/>
+                    </imrd:imrApp>
+                </xs:appinfo>
+            </xs:annotation>
+        </xs:attribute>
+    </xs:complexType>
+
+    <!--
+        Prey type.
+    -->
+    <xs:complexType name="PreyType">
+        <xs:sequence>
+            <xs:element name="digestion" type="StringDescriptionType" minOccurs="0" />
+            <xs:element name="totalcount" type="xs:integer" minOccurs="0" />
+            <xs:element name="weightresolution" type="xs:integer" minOccurs="0" />
+            <xs:element name="totalweight" type="xs:string" minOccurs="0" />
+            <xs:element name="interval" type="StringDescriptionType" minOccurs="0" />
+            <xs:element name="devstage" type="StringDescriptionType" minOccurs="0" />
+            <xs:element name="lengthmeasurement" type="StringDescriptionType" minOccurs="0" />
+            <xs:element name="copepodedevstage" type="CopepodedevstageType" minOccurs="0" maxOccurs="unbounded" />
+            <xs:element name="preylength" type="PreylengthType" minOccurs="0" maxOccurs="unbounded" />
+        </xs:sequence>
+        <xs:attribute name="fishno" type="xs:integer" use="required" >
+            <xs:annotation>
+                <xs:appinfo>
+                    <imrd:imrApp>
+                        <imrd:key/>
+                    </imrd:imrApp>
+                </xs:appinfo>
+            </xs:annotation>
+        </xs:attribute>
+        <xs:attribute name="species" type="xs:integer" use="required" >
+            <xs:annotation>
+                <xs:appinfo>
+                    <imrd:imrApp>
+                        <imrd:key/>
+                    </imrd:imrApp>
+                </xs:appinfo>
+            </xs:annotation>
+        </xs:attribute>
+        <xs:attribute name="partno" type="xs:integer" use="required" >
+            <xs:annotation>
+                <xs:appinfo>
+                    <imrd:imrApp>
+                        <imrd:key/>
+                    </imrd:imrApp>
+                </xs:appinfo>
+            </xs:annotation>
+        </xs:attribute>
+        <xs:attribute name="noname" type="xs:string" use="optional" />
+    </xs:complexType>
+
+    <!--
+        CopepodedevstageType type.
+    -->
+    <xs:complexType name="CopepodedevstageType">
+        <xs:sequence>
+            <xs:element name="count" type="xs:integer" />
+        </xs:sequence>
+        <xs:attribute name="copepodedevstage" type="xs:string" use="required" >
+            <xs:annotation>
+                <xs:appinfo>
+                    <imrd:imrApp>
+                        <imrd:key/>
+                    </imrd:imrApp>
+                </xs:appinfo>
+            </xs:annotation>
+        </xs:attribute>
+    </xs:complexType>
+
+    <!--
+        Prey length type.
+    -->
+    <xs:complexType name="PreylengthType">
+        <xs:sequence>
+            <xs:element name="count" type="xs:integer" />
+        </xs:sequence>
+        <xs:attribute name="length" type="xs:decimal" use="required" >
+            <xs:annotation>
+                <xs:appinfo>
+                    <imrd:imrApp>
+                        <imrd:key/>
+                    </imrd:imrApp>
+                </xs:appinfo>
+            </xs:annotation>
+        </xs:attribute>
+    </xs:complexType>
+
+    <!--
+        Tag type.
+    -->
+    <xs:complexType name="TagType">
+        <xs:sequence>
+            <xs:element name="tagtype" type="StringDescriptionType" />
+        </xs:sequence>
+        <xs:attribute name="tagno" type="xs:string" use="required" >
+            <xs:annotation>
+                <xs:appinfo>
+                    <imrd:imrApp>
+                        <imrd:key/>
+                    </imrd:imrApp>
+                </xs:appinfo>
+            </xs:annotation>
+        </xs:attribute>
+
+    </xs:complexType>
+
+    <!--
+        Common list elements with description and string type.
+    -->
+    <xs:complexType name="StringDescriptionType">
+        <xs:simpleContent>
+            <xs:extension base="xs:string">
+                <xs:attribute name="description" type="xs:string" use="optional" />
+            </xs:extension>
+        </xs:simpleContent>
+    </xs:complexType>
+
+</xs:schema>

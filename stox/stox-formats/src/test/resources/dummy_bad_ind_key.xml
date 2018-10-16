@@ -1,0 +1,553 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<missions xmlns="http://www.imr.no/formats/nmdbiotic/v1.4">
+    <mission missiontype="11" year="2017" platform="3654" missionnumber="1" missiontypename="Prøvebåt" callsignal="LHVE" platformname="Gamle Kvalstein[2013]/LHVE[2013]">
+        <startdate>21/01/2017</startdate>
+        <stopdate>07/04/2017</stopdate>
+        <fishstation serialno="99301">
+            <nation>58</nation>
+            <platform>9416</platform>
+            <station>1</station>
+            <stopdate>21/01/2017</stopdate>
+            <latitudestart>69.05833333333334</latitudestart>
+            <longitudestart>14.893333333333333</longitudestart>
+            <system>2</system>
+            <area>5</area>
+            <location>23</location>
+            <bottomdepthstart>80.0</bottomdepthstart>
+            <bottomdepthstop>120.0</bottomdepthstop>
+            <fishingdepthmax>120.0</fishingdepthmax>
+            <fishingdepthmin>80.0</fishingdepthmin>
+            <gear>5211</gear>
+            <gearcount>3</gearcount>
+            <gearcondition>1</gearcondition>
+            <trawlquality>8</trawlquality>
+            <soaktime>3.0</soaktime>
+            <landingsite>310</landingsite>
+            <catchsample species="164712" samplenumber="1" noname="TORSK" aphia="126436">
+                <sampletype>30</sampletype>
+                <group>26</group>
+                <conservation>1</conservation>
+                <producttype>1</producttype>
+                <weight>42.0</weight>
+                <lengthmeasurement>D</lengthmeasurement>
+                <lengthsamplecount>7</lengthsamplecount>
+                <specimensamplecount>7</specimensamplecount>
+                <agingstructure>2</agingstructure>
+                <individual specimenno="1">
+                    <lengthunit>1</lengthunit>
+                    <length>0.223</length>
+                    <agedetermination no="1">
+                        <age>9</age>
+                        <spawningage>7</spawningage>
+                        <spawningzones>2</spawningzones>
+                        <readability>1</readability>
+                        <otolithtype>1</otolithtype>
+                        <otolithedge>4</otolithedge>
+                    </agedetermination>
+                </individual>
+                <individual specimenno="2">
+                    <lengthunit>1</lengthunit>
+                    <length>0.263</length>
+                    <agedetermination no="1">
+                        <age>11</age>
+                        <spawningage>10</spawningage>
+                        <spawningzones>1</spawningzones>
+                        <readability>1</readability>
+                        <otolithtype>5</otolithtype>
+                        <otolithedge>4</otolithedge>
+                    </agedetermination>
+                </individual>
+                <individual specimenno="3">
+                    <lengthunit>1</lengthunit>
+                    <length>0.258</length>
+                    <agedetermination no="1">
+                        <age>13</age>
+                        <spawningage>11</spawningage>
+                        <spawningzones>2</spawningzones>
+                        <readability>1</readability>
+                        <otolithtype>4</otolithtype>
+                        <otolithedge>4</otolithedge>
+                    </agedetermination>
+                </individual>
+                <individual specimenno="4">
+                    <lengthunit>1</lengthunit>
+                    <length>0.239</length>
+                    <agedetermination no="1">
+                        <age>12</age>
+                        <spawningage>11</spawningage>
+                        <spawningzones>1</spawningzones>
+                        <readability>1</readability>
+                        <otolithtype>5</otolithtype>
+                        <otolithedge>4</otolithedge>
+                    </agedetermination>
+                </individual>
+                <individual specimenno="5">
+                    <lengthunit>1</lengthunit>
+                    <length>0.255</length>
+                    <agedetermination no="1">
+                        <age>12</age>
+                        <spawningage>11</spawningage>
+                        <spawningzones>1</spawningzones>
+                        <readability>5</readability>
+                        <otolithtype>5</otolithtype>
+                        <otolithedge>4</otolithedge>
+                    </agedetermination>
+                </individual>
+                <individual specimenno="6">
+                    <lengthunit>1</lengthunit>
+                    <length>0.227</length>
+                    <agedetermination no="1">
+                        <age>6</age>
+                        <spawningage>5</spawningage>
+                        <spawningzones>1</spawningzones>
+                        <readability>1</readability>
+                        <otolithtype>1</otolithtype>
+                        <otolithedge>4</otolithedge>
+                    </agedetermination>
+                </individual>
+                <individual specimenno="7">
+                    <lengthunit>1</lengthunit>
+                    <length>0.238</length>
+                    <agedetermination no="1">
+                        <age>10</age>
+                        <spawningage>9</spawningage>
+                        <spawningzones>1</spawningzones>
+                        <readability>6</readability>
+                        <otolithtype>5</otolithtype>
+                        <otolithedge>4</otolithedge>
+                    </agedetermination>
+                </individual>
+                <prey fishno="11" partno="1" species="">
+                    <totalweight>0.0</totalweight>
+                </prey>
+
+            </catchsample>
+            <catchsample species="164727" samplenumber="1" noname="SEI" aphia="126441">
+                <sampletype>20</sampletype>
+                <group>26</group>
+                <conservation>1</conservation>
+                <producttype>1</producttype>
+                <weight>140.0</weight>
+                <count>62</count>
+                <sampleproducttype>1</sampleproducttype>
+                <lengthmeasurement>E</lengthmeasurement>
+                <lengthsampleweight>68.13</lengthsampleweight>
+                <lengthsamplecount>30</lengthsamplecount>
+                <specimensamplecount>30</specimensamplecount>
+                <agingstructure>2</agingstructure>
+                <individual specimenno="1">
+                    <producttype>1</producttype>
+                    <weight>3.65</weight>
+                    <lengthunit>3</lengthunit>
+                    <length>0.73</length>
+                    <sex>2</sex>
+                    <stage>2</stage>
+                    <agedetermination no="1">
+                        <age>10</age>
+                        <spawningage>8</spawningage>
+                        <spawningzones>2</spawningzones>
+                        <readability>1</readability>
+                        <otolithedge>4</otolithedge>
+                    </agedetermination>
+                </individual>
+                <individual specimenno="2">
+                    <producttype>1</producttype>
+                    <weight>1.15</weight>
+                    <lengthunit>3</lengthunit>
+                    <length>0.52</length>
+                    <sex>1</sex>
+                    <stage>1</stage>
+                    <agedetermination no="1">
+                        <age>5</age>
+                        <readability>1</readability>
+                        <otolithedge>4</otolithedge>
+                    </agedetermination>
+                </individual>
+                <individual specimenno="3">
+                    <producttype>1</producttype>
+                    <weight>2.62</weight>
+                    <lengthunit>3</lengthunit>
+                    <length>0.69</length>
+                    <sex>1</sex>
+                    <stage>5</stage>
+                    <agedetermination no="1">
+                        <age>7</age>
+                        <spawningage>6</spawningage>
+                        <spawningzones>1</spawningzones>
+                        <readability>1</readability>
+                        <otolithedge>4</otolithedge>
+                    </agedetermination>
+                </individual>
+                <individual specimenno="4">
+                    <producttype>1</producttype>
+                    <weight>1.19</weight>
+                    <lengthunit>3</lengthunit>
+                    <length>0.5</length>
+                    <sex>2</sex>
+                    <stage>1</stage>
+                    <agedetermination no="1">
+                        <age>5</age>
+                        <readability>1</readability>
+                        <otolithedge>4</otolithedge>
+                    </agedetermination>
+                </individual>
+                <individual specimenno="5">
+                    <producttype>1</producttype>
+                    <weight>2.18</weight>
+                    <lengthunit>3</lengthunit>
+                    <length>0.63</length>
+                    <sex>1</sex>
+                    <stage>2</stage>
+                    <agedetermination no="1">
+                        <age>7</age>
+                        <spawningage>7</spawningage>
+                        <spawningzones>0</spawningzones>
+                        <readability>1</readability>
+                        <otolithedge>4</otolithedge>
+                    </agedetermination>
+                </individual>
+                <individual specimenno="6">
+                    <producttype>1</producttype>
+                    <weight>3.39</weight>
+                    <lengthunit>3</lengthunit>
+                    <length>0.72</length>
+                    <sex>1</sex>
+                    <stage>5</stage>
+                    <agedetermination no="1">
+                        <age>7</age>
+                        <readability>1</readability>
+                        <otolithedge>4</otolithedge>
+                    </agedetermination>
+                </individual>
+                <individual specimenno="7">
+                    <producttype>1</producttype>
+                    <weight>8.45</weight>
+                    <lengthunit>3</lengthunit>
+                    <length>1.01</length>
+                    <sex>1</sex>
+                    <stage>2</stage>
+                    <agedetermination no="1">
+                        <age>16</age>
+                        <spawningage>6</spawningage>
+                        <spawningzones>10</spawningzones>
+                        <readability>1</readability>
+                        <otolithedge>4</otolithedge>
+                    </agedetermination>
+                </individual>
+                <individual specimenno="8">
+                    <producttype>1</producttype>
+                    <weight>1.14</weight>
+                    <lengthunit>3</lengthunit>
+                    <length>0.51</length>
+                    <sex>2</sex>
+                    <stage>1</stage>
+                    <agedetermination no="1">
+                        <age>7</age>
+                        <readability>1</readability>
+                        <otolithedge>4</otolithedge>
+                    </agedetermination>
+                </individual>
+                <individual specimenno="9">
+                    <producttype>1</producttype>
+                    <weight>1.37</weight>
+                    <lengthunit>3</lengthunit>
+                    <length>0.57</length>
+                    <sex>1</sex>
+                    <stage>1</stage>
+                    <agedetermination no="1">
+                        <age>6</age>
+                        <readability>1</readability>
+                        <otolithedge>4</otolithedge>
+                    </agedetermination>
+                </individual>
+                <individual specimenno="10">
+                    <producttype>1</producttype>
+                    <weight>1.36</weight>
+                    <lengthunit>3</lengthunit>
+                    <length>0.56</length>
+                    <sex>1</sex>
+                    <stage>1</stage>
+                    <agedetermination no="1">
+                        <age>7</age>
+                        <readability>1</readability>
+                        <otolithedge>4</otolithedge>
+                    </agedetermination>
+                </individual>
+                <individual specimenno="11">
+                    <producttype>1</producttype>
+                    <weight>1.15</weight>
+                    <lengthunit>3</lengthunit>
+                    <length>0.52</length>
+                    <sex>1</sex>
+                    <stage>1</stage>
+                    <agedetermination no="1">
+                        <age>5</age>
+                        <readability>1</readability>
+                        <otolithedge>4</otolithedge>
+                    </agedetermination>
+                </individual>
+                <individual specimenno="12">
+                    <producttype>1</producttype>
+                    <weight>1.2</weight>
+                    <lengthunit>3</lengthunit>
+                    <length>0.53</length>
+                    <sex>1</sex>
+                    <stage>1</stage>
+                    <agedetermination no="1">
+                        <age>6</age>
+                        <readability>1</readability>
+                        <otolithedge>4</otolithedge>
+                    </agedetermination>
+                </individual>
+                <individual specimenno="13">
+                    <producttype>1</producttype>
+                    <weight>1.63</weight>
+                    <lengthunit>3</lengthunit>
+                    <length>0.56</length>
+                    <sex>1</sex>
+                    <stage>1</stage>
+                    <agedetermination no="1">
+                        <age>5</age>
+                        <readability>1</readability>
+                        <otolithedge>4</otolithedge>
+                    </agedetermination>
+                </individual>
+                <individual specimenno="14">
+                    <producttype>1</producttype>
+                    <weight>2.17</weight>
+                    <lengthunit>3</lengthunit>
+                    <length>0.61</length>
+                    <sex>2</sex>
+                    <stage>2</stage>
+                    <agedetermination no="1">
+                        <age>7</age>
+                        <spawningage>5</spawningage>
+                        <spawningzones>2</spawningzones>
+                        <readability>1</readability>
+                        <otolithedge>4</otolithedge>
+                    </agedetermination>
+                </individual>
+                <individual specimenno="15">
+                    <producttype>1</producttype>
+                    <weight>1.65</weight>
+                    <lengthunit>3</lengthunit>
+                    <length>0.56</length>
+                    <sex>1</sex>
+                    <stage>1</stage>
+                    <agedetermination no="1">
+                        <age>6</age>
+                        <readability>1</readability>
+                        <otolithedge>4</otolithedge>
+                    </agedetermination>
+                </individual>
+                <individual specimenno="16">
+                    <producttype>1</producttype>
+                    <weight>0.93</weight>
+                    <lengthunit>3</lengthunit>
+                    <length>0.49</length>
+                    <sex>1</sex>
+                    <stage>1</stage>
+                    <agedetermination no="1">
+                        <age>5</age>
+                        <readability>1</readability>
+                        <otolithedge>4</otolithedge>
+                    </agedetermination>
+                </individual>
+                <individual specimenno="17">
+                    <producttype>1</producttype>
+                    <weight>1.3</weight>
+                    <lengthunit>3</lengthunit>
+                    <length>0.55</length>
+                    <sex>2</sex>
+                    <stage>1</stage>
+                    <agedetermination no="1">
+                        <age>6</age>
+                        <readability>1</readability>
+                        <otolithedge>4</otolithedge>
+                    </agedetermination>
+                </individual>
+                <individual specimenno="18">
+                    <producttype>1</producttype>
+                    <weight>2.09</weight>
+                    <lengthunit>3</lengthunit>
+                    <length>0.62</length>
+                    <sex>1</sex>
+                    <stage>1</stage>
+                    <agedetermination no="1">
+                        <age>7</age>
+                        <readability>1</readability>
+                        <otolithedge>4</otolithedge>
+                    </agedetermination>
+                </individual>
+                <individual specimenno="19">
+                    <producttype>1</producttype>
+                    <weight>1.38</weight>
+                    <lengthunit>3</lengthunit>
+                    <length>0.57</length>
+                    <sex>2</sex>
+                    <stage>1</stage>
+                    <agedetermination no="1">
+                        <age>7</age>
+                        <readability>1</readability>
+                        <otolithedge>4</otolithedge>
+                    </agedetermination>
+                </individual>
+                <individual specimenno="20">
+                    <producttype>1</producttype>
+                    <weight>3.0</weight>
+                    <lengthunit>3</lengthunit>
+                    <length>0.68</length>
+                    <sex>2</sex>
+                    <stage>2</stage>
+                    <agedetermination no="1">
+                        <age>7</age>
+                        <spawningage>7</spawningage>
+                        <spawningzones>0</spawningzones>
+                        <readability>1</readability>
+                        <otolithedge>4</otolithedge>
+                    </agedetermination>
+                </individual>
+                <individual specimenno="21">
+                    <producttype>1</producttype>
+                    <weight>1.9</weight>
+                    <lengthunit>3</lengthunit>
+                    <length>0.61</length>
+                    <sex>2</sex>
+                    <stage>2</stage>
+                    <agedetermination no="1">
+                        <age>8</age>
+                        <spawningage>6</spawningage>
+                        <spawningzones>2</spawningzones>
+                        <readability>1</readability>
+                        <otolithedge>4</otolithedge>
+                    </agedetermination>
+                </individual>
+                <individual specimenno="22">
+                    <producttype>1</producttype>
+                    <weight>1.33</weight>
+                    <lengthunit>3</lengthunit>
+                    <length>0.56</length>
+                    <sex>1</sex>
+                    <stage>1</stage>
+                    <agedetermination no="1">
+                        <age>7</age>
+                        <readability>1</readability>
+                        <otolithedge>4</otolithedge>
+                    </agedetermination>
+                </individual>
+                <individual specimenno="23">
+                    <producttype>1</producttype>
+                    <weight>2.02</weight>
+                    <lengthunit>3</lengthunit>
+                    <length>0.63</length>
+                    <sex>1</sex>
+                    <stage>2</stage>
+                    <agedetermination no="1">
+                        <age>7</age>
+                        <spawningage>5</spawningage>
+                        <spawningzones>2</spawningzones>
+                        <readability>1</readability>
+                        <otolithedge>4</otolithedge>
+                    </agedetermination>
+                </individual>
+                <individual specimenno="24">
+                    <producttype>1</producttype>
+                    <weight>1.62</weight>
+                    <lengthunit>3</lengthunit>
+                    <length>0.59</length>
+                    <sex>2</sex>
+                    <stage>1</stage>
+                    <agedetermination no="1">
+                        <age>7</age>
+                        <readability>1</readability>
+                        <otolithedge>4</otolithedge>
+                    </agedetermination>
+                </individual>
+                <individual specimenno="25">
+                    <producttype>1</producttype>
+                    <weight>6.31</weight>
+                    <lengthunit>3</lengthunit>
+                    <length>0.84</length>
+                    <sex>2</sex>
+                    <stage>2</stage>
+                    <agedetermination no="1">
+                        <age>8</age>
+                        <spawningage>7</spawningage>
+                        <spawningzones>1</spawningzones>
+                        <readability>5</readability>
+                        <otolithedge>4</otolithedge>
+                    </agedetermination>
+                </individual>
+                <individual specimenno="26">
+                    <producttype>1</producttype>
+                    <weight>2.06</weight>
+                    <lengthunit>3</lengthunit>
+                    <length>0.59</length>
+                    <sex>1</sex>
+                    <stage>1</stage>
+                    <agedetermination no="1">
+                        <age>7</age>
+                        <readability>1</readability>
+                        <otolithedge>4</otolithedge>
+                    </agedetermination>
+                </individual>
+                <individual specimenno="27">
+                    <producttype>1</producttype>
+                    <weight>0.99</weight>
+                    <lengthunit>3</lengthunit>
+                    <length>0.51</length>
+                    <sex>1</sex>
+                    <stage>1</stage>
+                    <agedetermination no="1">
+                        <age>6</age>
+                        <readability>1</readability>
+                        <otolithedge>4</otolithedge>
+                    </agedetermination>
+                </individual>
+                <individual specimenno="28">
+                    <producttype>1</producttype>
+                    <weight>1.56</weight>
+                    <lengthunit>3</lengthunit>
+                    <length>0.56</length>
+                    <sex>2</sex>
+                    <stage>2</stage>
+                    <agedetermination no="1">
+                        <age>6</age>
+                        <spawningage>6</spawningage>
+                        <spawningzones>0</spawningzones>
+                        <readability>1</readability>
+                        <otolithedge>4</otolithedge>
+                    </agedetermination>
+                </individual>
+                <individual specimenno="29">
+                    <producttype>1</producttype>
+                    <weight>1.47</weight>
+                    <lengthunit>3</lengthunit>
+                    <length>0.55</length>
+                    <sex>1</sex>
+                    <stage>1</stage>
+                    <agedetermination no="1">
+                        <age>7</age>
+                        <readability>1</readability>
+                        <otolithedge>4</otolithedge>
+                    </agedetermination>
+                </individual>
+                <individual specimenno="30">
+                    <producttype>1</producttype>
+                    <weight>5.87</weight>
+                    <lengthunit>3</lengthunit>
+                    <length>0.85</length>
+                    <sex>1</sex>
+                    <stage>2</stage>
+                    <agedetermination no="1">
+                        <age>8</age>
+                        <spawningage>6</spawningage>
+                        <spawningzones>2</spawningzones>
+                        <readability>1</readability>
+                        <otolithedge>4</otolithedge>
+                    </agedetermination>
+                </individual>
+            </catchsample>
+        </fishstation>
+    </mission>
+</missions>

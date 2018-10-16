@@ -223,6 +223,7 @@
     <modules>
         <module>stox-util</module>
         <module>stox-core</module>
+        <module>stox-formats</module>
         <module>stox-base</module>
         <module>StoX</module>
     </modules>

@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<missions xmlns="http://www.imr.no/formats/nmdbiotic/v1.4">
+    <mission missiontype="4" year="2018" platform="4174" missionnumber="1" missiontypename="Forskningsfartøy" callsignal="LMEL" platformname="G.O.Sars">
+        <startdate>01/01/2018</startdate>
+        <stopdate>31/12/2018</stopdate>
+        <purpose></purpose>
+        <fishstation serialno="1">
+            <nation>58</nation>
+            <platform>4174</platform>
+            <catchsample species="164712" samplenumber="1" noname="torsk" aphia="126436">
+                <individual specimenno="1">
+                    <producttype>1</producttype>
+                </individual>
+                <prey fishno="1" partno="1" species="610010">
+                    <digestion>1</digestion>
+                    <weightresolution>3</weightresolution>
+                    <totalweight>2.0E-6</totalweight>
+                    <interval>1</interval>
+                    <devstage>1</devstage>
+                    <preylength length="0.002">
+                        <count>1</count>
+                    </preylength>
+                </prey>
+            </catchsample>
+        </fishstation>
+    </mission>
+</missions>
