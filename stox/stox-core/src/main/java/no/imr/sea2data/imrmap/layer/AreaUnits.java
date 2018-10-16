@@ -79,6 +79,7 @@ public class AreaUnits {
     }
 
     public static String getLineStringNameFromPos(List<LineString> l, Double lat, Double lon) {
+        if(l == null) return null;
         for (LineString lr : l) {
             if (JTSUtils.within(JTSUtils.createCoordinate(lon - 0.0000000001, lat - 0.0000000001), lr)) {
                 return JTSUtils.getLineStringName(lr);
