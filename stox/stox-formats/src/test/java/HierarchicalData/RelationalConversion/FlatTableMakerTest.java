@@ -23,6 +23,7 @@ import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import static org.junit.Assert.*;
+import org.junit.Ignore;
 
 /**
  * Tests flat structure with Individuals assumed to have non-repeating age
@@ -30,6 +31,7 @@ import static org.junit.Assert.*;
  *
  * @author Edvin Fuglebakk edvin.fuglebakk@imr.no
  */
+@Ignore
 public class FlatTableMakerTest {
 
     protected List<IndividualType> individuals;

@@ -40,7 +40,6 @@ public class ProjectTest {
     public void test() throws IOException {
         //FactoryUtil.extractTestModel();
 //        run(false,  "Swept area torsk vinter 2015", true, false);
-        Functions.XMLDATA = true;
         IProject pr = acquireProject(ProjectUtils.getSystemProjectRoot(), "Tobis-2013842-test", null);
         IProcess p = pr.getBaseline().getProcessByFunctionName(Functions.FN_READBIOTICXML);
         p.setFileOutput(Boolean.TRUE);

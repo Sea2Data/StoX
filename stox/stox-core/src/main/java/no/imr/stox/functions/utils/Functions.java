@@ -10,7 +10,7 @@ import java.util.List;
  */
 public final class Functions {
 
-    public static Boolean XMLDATA = false; // Use this swithc to turn on and off XMLDATA
+    //public static Boolean XMLDATA = false; // Use this swithc to turn on and off XMLDATA
     // Variables used as matrix dimensions or content
     // Assignments are specified per sampling unit (normally transect) and groups of channel layers (normally PB)
     public static final String DIM_ASSIGNMENT = "AssignmentID";

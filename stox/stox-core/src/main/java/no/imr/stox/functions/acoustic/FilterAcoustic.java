@@ -44,10 +44,6 @@ public class FilterAcoustic extends AbstractFunction {
         Expression freqE = engine.createExpression(frequenciesExpr);
         Expression nascE = engine.createExpression(nascExpr);
         JexlContext ctx = new MapContext();
-        if(Functions.XMLDATA) {
-            
-            return null;
-        }
         List<DistanceBO> allDistances = (List<DistanceBO>) input.get(Functions.PM_FILTERACOUSTIC_ACOUSTICDATA);
         List<DistanceBO> distances = new ArrayList<>();//FilterUtils.copyBOList((List)allDistances, null);
         for (DistanceBO ds : allDistances) {

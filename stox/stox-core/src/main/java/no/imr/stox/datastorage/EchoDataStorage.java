@@ -14,9 +14,6 @@ import no.imr.sea2data.imrbase.math.Calc;
 import no.imr.sea2data.imrbase.util.IMRdate;
 import no.imr.sea2data.imrbase.util.ExportUtil;
 import no.imr.sea2data.imrbase.util.ImrIO;
-import static no.imr.stox.datastorage.BioticDataStorage.getElmLevel;
-import no.imr.stox.functions.utils.DataStorageUtil;
-import no.imr.stox.functions.utils.Functions;
 
 /**
  * TODO: waht does this class do?
@@ -47,10 +44,6 @@ public class EchoDataStorage extends FileDataStorage {
     }
 
     public static void asTable(List<DistanceBO> list, Integer level, Writer wr) {
-        if (Functions.XMLDATA) {
-            DataStorageUtil.asTable((List) list, getElmLevel(level), wr);
-            return;
-        }
         switch (level) {
             case 1:
                 ImrIO.write(wr, ExportUtil.carrageReturnLineFeed(ExportUtil.tabbed("cruise", "log_start", "start_time", "lon_start", "lat_start", "lon_stop", "lat_stop", "integrator_dist",

@@ -64,10 +64,6 @@ public class FilterBiotic extends AbstractFunction {
         Expression sampleExpression = engine.createExpression(sampleExpr.toLowerCase());
         Expression individualExpression = engine.createExpression(individualExpr.toLowerCase());
         JexlContext ctx = new MapContext();
-        if(Functions.XMLDATA) {
-            
-            return null;
-        }
         // Old structures:
         List<FishstationBO> allFishstations = (List<FishstationBO>) input.get(Functions.PM_FILTERBIOTIC_BIOTICDATA);
         List<FishstationBO> fishstations = new BioticData();//FilterUtils.copyBOList((List) allFishstations, null);

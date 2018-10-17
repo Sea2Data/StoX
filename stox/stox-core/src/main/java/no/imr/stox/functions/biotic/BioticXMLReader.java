@@ -39,8 +39,8 @@ public class BioticXMLReader extends XMLReader {
      * @param stations List to populate.
      * @param project
      */
-    public BioticXMLReader(final List<Object> stations, IProject project) {
-        this.stations = (List) stations;
+    public BioticXMLReader(final List<FishstationBO> stations, IProject project) {
+        this.stations = stations;
         this.project = project;
     }
 

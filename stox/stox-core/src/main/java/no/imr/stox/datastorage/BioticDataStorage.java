@@ -17,7 +17,6 @@ import no.imr.sea2data.imrbase.util.IMRdate;
 import no.imr.stox.functions.utils.BioticUtils;
 import no.imr.sea2data.imrbase.util.ExportUtil;
 import no.imr.sea2data.imrbase.util.ImrIO;
-import no.imr.stox.functions.utils.DataStorageUtil;
 import no.imr.stox.functions.utils.Functions;
 
 /**
@@ -66,10 +65,6 @@ public class BioticDataStorage extends FileDataStorage {
     }
 
     public static void asTable(List<Object> list, Integer level, Writer wr) {
-        if (Functions.XMLDATA) {
-            DataStorageUtil.asTable((List) list, getElmLevel(level), wr);
-            return;
-        }
         // Old code
         switch (level) {
             case 1:

@@ -18,12 +18,14 @@ import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import static org.junit.Assert.*;
+import org.junit.Ignore;
 import org.xml.sax.XMLFilter;
 
 /**
  *
  * @author Edvin Fuglebakk edvin.fuglebakk@imr.no
  */
+@Ignore
 public class IOTest {
 
     public IOTest() {
