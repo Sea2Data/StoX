@@ -207,8 +207,8 @@ public class Biotic1Handler extends NamespaceVersionHandler<MissionsType> {
         m.setPlatform(missionBiotic3.getPlatform());
         m.setPlatformname(missionBiotic3.getPlatformname());
         m.setPurpose(missionBiotic3.getPurpose());
-        m.setStartdate(this.convertDateFromBiotic3(missionBiotic3.getMissionstartdate()));
-        m.setStopdate(this.convertDateFromBiotic3(missionBiotic3.getMissionstopdate()));
+        m.setStartdate(missionBiotic3.getMissionstartdate());
+        m.setStopdate(missionBiotic3.getMissionstopdate());
         m.setYear(missionBiotic3.getStartyear());
 
         for (BioticTypes.v3.FishstationType fs : missionBiotic3.getFishstation()) {
@@ -226,7 +226,7 @@ public class Biotic1Handler extends NamespaceVersionHandler<MissionsType> {
         }
         
         if (f.getArea()!=null){
-            fishstation.setArea(BigInteger.valueOf(Integer.parseInt(f.getArea())));
+            fishstation.setArea(Integer.parseInt(f.getArea()));
         }
         fishstation.setBottomdepthstart(f.getBottomdepthstart());
         fishstation.setBottomdepthstop(f.getBottomdepthstop());
@@ -265,16 +265,16 @@ public class Biotic1Handler extends NamespaceVersionHandler<MissionsType> {
         fishstation.setSea(createStringDescriptionTypeFromBiotic3(f.getSea()));
         fishstation.setSerialno(f.getSerialnumber());
         fishstation.setSoaktime(f.getSoaktime());
-        fishstation.setStartdate(this.convertDateFromBiotic3(f.getStationstartdate()));
+        fishstation.setStartdate(f.getStationstartdate());
         fishstation.setStartlog(f.getLogstart());
-        fishstation.setStarttime(this.convertTimeFromBiotic3(f.getStationstarttime()));
+        fishstation.setStarttime(f.getStationstarttime());
         fishstation.setStation(f.getStation());
         fishstation.setStationtype(createStringDescriptionTypeFromBiotic3(f.getStationtype()));
-        fishstation.setStopdate(this.convertDateFromBiotic3(f.getStationstopdate()));
+        fishstation.setStopdate(f.getStationstopdate());
         fishstation.setStoplog(f.getLogstop());
-        fishstation.setStoptime(this.convertTimeFromBiotic3(f.getStationstoptime()));
+        fishstation.setStoptime(f.getStationstoptime());
         if (f.getSystem()!=null){
-            fishstation.setSystem(BigInteger.valueOf(Integer.parseInt(f.getSystem())));
+            fishstation.setSystem(Integer.parseInt(f.getSystem()));
         }
         fishstation.setTrawlopening(f.getVerticaltrawlopening());
         fishstation.setTrawlopeningsd(f.getVerticaltrawlopeningsd());
@@ -286,7 +286,7 @@ public class Biotic1Handler extends NamespaceVersionHandler<MissionsType> {
         fishstation.setWinddirection(f.getWinddirection());
         fishstation.setWindspeed(f.getWindspeed());
         if (f.getWirelength() != null) {
-            fishstation.setWirelength(f.getWirelength().toBigInteger());
+            fishstation.setWirelength(f.getWirelength().intValue());
         } else {
             fishstation.setWirelength(null);
         }
@@ -383,7 +383,7 @@ public class Biotic1Handler extends NamespaceVersionHandler<MissionsType> {
         prey.setTotalweight(p.getTotalweight());
         prey.setWeightresolution(this.createStringDescriptionTypeFromBiotic3(p.getWeightresolution()));
 
-        Set<BigDecimal> lengths = new HashSet<>();
+        Set<Double> lengths = new HashSet<>();
         for (BioticTypes.v3.PreylengthType pl : p.getPreylengthfrequencytable()) {
             prey.getPreylength().add(this.convertPreyLengthFromBiotic3(pl));
 

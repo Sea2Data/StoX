@@ -31,14 +31,14 @@
                                         <directory>${basedir}/src/main/resources</directory>
                                     </fileset>
                                 </schema>
-                                <schema>
-                                    <url>https://git.imr.no/Formats/commons-biotic-jaxb/raw/3363f194415a106120efa2584f583e52d515a0ba/src/main/resources/bioticv3.xsd</url>
+                                <!--<schema>
+                                    <url>https://www.imr.no/formats/nmdbiotic/v3/bioticv3.xsd</url>
                                 </schema>
                                 <schema>
-                                    <url>https://git.imr.no/Formats/commons-biotic-jaxb/raw/1.1.4/src/main/resources/bioticv1_4.xsd</url>
-                                </schema>
+                                    <url>https://www.imr.no/formats/nmdbiotic/v1.4/bioticv1_4.xsd</url>
+                                </schema>-->
                             </schemas>
-                            <forceRegenerate>false</forceRegenerate>
+                            <forceRegenerate>true</forceRegenerate>
                             <generateDirectory>${project.build.directory}/generated-sources/xjc</generateDirectory>
                             <verbose>true</verbose>
                             <bindingDirectory>${basedir}/src/main/bindings</bindingDirectory>

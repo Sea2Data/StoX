@@ -13,10 +13,45 @@
     The following has been added. -->
 
         
-    <jxb:bindings schemaLocation="https://git.imr.no/Formats/commons-biotic-jaxb/raw/3363f194415a106120efa2584f583e52d515a0ba/src/main/resources/bioticv3.xsd" node="/xs:schema">
+    <jxb:bindings schemaLocation="../resources/bioticv3.xsd" node="/xs:schema">
         <jxb:schemaBindings>
             <jxb:package name="BioticTypes.v3" />
         </jxb:schemaBindings>
+        <jxb:bindings multiple="true" node="//xs:attribute[@type='xs:integer']">
+            <jxb:property>
+                <jxb:baseType>
+                    <xjc:javaType name="java.lang.Integer" adapter="adapters.IntegerAdapter" />
+                </jxb:baseType>
+            </jxb:property>
+        </jxb:bindings>
+        <jxb:bindings multiple="true" node="//xs:element[@type='xs:integer']">
+            <jxb:property>
+                <jxb:baseType>
+                    <xjc:javaType name="java.lang.Integer" adapter="adapters.IntegerAdapter" />
+                </jxb:baseType>
+            </jxb:property>
+        </jxb:bindings>
+        <jxb:bindings multiple="true" node="//xs:element[@type='xs:decimal']">
+            <jxb:property>
+                <jxb:baseType>
+                    <xjc:javaType name="java.lang.Double" adapter="adapters.DoubleAdapter" />
+                </jxb:baseType>
+            </jxb:property>
+        </jxb:bindings>
+        <jxb:bindings multiple="true" node="//xs:element[@type='xs:date']">
+            <jxb:property>
+                <jxb:baseType>
+                    <xjc:javaType name="java.time.LocalDate" adapter="adapters.DateAdapter" />
+                </jxb:baseType>
+            </jxb:property>
+        </jxb:bindings>
+        <jxb:bindings multiple="true" node="//xs:element[@type='xs:time']">
+            <jxb:property>
+                <jxb:baseType>
+                    <xjc:javaType name="java.time.LocalTime" adapter="adapters.TimeAdapter" />
+                </jxb:baseType>
+            </jxb:property>
+        </jxb:bindings>
         <jxb:bindings>
             <namespace:prefix name="" />
         </jxb:bindings>

@@ -12,6 +12,7 @@ import BioticTypes.v1_4.ObjectFactory;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
+import java.time.LocalDate;
 import javax.xml.datatype.XMLGregorianCalendar;
 import org.junit.After;
 import org.junit.AfterClass;
@@ -125,8 +126,8 @@ public class Biotic1HandlerTest {
         Biotic3Handler r3 = new Biotic3Handler();
         BioticTypes.v3.MissionsType b3 = r3.readOldBiotic(Biotic1HandlerTest.class.getClassLoader().getResourceAsStream("test.xml"));
         int year = b3.getMission().get(0).getMissionstopdate().getYear();
-        XMLGregorianCalendar stopdate = b3.getMission().get(0).getMissionstopdate();
-        stopdate.setYear(year+1);
+        LocalDate stopdate = b3.getMission().get(0).getMissionstopdate();
+        stopdate = stopdate.plusYears(1);
         b3.getMission().get(0).setMissionstopdate(stopdate);
         
         try{

@@ -242,8 +242,8 @@ public class Biotic3Handler extends NamespaceVersionHandler<MissionsType> {
         mission.setPlatformname(m.getPlatformname());
         mission.setPurpose(m.getPurpose());
         mission.setPlatform(m.getPlatform());
-        mission.setMissionstartdate(this.convertDateFromBiotic1(m.getStartdate()));
-        mission.setMissionstopdate(this.convertDateFromBiotic1(m.getStopdate()));
+        mission.setMissionstartdate(m.getStartdate());
+        mission.setMissionstopdate(m.getStopdate());
         mission.setStartyear(m.getYear());
 
         for (BioticTypes.v1_4.FishstationType f : m.getFishstation()) {
@@ -300,14 +300,14 @@ public class Biotic3Handler extends NamespaceVersionHandler<MissionsType> {
         fishstation.setSea(createStringFromBiotic1(f.getSea()));
         fishstation.setSerialnumber(f.getSerialno());
         fishstation.setSoaktime(f.getSoaktime());
-        fishstation.setStationstartdate(this.convertDateFromBiotic1(f.getStartdate()));
+        fishstation.setStationstartdate(f.getStartdate());
         fishstation.setLogstart(f.getStartlog());
-        fishstation.setStationstarttime(this.convertTimeBiotic1(f.getStarttime()));
+        fishstation.setStationstarttime(f.getStarttime());
         fishstation.setStation(f.getStation());
         fishstation.setStationtype(createStringFromBiotic1(f.getStationtype()));
-        fishstation.setStationstopdate(this.convertDateFromBiotic1(f.getStopdate()));
+        fishstation.setStationstopdate(f.getStopdate());
         fishstation.setLogstop(f.getStoplog());
-        fishstation.setStationstoptime(this.convertTimeBiotic1(f.getStoptime()));
+        fishstation.setStationstoptime(f.getStoptime());
         if (f.getSystem()==null){
             fishstation.setSystem(null);
         }
@@ -336,7 +336,7 @@ public class Biotic3Handler extends NamespaceVersionHandler<MissionsType> {
         checkIndividualKeyingBiotic1(c);
 
         CatchsampleType catchsample = this.biotic3factory.createCatchsampleType();
-        catchsample.setCatchsampleid(BigInteger.valueOf(this.createCatchsampleId(c)));
+        catchsample.setCatchsampleid(this.createCatchsampleId(c));
         catchsample.setAbundancecategory(this.createStringFromBiotic1(c.getAbundancecategory()));
         catchsample.setAphia(c.getAphia());
         catchsample.setCatchcomment(c.getComment());
@@ -469,7 +469,7 @@ public class Biotic3Handler extends NamespaceVersionHandler<MissionsType> {
     private PreyType createPreyFromBiotic1(BioticTypes.v1_4.PreyType p) throws BioticConversionException {
 
         PreyType prey = this.biotic3factory.createPreyType();
-        prey.setPreysampleid(BigInteger.valueOf(createPreytypeid(p)));
+        prey.setPreysampleid(createPreytypeid(p));
         prey.setDevstage(this.createStringFromBiotic1(p.getDevstage()));
         prey.setPreydigestion(this.createStringFromBiotic1(p.getDigestion()));
         prey.setInterval(this.createStringFromBiotic1(p.getInterval()));
@@ -502,7 +502,7 @@ public class Biotic3Handler extends NamespaceVersionHandler<MissionsType> {
     private PreylengthType convertPreyLengthFromBiotic1(BioticTypes.v1_4.PreylengthType pl) throws BioticConversionException {
 
         PreylengthType preylength = this.biotic3factory.createPreylengthType();
-        preylength.setPreylengthid(BigInteger.valueOf(this.creatPreyLengthId(pl)));
+        preylength.setPreylengthid(this.creatPreyLengthId(pl));
         preylength.setLengthintervalcount(pl.getCount());
         preylength.setLengthintervalstart(pl.getLength());
 
@@ -526,7 +526,7 @@ public class Biotic3Handler extends NamespaceVersionHandler<MissionsType> {
 
     // Checks if individuals are correctly keyed in biotic 1 data
     private void checkIndividualKeyingBiotic1(BioticTypes.v1_4.CatchsampleType c) throws BioticConversionException {
-        Set<BigInteger> keys = new HashSet<>();
+        Set<Integer> keys = new HashSet<>();
         for (BioticTypes.v1_4.IndividualType i : c.getIndividual()) {
             if (keys.contains(i.getSpecimenno())) {
                 throw new BioticConversionException("Individuals not correctly keyed (specimenno " + i.getSpecimenno() + " repeated)");
@@ -588,11 +588,11 @@ public class Biotic3Handler extends NamespaceVersionHandler<MissionsType> {
         }
     }
 
-    private BigDecimal convertIntegerToDecimal(BigInteger integer) {
+    private Double convertIntegerToDecimal(Integer integer) {
         if (integer == null) {
             return null;
         } else {
-            return new BigDecimal(integer);
+            return new BigDecimal(integer).doubleValue();
         }
     }
 
