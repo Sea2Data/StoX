@@ -39,13 +39,13 @@ public final class FilterUtils {
             context.set("fs", fs);
             context.set("missiontype", fs.getMissionType());
             context.set("cruise", fs.getCruise());
-            context.set("platform", fs.getPlatform());
+            context.set("platform", fs.getCatchPlatform());
             context.set("nation", fs.getNation());
-            context.set("platform", fs.getPlatform());
-            context.set("startdate", fs.getStartDate());
+            context.set("platform", fs.getCatchPlatform());
+            context.set("startdate", fs.getStationStartDate());
             context.set("station", fs.getStation());
             context.set("serialno", fs.getSerialNo());
-            context.set("fishstationtype", fs.getFishStationType());
+            context.set("fishstationtype", fs.getStationType());
             context.set("latitudestart", fs.getLatitudeStart());
             context.set("longitudestart", fs.getLongitudeStart());
             context.set("system", fs.getSystem());
@@ -57,34 +57,34 @@ public final class FilterUtils {
             context.set("gearno", fs.getGearNo());
             context.set("gear", fs.getGear());
             context.set("gearcount", fs.getGearCount());
-            context.set("directiongps", fs.getDirectionGps());
-            context.set("gearspeed", fs.getGearSpeed());
-            context.set("starttime", fs.getStartTime());
+            context.set("directiongps", fs.getDirection());
+            context.set("gearspeed", fs.getVesselSpeed());
+            context.set("starttime", fs.getStationStartTime());
             context.set("startlog", fs.getLogStart());
-            context.set("stoptime", fs.getStopTime());
+            context.set("stoptime", fs.getStationStopTime());
             context.set("distance", fs.getDistance());
             context.set("gearcondition", fs.getGearCondition());
             context.set("trawlquality", fs.getTrawlQuality());
             context.set("fishingdepthmax", fs.getFishingDepthMax());
             context.set("fishingdepthmin", fs.getFishingDepthMin());
             context.set("fishingdepthcount", fs.getFishingDepthCount());
-            context.set("trawlopening", fs.getTrawlOpening());
+            context.set("trawlopening", fs.getVerticalTrawlOpening());
             context.set("trawlopeningSD", fs.getTrawlStdOpening());
             context.set("doorspread", fs.getTrawlDoorSpread());
             context.set("doorspreadSD", fs.getTrawlStdDoorSpread());
             context.set("wirelength", fs.getWireLength());
             context.set("soaktime", fs.getSoaktime());
-            context.set("flowcount", fs.getFlowCount());
-            context.set("flowconst", fs.getFlowConst());
+            /*context.set("flowcount", fs.getFlowCount());
+            context.set("flowconst", fs.getFlowConst());*/
             context.set("comment", fs.getComment());
             // Derived attributes
             context.set("serialno", fs.getSerialNo());
-            context.set("stationtype", fs.getFishStationType());
+            context.set("stationtype", fs.getStationType());
             // period as integer: 20140101
-            if (fs.getStartDate() != null) {
-                context.set("year", IMRdate.getYear(fs.getStartDate(), true));
-                Integer period = IMRdate.getYear(fs.getStartDate(), true) * 10000 + IMRdate.getMonth(fs.getStartDate(), true) * 100
-                        + IMRdate.getDayOfMonth(fs.getStartDate(), true);
+            if (fs.getStationStartDate() != null) {
+                context.set("year", IMRdate.getYear(fs.getStationStartDate(), true));
+                Integer period = IMRdate.getYear(fs.getStationStartDate(), true) * 10000 + IMRdate.getMonth(fs.getStationStartDate(), true) * 100
+                        + IMRdate.getDayOfMonth(fs.getStationStartDate(), true);
                 context.set("period", period);
             }
         } else if (o instanceof CatchBO) {

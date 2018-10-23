@@ -220,12 +220,41 @@
             </dependency>
         </dependencies>
     </dependencyManagement>
-    <modules>
+    <!--<modules>
         <module>stox-util</module>
         <module>stox-core</module>
         <module>stox-formats</module>
         <module>stox-base</module>
         <module>StoX</module>
-    </modules>
-
+    </modules>-->
+    <profiles>
+        <profile>
+            <id>core</id>
+            <modules>
+                <module>stox-core</module>
+                <module>stox-base</module>
+            </modules>
+        </profile>
+        <profile>
+            <id>core-app</id>
+            <modules>
+                <module>stox-core</module>
+                <module>stox-base</module>
+                <module>StoX/application</module>
+            </modules>
+        </profile>
+        <profile>
+            <id>default</id>
+            <activation>
+                <activeByDefault>true</activeByDefault>
+            </activation>
+            <modules>
+                <module>stox-util</module>
+                <module>stox-core</module>
+                <module>stox-formats</module>
+                <module>stox-base</module>
+                <module>StoX</module>
+            </modules>
+        </profile>
+    </profiles>
 </project>

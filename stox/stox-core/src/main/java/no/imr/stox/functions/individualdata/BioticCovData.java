@@ -47,7 +47,7 @@ public class BioticCovData extends AbstractFunction {
         MatrixBO spatialM = AbndEstProcessDataUtil.getSpatial(pd);
         for (FishstationBO fs : bioticData) {
             // Filter station against covariates
-            Date d = fs.getStartDate();
+            Date d = fs.getStationStartDate();
             String tempKey = CovariateUtils.getTemporalFullKey(Functions.SOURCETYPE_BIOTIC, d, tempM);
             if (tempKey == null) {
                 tempKey = "";
@@ -63,7 +63,7 @@ public class BioticCovData extends AbstractFunction {
             if (spatialKey == null) {
                 spatialKey = "";
             }
-            String platformKey = fs.getPlatform();
+            String platformKey = fs.getCatchPlatform();
             if (platformKey == null) {
                 platformKey = "";
             }

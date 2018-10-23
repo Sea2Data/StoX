@@ -62,13 +62,13 @@ public final class BioticUtils {
             case Functions.COL_IND_SERIALNO:
                 return i.getSample().getCatchBO().getStationBO().getSerialNo();
             case Functions.COL_IND_PLATFORM:
-                return i.getSample().getCatchBO().getStationBO().getPlatform();
+                return i.getSample().getCatchBO().getStationBO().getCatchPlatform();
             case Functions.COL_IND_STARTDATE:
-                return IMRdate.formatDate(i.getSample().getCatchBO().getStationBO().getStartDate());
+                return IMRdate.formatDate(i.getSample().getCatchBO().getStationBO().getStationStartDate());
             case Functions.COL_IND_STARTTIME:
-                return IMRdate.formatTime(i.getSample().getCatchBO().getStationBO().getStartTime());
+                return IMRdate.formatTime(i.getSample().getCatchBO().getStationBO().getStationStartTime());
             case Functions.COL_IND_FISHSTATIONTYPE:
-                return i.getSample().getCatchBO().getStationBO().getFishStationType();
+                return i.getSample().getCatchBO().getStationBO().getStationType();
             case Functions.COL_IND_LATITUDESTART:
                 return Conversion.formatDoubletoDecimalString(i.getSample().getCatchBO().getStationBO().getLatitudeStart(), 4);
             case Functions.COL_IND_LONGITUDESTART:

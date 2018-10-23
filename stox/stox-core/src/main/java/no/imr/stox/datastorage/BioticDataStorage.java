@@ -74,14 +74,14 @@ public class BioticDataStorage extends FileDataStorage {
                         "fishingdepthmin", "fishingdepthcount", "trawlopening", "trawldoorspread", "latitudeend", "longitudeend", "wirelength", "stopdate", "logstop", "flowcount",
                         "flowconst", "comment")));
                 for (FishstationBO fs : (List<FishstationBO>) (List) list) {
-                    ImrIO.write(wr, ExportUtil.carrageReturnLineFeed(ExportUtil.tabbed(fs.getMissionType(), fs.getCruise(), fs.getSerialNo(), fs.getPlatform(), IMRdate.formatDate(fs.getStartDate()),
-                            fs.getStationNo(), fs.getStationType(), Conversion.formatDoubletoDecimalString(fs.getLatitudeStart(), 4),
+                    ImrIO.write(wr, ExportUtil.carrageReturnLineFeed(ExportUtil.tabbed(fs.getMissionType(), fs.getCruise(), fs.getSerialNo(), fs.getCatchPlatform(), IMRdate.formatDate(fs.getStationStartDate()),
+                            fs.getStation(), fs.getStationType(), Conversion.formatDoubletoDecimalString(fs.getLatitudeStart(), 4),
                             Conversion.formatDoubletoDecimalString(fs.getLongitudeStart(), 4), fs.getSystem(), fs.getArea(),
-                            fs.getLocation(), fs.getStratum(), fs.getBottomDepthStart(), fs.getBottomDepthStop(), fs.getGear(), fs.getGearCount(), fs.getGearSpeed(),
-                            IMRdate.formatTime(fs.getStartTime()), fs.getLogStart(), IMRdate.formatTime(fs.getStopTime()),
+                            fs.getLocation(), fs.getStratum(), fs.getBottomDepthStart(), fs.getBottomDepthStop(), fs.getGear(), fs.getGearCount(), fs.getVesselSpeed(),
+                            IMRdate.formatTime(fs.getStationStartTime()), fs.getLogStart(), IMRdate.formatTime(fs.getStationStopTime()),
                             fs.getDistance(), fs.getGearCondition(), fs.getTrawlQuality(), fs.getFishingDepthMax(), fs.getFishingDepthMin(), fs.getFishingDepthCount(),
-                            fs.getTrawlOpening(), fs.getTrawlDoorSpread(), fs.getLatitudeEnd(), fs.getLongitudeEnd(), fs.getWireLength(),
-                            IMRdate.formatDate(fs.getStopDate()), fs.getLogStop(), fs.getFlowCount(), fs.getFlowConst(), fs.getComment())));
+                            fs.getVerticalTrawlOpening(), fs.getTrawlDoorSpread(), fs.getLatitudeEnd(), fs.getLongitudeEnd(), fs.getWireLength(),
+                            IMRdate.formatDate(fs.getStationStopDate()), fs.getLogStop(), null, null, fs.getComment())));
                 }
                 break;
 
@@ -93,7 +93,7 @@ public class BioticDataStorage extends FileDataStorage {
                     for (CatchBO c : fs.getCatchBOCollection()) {
                         for (SampleBO s : c.getSampleBOCollection()) {
                 ImrIO.write(wr, ExportUtil.carrageReturnLineFeed(ExportUtil.tabbed(
-                                    /*IMRdate.getYear(fs.getStartDate(), true)*/fs.getCruise(), fs.getSerialNo(), fs.getPlatform(),
+                                    /*IMRdate.getYear(fs.getStationStartDate(), true)*/fs.getCruise(), fs.getSerialNo(), fs.getCatchPlatform(),
                                     s.getCatchBO().getSpeciesCatTableKey(), c.getSpecies(), c.getNoname(), c.getAphia(), s.getSampleNo(), s.getSampletype(), s.getGroup(), s.getConservationtype(), s.getMeasurementTypeTotal(),
                                     s.getTotalWeight(), s.getTotalCount(), s.getMeasurementTypeSampled(), s.getLengthType(), s.getSampledWeight(),
                                     s.getSampledCount(), s.getInumber(), s.getParasite(), s.getStomach(), s.getGenetics(), s.getComment())));

@@ -110,7 +110,9 @@ public class LarvaeDensity extends AbstractFunction {
             boolean sampleHasValue = false;
             for (String station : stations) {
                 FishstationBO fs = no.imr.stox.functions.utils.BioticUtils.findStation(biotic, station);
-                Double sweptVolume = getSweptVolume(fs.getFlowCount(), fs.getFlowConst(), gearOpeningAreaMap.get(fs.getGear()), fs.getFishingDepthMax());
+                Integer flowCount = null;
+                Double flowConst = null;
+                Double sweptVolume = getSweptVolume(flowCount, flowConst, gearOpeningAreaMap.get(fs.getGear()), fs.getFishingDepthMax());
                 //ant * fiskedyp[m] / volum[m^3] ; ant / 0.5
                 //volum = 0.3 * flowcount * 0.02835
                 //0.5 er åpning ved håv

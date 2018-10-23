@@ -60,7 +60,7 @@ public class DefinePlatform extends AbstractFunction {
                 }
                 biotic.stream().map((fs) -> {
                     //fs.
-                    return fs.getPlatform();
+                    return fs.getCatchPlatform();
                 }).filter((def) -> (def != null)).forEach((def) -> {
                     covP.setRowColValue(sourceType, def, def);
                 });

@@ -185,14 +185,14 @@ public class DATRASDataStorage extends FileDataStorage {
                         continue;
                     }
                     // Filter other station types that blank (vanlig)
-                    if (!(fs.getFishStationType() == null || fs.getFishStationType().equals(""))) {
+                    if (!(fs.getStationType() == null || fs.getStationType().equals(""))) {
                         continue;
                     }
-                    if(fs.getStartDate() == null)
+                    if(fs.getStationStartDate() == null)
                         continue;
-                    Integer year = IMRdate.getYear(fs.getStartDate(), true);
-                    Integer month = IMRdate.getMonth(fs.getStartDate(), true);
-                    Integer day = IMRdate.getDayOfMonth(fs.getStartDate(), true);
+                    Integer year = IMRdate.getYear(fs.getStationStartDate(), true);
+                    Integer month = IMRdate.getMonth(fs.getStationStartDate(), true);
+                    Integer day = IMRdate.getDayOfMonth(fs.getStationStartDate(), true);
                     Integer quarter = (month - 1) / 3 + 1;
                     // Invalid also less/more than 5..90 min. og uten for 62 grader, evt kvartal.
                     String haulVal = (fs.getGearCondition() == null || fs.getGearCondition().equals("1") || fs.getGearCondition().equals("2"))
@@ -205,7 +205,7 @@ public class DATRASDataStorage extends FileDataStorage {
                             // Country
                             getTSCountryByIOC(fs.getNation()), //TODO reference list
                             // Ship
-                            getTSShipByPlatform(fs.getPlatform()), // TODO reference list
+                            getTSShipByPlatform(fs.getCatchPlatform()), // TODO reference list
                             // Gear
                             "GOV", // TODO reference list
                             // SweepLngth
@@ -225,14 +225,14 @@ public class DATRASDataStorage extends FileDataStorage {
                             // Day
                             day,
                             // TimeShot
-                            StringUtils.leftPad(IMRdate.formatDate(fs.getStartTime(), "HHmm"), 4, '0'),
+                            StringUtils.leftPad(IMRdate.formatDate(fs.getStationStartTime(), "HHmm"), 4, '0'),
                             // Stratum
                             -9,
                             // HaulDur
-                            Math.round(IMRdate.minutesDiffD(IMRdate.encodeDate(fs.getStartDate(), fs.getStartTime()), IMRdate.encodeDate(fs.getStopDate(), fs.getStopTime()))),
+                            Math.round(IMRdate.minutesDiffD(IMRdate.encodeDate(fs.getStationStartDate(), fs.getStationStartTime()), IMRdate.encodeDate(fs.getStationStopDate(), fs.getStationStopTime()))),
                             // DayNight
                             // 15 minutes before  official sunrise, 15 min after official sunset.
-                            IMRdate.isDayTime(IMRdate.encodeDate(fs.getStartDate(), fs.getStartTime()), fs.getLatitudeStart(),
+                            IMRdate.isDayTime(IMRdate.encodeDate(fs.getStationStartDate(), fs.getStationStartTime()), fs.getLatitudeStart(),
                                     fs.getLongitudeStart()) ? "D" : "N",
                             // ShootLat
                             unkD(fs.getLatitudeStart(), "0.0000"),
@@ -259,7 +259,7 @@ public class DATRASDataStorage extends FileDataStorage {
                             // DataType
                             "R",
                             // Netopening
-                            fs.getTrawlOpening(),
+fs.getVerticalTrawlOpening(),
                             // Rigging
                             -9,
                             // Tickler
@@ -289,7 +289,7 @@ public class DATRASDataStorage extends FileDataStorage {
                             // Tow dir
                             unkO(fs.getDirection() != null ? Math.round(fs.getDirection()) : null),
                             // Ground speed (speed of trawl over ground)
-                            unkD(fs.getSpeedEquipment(), "0.0"),
+                            unkD(fs.getVesselSpeed(), "0.0"),
                             //Speed water
                             -9,
                             //SurCurDir
@@ -332,10 +332,10 @@ public class DATRASDataStorage extends FileDataStorage {
                     if (sweep == null) { // Sweep filter
                         continue;
                     }
-                    if(fs.getStartDate() == null)
+                    if(fs.getStationStartDate() == null)
                         continue;
-                    Integer year = IMRdate.getYear(fs.getStartDate(), true);
-                    Integer month = IMRdate.getMonth(fs.getStartDate(), true);
+                    Integer year = IMRdate.getYear(fs.getStationStartDate(), true);
+                    Integer month = IMRdate.getMonth(fs.getStationStartDate(), true);
                     Integer quarter = (int) Math.ceil(month / 3.0);
                     String haulVal = (fs.getGearCondition() == null || fs.getGearCondition().equals("1") || fs.getGearCondition().equals("2"))
                             && (fs.getTrawlQuality() == null || fs.getTrawlQuality().equals("0") || fs.getTrawlQuality().equals("1")) ? "V" : "I";
@@ -350,7 +350,7 @@ public class DATRASDataStorage extends FileDataStorage {
 
                         for (SampleBO s : c.getSampleBOCollection()) {
 
-                            //Double raiseFac = 60.0 / IMRdate.minutesDiffD(IMRdate.encodeDate(fs.getStartDate(), fs.getStartTime()), IMRdate.encodeDate(fs.getStopDate(), fs.getStopTime()));
+                            //Double raiseFac = 60.0 / IMRdate.minutesDiffD(IMRdate.encodeDate(fs.getStationStartDate(), fs.getStationStartTime()), IMRdate.encodeDate(fs.getStationStopDate(), fs.getStationStopTime()));
                             MatrixBO hlNoAtLngth = new MatrixBO();
                             MatrixBO lsCountTot = new MatrixBO();
 
@@ -432,7 +432,7 @@ public class DATRASDataStorage extends FileDataStorage {
                                         "HL",
                                         quarter,
                                         getTSCountryByIOC(fs.getNation()),
-                                        getTSShipByPlatform(fs.getPlatform()),
+                                        getTSShipByPlatform(fs.getCatchPlatform()),
                                         "GOV",
                                         sweep,
                                         "S",
@@ -469,10 +469,10 @@ public class DATRASDataStorage extends FileDataStorage {
                     if (sweep == null) { // Sweep filter
                         continue;
                     }
-                    if(fs.getStartDate() == null)
+                    if(fs.getStationStartDate() == null)
                         continue;
-                    Integer year = IMRdate.getYear(fs.getStartDate(), true);
-                    Integer month = IMRdate.getMonth(fs.getStartDate(), true);
+                    Integer year = IMRdate.getYear(fs.getStationStartDate(), true);
+                    Integer month = IMRdate.getMonth(fs.getStationStartDate(), true);
                     Integer quarter = (int) Math.ceil(month / 3.0);
                     String areaLoc = fs.getArea() != null && fs.getLocation() != null ? fs.getArea() + fs.getLocation() : "";
 
@@ -535,7 +535,7 @@ public class DATRASDataStorage extends FileDataStorage {
                                                     "CA",
                                                     quarter,
                                                     getTSCountryByIOC(fs.getNation()),
-                                                    getTSShipByPlatform(fs.getPlatform()),
+                                                    getTSShipByPlatform(fs.getCatchPlatform()),
                                                     "GOV",
                                                     sweep,
                                                     "S",
@@ -582,7 +582,7 @@ public class DATRASDataStorage extends FileDataStorage {
             }
         } else if (i.getStage() != null) {
             FishstationBO fs = c.getStationBO();
-            Integer month = IMRdate.getMonth(fs.getStartDate(), true);
+            Integer month = IMRdate.getMonth(fs.getStationStartDate(), true);
             Integer quarter = month / 4 + 1;
             Integer st = Conversion.safeStringtoIntegerNULL(i.getStage());
             if (st != null) {

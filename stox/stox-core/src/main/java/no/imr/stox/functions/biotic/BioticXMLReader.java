@@ -100,10 +100,9 @@ public class BioticXMLReader extends XMLReader {
             result = stations;
         } else if (current instanceof List && elmName.equals("fishstation")) {
             FishstationBO station = new FishstationBO();
-            station.setId(UUID.randomUUID().toString().replace("-", "").toString());
             station.setCruise(currentCruise);
             station.setMissionType(currentMissionType);
-            station.setPlatform(currentPlatform);
+            station.setCatchPlatform(currentPlatform);
             station.setPlatformName(currentPlatformName);
             stations.add(station);
             result = station;
@@ -160,14 +159,14 @@ public class BioticXMLReader extends XMLReader {
         if (key.equals("nation")) {
             bo.setNation(value);
         } else if (key.equals("platform")) {
-            bo.setPlatformcode(value);
+            bo.setCatchPlatform(value);
         } else if (key.equals("startdate")) {
-            bo.setStartDate(IMRdate.strToDate(value));
-            bo.setYear(IMRdate.getYear(bo.getStartDate(), true));
+            bo.setStationStartDate(IMRdate.strToDate(value));
+            bo.setYear(IMRdate.getYear(bo.getStationStartDate(), true));
         } else if (key.equals("stopdate")) {
-            bo.setStopDate(IMRdate.strToDate(value));
+            bo.setStationStopDate(IMRdate.strToDate(value));
         } else if (key.equals("station")) {
-            bo.setStationNo(Conversion.safeStringtoIntegerNULL(value));
+            bo.setStation(Conversion.safeStringtoIntegerNULL(value));
         } else if (key.equals("serialno") || key.equals("catchnumber")) {
             bo.setSerialNo(Conversion.safeStringtoIntegerNULL(value));
         } else if (key.equals("fishstationtype") || key.equals("stationtype")) {
@@ -199,13 +198,13 @@ public class BioticXMLReader extends XMLReader {
         } else if (key.equals("directiongps") || key.equals("direction")) {
             bo.setDirection(Conversion.safeStringtoDoubleNULL(value));
         } else if (key.equals("speedequipment") || key.equals("gearspeed")) {
-            bo.setGearSpeed(Conversion.safeStringtoDoubleNULL(value));
+            bo.setVesselSpeed(Conversion.safeStringtoDoubleNULL(value));
         } else if (key.equals("starttime")) {
-            bo.setStartTime(IMRdate.strToTime(value));
+            bo.setStationStartTime(IMRdate.strToTime(value));
         } else if (key.equals("logstart") || key.equals("startlog")) {
             bo.setLogStart(Conversion.safeStringtoDoubleNULL(value));
         } else if (key.equals("stoptime")) {
-            bo.setStopTime(IMRdate.strToTime(value));
+            bo.setStationStopTime(IMRdate.strToTime(value));
         } else if (key.equals("distance")) {
             bo.setDistance(Conversion.safeStringtoDoubleNULL(value));
         } else if (key.equals("gearcondition")) {
@@ -219,7 +218,7 @@ public class BioticXMLReader extends XMLReader {
         } else if (key.equals("fishingdepthcount")) {
             bo.setFishingDepthCount(Conversion.safeStringtoIntegerNULL(value));
         } else if (key.equals("trawlopening")) {
-            bo.setTrawlOpening(Conversion.safeStringtoDoubleNULL(value));
+            bo.setVerticalTrawlOpening(Conversion.safeStringtoDoubleNULL(value));
         } else if (key.equals("trawlstdopening") || key.equals("trawlopeningsd")) {
             bo.setTrawlStdOpening(Conversion.safeStringtoDoubleNULL(value));
         } else if (key.equals("trawldoorspread") || key.equals("doorspread")) {
@@ -232,10 +231,6 @@ public class BioticXMLReader extends XMLReader {
             bo.setSoaktime(Conversion.safeStringtoDoubleNULL(value));
         } else if (key.equals("tripno")) {
             bo.setTripNo(Conversion.safeStringtoIntegerNULL(value));
-        } else if (key.equals("flowconst")) {
-            bo.setFlowConst(Conversion.safeStringtoDoubleNULL(value));
-        } else if (key.equals("flowcount")) {
-            bo.setFlowCount(Conversion.safeStringtoIntegerNULL(value));
         } else if (key.equals("comment")) {
             bo.setComment(value);
         }

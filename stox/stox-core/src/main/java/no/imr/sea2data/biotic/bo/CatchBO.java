@@ -9,10 +9,7 @@ import java.util.List;
  *
  * @author oddrune
  */
-public class CatchBO implements Serializable {
-
-    private Integer original;
-    private Date last_edited;
+public class CatchBO {
 
     protected String taxa; // tsn number as natural key. Use external reference system for lookup by tsn key.
     protected String noname; // tsn number as natural key. Use external reference system for lookup by tsn key.
@@ -25,14 +22,10 @@ public class CatchBO implements Serializable {
     protected int taxaTypeCode;        // not important (old overpunch code)
     private String fishingArea;        // misplaced, belongs to fishstation
     private Boolean targetSpecies;     // not in use
-    private Double totalWeight;        // redundant now, but could mean control check weight (ask Knut?) in the future
-    private Double totalVolume;        // redundant
-    private Integer totalCount;        // redundant now, but could mean control check count (ask Knut?) in the future
     private String norwegianname;      // redundant reference info
     private String scientificname;     // redundant reference info
     private String englishname;        // redundant reference info
 
-    private String description;
     private List<no.imr.sea2data.biotic.bo.SampleBO> sampleBOs = new ArrayList<>();
     private FishstationBO stationBO;
 
@@ -116,34 +109,6 @@ public class CatchBO implements Serializable {
         this.measurementType = measurementType;
     }
 
-    public void setOriginal(Integer original) {
-        this.original = original;
-    }
-
-    public void setLast_edited(Date last_edited) {
-        this.last_edited = last_edited;
-    }
-
-    public Integer getOriginal() {
-        return original;
-    }
-
-    public Date getLast_edited() {
-        return last_edited;
-    }
-
-    public void setTotalWeight(Double totalWeight) {
-        this.totalWeight = totalWeight;
-    }
-
-    public void setTotalVolume(Double totalVolume) {
-        this.totalVolume = totalVolume;
-    }
-
-    public void setTotalCount(Integer totalCount) {
-        this.totalCount = totalCount;
-    }
-
     public void setTargetSpecies(Boolean targetSpecies) {
         this.targetSpecies = targetSpecies;
     }
@@ -158,10 +123,6 @@ public class CatchBO implements Serializable {
 
     public String getFishingArea() {
         return fishingArea;
-    }
-
-    public String description() {
-        return this.description;
     }
 
     @Override
@@ -209,13 +170,6 @@ public class CatchBO implements Serializable {
      */
     public void setEnglishname(String englishname) {
         this.englishname = englishname;
-    }
-
-    /**
-     * @param description the description to set
-     */
-    public void setDescription(String description) {
-        this.description = description;
     }
 
     /**

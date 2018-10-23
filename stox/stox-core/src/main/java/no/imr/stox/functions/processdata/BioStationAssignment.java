@@ -249,12 +249,12 @@ public class BioStationAssignment extends AbstractFunction {
             scalarProduct += val;
         }
         if (refTime != null && refTime > 0d) {
-            if (d.getStart_time() == null || fs.getStartDate() == null || fs.getStartTime() == null) {
+            if (d.getStart_time() == null || fs.getStationStartDate() == null || fs.getStationStartTime() == null) {
                 return null;
             }
             try {
                 Duration dur = Duration.between(IMRdate.getLocalDateTime(d.getStart_time()),
-                        IMRdate.encodeLocalDateTime(fs.getStartDate(), fs.getStartTime()));
+                        IMRdate.encodeLocalDateTime(fs.getStationStartDate(), fs.getStationStartTime()));
                 Double hours = dur.getSeconds() / 3600d;
                 Double val = StoXMath.safeSumRelativeDiffSquared(hours, refTime);
                 if (val == null) {
