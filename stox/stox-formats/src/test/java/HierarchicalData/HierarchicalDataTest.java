@@ -27,7 +27,7 @@ import org.junit.Ignore;
  *
  * @author Edvin Fuglebakk edvin.fuglebakk@imr.no
  */
-@Ignore
+//@Ignore
 public class HierarchicalDataTest {
     
     public HierarchicalDataTest() {

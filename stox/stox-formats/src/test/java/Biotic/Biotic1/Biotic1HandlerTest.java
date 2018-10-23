@@ -26,7 +26,7 @@ import org.junit.Ignore;
  *
  * @author Edvin Fuglebakk edvin.fuglebakk@imr.no
  */
-@Ignore
+//@Ignore
 public class Biotic1HandlerTest {
 
     public Biotic1HandlerTest() {

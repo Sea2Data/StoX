@@ -18,7 +18,7 @@ import org.junit.Ignore;
  *
  * @author Edvin Fuglebakk edvin.fuglebakk@imr.no
  */
-@Ignore
+//@Ignore
 public class SuffixOnAllColumnsNamingConventionTest {
 
     public SuffixOnAllColumnsNamingConventionTest() {

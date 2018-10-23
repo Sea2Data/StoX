@@ -25,7 +25,7 @@ import org.junit.Ignore;
  *
  * @author Edvin Fuglebakk edvin.fuglebakk@imr.no
  */
-@Ignore
+//@Ignore
 public class SchemaReaderTest {
     
     public SchemaReaderTest() {
@@ -69,7 +69,7 @@ public class SchemaReaderTest {
         SchemaReader instance = new SchemaReader(SchemaReaderTest.class.getClassLoader().getResourceAsStream("bioticv1_4.xsd"));
         List<SchemaReader.SchemaNode> resultFs = instance.getNodes("FishstationType");
         assertTrue(resultFs.contains(new SchemaReader.SchemaNode("platform", "StringDescriptionType")));
-        assertTrue(resultFs.contains(new SchemaReader.SchemaNode("catchsample", "catchsampleType")));
+        assertTrue(resultFs.contains(new SchemaReader.SchemaNode("catchsample", "CatchsampleType")));
         assertTrue(resultFs.contains(new SchemaReader.SchemaNode("serialno", "integer")));
         assertTrue(resultFs.contains(new SchemaReader.SchemaNode("fishingdepthmin", "decimal")));
         

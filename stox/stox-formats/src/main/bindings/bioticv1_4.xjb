@@ -17,6 +17,13 @@
         <jxb:schemaBindings>
             <jxb:package name="BioticTypes.v1_4" />
         </jxb:schemaBindings>
+        <!--<jxb:bindings multiple="true" node="//xs:element[@type='StringDescriptionType']">
+            <jxb:property>
+                <jxb:baseType>
+                    <xjc:javaType name="java.lang.String" adapter="adapters.StringDescriptionTypeToStringAdapter" />
+                </jxb:baseType>
+            </jxb:property>
+        </jxb:bindings>-->
         <jxb:bindings multiple="true" node="//xs:attribute[@type='xs:integer']">
             <jxb:property>
                 <jxb:baseType>
@@ -24,7 +31,7 @@
                 </jxb:baseType>
             </jxb:property>
         </jxb:bindings>
-        <jxb:bindings multiple="true" node="//xs:element[@type='xs:integer']">
+        <jxb:bindings multiple="true" node="//xs:element[@type='xs:integer' and (@name != 'system' and @name != 'area' and @name != 'wirelength')]">
             <jxb:property>
                 <jxb:baseType>
                     <xjc:javaType name="java.lang.Integer" adapter="adapters.IntegerAdapter" />
@@ -52,10 +59,24 @@
                 </jxb:baseType>
             </jxb:property>
         </jxb:bindings>
-        <jxb:bindings multiple="true" node="//xs:element[@type='xs:string' and (@name = 'starttime' or @name = 'stoptime')]">
+        <jxb:bindings multiple="true" node="//xs:complexType[@name='FishstationType']/xs:sequence/xs:element[@name = 'starttime' or @name = 'stoptime']">
             <jxb:property>
                 <jxb:baseType>
                     <xjc:javaType name="java.time.LocalTime" adapter="adapters.OldTimeAdapter" />
+                </jxb:baseType>
+            </jxb:property>
+        </jxb:bindings>
+        <jxb:bindings multiple="true" node="//xs:complexType[@name='FishstationType']/xs:sequence/xs:element[@name = 'system' or @name = 'area']">
+            <jxb:property>
+                <jxb:baseType>
+                    <xjc:javaType name="java.lang.String" adapter="adapters.StringAdapter" />
+                </jxb:baseType>
+            </jxb:property>
+        </jxb:bindings>
+        <jxb:bindings multiple="true" node="//xs:complexType[@name='FishstationType']/xs:sequence/xs:element[@name = 'wirelength']">
+            <jxb:property>
+                <jxb:baseType>
+                    <xjc:javaType name="java.lang.Double" adapter="adapters.DoubleAdapter" />
                 </jxb:baseType>
             </jxb:property>
         </jxb:bindings>
@@ -63,77 +84,66 @@
             <namespace:prefix name="" />
         </jxb:bindings>
         <jxb:bindings node="//xs:complexType[@name='ListType']">
-            <annox:annotate target="package">@javax.xml.bind.annotation.adapters.XmlJavaTypeAdapters({@javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter(value = adapters.BigDecimalAdapter.class, type = java.math.BigDecimal.class),@javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter(value = adapters.BigIntegerAdapter.class, type = java.math.BigInteger.class)})</annox:annotate>
             <annox:annotate>
                 <annox:annotate annox:class="javax.xml.bind.annotation.XmlRootElement" name="list" />
             </annox:annotate>
         </jxb:bindings>
         <jxb:bindings node="//xs:complexType[@name='MissionsType']">
             <inheritance:extends> HierarchicalData.HierarchicalData </inheritance:extends>
-            <annox:annotate target="package">@javax.xml.bind.annotation.adapters.XmlJavaTypeAdapters({@javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter(value = adapters.BigDecimalAdapter.class, type = java.math.BigDecimal.class),@javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter(value = adapters.BigIntegerAdapter.class, type = java.math.BigInteger.class)})</annox:annotate>
             <annox:annotate>
                 <annox:annotate annox:class="javax.xml.bind.annotation.XmlRootElement" name="missions"/>
             </annox:annotate>
         </jxb:bindings>
         <jxb:bindings node="//xs:complexType[@name='MissionType']">
             <inheritance:extends> HierarchicalData.HierarchicalData </inheritance:extends>
-            <annox:annotate target="package">@javax.xml.bind.annotation.adapters.XmlJavaTypeAdapters({@javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter(value = adapters.BigDecimalAdapter.class, type = java.math.BigDecimal.class),@javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter(value = adapters.BigIntegerAdapter.class, type = java.math.BigInteger.class)})</annox:annotate>            
             <annox:annotate>
                 <annox:annotate annox:class="javax.xml.bind.annotation.XmlRootElement" name="mission"/>
             </annox:annotate>
         </jxb:bindings>
         <jxb:bindings node="//xs:complexType[@name='FishstationType']">
             <inheritance:extends> HierarchicalData.HierarchicalData </inheritance:extends>
-            <annox:annotate target="package">@javax.xml.bind.annotation.adapters.XmlJavaTypeAdapters({@javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter(value = adapters.BigDecimalAdapter.class, type = java.math.BigDecimal.class),@javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter(value = adapters.BigIntegerAdapter.class, type = java.math.BigInteger.class)})</annox:annotate>            
             <annox:annotate>
                 <annox:annotate annox:class="javax.xml.bind.annotation.XmlRootElement" name="fishstation"/>
             </annox:annotate>
         </jxb:bindings>      
         <jxb:bindings node="//xs:complexType[@name='CatchsampleType']">
             <inheritance:extends> HierarchicalData.HierarchicalData </inheritance:extends>
-            <annox:annotate target="package">@javax.xml.bind.annotation.adapters.XmlJavaTypeAdapters({@javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter(value = adapters.BigDecimalAdapter.class, type = java.math.BigDecimal.class),@javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter(value = adapters.BigIntegerAdapter.class, type = java.math.BigInteger.class)})</annox:annotate>            
             <annox:annotate>
                 <annox:annotate annox:class="javax.xml.bind.annotation.XmlRootElement" name="catchsample"/>
             </annox:annotate>
         </jxb:bindings>  
         <jxb:bindings node="//xs:complexType[@name='IndividualType']">
             <inheritance:extends> HierarchicalData.HierarchicalData </inheritance:extends>
-            <annox:annotate target="package">@javax.xml.bind.annotation.adapters.XmlJavaTypeAdapters({@javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter(value = adapters.BigDecimalAdapter.class, type = java.math.BigDecimal.class),@javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter(value = adapters.BigIntegerAdapter.class, type = java.math.BigInteger.class)})</annox:annotate>            
             <annox:annotate>
                 <annox:annotate annox:class="javax.xml.bind.annotation.XmlRootElement" name="individual"/>
             </annox:annotate>
         </jxb:bindings>                        
         <jxb:bindings node="//xs:complexType[@name='AgedeterminationType']">
             <inheritance:extends> HierarchicalData.HierarchicalData </inheritance:extends>
-            <annox:annotate target="package">@javax.xml.bind.annotation.adapters.XmlJavaTypeAdapters({@javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter(value = adapters.BigDecimalAdapter.class, type = java.math.BigDecimal.class),@javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter(value = adapters.BigIntegerAdapter.class, type = java.math.BigInteger.class)})</annox:annotate>            
             <annox:annotate>
                 <annox:annotate annox:class="javax.xml.bind.annotation.XmlRootElement" name="agedetermination"/>
             </annox:annotate>
         </jxb:bindings>   
         <jxb:bindings node="//xs:complexType[@name='TagType']">
             <inheritance:extends> HierarchicalData.HierarchicalData </inheritance:extends>
-            <annox:annotate target="package">@javax.xml.bind.annotation.adapters.XmlJavaTypeAdapters({@javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter(value = adapters.BigDecimalAdapter.class, type = java.math.BigDecimal.class),@javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter(value = adapters.BigIntegerAdapter.class, type = java.math.BigInteger.class)})</annox:annotate>            
             <annox:annotate>
                 <annox:annotate annox:class="javax.xml.bind.annotation.XmlRootElement" name="tag"/>
             </annox:annotate>
         </jxb:bindings>
         <jxb:bindings node="//xs:complexType[@name='PreyType']">
             <inheritance:extends> HierarchicalData.HierarchicalData </inheritance:extends>
-            <annox:annotate target="package">@javax.xml.bind.annotation.adapters.XmlJavaTypeAdapters({@javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter(value = adapters.BigDecimalAdapter.class, type = java.math.BigDecimal.class),@javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter(value = adapters.BigIntegerAdapter.class, type = java.math.BigInteger.class)})</annox:annotate>            
             <annox:annotate>
                 <annox:annotate annox:class="javax.xml.bind.annotation.XmlRootElement" name="prey"/>
             </annox:annotate>
         </jxb:bindings>  
         <jxb:bindings node="//xs:complexType[@name='PreylengthType']">
             <inheritance:extends> HierarchicalData.HierarchicalData </inheritance:extends>
-            <annox:annotate target="package">@javax.xml.bind.annotation.adapters.XmlJavaTypeAdapters({@javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter(value = adapters.BigDecimalAdapter.class, type = java.math.BigDecimal.class),@javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter(value = adapters.BigIntegerAdapter.class, type = java.math.BigInteger.class)})</annox:annotate>            
             <annox:annotate>
                 <annox:annotate annox:class="javax.xml.bind.annotation.XmlRootElement" name="preylength"/>
             </annox:annotate>
         </jxb:bindings> 
         <jxb:bindings node="//xs:complexType[@name='CopepodedevstageType']">
             <inheritance:extends> HierarchicalData.HierarchicalData </inheritance:extends>
-            <annox:annotate target="package">@javax.xml.bind.annotation.adapters.XmlJavaTypeAdapters({@javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter(value = adapters.BigDecimalAdapter.class, type = java.math.BigDecimal.class),@javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter(value = adapters.BigIntegerAdapter.class, type = java.math.BigInteger.class)})</annox:annotate>            
             <annox:annotate>
                 <annox:annotate annox:class="javax.xml.bind.annotation.XmlRootElement" name="copepodedevstage"/>
             </annox:annotate>

@@ -42,7 +42,7 @@ import org.junit.Ignore;
  *
  * @author Edvin Fuglebakk edvin.fuglebakk@imr.no
  */
-@Ignore
+//@Ignore
 public class Biotic3HandlerTest {
 
     public Biotic3HandlerTest() {

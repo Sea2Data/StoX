@@ -323,7 +323,7 @@ public class Biotic3Handler extends NamespaceVersionHandler<MissionsType> {
         fishstation.setWeather(createStringFromBiotic1(f.getWeather()));
         fishstation.setWinddirection(f.getWinddirection());
         fishstation.setWindspeed(f.getWindspeed());
-        fishstation.setWirelength(this.convertIntegerToDecimal(f.getWirelength()));
+        fishstation.setWirelength(f.getWirelength());
 
         for (BioticTypes.v1_4.CatchsampleType c : f.getCatchsample()) {
             fishstation.getCatchsample().add(this.createCatchsampleFromBiotic1(c));

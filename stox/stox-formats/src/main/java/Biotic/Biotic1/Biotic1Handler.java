@@ -224,10 +224,7 @@ public class Biotic1Handler extends NamespaceVersionHandler<MissionsType> {
         if (!(f.getFishingdepthcount() == null || f.getFishingdepthcount().intValue() == 1)) {
             throw new BioticConversionException("Multiple trawling depths are not handled in Biotic v1.4 conversion");
         }
-        
-        if (f.getArea()!=null){
-            fishstation.setArea(Integer.parseInt(f.getArea()));
-        }
+        fishstation.setArea(f.getArea());
         fishstation.setBottomdepthstart(f.getBottomdepthstart());
         fishstation.setBottomdepthstop(f.getBottomdepthstop());
         fishstation.setPlatform(createStringDescriptionTypeFromBiotic3(f.getCatchplatform()));
@@ -273,9 +270,7 @@ public class Biotic1Handler extends NamespaceVersionHandler<MissionsType> {
         fishstation.setStopdate(f.getStationstopdate());
         fishstation.setStoplog(f.getLogstop());
         fishstation.setStoptime(f.getStationstoptime());
-        if (f.getSystem()!=null){
-            fishstation.setSystem(Integer.parseInt(f.getSystem()));
-        }
+        fishstation.setSystem(f.getSystem());
         fishstation.setTrawlopening(f.getVerticaltrawlopening());
         fishstation.setTrawlopeningsd(f.getVerticaltrawlopeningsd());
         fishstation.setTripno(f.getTripno());
@@ -285,11 +280,7 @@ public class Biotic1Handler extends NamespaceVersionHandler<MissionsType> {
         fishstation.setWeather(createStringDescriptionTypeFromBiotic3(f.getWeather()));
         fishstation.setWinddirection(f.getWinddirection());
         fishstation.setWindspeed(f.getWindspeed());
-        if (f.getWirelength() != null) {
-            fishstation.setWirelength(f.getWirelength().intValue());
-        } else {
-            fishstation.setWirelength(null);
-        }
+        fishstation.setWirelength(f.getWirelength());
 
         Set<String> catchKeys = new HashSet<>();
         for (BioticTypes.v3.CatchsampleType c : f.getCatchsample()) {

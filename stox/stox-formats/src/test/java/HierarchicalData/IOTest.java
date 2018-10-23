@@ -25,7 +25,7 @@ import org.xml.sax.XMLFilter;
  *
  * @author Edvin Fuglebakk edvin.fuglebakk@imr.no
  */
-@Ignore
+//@Ignore
 public class IOTest {
 
     public IOTest() {

@@ -29,7 +29,7 @@ import org.xml.sax.XMLReader;
  *
  * @author Edvin Fuglebakk edvin.fuglebakk@imr.no
  */
-@Ignore
+//@Ignore
 public class NamespaceFilterTest {
 
     public NamespaceFilterTest() {
