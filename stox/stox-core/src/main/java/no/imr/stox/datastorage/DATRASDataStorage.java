@@ -341,6 +341,9 @@ public class DATRASDataStorage extends FileDataStorage {
                             && (fs.getTrawlQuality() == null || fs.getTrawlQuality().equals("0") || fs.getTrawlQuality().equals("1")) ? "V" : "I";
 
                     for (CatchBO c : fs.getCatchBOCollection()) {
+                        // IU: Sometimes we get null aphia
+                        if(c.getAphia() == null)
+                            continue;
 
                         // IU: Use aphia for comparison and add crustacean boolean
                         boolean isHerringOrSprat = c.getAphia().equals("126417") || c.getAphia().equals("126425");
@@ -477,6 +480,10 @@ public class DATRASDataStorage extends FileDataStorage {
                     String areaLoc = fs.getArea() != null && fs.getLocation() != null ? fs.getArea() + fs.getLocation() : "";
 
                     for (CatchBO c : fs.getCatchBOCollection()) {
+                        // IU: Sometimes we get null aphia
+                        if(c.getAphia() == null)
+                            continue;
+
                         // IU: Use aphia for comparison and add crustacean boolean
                         boolean isHerringOrSprat = c.getAphia().equals("126417") || c.getAphia().equals("126425");
 
