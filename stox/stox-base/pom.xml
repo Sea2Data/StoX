@@ -34,6 +34,11 @@
             <artifactId>stox-util</artifactId>
             <version>${stox.util.version}</version>
         </dependency>
+        <dependency>
+            <groupId>no.imr.sea2data</groupId>
+            <artifactId>stox-formats</artifactId>
+            <version>1.0.0</version>
+        </dependency>
     </dependencies>
     <build>
         <plugins>

@@ -107,18 +107,18 @@ public class MoveHandler {
                 }
             } else if (sf.getUserData() != null && sf.getUserData() instanceof FishstationBO) {
                 FishstationBO fs = (FishstationBO) sf.getUserData();
-                s = s + "Cruise: " + fs.getCruise() + "<br>Serialno: " + fs.getSerialNo() + "<br>Date: " + IMRdate.getLocalDate(fs.getStationStartDate())
-                        + "<br>Time: " + IMRdate.getLocalTime(fs.getStationStartTime());
+                s = s + "Cruise: " + fs.getCruise() + "<br>Serialno: " + fs.getSerialnumber() + "<br>Date: " + IMRdate.getLocalDate(fs.getStationstartdate())
+                        + "<br>Time: " + IMRdate.getLocalTime(fs.getStationstarttime());
                 if (e.isAltDown()) {
-                    Double b1 = Calc.roundTo(fs.getBottomDepthStart(), 0);
-                    Double b2 = Calc.roundTo(fs.getBottomDepthStop(), 0);
+                    Double b1 = Calc.roundTo(fs.getBottomdepthstart(), 0);
+                    Double b2 = Calc.roundTo(fs.getBottomdepthstop(), 0);
                     s = s + "<br>Bot.depth start-stop: " + b1 + "-" + b2;
                     s = s + "<br>Lat/Lon: " + fs.getStartLat() + "/" + fs.getStartLon();
                     if (e.isShiftDown()) {
-                        for (CatchBO c : fs.getCatchBOCollection()) {
-                            for (SampleBO samp : c.getSampleBOCollection()) {
-                                if (c.getNoname() != null && samp.getWeight() != null) {
-                                    s = s + "<br>" + c.getNoname() + ": " + samp.getWeight() + " kg. (" + (samp.getIndividualSampleCount() != null ? samp.getIndividualSampleCount() : 0) + " bio. individuals)";
+                        for (CatchBO c : fs.getCatchBOs()) {
+                            for (SampleBO samp : c.getSampleBOs()) {
+                                if (c.getCommonname() != null && samp.getCatchweight() != null) {
+                                    s = s + "<br>" + c.getCommonname() + ": " + samp.getCatchweight() + " kg. (" + (samp.getSpecimentsamplecount() != null ? samp.getSpecimentsamplecount() : 0) + " bio. individuals)";
                                 }
                             }
                         }

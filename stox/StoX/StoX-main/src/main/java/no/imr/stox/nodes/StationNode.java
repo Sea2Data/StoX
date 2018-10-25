@@ -51,19 +51,19 @@ public class StationNode extends AbstractNode {
                 case PROP_CRUISE:
                     return fs.getCruise();
                 case PROP_SERIALNO:
-                    return fs.getSerialNo();
+                    return fs.getSerialnumber();
                 case PROP_DATE:
-                    return IMRdate.getDefaultDateTimeFormat().format(IMRdate.encodeDate(fs.getStationStartDate(), fs.getStationStartTime())) + " (UTC)";
+                    return IMRdate.getDefaultDateTimeFormat().format(IMRdate.encodeDate(fs.getStationstartdate(), fs.getStationstarttime())) + " (UTC)";
                 case PROP_POS:
-                    return LatLonUtil.latLonToStr(fs.getLatitudeStart(), fs.getLongitudeStart());
+                    return LatLonUtil.latLonToStr(fs.getLatitudestart(), fs.getLongitudestart());
                 case PROP_PLATFORM:
-                    return fs.getPlatformName() != null ? fs.getPlatformName() : fs.getCallSignal() != null ? fs.getCallSignal() : "";
+                    return fs.getPlatformname() != null ? fs.getPlatformname() : fs.getCallsignal() != null ? fs.getCallsignal() : "";
                 case PROP_GEAR:
                     return fs.getGear();
                 case PROP_FDEP:
-                    return getMinMaxStr(fs.getFishingDepthMin(), fs.getFishingDepthMax());
+                    return getMinMaxStr(fs.getFishingdepthmin(), fs.getFishingdepthmax());
                 case PROP_BDEP:
-                    return getMinMaxStr(fs.getBottomDepthStart(), fs.getBottomDepthStop());
+                    return getMinMaxStr(fs.getBottomdepthstart(), fs.getBottomdepthstop());
                 case PROP_DISTANCE:
                     return fs.getDistance() != null ? fs.getDistance() : "";
             }
@@ -121,10 +121,10 @@ public class StationNode extends AbstractNode {
         propSet.setName("Catch weight");
         propSet.setDisplayName("Catch weight");
         Map<String, Double> m = new HashMap<>();
-        for (CatchBO c : fs.getCatchBOCollection()) {
+        for (CatchBO c : fs.getCatchBOs()) {
             String sKey = c.getSpeciesKey();
-            for (SampleBO s : c.getSampleBOCollection()) {
-                Double w = s.getWeight();
+            for (SampleBO s : c.getSampleBOs()) {
+                Double w = s.getCatchweight();
                 if (w == null || w == 0) {
                     continue;
                 }

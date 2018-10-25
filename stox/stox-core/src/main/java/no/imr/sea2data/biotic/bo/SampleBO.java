@@ -9,89 +9,59 @@ import java.util.List;
  *
  * @author oddrune
  */
-public class SampleBO implements Serializable {
+public class SampleBO {
 
-    private Integer original;
-    private Date last_edited;
-    protected String stock; // misplaced field?, Belongs to taxa, transient now at catchBO
-    private Integer sampleNo;
+    private String agingstructure;
+    private Integer catchpartnumber;
     protected Integer sampletype;
     protected String group;
-    protected String conservationtype;
-    protected String measurementTypeTotal;
-    private Double totalWeight;
-    private Double totalVolume;
-    private Integer totalCount;
-    protected String measurementTypeSampled;
-    protected String lengthType;
-    private Double sampledWeight;
-    private Double sampledVolume;
-    private Integer sampledCount;
-    private Integer inumber;
-    private Double raisingFactor;
-    protected String frozenSample;
+    protected String conservation;
+    protected String catchproducttype;
+    private Double catchweight;
+    private Double catchvolume;
+    private Integer catchcount;
+    protected String sampleproducttype;
+    protected String lengthmeasurement;
+    private Double lengthsampleweight;
+    private Double lengthsamplevolume;
+    private Integer lengthsamplecount;
+    private Integer specimensamplecount;
+    private Double raisingfactor;
     protected String parasite;
     protected String stomach;
-    protected String genetics;
-    protected String nonBiological;
-    private List<IndividualBO> individualBOs = new ArrayList<>();
-    protected String person; // not in use
-    private String comment;
-    private String description;
+    protected String tissuesample;
+    protected String foreignobject;
+    private String catchcomment;
     private CatchBO catchBO;
+    final private List<IndividualBO> individualBOs = new ArrayList<>();
 
-    public SampleBO() {
+    public SampleBO(CatchBO catchBO) {
+        this.catchBO = catchBO;
     }
 
     public SampleBO(CatchBO cbF, SampleBO bo) {
-        sampleNo = bo.getSampleNo();
+        this(cbF);
+        catchpartnumber = bo.getCatchpartnumber();
         sampletype = bo.getSampletype();
         group = bo.getGroup();
-        conservationtype = bo.getConservationtype();
-        measurementTypeTotal = bo.getMeasurementTypeTotal();
-        totalWeight = bo.getTotalWeight();
-        totalVolume = bo.getTotalVolume();
-        totalCount = bo.getTotalCount();
-        measurementTypeSampled = bo.getMeasurementTypeSampled();
-        lengthType = bo.getLengthType();
-        sampledWeight = bo.getSampledWeight();
-        sampledVolume = bo.getSampledVolume();
-        sampledCount = bo.getSampledCount();
-        inumber = bo.getInumber();
-        raisingFactor = bo.getRaisingFactor();
-        frozenSample = bo.getFrozenSample();
+        conservation = bo.getConservation();
+        catchproducttype = bo.getCatchproducttype();
+        catchweight = bo.getCatchweight();
+        catchvolume = bo.getCatchvolume();
+        catchcount = bo.getCatchcount();
+        sampleproducttype = bo.getSampleproducttype();
+        lengthmeasurement = bo.getLengthmeasurement();
+        lengthsampleweight = bo.getlengthsampleweight();
+        lengthsamplevolume = bo.getLengthsamplevolume();
+        lengthsamplecount = bo.getLengthsamplecount();
+        specimensamplecount = bo.getSpecimensamplecount();
+        raisingfactor = bo.getRaisingfactor();
+        agingstructure = bo.getAgingstructure();
         parasite = bo.getParasite();
         stomach = bo.getStomach();
-        genetics = bo.getGenetics();
-        nonBiological = bo.getNonBiological();
-        comment = bo.getComment();
-        catchBO = cbF;
-    }
-
-    public final void addPrey(Integer fishno, PreyBO prey) {
-        for (IndividualBO indBO : individualBOs) {
-            if (indBO.getIndividualNo().equals(fishno)) {
-                indBO.getPreyBOCollection().add(prey);
-                break;
-            }
-        }
-
-    }
-
-    public String getConservationtype() {
-        return conservationtype;
-    }
-
-    public void setConservationtype(String conservationtype) {
-        this.conservationtype = conservationtype;
-    }
-
-    public String getFrozenSample() {
-        return frozenSample;
-    }
-
-    public void setFrozenSample(String frozenSample) {
-        this.frozenSample = frozenSample;
+        tissuesample = bo.getGenetics();
+        foreignobject = bo.getForeignobject();
+        catchcomment = bo.getCatchcomment();
     }
 
     public String getGroup() {
@@ -102,36 +72,28 @@ public class SampleBO implements Serializable {
         this.group = group;
     }
 
-    public String getLengthType() {
-        return lengthType;
+    public String getSampleproducttype() {
+        return sampleproducttype;
     }
 
-    public void setLengthType(String lengthType) {
-        this.lengthType = lengthType;
+    public void setSampleproducttype(String sampleproducttype) {
+        this.sampleproducttype = sampleproducttype;
     }
 
-    public String getMeasurementTypeSampled() {
-        return measurementTypeSampled;
+    public String getCatchproducttype() {
+        return catchproducttype;
     }
 
-    public void setMeasurementTypeSampled(String measurementTypeSampled) {
-        this.measurementTypeSampled = measurementTypeSampled;
+    public void setCatchproducttype(String catchproducttype) {
+        this.catchproducttype = catchproducttype;
     }
 
-    public String getMeasurementTypeTotal() {
-        return measurementTypeTotal;
+    public String getForeignobject() {
+        return foreignobject;
     }
 
-    public void setMeasurementTypeTotal(String measurementTypeTotal) {
-        this.measurementTypeTotal = measurementTypeTotal;
-    }
-
-    public String getNonBiological() {
-        return nonBiological;
-    }
-
-    public void setNonBiological(String nonBiological) {
-        this.nonBiological = nonBiological;
+    public void setForeignobject(String foreignobject) {
+        this.foreignobject = foreignobject;
     }
 
     public String getParasite() {
@@ -142,28 +104,12 @@ public class SampleBO implements Serializable {
         this.parasite = parasite;
     }
 
-    public String getPerson() {
-        return person;
-    }
-
-    public void setPerson(String person) {
-        this.person = person;
-    }
-
     public Integer getSampletype() {
         return sampletype;
     }
 
     public void setSampletype(Integer sampletype) {
         this.sampletype = sampletype;
-    }
-
-    public String getStock() {
-        return stock;
-    }
-
-    public void setStock(String stock) {
-        this.stock = stock;
     }
 
     public String getStomach() {
@@ -174,274 +120,142 @@ public class SampleBO implements Serializable {
         this.stomach = stomach;
     }
 
-    public List<IndividualBO> getIndividualBOCollection() {
+    public void setCatchweight(Double catchweight) {
+        this.catchweight = catchweight;
+    }
+
+    public void setCatchvolume(Double catchvolume) {
+        this.catchvolume = catchvolume;
+    }
+
+    public void setLengthsamplevolume(Double lengthsamplevolume) {
+        this.lengthsamplevolume = lengthsamplevolume;
+    }
+
+    public void setCatchpartnumber(Integer catchpartnumber) {
+        this.catchpartnumber = catchpartnumber;
+    }
+
+    public void setRaisingfactor(Double raisingfactor) {
+        this.raisingfactor = raisingfactor;
+    }
+
+    public Double getCatchweight() {
+        return catchweight;
+    }
+
+    public Double getCatchvolume() {
+        return catchvolume;
+    }
+
+    public Integer getCatchcount() {
+        return catchcount;
+    }
+
+    public Double getLengthsamplevolume() {
+        return lengthsamplevolume;
+    }
+
+    public Integer getCatchpartnumber() {
+        return catchpartnumber;
+    }
+
+    public Double getRaisingfactor() {
+        return raisingfactor;
+    }
+
+    public Integer getSpecimensamplecount() {
+        return specimensamplecount;
+    }
+
+    public void setCatchcomment(String catchcomment) {
+        this.catchcomment = catchcomment;
+    }
+
+    public String getCatchcomment() {
+        return catchcomment;
+    }
+
+    public String getGenetics() {
+        return tissuesample;
+    }
+
+    public void setTissuesample(String genetics) {
+        this.tissuesample = genetics;
+    }
+
+    public String getConservation() {
+        return conservation;
+    }
+
+    public void setConservation(String conservation) {
+        this.conservation = conservation;
+    }
+
+    public String getLengthmeasurement() {
+        return lengthmeasurement;
+    }
+
+    public void setLengthmeasurement(String lengthmeasurement) {
+        this.lengthmeasurement = lengthmeasurement;
+    }
+
+    public Double getlengthsampleweight() {
+        return lengthsampleweight;
+    }
+
+    public void setLengthsampleweight(Double lengthsampleweight) {
+        this.lengthsampleweight = lengthsampleweight;
+    }
+
+    public Integer getSpecimentsamplecount() {
+        return specimensamplecount;
+    }
+
+    public void setSpecimensamplecount(Integer specimensamplecount) {
+        this.specimensamplecount = specimensamplecount;
+    }
+
+    public void setCatchcount(Integer catchcount) {
+        this.catchcount = catchcount;
+    }
+
+    public Integer getLengthsamplecount() {
+        return lengthsamplecount;
+    }
+
+    public void setLengthsamplecount(Integer lengthsamplecount) {
+        this.lengthsamplecount = lengthsamplecount;
+    }
+
+    public String getAgingstructure() {
+        return agingstructure;
+    }
+
+    public void setAgingstructure(String agingstructure) {
+        this.agingstructure = agingstructure;
+    }
+
+    public List<IndividualBO> getIndividualBOs() {
         return individualBOs;
     }
 
-    public void setIndividualBOCollection(List<IndividualBO> individualBOs) {
-        this.individualBOs = individualBOs;
+    public IndividualBO addIndividual() {
+        IndividualBO bo = new IndividualBO(this);
+        getIndividualBOs().add(bo);
+        return bo;
     }
 
-    public void setOriginal(Integer original) {
-        this.original = original;
+    public CatchBO getCatchBO() {
+        return this.catchBO;
     }
 
-    public void setLast_edited(Date last_edited) {
-        this.last_edited = last_edited;
-    }
-
-    public Integer getOriginal() {
-        return original;
-    }
-
-    public Date getLast_edited() {
-        return last_edited;
-    }
-
-    public void setTotalWeight(Double totalWeight) {
-        this.totalWeight = totalWeight;
-    }
-
-    public void setTotalVolume(Double totalVolume) {
-        this.totalVolume = totalVolume;
-    }
-
-    public void setTotalCount(Integer totalCount) {
-        this.totalCount = totalCount;
-    }
-
-    public void setSampledWeight(Double sampledWeight) {
-        this.sampledWeight = sampledWeight;
-    }
-
-    public void setSampledVolume(Double sampledVolume) {
-        this.sampledVolume = sampledVolume;
-    }
-
-    public void setSampledCount(Integer sampledCount) {
-        this.sampledCount = sampledCount;
-    }
-
-    public void setSampleNo(Integer sampleNo) {
-        this.sampleNo = sampleNo;
-    }
-
-    public void setRaisingFactor(Double raisingFactor) {
-        this.raisingFactor = raisingFactor;
-    }
-
-    public void setInumber(Integer inumber) {
-        this.inumber = inumber;
-    }
-
-    public Double getTotalWeight() {
-        return totalWeight;
-    }
-
-    public Double getTotalVolume() {
-        return totalVolume;
-    }
-
-    public Integer getTotalCount() {
-        return totalCount;
-    }
-
-    public Double getSampledWeight() {
-        return sampledWeight;
-    }
-
-    public Double getSampledVolume() {
-        return sampledVolume;
-    }
-
-    public Integer getSampledCount() {
-        return sampledCount;
-    }
-
-    public Integer getSampleNo() {
-        return sampleNo;
-    }
-
-    public Double getRaisingFactor() {
-        return raisingFactor;
-    }
-
-    public Integer getInumber() {
-        return inumber;
-    }
-
-    public String description() {
-        return this.description;
-    }
-
-    public void setComment(String comment) {
-        this.comment = comment;
-    }
-
-    public String getComment() {
-        return comment;
+    public String getKey() {
+        return catchBO.getKey() + "/" + catchpartnumber;
     }
 
     @Override
     public String toString() {
         return getKey();
-    }
-
-    /**
-     * @return the genetics
-     */
-    public String getGenetics() {
-        return genetics;
-    }
-
-    /**
-     * @param genetics the genetics to set
-     */
-    public void setGenetics(String genetics) {
-        this.genetics = genetics;
-    }
-
-    /**
-     * @param description the description to set
-     */
-    public void setDescription(String description) {
-        this.description = description;
-    }
-
-    /**
-     * Set catchBO.
-     *
-     * @param cb
-     */
-    public void setCatchBO(CatchBO cb) {
-        this.catchBO = cb;
-    }
-
-    /**
-     * Return catch.
-     *
-     * @return
-     */
-    public CatchBO getCatchBO() {
-        return this.catchBO;
-    }
-
-  /*  @Override
-    public int hashCode() {
-        int hash = 5;
-        hash = 37 * hash + (this.stock != null ? this.stock.hashCode() : 0);
-        hash = 37 * hash + (this.sampleNo != null ? this.sampleNo.hashCode() : 0);
-        hash = 37 * hash + (this.catchBO != null ? this.catchBO.hashCode() : 0);
-        return hash;
-    }
-
-    @Override
-    public boolean equals(Object obj) {
-        if (obj == null) {
-            return false;
-        }
-        if (getClass() != obj.getClass()) {
-            return false;
-        }
-        final SampleBO other = (SampleBO) obj;
-        if ((this.stock == null) ? (other.stock != null) : !this.stock.equals(other.stock)) {
-            return false;
-        }
-        if (this.sampleNo != other.sampleNo && (this.sampleNo == null || !this.sampleNo.equals(other.sampleNo))) {
-            return false;
-        }
-        if (this.catchBO != other.catchBO && (this.catchBO == null || !this.catchBO.equals(other.catchBO))) {
-            return false;
-        }
-        return true;
-    }
-*/
-    public String getKey() {
-        return catchBO.getKey() + "/" + sampleNo;
-    }
-
-    // Wrappers
-    public Integer getSampleNumber() {
-        return getSampleNo();
-    }
-
-    public String getConservation() {
-        return getConservationtype();
-    }
-
-    public void setConservation(String conservation) {
-        setConservationtype(conservation);
-    }
-
-    public String getMeasurement() {
-        return getMeasurementTypeTotal();
-    }
-
-    public void setMeasurement(String measurement) {
-        setMeasurementTypeTotal(measurement);
-    }
-
-    public Double getWeight() {
-        return getTotalWeight();
-    }
-
-    public void setWeight(Double weight) {
-        setTotalWeight(weight);
-    }
-
-    public String getSampleMeasurement() {
-        return getMeasurementTypeSampled();
-    }
-
-    public void setSampleMeasurement(String sampleMeasurement) {
-        setMeasurementTypeSampled(sampleMeasurement);
-    }
-
-    public String getLengthMeasurement() {
-        return getLengthType();
-    }
-
-    public void setLengthMeasurement(String lengthMeasurement) {
-        setLengthType(lengthMeasurement);
-    }
-
-    public Double getLengthSampleWeight() {
-        return getSampledWeight();
-    }
-
-    public void setLengthSampleWeight(Double lengthSampleWeight) {
-        setSampledWeight(lengthSampleWeight);
-    }
-
-    public Integer getIndividualSampleCount() {
-        return getInumber();
-    }
-
-    public void setIndividualSampleCount(Integer individualSampleCount) {
-        setInumber(individualSampleCount);
-    }
-
-    public Integer getCount() {
-        return getTotalCount();
-    }
-
-    public void setCount(Integer count) {
-        setTotalCount(count);
-    }
-
-    public Integer getLengthSampleCount() {
-        return getSampledCount();
-    }
-
-    public void setLengthSampleCount(Integer lengthSampleCount) {
-        setSampledCount(lengthSampleCount);
-    }
-
-    public String getAgeSample() {
-        return getFrozenSample();
-    }
-
-    public void setAgeSample(String ageSample) {
-        setFrozenSample(ageSample);
     }
 }

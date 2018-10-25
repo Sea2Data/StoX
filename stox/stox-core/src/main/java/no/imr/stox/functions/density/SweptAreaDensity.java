@@ -188,9 +188,9 @@ public class SweptAreaDensity extends AbstractFunction {
                     }
                 }
                 if (distanceMethod != null && distanceMethod.equals(Functions.DISTANCEMETHOD_BYDEPTH)) {
-                    if (fs.getFishingDepthCount() != null && fs.getFishingDepthCount() > 1) {
+                    if (fs.getFishingdepthcount() != null && fs.getFishingdepthcount() > 1) {
                         // Standardize the swept distance to one depth unit
-                        sweptDistance = sweptDistance / fs.getFishingDepthCount();
+                        sweptDistance = sweptDistance / fs.getFishingdepthcount();
                     }
                 }
                 Double stationWeight = 0d;
@@ -254,19 +254,19 @@ public class SweptAreaDensity extends AbstractFunction {
                             logger.error("Station " + station + " not available in Biotic Data.", null);
                             return null;
                         }
-                        for (CatchBO c : fs.getCatchBOCollection()) {
+                        for (CatchBO c : fs.getCatchBOs()) {
                             String specCat = c.getSpeciesCatTableKey(); // Using taxa as group
-                            for (SampleBO s : c.getSampleBOCollection()) {
+                            for (SampleBO s : c.getSampleBOs()) {
                                 Double variable = null;
                                 switch (catchVariable) {
                                     case Functions.CATCHVARIABLE_WEIGHT:
-                                        variable = s.getWeight();
+                                        variable = s.getCatchweight();
                                         if(variable == null){
                                             logger.error("Missing weight at " + s.getKey() + " for psu " + psu, null);
                                         }
                                         break;
                                     case Functions.CATCHVARIABLE_COUNT:
-                                        variable = Conversion.safeIntegerToDouble(s.getCount());
+                                        variable = Conversion.safeIntegerToDouble(s.getCatchcount());
                                         break;
                                 }
                                 switch (catchVariable) {

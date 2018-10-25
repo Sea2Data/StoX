@@ -22,4 +22,15 @@
                 <skipTests>true</skipTests>
             </properties>
         </action>
+        <action>
+            <actionName>CUSTOM-Build Formats</actionName>
+            <displayName>Build Formats</displayName>
+            <goals>
+                <goal>clean</goal>
+                <goal>install -P formats</goal>
+            </goals>
+            <properties>
+                <skipTests>true</skipTests>
+            </properties>
+        </action>
     </actions>

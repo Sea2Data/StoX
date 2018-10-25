@@ -185,18 +185,18 @@ public class DATRASDataStorage extends FileDataStorage {
                         continue;
                     }
                     // Filter other station types that blank (vanlig)
-                    if (!(fs.getStationType() == null || fs.getStationType().equals(""))) {
+                    if (!(fs.getStationtype() == null || fs.getStationtype().equals(""))) {
                         continue;
                     }
-                    if(fs.getStationStartDate() == null)
+                    if(fs.getStationstartdate() == null)
                         continue;
-                    Integer year = IMRdate.getYear(fs.getStationStartDate(), true);
-                    Integer month = IMRdate.getMonth(fs.getStationStartDate(), true);
-                    Integer day = IMRdate.getDayOfMonth(fs.getStationStartDate(), true);
+                    Integer year = IMRdate.getYear(fs.getStationstartdate(), true);
+                    Integer month = IMRdate.getMonth(fs.getStationstartdate(), true);
+                    Integer day = IMRdate.getDayOfMonth(fs.getStationstartdate(), true);
                     Integer quarter = (month - 1) / 3 + 1;
                     // Invalid also less/more than 5..90 min. og uten for 62 grader, evt kvartal.
-                    String haulVal = (fs.getGearCondition() == null || fs.getGearCondition().equals("1") || fs.getGearCondition().equals("2"))
-                            && (fs.getTrawlQuality() == null || fs.getTrawlQuality().equals("0") || fs.getTrawlQuality().equals("1")) ? "V" : "I";
+                    String haulVal = (fs.getGearcondition() == null || fs.getGearcondition().equals("1") || fs.getGearcondition().equals("2"))
+                            && (fs.getSamplequality() == null || fs.getSamplequality().equals("0") || fs.getSamplequality().equals("1")) ? "V" : "I";
 
                     ImrIO.write(wr, ExportUtil.carrageReturnLineFeed(ExportUtil.csv(// RecordType
                             "HH",
@@ -205,17 +205,15 @@ public class DATRASDataStorage extends FileDataStorage {
                             // Country
                             getTSCountryByIOC(fs.getNation()), //TODO reference list
                             // Ship
-                            getTSShipByPlatform(fs.getCatchPlatform()), // TODO reference list
+                            getTSShipByPlatform(fs.getCatchplatform()), // TODO reference list
                             // Gear
                             "GOV", // TODO reference list
                             // SweepLngth
                             sweep,
                             // GearExp
-                            getGearExp(sweep, fs.getYear(), fs.getSerialNo(), fs.getBottomDepthStart()), // TODO: S=Single, D=Double, -9 not given
+                            getGearExp(sweep, fs.getYear(), fs.getSerialnumber(), fs.getBottomdepthstart()), // TODO: S=Single, D=Double, -9 not given
                             // DoorType
-                            "P", // P=Polyvalent, 
-                            //StNo
-                            fs.getSerialNo(),
+                            "P", fs.getSerialnumber(),
                             // HaulNo
                             fs.getStation(),
                             // Year
@@ -225,27 +223,27 @@ public class DATRASDataStorage extends FileDataStorage {
                             // Day
                             day,
                             // TimeShot
-                            StringUtils.leftPad(IMRdate.formatDate(fs.getStationStartTime(), "HHmm"), 4, '0'),
+                            StringUtils.leftPad(IMRdate.formatDate(fs.getStationstarttime(), "HHmm"), 4, '0'),
                             // Stratum
                             -9,
                             // HaulDur
-                            Math.round(IMRdate.minutesDiffD(IMRdate.encodeDate(fs.getStationStartDate(), fs.getStationStartTime()), IMRdate.encodeDate(fs.getStationStopDate(), fs.getStationStopTime()))),
+                            Math.round(IMRdate.minutesDiffD(IMRdate.encodeDate(fs.getStationstartdate(), fs.getStationstarttime()), IMRdate.encodeDate(fs.getStationstopdate(), fs.getStationstoptime()))),
                             // DayNight
                             // 15 minutes before  official sunrise, 15 min after official sunset.
-                            IMRdate.isDayTime(IMRdate.encodeDate(fs.getStationStartDate(), fs.getStationStartTime()), fs.getLatitudeStart(),
-                                    fs.getLongitudeStart()) ? "D" : "N",
+                            IMRdate.isDayTime(IMRdate.encodeDate(fs.getStationstartdate(), fs.getStationstarttime()), fs.getLatitudestart(),
+                                    fs.getLongitudestart()) ? "D" : "N",
                             // ShootLat
-                            unkD(fs.getLatitudeStart(), "0.0000"),
+                            unkD(fs.getLatitudestart(), "0.0000"),
                             // ShootLong
-                            unkD(fs.getLongitudeStart(), "0.0000"),
+                            unkD(fs.getLongitudestart(), "0.0000"),
                             // HaulLat
-                            unkD(fs.getLatitudeEnd(), "0.0000"),
+                            unkD(fs.getLatitudeend(), "0.0000"),
                             // HaulLong
-                            unkD(fs.getLongitudeEnd(), "0.0000"),
+                            unkD(fs.getLongitudeend(), "0.0000"),
                             // StatRec
-                            AreaUnits.getFDOmrLokFromPos(fs.getLatitudeStart(), fs.getLongitudeStart()),
+                            AreaUnits.getFDOmrLokFromPos(fs.getLatitudestart(), fs.getLongitudestart()),
                             // Depth
-                            Math.round(fs.getBottomDepthStart()),
+                            Math.round(fs.getBottomdepthstart()),
                             //HaulVal
                             haulVal,
                             // TODO stasjon : match på logg mot toktlogger 5 nm, tid.
@@ -258,8 +256,7 @@ public class DATRASDataStorage extends FileDataStorage {
                             1,
                             // DataType
                             "R",
-                            // Netopening
-fs.getVerticalTrawlOpening(),
+                            fs.getVerticaltrawlopening(),
                             // Rigging
                             -9,
                             // Tickler
@@ -267,7 +264,7 @@ fs.getVerticalTrawlOpening(),
                             // Distance
                             unkO(fs.getDistance() != null ? fs.getDistance() * 1852 : null),
                             // Warplngt
-                            unkO(fs.getWireLength()),
+                            unkO(fs.getwirelength()),
                             //Warpdia
                             -9,
                             //Warpden
@@ -277,7 +274,7 @@ fs.getVerticalTrawlOpening(),
                             //DoorWgt
                             1075,
                             //DoorSpread
-                            unkD(fs.getTrawlDoorSpread(), "0.0"),
+                            unkD(fs.getTrawldoorspread(), "0.0"),
                             //WingSpread
                             -9,
                             //Buoyancy
@@ -289,7 +286,7 @@ fs.getVerticalTrawlOpening(),
                             // Tow dir
                             unkO(fs.getDirection() != null ? Math.round(fs.getDirection()) : null),
                             // Ground speed (speed of trawl over ground)
-                            unkD(fs.getVesselSpeed(), "0.0"),
+                            unkD(fs.getVesselspeed(), "0.0"),
                             //Speed water
                             -9,
                             //SurCurDir
@@ -332,15 +329,15 @@ fs.getVerticalTrawlOpening(),
                     if (sweep == null) { // Sweep filter
                         continue;
                     }
-                    if(fs.getStationStartDate() == null)
+                    if(fs.getStationstartdate() == null)
                         continue;
-                    Integer year = IMRdate.getYear(fs.getStationStartDate(), true);
-                    Integer month = IMRdate.getMonth(fs.getStationStartDate(), true);
+                    Integer year = IMRdate.getYear(fs.getStationstartdate(), true);
+                    Integer month = IMRdate.getMonth(fs.getStationstartdate(), true);
                     Integer quarter = (int) Math.ceil(month / 3.0);
-                    String haulVal = (fs.getGearCondition() == null || fs.getGearCondition().equals("1") || fs.getGearCondition().equals("2"))
-                            && (fs.getTrawlQuality() == null || fs.getTrawlQuality().equals("0") || fs.getTrawlQuality().equals("1")) ? "V" : "I";
+                    String haulVal = (fs.getGearcondition() == null || fs.getGearcondition().equals("1") || fs.getGearcondition().equals("2"))
+                            && (fs.getSamplequality() == null || fs.getSamplequality().equals("0") || fs.getSamplequality().equals("1")) ? "V" : "I";
 
-                    for (CatchBO c : fs.getCatchBOCollection()) {
+                    for (CatchBO c : fs.getCatchBOs()) {
 
                         // IU: Use aphia for comparison and add crustacean boolean
                         boolean isHerringOrSprat = c.getAphia().equals("126417") || c.getAphia().equals("126425");
@@ -348,52 +345,52 @@ fs.getVerticalTrawlOpening(),
                         List<String> crustList = Arrays.asList( "107275", "107276", "107369", "107253", "107703", "107704", "107350", "107254", "107205", "140712", "140687", "140658" );
                         boolean isCrustacean = crustList.contains(c.getAphia());
 
-                        for (SampleBO s : c.getSampleBOCollection()) {
+                        for (SampleBO s : c.getSampleBOs()) {
 
-                            //Double raiseFac = 60.0 / IMRdate.minutesDiffD(IMRdate.encodeDate(fs.getStationStartDate(), fs.getStationStartTime()), IMRdate.encodeDate(fs.getStationStopDate(), fs.getStationStopTime()));
+                            //Double raiseFac = 60.0 / IMRdate.minutesDiffD(IMRdate.encodeDate(fs.getStationstartdate(), fs.getStationstarttime()), IMRdate.encodeDate(fs.getStationstopdate(), fs.getStationstoptime()));
                             MatrixBO hlNoAtLngth = new MatrixBO();
                             MatrixBO lsCountTot = new MatrixBO();
 
-                            //Double sampleFac = s.getTotalCount().doubleValue() / s.getLengthSampleCount();
-                            //if (s.getWeight() == null || s.getTotalCount() == null) {
+                            //Double sampleFac = s.getCatchcount().doubleValue() / s.getLengthsamplecount();
+                            //if (s.getWeight() == null || s.getCatchcount() == null) {
                             //    continue;
                             //}
 
                             Integer specVal = haulVal.equals("I") ? 0 :
-                                s.getTotalCount() != null && s.getLengthSampleCount() != null && s.getTotalWeight() != null ? 1 :
-                                s.getTotalCount() != null && s.getLengthSampleCount() == null && s.getTotalWeight() == null ? 4 :
-                                s.getTotalCount() == null && s.getLengthSampleCount() == null && s.getTotalWeight() != null ? 6 :
-                                s.getTotalCount() != null && s.getLengthSampleCount() == null && s.getTotalWeight() != null ? 7 :
-                                haulVal.equals("V") && s.getTotalCount() == null && s.getLengthSampleCount() == null && s.getTotalWeight() == null ? 5 :
-                                s.getTotalCount() != null && s.getLengthSampleCount() != null && s.getTotalWeight() == null ? 0 : -9;
+                                s.getCatchcount() != null && s.getLengthsamplecount() != null && s.getCatchweight() != null ? 1 :
+                                s.getCatchcount() != null && s.getLengthsamplecount() == null && s.getCatchweight() == null ? 4 :
+                                s.getCatchcount() == null && s.getLengthsamplecount() == null && s.getCatchweight() != null ? 6 :
+                                s.getCatchcount() != null && s.getLengthsamplecount() == null && s.getCatchweight() != null ? 7 :
+                                haulVal.equals("V") && s.getCatchcount() == null && s.getLengthsamplecount() == null && s.getCatchweight() == null ? 5 :
+                                s.getCatchcount() != null && s.getLengthsamplecount() != null && s.getCatchweight() == null ? 0 : -9;
 
                             String lngtCode = s.getSampletype() != null ? isCrustacean ? "."/*1mm*/ : isHerringOrSprat ? "0"/*5mm*/ : "1"/*1cm*/ : "-9"/*1cm*/;
                             Integer lenInterval = lngtCode.equals("0") ? 5 : 1;
                             Boolean reportInMM = !lngtCode.equals("1");
 
-                            Double catCatchWgt = (s.getTotalWeight() != null ? s.getTotalWeight() : 0) * 1000;
+                            Double catCatchWgt = (s.getCatchweight() != null ? s.getCatchweight() : 0) * 1000;
 
                             // If weight is below 1, raise it into 1
                             if(catCatchWgt < 1 && catCatchWgt > 0)
                                 catCatchWgt = Math.ceil(catCatchWgt) * 1.0;
 
-                            Double subWeight = (s.getLengthSampleWeight() != null ? s.getLengthSampleWeight() : 0) * 1000;
+                            Double subWeight = (s.getlengthsampleweight() != null ? s.getlengthsampleweight() : 0) * 1000;
 
                             // If weight is below 1, raise it into 1
                             if(subWeight < 1 && subWeight > 0)
                                 subWeight = Math.ceil(subWeight) * 1.0;
 
-                            if (s.getIndividualBOCollection().isEmpty() || s.getLengthSampleWeight() == null) {
+                            if (s.getIndividualBOs().isEmpty() || s.getlengthsampleweight() == null) {
                                 String lngtClass = "-9";
                                 String sex = "-9";
-                                hlNoAtLngth.addGroupRowColValue(c.getAphia(), sex, lngtClass, (s.getTotalCount() != null ? s.getTotalCount() : 0) * 1.0);
-                                lsCountTot.addGroupRowColValue(c.getAphia(), sex, lngtClass, (s.getLengthSampleCount() != null ? s.getLengthSampleCount() : 0) * 1.0);
+                                hlNoAtLngth.addGroupRowColValue(c.getAphia(), sex, lngtClass, (s.getCatchcount() != null ? s.getCatchcount() : 0) * 1.0);
+                                lsCountTot.addGroupRowColValue(c.getAphia(), sex, lngtClass, (s.getLengthsamplecount() != null ? s.getLengthsamplecount() : 0) * 1.0);
                             } else {
-                                //if (s.getLengthSampleWeight() == null) {
+                                //if (s.getlengthsampleweight() == null) {
                                 //    continue;
                                 //}
-                                Double sampleFac = s.getTotalWeight() / s.getLengthSampleWeight();
-                                for (IndividualBO i : s.getIndividualBOCollection()) {
+                                Double sampleFac = s.getCatchweight() / s.getlengthsampleweight();
+                                for (IndividualBO i : s.getIndividualBOs()) {
                                     Double length = i.getLength();/*cm*/;
                                     if (i.getLength() == null) {
                                         continue;
@@ -432,12 +429,12 @@ fs.getVerticalTrawlOpening(),
                                         "HL",
                                         quarter,
                                         getTSCountryByIOC(fs.getNation()),
-                                        getTSShipByPlatform(fs.getCatchPlatform()),
+                                        getTSShipByPlatform(fs.getCatchplatform()),
                                         "GOV",
                                         sweep,
                                         "S",
                                         "P",
-                                        fs.getSerialNo(),
+                                        fs.getSerialnumber(),
                                         fs.getStation(),
                                         year,
                                         "W", // Worms
@@ -445,7 +442,7 @@ fs.getVerticalTrawlOpening(),
                                         specVal,
                                         sex,
                                         totalNo == 0 ? -9 : unkD(totalNo, "0.00"), // n per Hour
-                                        s.getSampleNumber(), //CatIdentifier
+                                        s.getCatchpartnumber(), //CatIdentifier
                                         noMeas == 0 ? -9 : Math.round(noMeas), // n measured as individual
                                         unkD(subFactor, "0.0000"), // SubFactor
                                         subWeight == 0 ? -9 : Math.round(subWeight),
@@ -469,22 +466,22 @@ fs.getVerticalTrawlOpening(),
                     if (sweep == null) { // Sweep filter
                         continue;
                     }
-                    if(fs.getStationStartDate() == null)
+                    if(fs.getStationstartdate() == null)
                         continue;
-                    Integer year = IMRdate.getYear(fs.getStationStartDate(), true);
-                    Integer month = IMRdate.getMonth(fs.getStationStartDate(), true);
+                    Integer year = IMRdate.getYear(fs.getStationstartdate(), true);
+                    Integer month = IMRdate.getMonth(fs.getStationstartdate(), true);
                     Integer quarter = (int) Math.ceil(month / 3.0);
                     String areaLoc = fs.getArea() != null && fs.getLocation() != null ? fs.getArea() + fs.getLocation() : "";
 
-                    for (CatchBO c : fs.getCatchBOCollection()) {
+                    for (CatchBO c : fs.getCatchBOs()) {
                         // IU: Use aphia for comparison and add crustacean boolean
                         boolean isHerringOrSprat = c.getAphia().equals("126417") || c.getAphia().equals("126425");
 
                         List<String> crustList = Arrays.asList( "107275", "107276", "107369", "107253", "107703", "107704", "107350", "107254", "107205", "140712", "140687", "140658" );
                         boolean isCrustacean = crustList.contains(c.getAphia());
 
-                        for (SampleBO s : c.getSampleBOCollection()) {
-                            if (s.getIndividualBOCollection().isEmpty()) {
+                        for (SampleBO s : c.getSampleBOs()) {
+                            if (s.getIndividualBOs().isEmpty()) {
                                 continue;
                             }
                             MatrixBO nInd = new MatrixBO();
@@ -493,7 +490,7 @@ fs.getVerticalTrawlOpening(),
                             String lngtCode = s.getSampletype() != null ? isCrustacean ? "."/*1mm*/ : isHerringOrSprat ? "0"/*5mm*/ : "1"/*1cm*/ : "-9"/*1cm*/;
                             Integer lenInterval = lngtCode.equals("0") ? 5 : 1;
                             Boolean reportInMM = !lngtCode.equals("1");
-                            for (IndividualBO i : s.getIndividualBOCollection()) {
+                            for (IndividualBO i : s.getIndividualBOs()) {
                                 Double length = i.getLength();/*cm*/;
                                 if (i.getLength() == null) {
                                     continue;
@@ -535,12 +532,12 @@ fs.getVerticalTrawlOpening(),
                                                     "CA",
                                                     quarter,
                                                     getTSCountryByIOC(fs.getNation()),
-                                                    getTSShipByPlatform(fs.getCatchPlatform()),
+                                                    getTSShipByPlatform(fs.getCatchplatform()),
                                                     "GOV",
                                                     sweep,
                                                     "S",
                                                     "P",
-                                                    fs.getSerialNo(),
+                                                    fs.getSerialnumber(),
                                                     fs.getStation(),
                                                     year,
                                                     "W", // Worms
@@ -567,12 +564,12 @@ fs.getVerticalTrawlOpening(),
 
     private static String getDATRASMaturity(IndividualBO i) {
         CatchBO c = i.getSample().getCatchBO();
-        String noName = c.getNoname().toUpperCase();
+        String noName = c.getCommonname().toUpperCase();
         boolean isHerringOrSpratOrMackerel = c.getAphia().equals("126417") || c.getAphia().equals("126425") || c.getAphia().equals("127023");
 
         Integer res = -9;
-        if (i.getSpecialStage() != null) {
-            Integer sp = Conversion.safeStringtoIntegerNULL(i.getSpecialStage());
+        if (i.getSpecialstage() != null) {
+            Integer sp = Conversion.safeStringtoIntegerNULL(i.getSpecialstage());
             if (sp != null) {
                 if (isHerringOrSpratOrMackerel) {
                     res = sp <= 2 ? 61 : sp <= 5 ? 62 : 60 + sp - 3;
@@ -580,11 +577,11 @@ fs.getVerticalTrawlOpening(),
                     res = 60 + sp;
                 }
             }
-        } else if (i.getStage() != null) {
+        } else if (i.getMaturationstage() != null) {
             FishstationBO fs = c.getStationBO();
-            Integer month = IMRdate.getMonth(fs.getStationStartDate(), true);
+            Integer month = IMRdate.getMonth(fs.getStationstartdate(), true);
             Integer quarter = month / 4 + 1;
-            Integer st = Conversion.safeStringtoIntegerNULL(i.getStage());
+            Integer st = Conversion.safeStringtoIntegerNULL(i.getMaturationstage());
             if (st != null) {
                 res = 60 + st;
                 if (st == 5 && quarter == 3) {

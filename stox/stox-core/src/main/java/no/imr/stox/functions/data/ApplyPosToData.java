@@ -64,7 +64,7 @@ public class ApplyPosToData extends AbstractFunction {
                 return landing;
             case Functions.SOURCETYPE_BIOTIC:
                 for (FishstationBO fs : biotic) {
-                    if (fs.getLatitudeStart() != null && fs.getLongitudeStart() != null) {
+                    if (fs.getLatitudestart() != null && fs.getLongitudestart() != null) {
                         continue;
                     }
                     String area = fs.getArea() != null ? fs.getArea() + "" : null;
@@ -72,8 +72,8 @@ public class ApplyPosToData extends AbstractFunction {
                     if (pt == null) {
                         continue;
                     }
-                    fs.setLatitudeStart(pt.y);
-                    fs.setLongitudeStart(pt.x);
+                    fs.setLatitudestart(pt.y);
+                    fs.setLongitudestart(pt.x);
                 }
                 return biotic;
         }

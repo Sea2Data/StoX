@@ -45,19 +45,19 @@ public class ConvertLengthAndWeight extends AbstractFunction {
         Double wGutHeadOn = (Double) input.get(Functions.PM_CONVERTLENGTHANDWEIGHT_WGUTHEADON); // product type 3,4
         // if 
         for (FishstationBO f : bioticData) {
-            for (CatchBO c : f.getCatchBOCollection()) {
-                for (SampleBO s : c.getSampleBOCollection()) {
-                    for (IndividualBO i : s.getIndividualBOCollection()) {
-                        if (i.getProductType() == null) {
+            for (CatchBO c : f.getCatchBOs()) {
+                for (SampleBO s : c.getSampleBOs()) {
+                    for (IndividualBO i : s.getIndividualBOs()) {
+                        if (i.getIndividualproducttype()== null) {
                             continue;
                         }
                         Double w = null;
                         Double l = null;
-                        switch (i.getProductType()) {
+                        switch (i.getIndividualproducttype()) {
                             case "3":
                                 // Gutted without head - correct length
                                 Double le = i.getLength();
-                                Integer lu = Conversion.safeStringtoIntegerNULL(i.getLengthUnit());
+                                Integer lu = Conversion.safeStringtoIntegerNULL(i.getLengthresolution());
                                 if (le != null && lu != null && hCutFacA != null && hCutFacB != null) {
                                     Double lucm = BioticUtils.getLengthInterval(lu);
                                     l = hCutFacA * (le + 0.5 * lucm) + hCutFacB;
@@ -66,19 +66,19 @@ public class ConvertLengthAndWeight extends AbstractFunction {
                             case "4":
                                 // Gutted with head - correct weight
                                 w = i.getWeight();
-                                Double wFac = i.getProductType().equals("3") ? wGutHeadOff : wGutHeadOn;
+                                Double wFac = i.getIndividualproducttype().equals("3") ? wGutHeadOff : wGutHeadOn;
                                 if (w != null && wFac != null) {
                                     w = w * wFac;
                                 }
                         }
                         if (w != null) {
-                            i.setWeight(w);
+                            i.setIndividualweight(w);
                         }
                         if (l != null) {
-                            i.setWeight(l);
+                            i.setIndividualweight(l);
                         }
                         if (w != null || l != null) {
-                            i.setProductType(1 + "");
+                            i.setIndividualproducttype(1 + "");
                         }
                     }
                 }

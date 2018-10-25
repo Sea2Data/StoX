@@ -11,98 +11,85 @@ import java.util.List;
  */
 public class IndividualBO implements Serializable {
 
-    private Integer original;
-    private Date last_edited;
-
-    private Integer individualNo;
-    protected String measurementType;
+    private Integer specimenid;
+    private String individualproducttype;
     private Double weight;
-    private Double volume;
-    protected String lengthType;
+    private Double individualvolume;
+    private String lengthresolution;
     private Double length;
-    protected String fat;
-    protected String sex;
-    protected String stage;
-    protected String specialStage;
-    private transient String eggStage; // Used for forberg at capelin male (not in the database)
-    protected String stomachFill;
-    protected String stomachFill2;
-    protected String digestDeg;
-    protected String liver;
-    protected String liverParasite;
-    protected String specialCode;
-    // special code is not enough for combining illness parameters, thus introduce the following transients:
-    private transient String gillWorms;
-    private transient String swollenGills;
-    private transient String fungusHeart;
-    private transient String fungusSpores;
-    private transient String fungusOuter;
-    private transient String blackSpot;
-    private Integer vertebrae;
-    private List<no.imr.sea2data.biotic.bo.AgeDeterminationBO> ageDeterminationBOs = new ArrayList<>();
-    private List<no.imr.sea2data.biotic.bo.PreyBO> preyBOs = new ArrayList<>();
+    private String fat;
+    private String sex;
+    private String maturationstage;
+    private String specialstage;
+    private String eggstage; // Used for forberg at capelin male (not in the database)
+    private String stomachfillfield;
+    private String stomachfilllab;
+    private String digestion;
+    private String liver;
+    private String liverparasite;
+    private String gillworms;
+    private String swollengills;
+    private String fungusheart;
+    private String fungusspores;
+    private String fungusouter;
+    private String blackspot;
+    private Integer vertebraecount;
+    private Double gonadweight;
+    private Double liverweight;
+    private Double stomachweight;
+    private String individualcomment;
+    private List<AgeDeterminationBO> ageDeterminationBOs = new ArrayList<>();
 
-    private Integer age; // this is redundant, since agedetermination keep allways one line with age data.
-
-    private Double gonadWeight;
-    private Double liverWeight;
-    private Double stomachWeight;
-    private Boolean fromLengthFrequency; // redundant?
-    private String comment;
-
-    private String description; // why is this a field?
     private SampleBO sample;
-    private transient String developmentalStage;
 
     public IndividualBO() {
     }
 
+    public IndividualBO(SampleBO sampleF) {
+        this.sample = sampleF;
+    }
+
     public IndividualBO(SampleBO sampleF, IndividualBO bo) {
-        individualNo = bo.getIndividualNo();
-        measurementType = bo.getMeasurementType();
+        this(sampleF);
+        specimenid = bo.getSpecimenid();
+        individualproducttype = bo.getIndividualproducttype();
         weight = bo.getWeight();
-        volume = bo.getVolume();
-        lengthType = bo.getLengthType();
+        individualvolume = bo.getVolume();
+        lengthresolution = bo.getLengthresolution();
         length = bo.getLength();
         fat = bo.getFat();
         sex = bo.getSex();
-        stage = bo.getStage();
-        developmentalStage = bo.getDevelopmentalStage();
-        specialStage = bo.getSpecialStage();
-        eggStage = bo.getEggStage();
-        stomachFill = bo.getStomachFill();
-        stomachFill2 = bo.getStomachFill2();
-        digestDeg = bo.getDigestDeg();
+        maturationstage = bo.getMaturationstage();
+        specialstage = bo.getSpecialstage();
+        eggstage = bo.getEggstage();
+        stomachfillfield = bo.getStomachfillfield();
+        stomachfilllab = bo.getStomachfilllab();
+        digestion = bo.getDigestion();
         liver = bo.getLiver();
-        liverParasite = bo.getLiverParasite();
-        gillWorms = bo.getGillWorms();
-        swollenGills = bo.getSwollenGills();
-        fungusHeart = bo.getFungusHeart();
-        fungusSpores = bo.getFungusSpores();
-        fungusOuter = bo.getFungusOuter();
-        blackSpot = bo.getBlackSpot();
-        vertebrae = bo.getVertebrae();
-        gonadWeight = bo.getGonadWeight();
-        liverWeight = bo.getLiverWeight();
-        stomachWeight = bo.getStomachWeight();
-        comment = bo.getComment();
-        sample = sampleF;
-        for (AgeDeterminationBO aBO : bo.getAgeDeterminationBOCollection()) {
+        liverparasite = bo.getLiverparasite();
+        gillworms = bo.getGillworms();
+        swollengills = bo.getSwollengills();
+        fungusheart = bo.getFungusheart();
+        fungusspores = bo.getFungusspores();
+        fungusouter = bo.getFungusouter();
+        blackspot = bo.getBlackspot();
+        vertebraecount = bo.getvertebraecount();
+        gonadweight = bo.getGonadweight();
+        liverweight = bo.getLiverweight();
+        stomachweight = bo.getStomachweight();
+        individualcomment = bo.getIndividualcomment();
+        for (AgeDeterminationBO aBO : bo.getAgeDeterminationBOs()) {
             AgeDeterminationBO agBO = new AgeDeterminationBO(this, aBO);
             ageDeterminationBOs.add(agBO);
         }
-        for (PreyBO pBO : bo.getPreyBOCollection()) {
-            PreyBO prBO = new PreyBO(sample, pBO);
-            preyBOs.add(prBO);
-        }
     }
 
-    public String getDigestDeg() {
-        return digestDeg;
+    public String getDigestion() {
+        return digestion;
     }
 
-    public void setDigestDeg(String digestDeg) {
-        this.digestDeg = digestDeg;
+    public void setDigestion(String digestion) {
+        this.digestion = digestion;
     }
 
     public String getFat() {
@@ -113,12 +100,12 @@ public class IndividualBO implements Serializable {
         this.fat = fat;
     }
 
-    public String getLengthType() {
-        return lengthType;
+    public String getLengthresolution() {
+        return lengthresolution;
     }
 
-    public void setLengthType(String lengthType) {
-        this.lengthType = lengthType;
+    public void setLengthresolution(String lengthresolution) {
+        this.lengthresolution = lengthresolution;
     }
 
     public String getLiver() {
@@ -129,24 +116,20 @@ public class IndividualBO implements Serializable {
         this.liver = liver;
     }
 
-    public String getMeasurementType() {
-        return measurementType;
+    public String getIndividualproducttype() {
+        return individualproducttype;
     }
 
-    public void setMeasurementType(String measurementType) {
-        this.measurementType = measurementType;
+    public void setIndividualproducttype(String individualproducttype) {
+        this.individualproducttype = individualproducttype;
     }
 
-    public void setProductType(String productType) {
-        this.measurementType = productType;
-    }
-    
-    public String getLiverParasite() {
-        return liverParasite;
+    public String getLiverparasite() {
+        return liverparasite;
     }
 
-    public void setLiverParasite(String liverParasite) {
-        this.liverParasite = liverParasite;
+    public void setLiverparasite(String liverparasite) {
+        this.liverparasite = liverparasite;
     }
 
     public String getSex() {
@@ -157,90 +140,64 @@ public class IndividualBO implements Serializable {
         this.sex = sex;
     }
 
-    public String getSpecialStage() {
-        return specialStage;
+    public String getSpecialstage() {
+        return specialstage;
     }
 
-    public void setSpecialStage(String specialStage) {
-        this.specialStage = specialStage;
+    public void setSpecialstage(String specialstage) {
+        this.specialstage = specialstage;
     }
 
-    public String getStage() {
-        return stage;
+    public String getMaturationstage() {
+        return maturationstage;
     }
 
-    public void setStage(String stage) {
-        this.stage = stage;
+    public void setMaturationstage(String maturationstage) {
+        this.maturationstage = maturationstage;
     }
 
-    public String getStomachFill() {
-        return stomachFill;
+    public String getStomachfillfield() {
+        return stomachfillfield;
     }
 
-    public void setStomachFill(String stomachFill) {
-        this.stomachFill = stomachFill;
+    public void setStomachfillfield(String stomachfillfield) {
+        this.stomachfillfield = stomachfillfield;
     }
 
-    public String getStomachFill2() {
-        return stomachFill2;
+    public String getStomachfilllab() {
+        return stomachfilllab;
     }
 
-    public void setStomachFill2(String stomachFill2) {
-        this.stomachFill2 = stomachFill2;
+    public void setStomachfilllab(String stomachfilllab) {
+        this.stomachfilllab = stomachfilllab;
     }
 
-    public void setOriginal(Integer original) {
-
-        this.original = original;
-    }
-
-    public void setLast_edited(Date last_edited) {
-
-        this.last_edited = last_edited;
-    }
-
-    public Integer getOriginal() {
-        return original;
-    }
-
-    public Date getLast_edited() {
-        return last_edited;
-    }
-
-    public void setWeight(Double weight) {
+    public void setIndividualweight(Double weight) {
         this.weight = weight;
     }
 
-    public void setVolume(Double volume) {
-        this.volume = volume;
+    public void setIndividualvolume(Double individualvolume) {
+        this.individualvolume = individualvolume;
     }
 
-    public void setVertebrae(Integer vertebrae) {
-        this.vertebrae = vertebrae;
+    public void setVertebraecount(Integer vertebraecount) {
+        this.vertebraecount = vertebraecount;
     }
 
-    public void setStomachWeight(Double stomachWeight) {
-        this.stomachWeight = stomachWeight;
+    public void setStomachweight(Double stomachweight) {
+        this.stomachweight = stomachweight;
     }
 
-    public void setLiverWeight(Double liverWeight) {
-        this.liverWeight = liverWeight;
+    public void setLiverweight(Double liverweight) {
+        this.liverweight = liverweight;
     }
 
     public void setLength(Double length) {
         this.length = length;
     }
 
-    public void setGonadWeight(Double gonadWeight) {
-        this.gonadWeight = gonadWeight;
-    }
-
-    public void setFromLengthFrequency(Boolean fromLengthFrequency) {
-        this.fromLengthFrequency = fromLengthFrequency;
-    }
-
-    public void setAge(Integer age) {
-        this.age = age;
+    public void setGonadweight(Double gonadweight) {
+        this.gonadweight = gonadweight;
     }
 
     public Double getWeight() {
@@ -248,71 +205,135 @@ public class IndividualBO implements Serializable {
     }
 
     public Double getVolume() {
-        return volume;
+        return individualvolume;
     }
 
-    public Integer getVertebrae() {
-        return vertebrae;
+    public Integer getvertebraecount() {
+        return vertebraecount;
     }
 
-    public Double getStomachWeight() {
-        return stomachWeight;
+    public Double getStomachweight() {
+        return stomachweight;
     }
 
-    public Double getLiverWeight() {
-        return liverWeight;
+    public Double getLiverweight() {
+        return liverweight;
     }
 
     public Double getLength() {
         return length;
     }
 
-    public Integer getIndividualNo() {
-        return individualNo;
+    public Integer getSpecimenid() {
+        return specimenid;
     }
 
-    public Double getGonadWeight() {
-        return gonadWeight;
+    public Double getGonadweight() {
+        return gonadweight;
     }
 
-    public Boolean getFromLengthFrequency() {
-        return fromLengthFrequency;
+    public void setIndividualcomment(String comment) {
+        this.individualcomment = comment;
     }
 
-    public String description() {
-        return description;
+    public String getIndividualcomment() {
+        return individualcomment;
     }
 
-    public List<PreyBO> getPreyBOCollection() {
-        return preyBOs;
+    public String getEggstage() {
+        return eggstage;
     }
 
-    public void setPreyBOCollection(List<PreyBO> preyBOs) {
-        this.preyBOs = preyBOs;
+    public void setEggstage(String eggstage) {
+        this.eggstage = eggstage;
     }
 
-    public String getSpecialCode() {
-        return specialCode;
+    public String getGillworms() {
+        return gillworms;
     }
 
-    public void setSpecialCode(String specialCode) {
-        this.specialCode = specialCode;
+    public void setGillworms(String gillworms) {
+        this.gillworms = gillworms;
     }
 
-    public List<AgeDeterminationBO> getAgeDeterminationBOCollection() {
-        return ageDeterminationBOs;
+    public String getSwollengills() {
+        return swollengills;
     }
 
-    public void setAgeDeterminationBOCollection(List<AgeDeterminationBO> ageDeterminationBOs) {
-        this.ageDeterminationBOs = ageDeterminationBOs;
+    public void setSwollengills(String swollengills) {
+        this.swollengills = swollengills;
     }
 
-    public void setComment(String comment) {
-        this.comment = comment;
+    public String getFungusheart() {
+        return fungusheart;
     }
 
-    public String getComment() {
-        return comment;
+    public void setFungusheart(String fungusheart) {
+        this.fungusheart = fungusheart;
+    }
+
+    public String getFungusspores() {
+        return fungusspores;
+    }
+
+    public void setFungusspores(String fungusspores) {
+        this.fungusspores = fungusspores;
+    }
+
+    public String getFungusouter() {
+        return fungusouter;
+    }
+
+    public void setFungusouter(String fungusouter) {
+        this.fungusouter = fungusouter;
+    }
+
+    public String getBlackspot() {
+        return blackspot;
+    }
+
+    public void setBlackspot(String blackspot) {
+        this.blackspot = blackspot;
+    }
+
+    public void setSpecimenid(Integer specimenid) {
+        this.specimenid = specimenid;
+    }
+
+    public SampleBO getSample() {
+        return this.sample;
+    }
+
+    public Integer getAge() {
+        return acquireAgeDet().getAge();
+    }
+
+    public Object getSpawningage() {
+        return acquireAgeDet().getSpawningage();
+    }
+
+    public Object getSpawningzones() {
+        return acquireAgeDet().getSpawningzones();
+    }
+
+    public Object getReadability() {
+        return acquireAgeDet().getReadability();
+    }
+
+    public Object getOtolithtype() {
+        return acquireAgeDet().getOtolithtype();
+    }
+
+    public Object getOtolithedge() {
+        return acquireAgeDet().getOtolithedge();
+    }
+
+    public Object getOtolithcentre() {
+        return acquireAgeDet().getOtolithcentre();
+    }
+
+    public Object getCalibration() {
+        return acquireAgeDet().getCalibration();
     }
 
     @Override
@@ -320,179 +341,25 @@ public class IndividualBO implements Serializable {
         return getKey();
     }
 
-    /**
-     * @param description the description to set
-     */
-    public void setDescription(String description) {
-        this.description = description;
+    public List<AgeDeterminationBO> getAgeDeterminationBOs() {
+        return ageDeterminationBOs;
     }
 
-    public String getEggStage() {
-        return eggStage;
-    }
-
-    public void setEggStage(String eggStage) {
-        this.eggStage = eggStage;
-    }
-
-    public String getGillWorms() {
-        return gillWorms;
-    }
-
-    public void setGillWorms(String gillWorms) {
-        this.gillWorms = gillWorms;
-    }
-
-    public String getSwollenGills() {
-        return swollenGills;
-    }
-
-    public void setSwollenGills(String swollenGills) {
-        this.swollenGills = swollenGills;
-    }
-
-    public String getFungusHeart() {
-        return fungusHeart;
-    }
-
-    public void setFungusHeart(String fungusHeart) {
-        this.fungusHeart = fungusHeart;
-    }
-
-    public String getFungusSpores() {
-        return fungusSpores;
-    }
-
-    public void setFungusSpores(String fungusSpores) {
-        this.fungusSpores = fungusSpores;
-    }
-
-    public String getFungusOuter() {
-        return fungusOuter;
-    }
-
-    public void setFungusOuter(String fungusOuter) {
-        this.fungusOuter = fungusOuter;
-    }
-
-    public String getBlackSpot() {
-        return blackSpot;
-    }
-
-    public void setBlackSpot(String blackSpot) {
-        this.blackSpot = blackSpot;
-    }
-
-    public void setIndividualNo(Integer individualNo) {
-        this.individualNo = individualNo;
-    }
-
-    public void setSample(SampleBO sample) {
-        this.sample = sample;
-    }
-
-    public SampleBO getSample() {
-        return this.sample;
-    }
-/*
-    @Override
-    public int hashCode() {
-        int hash = 7;
-        hash = 41 * hash + (this.individualNo != null ? this.individualNo.hashCode() : 0);
-        hash = 41 * hash + (this.sample != null ? this.sample.hashCode() : 0);
-        return hash;
-    }
-
-    @Override
-    public boolean equals(Object obj) {
-        if (obj == null) {
-            return false;
-        }
-        if (getClass() != obj.getClass()) {
-            return false;
-        }
-        final IndividualBO other = (IndividualBO) obj;
-        if (this.individualNo != other.individualNo && (this.individualNo == null || !this.individualNo.equals(other.individualNo))) {
-            return false;
-        }
-        if (this.sample != other.sample && (this.sample == null || !this.sample.equals(other.sample))) {
-            return false;
-        }
-        return true;
-    }
-*/
-    public String getKey() {
-        return (sample != null ? sample.getKey() + "/" : "") + (individualNo != null ? individualNo : "");
-    }
-
-    // Wrappers
-    public Integer getNo() {
-        return getIndividualNo();
-    }
-
-    public String getLengthUnit() {
-        return getLengthType();
-    }
-
-    public String getWeightMethod() {
-        return getMeasurementType();
-    }
-
-    public String getProductType() {
-        return getMeasurementType();
-    }
-    
-    public Object getStomachFillField() {
-        return getStomachFill();
+    public AgeDeterminationBO addAgeDetermination() {
+            AgeDeterminationBO agedet = new AgeDeterminationBO(this);
+            ageDeterminationBOs.add(agedet);
+            return agedet;
     }
 
     public AgeDeterminationBO acquireAgeDet() {
         if (ageDeterminationBOs.isEmpty()) {
-            AgeDeterminationBO agedet = new AgeDeterminationBO();
-            agedet.setIndividual(this);
-            ageDeterminationBOs.add(agedet);
+            return addAgeDetermination();
         }
         return ageDeterminationBOs.get(0);
     }
 
-    public Integer getAge() {
-        return acquireAgeDet().getAge();
-    }
-
-    public Object getSpawningAge() {
-        return acquireAgeDet().getSpawningAge();
-    }
-
-    public Object getSpawningZones() {
-        return acquireAgeDet().getSpawningZones();
-    }
-
-    public Object getReadability() {
-        return acquireAgeDet().getReadability();
-    }
-
-    public Object getOtolithType() {
-        return acquireAgeDet().getType();
-    }
-
-    public Object getOtolithEdge() {
-        return acquireAgeDet().getOtolithEdge();
-    }
-
-    public Object getOtolithCentre() {
-        return acquireAgeDet().getOtolithCentre();
-    }
-
-    public Object getCalibration() {
-        return acquireAgeDet().getCalibration();
-    }
-
-    public String getDevelopmentalStage() {
-        return developmentalStage;
-    }
-
-    public void setDevelopmentalStage(String developmentalStage) {
-        this.developmentalStage = developmentalStage;
+    public String getKey() {
+        return (sample != null ? sample.getKey() + "/" : "") + (specimenid != null ? specimenid : "");
     }
 
 }

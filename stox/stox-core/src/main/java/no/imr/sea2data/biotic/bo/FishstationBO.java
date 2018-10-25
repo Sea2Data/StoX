@@ -5,6 +5,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.function.Function;
 import no.imr.sea2data.imrbase.map.ILatLonEvent;
+import no.imr.sea2data.imrbase.util.IMRdate;
 
 /**
  *
@@ -12,54 +13,53 @@ import no.imr.sea2data.imrbase.map.ILatLonEvent;
  */
 public class FishstationBO implements ILatLonEvent {
 
-    private String missionType;
+    private String missiontype;
     private String cruise;
-    private String callSignal;
-    private String platformName;
+    private String callsignal;
+    private String platformname;
     protected String catchplatform;
     protected String nation;
-    private Date stationStartDate;
+    private Date stationstartdate;
     private Integer station;
-    private Integer serialNo; // redundant
-    protected String stationType;
-    private Double latitudeStart;
-    private Double longitudeStart;
+    private Integer serialnumber;
+    protected String stationtype;
+    private Double latitudestart;
+    private Double longitudestart;
     private Integer system;
     private Integer area;
     private String location;
-    private Double bottomDepthStart;
-    private Double bottomDepthStop;
-    private Integer gearNo;
+    private Double bottomdepthstart;
+    private Double bottomdepthstop;
+    private Integer gearno;
     protected String gear;
-    private Integer gearCount;
+    private Integer gearcount;
     private Double direction;
-    private Double vesselSpeed;
-    protected Date stationStartTime;
-    private Double logStart;
+    private Double vesselspeed;
+    protected Date stationstarttime;
+    private Double logstart;
     protected Date stationStopTime;
     private Double distance;
-    protected String gearCondition;
-    protected String trawlQuality;
-    private Double fishingDepthMax;
-    private Double fishingDepthMin;
-    private Integer fishingDepthCount = 1;
-    private Double verticalTrawlOpening;
-    private Double trawlStdOpening;
-    private Double trawlDoorSpread;
-    private Double trawlStdDoorSpread;
-    private Integer wireLength;
+    protected String gearcondition;
+    protected String samplequality;
+    private Double fishingdepthmax;
+    private Double fishingdepthmin;
+    private Integer fishingdepthcount = 1;
+    private Double verticaltrawlopening;
+    private Double verticaltrawlopeningsd;
+    private Double trawldoorspread;
+    private Double trawldoorspreadsd;
+    private Integer wirelength;
     private Double soaktime;
-    private Integer tripNo;
-    private String comment;
-    private Date stationStopDate;
-    private Double logStop;
-    protected Integer platformcodesys;
-    private List<no.imr.sea2data.biotic.bo.CatchBO> catchBOs = new ArrayList<>();
+    private Integer tripno;
+    private String stationcomment;
+    private Date stationstopdate;
+    private Double logstop;
+    private List<CatchBO> catchBOs = new ArrayList<>();
     private Integer year;
-    private Double trawlWingSpread;
-    private Double trawlStdWingSpread;
-    private Double longitudeEnd;
-    private Double latitudeEnd;
+    private Double wingspread;
+    private Double wingspreadsd;
+    private Double longitudeend;
+    private Double latitudeend;
     private String key = null;
     private String stratum;
 
@@ -68,65 +68,47 @@ public class FishstationBO implements ILatLonEvent {
 
     public FishstationBO(FishstationBO bo) {
         cruise = bo.getCruise();
-        missionType = bo.getMissionType();
-        callSignal = bo.getCallSignal();
-        platformName = bo.getPlatformName();
+        missiontype = bo.getMissiontype();
+        callsignal = bo.getCallsignal();
+        platformname = bo.getPlatformname();
         nation = bo.getNation();
-        catchplatform = bo.getCatchPlatform();
-        stationStartDate = bo.getStationStartDate();
-        stationStartTime = bo.getStationStartTime();
-        stationStopDate = bo.getStationStopDate();
-        stationStopTime = bo.getStationStopTime();
+        catchplatform = bo.getCatchplatform();
+        stationstartdate = bo.getStationstartdate();
+        stationstarttime = bo.getStationstarttime();
+        stationstopdate = bo.getStationstopdate();
+        stationStopTime = bo.getStationstoptime();
         year = bo.getYear();
         station = bo.getStation();
-        serialNo = bo.getSerialNo();
-        stationType = bo.getStationType();
-        latitudeStart = bo.getLatitudeStart();
-        longitudeStart = bo.getLongitudeStart();
+        serialnumber = bo.getSerialnumber();
+        stationtype = bo.getStationtype();
+        latitudestart = bo.getLatitudestart();
+        longitudestart = bo.getLongitudestart();
         system = bo.getSystem();
         area = bo.getArea();
         location = bo.getLocation();
-        bottomDepthStart = bo.getBottomDepthStart();
-        bottomDepthStop = bo.getBottomDepthStop();
-        gearNo = bo.getGearNo();
+        bottomdepthstart = bo.getBottomdepthstart();
+        bottomdepthstop = bo.getBottomdepthstop();
+        gearno = bo.getGearno();
         gear = bo.getGear();
-        gearCount = bo.getGearCount();
+        gearcount = bo.getGearcount();
         direction = bo.getDirection();
-        vesselSpeed = bo.getVesselSpeed();
-        logStart = bo.getLogStart();
+        vesselspeed = bo.getVesselspeed();
+        logstart = bo.getLogstart();
         distance = bo.getDistance();
-        gearCondition = bo.getGearCondition();
-        trawlQuality = bo.getTrawlQuality();
-        fishingDepthMax = bo.getFishingDepthMax();
-        fishingDepthMin = bo.getFishingDepthMin();
-        fishingDepthCount = bo.getFishingDepthCount();
-        verticalTrawlOpening = bo.getVerticalTrawlOpening();
-        trawlStdOpening = bo.getTrawlStdOpening();
-        trawlDoorSpread = bo.getTrawlDoorSpread();
-        trawlStdDoorSpread = bo.getTrawlStdDoorSpread();
-        wireLength = bo.getWireLength();
+        gearcondition = bo.getGearcondition();
+        samplequality = bo.getSamplequality();
+        fishingdepthmax = bo.getFishingdepthmax();
+        fishingdepthmin = bo.getFishingdepthmin();
+        fishingdepthcount = bo.getFishingdepthcount();
+        verticaltrawlopening = bo.getVerticaltrawlopening();
+        verticaltrawlopeningsd = bo.getVerticaltrawlopeningsd();
+        trawldoorspread = bo.getTrawldoorspread();
+        trawldoorspreadsd = bo.getTrawldoorspreadsd();
+        wirelength = bo.getwirelength();
         soaktime = bo.getSoaktime();
-        tripNo = bo.getTripNo();
-        comment = bo.getComment();
+        tripno = bo.gettripno();
+        stationcomment = bo.getComment();
         stratum = bo.getStratum();
-    }
-
-    public final void addSample(String species, SampleBO sampleBO) {
-        CatchBO cb = null;
-        for (CatchBO cab : catchBOs) {
-            if (cab.getTaxa().equals(species)) {
-                cb = cab;
-                break;
-            }
-        }
-        if (cb == null) {
-            cb = new CatchBO(species);
-            catchBOs.add(cb);
-        }
-        cb.getSampleBOCollection().add(sampleBO);
-        sampleBO.setCatchBO(cb);
-        cb.setStationBO(this);
-
     }
 
     public String getCruise() {
@@ -137,136 +119,128 @@ public class FishstationBO implements ILatLonEvent {
         this.cruise = cruise;
     }
 
-    public void setGearCondition(String gearCondition) {
-        this.gearCondition = gearCondition;
+    public void setGearcondition(String gearCondition) {
+        this.gearcondition = gearCondition;
     }
 
-    public void setTrawlQuality(String trawlQuality) {
-        this.trawlQuality = trawlQuality;
+    public void setSamplequality(String samplequality) {
+        this.samplequality = samplequality;
     }
 
-    public List<CatchBO> getCatchBOCollection() {
-        return catchBOs;
+    public String getGearcondition() {
+        return gearcondition;
     }
 
-    public void setCatchBOCollection(List<CatchBO> catchBOs) {
-        this.catchBOs = catchBOs;
-    }
-
-    public String getGearCondition() {
-        return gearCondition;
-    }
-
-    public String getCatchPlatform() {
+    public String getCatchplatform() {
         return catchplatform;
     }
 
-    public void setCatchPlatform(String catchPlatform) {
-        this.catchplatform = catchPlatform;
-    }
-    public String getTrawlQuality() {
-        return trawlQuality;
+    public void setCatchplatform(String catchplatform) {
+        this.catchplatform = catchplatform;
     }
 
-    public void setYear(Integer year) {
-        this.year = year;
+    public String getSamplequality() {
+        return samplequality;
     }
 
-    public void setWireLength(Integer wireLength) {
-        this.wireLength = wireLength;
+    public void setWireLength(Integer wirelength) {
+        this.wirelength = wirelength;
     }
 
-    public void setTripNo(Integer tripNo) {
-        this.tripNo = tripNo;
+    public void setTripno(Integer tripno) {
+        this.tripno = tripno;
     }
 
-    public void setTrawlWingSpread(Double trawlWingSpread) {
-        this.trawlWingSpread = trawlWingSpread;
+    public void setWingspread(Double wingspread) {
+        this.wingspread = wingspread;
     }
 
-    public void setTrawlStdOpening(Double trawlStdOpening) {
-        this.trawlStdOpening = trawlStdOpening;
+    public void setWingspreadsd(Double wingspreadsd) {
+        this.wingspreadsd = wingspreadsd;
     }
 
-    public void setTrawlStdDoorSpread(Double trawlStdDoorSpread) {
-        this.trawlStdDoorSpread = trawlStdDoorSpread;
+    public void setVerticaltrawlopeningsd(Double verticaltrawlopeningsd) {
+        this.verticaltrawlopeningsd = verticaltrawlopeningsd;
     }
 
-    public void setVerticalTrawlOpening(Double trawlOpening) {
-        this.verticalTrawlOpening = trawlOpening;
+    public void setTrawldoorspreadsd(Double trawldoorspreadsd) {
+        this.trawldoorspreadsd = trawldoorspreadsd;
     }
 
-    public void setTrawlDoorSpread(Double trawlDoorSpread) {
-        this.trawlDoorSpread = trawlDoorSpread;
+    public void setVerticalTrawlOpening(Double verticaltrawlopening) {
+        this.verticaltrawlopening = verticaltrawlopening;
+    }
+
+    public void setTrawldoorspread(Double trawldoorspread) {
+        this.trawldoorspread = trawldoorspread;
     }
 
     public void setSystem(Integer system) {
         this.system = system;
     }
 
-    public void setStationStopDate(Date stopDate) {
-        this.stationStopDate = stopDate;
+    public void setStationstopdate(Date stationstopdate) {
+        this.stationstopdate = stationstopdate;
     }
 
-
-    public void setStationStartDate(Date startDate) {
-        this.stationStartDate = startDate;
+    public void setStationstartdate(Date stationstartdate) {
+        this.stationstartdate = stationstartdate;
     }
 
-    public void setVesselSpeed(Double vesselSpeed) {
-        this.vesselSpeed = vesselSpeed;
+    public void setVesselspeed(Double vesselspeed) {
+        this.vesselspeed = vesselspeed;
     }
 
-    public void setSerialNo(Integer serialNo) {
-        this.serialNo = serialNo;
+    public void setSerialnumber(Integer serialnumber) {
+        this.serialnumber = serialnumber;
     }
 
-    public void setLongitudeStart(Double longitudeStart) {
-        this.longitudeStart = longitudeStart;
+    public void setLongitudestart(Double longitudestart) {
+        this.longitudestart = longitudestart;
     }
 
-    public void setLongitudeEnd(Double longitudeEnd) {
-        this.longitudeEnd = longitudeEnd;
+    public void setLongitudeend(Double longitudeend) {
+        this.longitudeend = longitudeend;
     }
 
-    public void setLogStop(Double logStop) {
-        this.logStop = logStop;
+    public void setLogstop(Double logstop) {
+        this.logstop = logstop;
     }
 
-    public void setLogStart(Double logStart) {
-        this.logStart = logStart;
+    public void setLogstart(Double logstart) {
+        this.logstart = logstart;
     }
 
     public void setLocation(String location) {
         this.location = location;
     }
 
-    public void setLatitudeStart(Double latitudeStart) {
-        this.latitudeStart = latitudeStart;
+    public void setLatitudestart(Double latitudestart) {
+        this.latitudestart = latitudestart;
     }
 
-    public void setLatitudeEnd(Double latitudeEnd) {
-        this.latitudeEnd = latitudeEnd;
+    public void setLatitudeend(Double latitudeend) {
+        this.latitudeend = latitudeend;
     }
 
-    public void setFishingDepthMin(Double fishingDepthMin) {
-        this.fishingDepthMin = fishingDepthMin;
+    public void setFishingdepthmin(Double fishingdepthmin) {
+        this.fishingdepthmin = fishingdepthmin;
     }
 
-    public void setFishingDepthCount(Integer fishingDepthCount) {
-        this.fishingDepthCount = fishingDepthCount;
+    public void setFishingdepthcount(Integer fishingdepthcount) {
+        this.fishingdepthcount = fishingdepthcount;
     }
 
-    public void setFishingDepthMax(Double fishingDepthMax) {
-        this.fishingDepthMax = fishingDepthMax;
+    public void setFishingdepthmax(Double fishingdepthmax) {
+        this.fishingdepthmax = fishingdepthmax;
     }
 
-    public void setGearNo(Integer gearNo) {
-        this.gearNo = gearNo;
+    public void setGearno(Integer gearno) {
+        this.gearno = gearno;
     }
 
-    public void setGearCount(Integer gearCount) {
-        this.gearCount = gearCount;
+    public void setGearcount(Integer gearcount) {
+        this.gearcount = gearcount;
     }
 
     public void setDistance(Double distance) {
@@ -277,81 +251,69 @@ public class FishstationBO implements ILatLonEvent {
         this.direction = direction;
     }
 
-    public void setComment(String comment) {
-        this.comment = comment;
+    public void setStationcomment(String stationcomment) {
+        this.stationcomment = stationcomment;
     }
 
-    public void setBottomDepthStop(Double bottomDepthStop) {
-        this.bottomDepthStop = bottomDepthStop;
+    public void setBottomdepthstop(Double bottomdepthstop) {
+        this.bottomdepthstop = bottomdepthstop;
     }
 
-    public void setBottomDepthStart(Double bottomDepthStart) {
-        this.bottomDepthStart = bottomDepthStart;
+    public void setBottomdepthstart(Double bottomdepthstart) {
+        this.bottomdepthstart = bottomdepthstart;
     }
 
     public void setArea(Integer area) {
         this.area = area;
     }
 
-    /**
-     * @return soaktime the time either longline or fishnet is fishing in
-     * decimal hours
-     */
     public Double getSoaktime() {
         return soaktime;
     }
 
-    /**
-     * @param soaktime the time either longline or fishnet is fishing in decimal
-     * hours
-     */
     public void setSoaktime(Double soaktime) {
 
         this.soaktime = soaktime;
     }
 
-    public Integer getYear() {
-        return year;
+    public Integer getwirelength() {
+        return wirelength;
     }
 
-    public Integer getWireLength() {
-        return wireLength;
+    public Integer gettripno() {
+        return tripno;
     }
 
-    public Integer getTripNo() {
-        return tripNo;
+    public Double getwingspread() {
+        return wingspread;
     }
 
-    public Double getTrawlWingSpread() {
-        return trawlWingSpread;
+    public Double getwingspreadsd() {
+        return wingspreadsd;
     }
 
-    public Double getTrawlStdWingSpread() {
-        return trawlStdWingSpread;
+    public Double getVerticaltrawlopeningsd() {
+        return verticaltrawlopeningsd;
     }
 
-    public Double getTrawlStdOpening() {
-        return trawlStdOpening;
+    public Double getTrawldoorspreadsd() {
+        return trawldoorspreadsd;
     }
 
-    public Double getTrawlStdDoorSpread() {
-        return trawlStdDoorSpread;
+    public Double getVerticaltrawlopening() {
+        return verticaltrawlopening;
     }
 
-    public Double getVerticalTrawlOpening() {
-        return verticalTrawlOpening;
-    }
-
-    public Double getTrawlDoorSpread() {
-        return trawlDoorSpread;
+    public Double getTrawldoorspread() {
+        return trawldoorspread;
     }
 
     public Integer getSystem() {
         return system;
     }
 
-    public Date getStationStopDate() {
-        return stationStopDate;
+    public Date getStationstopdate() {
+        return stationstopdate;
     }
 
     public Integer getStation() {
@@ -362,85 +324,67 @@ public class FishstationBO implements ILatLonEvent {
         this.station = station;
     }
 
-    public Date getStationStartDate() {
-        return stationStartDate;
+    public Date getStationstartdate() {
+        return stationstartdate;
     }
 
-    public Double getVesselSpeed() {
-        return vesselSpeed;
+    public Double getVesselspeed() {
+        return vesselspeed;
     }
 
-    public Integer getSerialNo() {
-        return serialNo;
+    public Integer getSerialnumber() {
+        return serialnumber;
     }
 
-    public Double getLongitudeStart() {
-        return longitudeStart;
+    public Double getLongitudestart() {
+        return longitudestart;
     }
 
-    public Double getLongitudeEnd() {
-        return longitudeEnd;
+    public Double getLongitudeend() {
+        return longitudeend;
     }
 
-    public Double getLogStop() {
-        return logStop;
+    public Double getLogstop() {
+        return logstop;
     }
 
-    public Double getLogStart() {
-        return logStart;
+    public Double getLogstart() {
+        return logstart;
     }
 
     public String getLocation() {
         return location;
     }
 
-    public Double getLatitudeStart() {
-        return latitudeStart;
+    public Double getLatitudestart() {
+        return latitudestart;
     }
 
-    public Double getLatitudeEnd() {
-        return latitudeEnd;
+    public Double getLatitudeend() {
+        return latitudeend;
     }
 
-    public Double getFishingDepthMin() {
-        return fishingDepthMin;
+    public Double getFishingdepthmin() {
+        return fishingdepthmin;
     }
 
-    public Integer getFishingDepthCount() {
-        return fishingDepthCount;
+    public Integer getFishingdepthcount() {
+        return fishingdepthcount;
     }
 
-    public Double getFishingDepthMax() {
-        return fishingDepthMax;
+    public Double getFishingdepthmax() {
+        return fishingdepthmax;
     }
 
-    public Integer getEquipmentNo() {
-        return gearNo;
+    public Integer getGearno() {
+        return gearno;
     }
 
-    public Integer getGearNo() {
-        return getEquipmentNo();
-    }
-
-    public Integer getGearCount() {
-        return gearCount;
+    public Integer getGearcount() {
+        return gearcount;
     }
 
     public Double getDistance() {
-        /*if (distance == null) {
-            if (getStationStartDate() == null || getStationStopDate() == null || getStationStopTime() == null || getStationStartTime() == null
-                    || getSpeedEquipment() == null) {
-                return null;
-            }
-            Date start = IMRdate.encodeDate(getStationStartDate(), getStationStartTime());
-            Date end = IMRdate.encodeDate(getStationStopDate(), getStationStopTime());
-            double hours = (end.getTime() - start.getTime()) / 3600000.0;
-            if (hours < 0) {
-                return null;
-            }
-            double speed = getSpeedEquipment(); // knot = nm/h
-            distance = speed * hours;
-        }*/
         return distance;
     }
 
@@ -449,15 +393,15 @@ public class FishstationBO implements ILatLonEvent {
     }
 
     public String getComment() {
-        return comment;
+        return stationcomment;
     }
 
-    public Double getBottomDepthStop() {
-        return bottomDepthStop;
+    public Double getBottomdepthstop() {
+        return bottomdepthstop;
     }
 
-    public Double getBottomDepthStart() {
-        return bottomDepthStart;
+    public Double getBottomdepthstart() {
+        return bottomdepthstart;
     }
 
     public Integer getArea() {
@@ -472,61 +416,28 @@ public class FishstationBO implements ILatLonEvent {
         this.nation = nation;
     }
 
-    public Date getStationStartTime() {
-        return stationStartTime;
+    public Date getStationstarttime() {
+        return stationstarttime;
     }
 
-    public void setStationStartTime(Date startTime) {
-        this.stationStartTime = startTime;
+    public void setStationstarttime(Date starttime) {
+        this.stationstarttime = starttime;
     }
 
-    public Date getStationStopTime() {
+    public Date getStationstoptime() {
         return stationStopTime;
     }
 
-    public void setStationStopTime(Date stopTime) {
+    public void setStationstoptime(Date stopTime) {
         this.stationStopTime = stopTime;
     }
 
-    public CatchBO findCatch(String taxa) {
-        for (CatchBO c : getCatchBOCollection()) {
-            if (c.getTaxa().equals(taxa)) {
-                return c;
-            }
-        }
-        return null;
+    public String getStationtype() {
+        return stationtype;
     }
 
-    public SampleBO findSample(String taxa) {
-        CatchBO c = findCatch(taxa);
-        if (c != null) {
-            return c.getSampleBOCollection() != null && c.getSampleBOCollection().size() == 1
-                    ? c.getSampleBOCollection().get(0) : null;
-        }
-        return null;
-    }
-
-    @Override
-    public String getKey() {
-        if (key != null) {
-            return key;
-        }
-        key = (cruise != null ? cruise : (year != null ? year : "")) + "/" + (serialNo != null ? serialNo : "");
-        return key;
-    }
-
-    @Override
-    public String toString() {
-        return getKey();
-    }
-
-
-    public String getStationType() {
-        return stationType;
-    }
-
-    public void setStationType(String stationType) {
-        this.stationType = stationType;
+    public void setStationtype(String stationtype) {
+        this.stationtype = stationtype;
     }
 
     public String getGear() {
@@ -537,23 +448,43 @@ public class FishstationBO implements ILatLonEvent {
         this.gear = gear;
     }
 
-    public Integer getEquipmentNumber() {
-        return getEquipmentNo();
+    public String getCallsignal() {
+        return callsignal;
+    }
+
+    public void setCallsignal(String callsignal) {
+        this.callsignal = callsignal;
+    }
+
+    public String getPlatformname() {
+        return platformname;
+    }
+
+    public void setPlatformname(String platformname) {
+        this.platformname = platformname;
+    }
+
+    public String getMissiontype() {
+        return missiontype;
+    }
+
+    public void setMissiontype(String missiontype) {
+        this.missiontype = missiontype;
     }
 
     @Override
     public Double getStartLat() {
-        return getLatitudeStart();
+        return getLatitudestart();
     }
 
     @Override
     public Double getStartLon() {
-        return getLongitudeStart();
+        return getLongitudestart();
     }
 
     public boolean hasCatch(String noName) {
-        for (CatchBO c : getCatchBOCollection()) {
-            if (c.getNoname().equals(noName)) {
+        for (CatchBO c : getCatchBOs()) {
+            if (c.getCommonname().equals(noName)) {
                 return true;
             }
         }
@@ -562,10 +493,10 @@ public class FishstationBO implements ILatLonEvent {
 
     public int getCountBy(String species, Function<CatchBO, String> spcodeFunc) {
         int n = 0;
-        if (getCatchBOCollection() == null) {
+        if (getCatchBOs() == null) {
             return 0;
         }
-        for (CatchBO c : getCatchBOCollection()) {
+        for (CatchBO c : getCatchBOs()) {
             String spcode = spcodeFunc.apply(c);
             if (spcode == null) {
                 continue;
@@ -573,53 +504,53 @@ public class FishstationBO implements ILatLonEvent {
             if (!spcode.equals(species)) {
                 continue;
             }
-            if (c.getSampleBOCollection() == null) {
+            if (c.getSampleBOs() == null) {
                 continue;
             }
-            for (SampleBO s : c.getSampleBOCollection()) {
-                if (s.getCount() == null) {
+            for (SampleBO s : c.getSampleBOs()) {
+                if (s.getCatchcount() == null) {
                     continue;
                 }
-                n += s.getCount();
+                n += s.getCatchcount();
             }
         }
         return n;
     }
 
     public int getCount(String code) {
-        return getCountBy(code, c -> c.getNoname());
+        return getCountBy(code, c -> c.getCommonname());
     }
 
     public int getCountBySpecies(String code) {
-        return getCountBy(code, c -> c.getSpecies());
+        return getCountBy(code, c -> c.getCatchcategory());
     }
 
     public int getLengthSampleCount(String spec) {
         int n = 0;
-        if (getCatchBOCollection() == null) {
+        if (getCatchBOs() == null) {
             return 0;
         }
-        for (CatchBO c : getCatchBOCollection()) {
-            if (c.getNoname() == null && c.getSpecies() == null) {
+        for (CatchBO c : getCatchBOs()) {
+            if (c.getCommonname() == null && c.getCatchcategory() == null) {
                 continue;
             }
-            if (c.getNoname() != null) {
-                if (!c.getNoname().equalsIgnoreCase(spec)) { // SILDG03
+            if (c.getCommonname() != null) {
+                if (!c.getCommonname().equalsIgnoreCase(spec)) { // SILDG03
                     continue;
                 }
-            } else if (c.getSpecies() != null) {
-                if (!c.getSpecies().equalsIgnoreCase(spec)) { // 161722.G03
+            } else if (c.getCatchcategory()!= null) {
+                if (!c.getCatchcategory().equalsIgnoreCase(spec)) { // 161722.G03
                     continue;
                 }
             }
-            if (c.getSampleBOCollection() == null) {
+            if (c.getSampleBOs() == null) {
                 continue;
             }
-            for (SampleBO s : c.getSampleBOCollection()) {
-                if (s.getLengthSampleCount() == null) {
+            for (SampleBO s : c.getSampleBOs()) {
+                if (s.getLengthsamplecount() == null) {
                     continue;
                 }
-                n += s.getLengthSampleCount();
+                n += s.getLengthsamplecount();
             }
         }
         return n;
@@ -627,37 +558,15 @@ public class FishstationBO implements ILatLonEvent {
 
     @Override
     public Double getStopLat() {
-        return getLatitudeEnd();
+        return getLatitudeend();
     }
 
     @Override
     public Double getStopLon() {
-        return getLongitudeEnd();
+        return getLongitudeend();
     }
 
-    public String getCallSignal() {
-        return callSignal;
-    }
-
-    public void setCallSignal(String callSignal) {
-        this.callSignal = callSignal;
-    }
-
-    public String getPlatformName() {
-        return platformName;
-    }
-
-    public void setPlatformName(String platformName) {
-        this.platformName = platformName;
-    }
-
-    public String getMissionType() {
-        return missionType;
-    }
-
-    public void setMissionType(String missionType) {
-        this.missionType = missionType;
-    }
+    // Helpers
     public String getStratum() {
         return stratum;
     }
@@ -665,4 +574,51 @@ public class FishstationBO implements ILatLonEvent {
     public void setStratum(String stratum) {
         this.stratum = stratum;
     }
+
+    public Integer getYear() {
+        return getStationstartdate() != null ? IMRdate.getYear(getStationstartdate(), true) : null;
+    }
+
+    @Override
+    public String getKey() {
+        if (key != null) {
+            return key;
+        }
+        key = (cruise != null ? cruise : (year != null ? year : "")) + "/" + (serialnumber != null ? serialnumber : "");
+        return key;
+    }
+
+    @Override
+    public String toString() {
+        return getKey();
+    }
+
+    public List<CatchBO> getCatchBOs() {
+        return catchBOs;
+    }
+
+    public CatchBO addCatch() {
+        return addCatch(null);
+    }
+
+    public CatchBO addCatch(String species) {
+        CatchBO cbo = species == null ? new CatchBO(this) : new CatchBO(this, species);
+        getCatchBOs().add(cbo);
+        return cbo;
+    }
+
+    public SampleBO addSample(String species) {
+        CatchBO cb = null;
+        for (CatchBO cab : getCatchBOs()) {
+            if (cab.getCatchcategory().equals(species)) {
+                cb = cab;
+                break;
+            }
+        }
+        if (cb == null) {
+            cb = addCatch(species);
+        }
+        return cb.addSample();
+    }
+
 }

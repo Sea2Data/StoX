@@ -74,14 +74,14 @@ public class BioticDataStorage extends FileDataStorage {
                         "fishingdepthmin", "fishingdepthcount", "trawlopening", "trawldoorspread", "latitudeend", "longitudeend", "wirelength", "stopdate", "logstop", "flowcount",
                         "flowconst", "comment")));
                 for (FishstationBO fs : (List<FishstationBO>) (List) list) {
-                    ImrIO.write(wr, ExportUtil.carrageReturnLineFeed(ExportUtil.tabbed(fs.getMissionType(), fs.getCruise(), fs.getSerialNo(), fs.getCatchPlatform(), IMRdate.formatDate(fs.getStationStartDate()),
-                            fs.getStation(), fs.getStationType(), Conversion.formatDoubletoDecimalString(fs.getLatitudeStart(), 4),
-                            Conversion.formatDoubletoDecimalString(fs.getLongitudeStart(), 4), fs.getSystem(), fs.getArea(),
-                            fs.getLocation(), fs.getStratum(), fs.getBottomDepthStart(), fs.getBottomDepthStop(), fs.getGear(), fs.getGearCount(), fs.getVesselSpeed(),
-                            IMRdate.formatTime(fs.getStationStartTime()), fs.getLogStart(), IMRdate.formatTime(fs.getStationStopTime()),
-                            fs.getDistance(), fs.getGearCondition(), fs.getTrawlQuality(), fs.getFishingDepthMax(), fs.getFishingDepthMin(), fs.getFishingDepthCount(),
-                            fs.getVerticalTrawlOpening(), fs.getTrawlDoorSpread(), fs.getLatitudeEnd(), fs.getLongitudeEnd(), fs.getWireLength(),
-                            IMRdate.formatDate(fs.getStationStopDate()), fs.getLogStop(), null, null, fs.getComment())));
+                    ImrIO.write(wr, ExportUtil.carrageReturnLineFeed(ExportUtil.tabbed(fs.getMissiontype(), fs.getCruise(), fs.getSerialnumber(), fs.getCatchplatform(), IMRdate.formatDate(fs.getStationstartdate()),
+                            fs.getStation(), fs.getStationtype(), Conversion.formatDoubletoDecimalString(fs.getLatitudestart(), 4),
+                            Conversion.formatDoubletoDecimalString(fs.getLongitudestart(), 4), fs.getSystem(), fs.getArea(),
+                            fs.getLocation(), fs.getStratum(), fs.getBottomdepthstart(), fs.getBottomdepthstop(), fs.getGear(), fs.getGearcount(), fs.getVesselspeed(),
+                            IMRdate.formatTime(fs.getStationstarttime()), fs.getLogstart(), IMRdate.formatTime(fs.getStationstoptime()),
+                            fs.getDistance(), fs.getGearcondition(), fs.getSamplequality(), fs.getFishingdepthmax(), fs.getFishingdepthmin(), fs.getFishingdepthcount(),
+                            fs.getVerticaltrawlopening(), fs.getTrawldoorspread(), fs.getLatitudeend(), fs.getLongitudeend(), fs.getwirelength(),
+                            IMRdate.formatDate(fs.getStationstopdate()), fs.getLogstop(), null, null, fs.getComment())));
                 }
                 break;
 
@@ -90,13 +90,13 @@ public class BioticDataStorage extends FileDataStorage {
                         "conservation", "measurement", "weight", "count", "samplemeasurement", "lengthmeasurement", "lengthsampleweight",
                         "lengthsamplecount", "individualsamplecount", "parasite", "stomach", "genetics", "comment")));
                 for (FishstationBO fs : (List<FishstationBO>) (List) list) {
-                    for (CatchBO c : fs.getCatchBOCollection()) {
-                        for (SampleBO s : c.getSampleBOCollection()) {
+                    for (CatchBO c : fs.getCatchBOs()) {
+                        for (SampleBO s : c.getSampleBOs()) {
                 ImrIO.write(wr, ExportUtil.carrageReturnLineFeed(ExportUtil.tabbed(
-                                    /*IMRdate.getYear(fs.getStationStartDate(), true)*/fs.getCruise(), fs.getSerialNo(), fs.getCatchPlatform(),
-                                    s.getCatchBO().getSpeciesCatTableKey(), c.getSpecies(), c.getNoname(), c.getAphia(), s.getSampleNo(), s.getSampletype(), s.getGroup(), s.getConservationtype(), s.getMeasurementTypeTotal(),
-                                    s.getTotalWeight(), s.getTotalCount(), s.getMeasurementTypeSampled(), s.getLengthType(), s.getSampledWeight(),
-                                    s.getSampledCount(), s.getInumber(), s.getParasite(), s.getStomach(), s.getGenetics(), s.getComment())));
+                                    /*IMRdate.getYear(fs.getStationstartdate(), true)*/fs.getCruise(), fs.getSerialnumber(), fs.getCatchplatform(),
+                                    s.getCatchBO().getSpeciesCatTableKey(), c.getCatchcategory(), c.getCommonname(), c.getAphia(), s.getCatchpartnumber(), s.getSampletype(), s.getGroup(), s.getConservation(), s.getCatchproducttype(),
+                                    s.getCatchweight(), s.getCatchcount(), s.getSampleproducttype(), s.getLengthmeasurement(), s.getlengthsampleweight(),
+                                    s.getLengthsamplecount(), s.getSpecimensamplecount(), s.getParasite(), s.getStomach(), s.getGenetics(), s.getCatchcomment())));
                         }
                     }
                 }
@@ -104,9 +104,9 @@ public class BioticDataStorage extends FileDataStorage {
             case 3:
                 ImrIO.write(wr, ExportUtil.carrageReturnLineFeed(ExportUtil.tabbed(ExportUtil.tabbed(Functions.INDIVIDUALS))));
                 for (FishstationBO fs : (List<FishstationBO>) (List) list) {
-                    for (CatchBO c : fs.getCatchBOCollection()) {
-                        for (SampleBO s : c.getSampleBOCollection()) {
-                            asTable(null, s.getIndividualBOCollection(), wr);
+                    for (CatchBO c : fs.getCatchBOs()) {
+                        for (SampleBO s : c.getSampleBOs()) {
+                            asTable(null, s.getIndividualBOs(), wr);
                         }
                     }
                 }
@@ -136,7 +136,7 @@ public class BioticDataStorage extends FileDataStorage {
                 line = line != null ? ExportUtil.tabbed(line, c) : c == null ? "-" : c.toString();
             }
             // Add comment
-            //line = line != null ? ExportUtil.tabbed(line, i.getComment()) : line;
+            //line = line != null ? ExportUtil.tabbed(line, i.getCatchcomment()) : line;
 
             line = ExportUtil.carrageReturnLineFeed(line);
             ImrIO.write(wr, line);

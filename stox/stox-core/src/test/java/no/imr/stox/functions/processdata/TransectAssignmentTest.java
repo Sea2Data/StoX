@@ -64,16 +64,14 @@ public class TransectAssignmentTest {
         List<FishstationBO> fs = new ArrayList<FishstationBO>();
         FishstationBO f = new FishstationBO();
         fs.add(f);
-        f.setLongitudeStart(1.1d);
-        f.setLatitudeStart(0.9d);
-        f.setYear(2013);
-        f.setSerialNo(1000);
+        f.setLongitudestart(1.1d);
+        f.setLatitudestart(0.9d);
+        f.setSerialnumber(1000);
         f = new FishstationBO();
         fs.add(f);
-        f.setLongitudeStart(2.9d);
-        f.setLatitudeStart(0.9d);
-        f.setYear(2013);
-        f.setSerialNo(1000);
+        f.setLongitudestart(2.9d);
+        f.setLatitudestart(0.9d);
+        f.setSerialnumber(1000);
         return fs;
     }
 

@@ -61,7 +61,7 @@ public class CorrectForInnsufficientSampling extends AbstractFunction {
                             Double length = StoXMath.getLength(Conversion.safeStringtoDoubleNULL(lenGrp), lenInterval);
                             i.setLength(length);
                             // We need to estimate the biomass for this representation with linear regression from all length groups within estimation layer:
-                            i.setWeight(getEstimatedWeight(indData.getData(), species, estLayer, length));
+                            i.setIndividualweight(getEstimatedWeight(indData.getData(), species, estLayer, length));
                             indList.add(i);
                         }
                         result.getData().setGroupRowColCellValue(species, stratum, estLayer, lenGrp, indList);

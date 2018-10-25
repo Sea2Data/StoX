@@ -1,7 +1,10 @@
 package no.imr.stox.functions.biotic;
 
 import Biotic.Biotic3.Biotic3Handler;
+import BioticTypes.v3.AgedeterminationType;
+import BioticTypes.v3.CatchsampleType;
 import BioticTypes.v3.FishstationType;
+import BioticTypes.v3.IndividualType;
 import BioticTypes.v3.MissionType;
 import BioticTypes.v3.MissionsType;
 import java.io.File;
@@ -17,7 +20,11 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
+import no.imr.sea2data.biotic.bo.AgeDeterminationBO;
+import no.imr.sea2data.biotic.bo.CatchBO;
 import no.imr.sea2data.biotic.bo.FishstationBO;
+import no.imr.sea2data.biotic.bo.IndividualBO;
+import no.imr.sea2data.biotic.bo.SampleBO;
 import no.imr.stox.functions.utils.Functions;
 import no.imr.stox.functions.AbstractFunction;
 import no.imr.sea2data.imrbase.exceptions.XMLReaderException;
@@ -74,52 +81,136 @@ public class ReadBioticXML extends AbstractFunction {
         }
     }
 
-
     private void translateBioticV3ToBO(List<MissionType> mission, List<FishstationBO> stations) {
         for (MissionType mt : mission) {
             for (FishstationType fs : mt.getFishstation()) {
                 FishstationBO fbo = new FishstationBO();
                 stations.add(fbo);
+
                 fbo.setArea(Conversion.safeStringtoIntegerNULL(fs.getArea()));
-                fbo.setBottomDepthStart(fs.getBottomdepthstart());
-                fbo.setBottomDepthStop(fs.getBottomdepthstop());
-                fbo.setCallSignal(mt.getCallsignal());
-                fbo.setComment(fs.getStationcomment());
+                fbo.setBottomdepthstart(fs.getBottomdepthstart());
+                fbo.setBottomdepthstop(fs.getBottomdepthstop());
+                fbo.setCallsignal(mt.getCallsignal());
+                fbo.setCatchplatform(fs.getCatchplatform());
                 fbo.setCruise(mt.getCruise());
                 fbo.setDirection(fs.getDirection());
                 fbo.setDistance(fs.getDistance());
-                fbo.setFishingDepthCount(fs.getFishingdepthcount());
-                fbo.setFishingDepthMax(fs.getFishingdepthmax());
-                fbo.setFishingDepthMin(fs.getFishingdepthmin());
+                fbo.setFishingdepthcount(fs.getFishingdepthcount());
+                fbo.setFishingdepthmax(fs.getFishingdepthmax());
+                fbo.setFishingdepthmin(fs.getFishingdepthmin());
                 fbo.setGear(fs.getGear());
-                fbo.setGearCondition(fs.getGearcondition());
-                fbo.setGearCount(fs.getGearcount());
-                fbo.setGearNo(fs.getGearno());
-                fbo.setLatitudeEnd(fs.getLatitudeend());
-                fbo.setLatitudeStart(fs.getLatitudestart());
+                fbo.setGearcondition(fs.getGearcondition());
+                fbo.setGearcount(fs.getGearcount());
+                fbo.setGearno(fs.getGearno());
+                fbo.setLatitudeend(fs.getLatitudeend());
+                fbo.setLatitudestart(fs.getLatitudestart());
                 fbo.setLocation(fs.getLocation());
-                fbo.setLogStart(fs.getLogstart());
-                fbo.setLogStop(fs.getLogstop());
-                fbo.setLongitudeEnd(fs.getLongitudeend());
-                fbo.setLongitudeStart(fs.getLongitudestart());
-                fbo.setMissionType(mt.getMissiontype());
+                fbo.setLogstart(fs.getLogstart());
+                fbo.setLogstop(fs.getLogstop());
+                fbo.setLongitudestart(fs.getLongitudestart());
+                fbo.setLongitudeend(fs.getLongitudeend());
+                fbo.setMissiontype(mt.getMissiontype());
                 fbo.setNation(fs.getNation());
-                fbo.setCatchPlatform(fs.getCatchplatform());
-                fbo.setPlatformName(mt.getPlatformname());
-                fbo.setSerialNo(fs.getSerialnumber());
+                fbo.setPlatformname(mt.getPlatformname());
+                fbo.setSamplequality(fs.getSamplequality());
+                fbo.setSerialnumber(fs.getSerialnumber());
                 fbo.setSoaktime(fs.getSoaktime());
                 fbo.setStation(fs.getStation());
-                fbo.setStationStartDate(fs.getStationstartdate() == null ? null : Date.from(fs.getStationstartdate().atStartOfDay().toInstant(ZoneOffset.UTC)));
-                fbo.setStationStartTime(fs.getStationstarttime() == null ? null : Date.from(fs.getStationstarttime().atDate(LocalDate.MAX).toInstant(ZoneOffset.UTC)));
-                fbo.setStationStopDate(fs.getStationstopdate() == null ? null : Date.from(fs.getStationstopdate().atStartOfDay().toInstant(ZoneOffset.UTC)));
-                fbo.setStationStopTime(fs.getStationstoptime() == null ? null : Date.from(fs.getStationstoptime().atDate(LocalDate.MAX).toInstant(ZoneOffset.UTC)));
-                fbo.setStationType(fs.getStationtype());
+                fbo.setStationcomment(fs.getStationcomment());
+                fbo.setStationstartdate(fs.getStationstartdate() == null ? null : Date.from(fs.getStationstartdate().atStartOfDay().toInstant(ZoneOffset.UTC)));
+                fbo.setStationstarttime(fs.getStationstarttime() == null ? null : Date.from(fs.getStationstarttime().atDate(LocalDate.ofYearDay(1900, 1)).toInstant(ZoneOffset.UTC)));
+                fbo.setStationstopdate(fs.getStationstopdate() == null ? null : Date.from(fs.getStationstopdate().atStartOfDay().toInstant(ZoneOffset.UTC)));
+                fbo.setStationstoptime(fs.getStationstoptime() == null ? null : Date.from(fs.getStationstoptime().atDate(LocalDate.ofYearDay(1900, 1)).toInstant(ZoneOffset.UTC)));
+                fbo.setStationtype(fs.getStationtype());
                 fbo.setSystem(Conversion.safeStringtoIntegerNULL(fs.getSystem()));
-                fbo.setTrawlDoorSpread(fs.getTrawldoorspread());
+                fbo.setTrawldoorspread(fs.getTrawldoorspread());
+                fbo.setTrawldoorspreadsd(fs.getTrawldoorspreadsd());
+                fbo.setTripno(fs.getTripno());
                 fbo.setVerticalTrawlOpening(fs.getVerticaltrawlopening());
-                fbo.setVesselSpeed(fs.getVesselspeed());
+                fbo.setVerticaltrawlopeningsd(fs.getVerticaltrawlopeningsd());
+                fbo.setVesselspeed(fs.getVesselspeed());
+                fbo.setWingspread(fs.getWingspread());
+                fbo.setWingspreadsd(fs.getWingspreadsd());
                 fbo.setWireLength(fs.getWirelength() != null ? fs.getWirelength().intValue() : null);
-                fbo.setGearCount(fs.getGearcount());
+                for (CatchsampleType cs : fs.getCatchsample()) {
+                    SampleBO sbo = fbo.addSample(cs.getCatchcategory());
+                    sbo.getCatchBO().setAphia(cs.getAphia());
+                    sbo.getCatchBO().setCommonname(cs.getCommonname());
+                    sbo.setAgingstructure(cs.getAgingstructure());
+                    sbo.setCatchcomment(cs.getCatchcomment());
+                    sbo.setCatchcount(cs.getCatchcount());
+                    sbo.setCatchpartnumber(cs.getCatchpartnumber());
+                    sbo.setCatchproducttype(cs.getCatchproducttype());
+                    sbo.setCatchvolume(cs.getCatchvolume());
+                    sbo.setCatchweight(cs.getCatchweight());
+                    sbo.setConservation(cs.getConservation());
+                    sbo.setForeignobject(cs.getForeignobject());
+                    sbo.setGroup(cs.getGroup());
+                    sbo.setLengthmeasurement(cs.getLengthmeasurement());
+                    sbo.setLengthsamplecount(cs.getLengthsamplecount());
+                    sbo.setLengthsamplevolume(cs.getLengthsamplevolume());
+                    sbo.setLengthsampleweight(cs.getLengthsampleweight());
+                    sbo.setParasite(cs.getParasite());
+                    sbo.setRaisingfactor(cs.getRaisingfactor());
+                    sbo.setSampletype(Conversion.safeStringtoIntegerNULL(cs.getSampletype()));
+                    sbo.setSampleproducttype(cs.getSampleproducttype());
+                    sbo.setSpecimensamplecount(cs.getSpecimensamplecount());
+                    sbo.setStomach(cs.getStomach());
+                    sbo.setTissuesample(cs.getTissuesample());
+                    for (IndividualType i : cs.getIndividual()) {
+                        IndividualBO ibo = sbo.addIndividual();
+                        ibo.setBlackspot(i.getBlackspot());
+                        ibo.setDigestion(i.getDigestion());
+                        ibo.setEggstage(i.getEggstage());
+                        ibo.setFat(i.getFat());
+                        ibo.setFungusheart(i.getFungusheart());
+                        ibo.setFungusouter(i.getFungusouter());
+                        ibo.setFungusspores(i.getFungusspores());
+                        ibo.setGillworms(i.getGillworms());
+                        ibo.setGonadweight(i.getGonadweight());
+                        ibo.setIndividualcomment(i.getIndividualcomment());
+                        ibo.setIndividualproducttype(i.getIndividualproducttype());
+                        ibo.setIndividualvolume(i.getIndividualvolume());
+                        ibo.setIndividualweight(i.getIndividualweight());
+                        ibo.setLength(i.getLength());
+                        ibo.setLengthresolution(i.getLengthresolution());
+                        ibo.setLiver(i.getLiver());
+                        ibo.setLiverparasite(i.getLiverparasite());
+                        ibo.setLiverweight(i.getLiverweight());
+                        ibo.setMaturationstage(i.getMaturationstage());
+                        ibo.setSex(i.getSex());
+                        ibo.setSpecialstage(i.getSpecialstage());
+                        ibo.setSpecimenid(i.getSpecimenid());
+                        ibo.setStomachfillfield(i.getStomachfillfield());
+                        ibo.setStomachfilllab(i.getStomachfilllab());
+                        ibo.setSwollengills(i.getSwollengills());
+                        ibo.setVertebraecount(i.getVertebraecount());
+                        for (AgedeterminationType a : i.getAgedetermination()) {
+                            AgeDeterminationBO abo = ibo.addAgeDetermination();
+                            abo.setAge(a.getAge());
+                            abo.setAgedeterminationid(a.getAgedeterminationid());
+                            abo.setCalibration(a.getCalibration());
+                            abo.setCoastalannuli(a.getCoastalannuli());
+                            abo.setGrowthzonestotal(a.getGrowthzonestotal());
+                            abo.setGrowthzone1(a.getGrowthzone1());
+                            abo.setGrowthzone2(a.getGrowthzone2());
+                            abo.setGrowthzone3(a.getGrowthzone3());
+                            abo.setGrowthzone4(a.getGrowthzone4());
+                            abo.setGrowthzone5(a.getGrowthzone5());
+                            abo.setGrowthzone6(a.getGrowthzone6());
+                            abo.setGrowthzone7(a.getGrowthzone7());
+                            abo.setGrowthzone8(a.getGrowthzone8());
+                            abo.setGrowthzone9(a.getGrowthzone9());
+                            abo.setOceanicannuli(a.getOceanicannuli());
+                            abo.setOtolithedge(a.getOtolithedge());
+                            abo.setOtolithcentre(a.getOtolithcentre());
+                            abo.setOtolithtype(a.getOtolithtype());
+                            abo.setReadability(a.getReadability());
+                            abo.setSpawningage(a.getSpawningage());
+                            abo.setSpawningzones(a.getSpawningzones());
+                        }
+                    }
+                }
             }
         }
     }

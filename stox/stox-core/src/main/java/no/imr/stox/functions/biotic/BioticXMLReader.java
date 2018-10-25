@@ -1,11 +1,9 @@
 package no.imr.stox.functions.biotic;
 
 import java.util.List;
-import java.util.UUID;
 import no.imr.sea2data.biotic.bo.AgeDeterminationBO;
 import no.imr.sea2data.biotic.bo.FishstationBO;
 import no.imr.sea2data.biotic.bo.IndividualBO;
-import no.imr.sea2data.biotic.bo.PreyBO;
 import no.imr.sea2data.biotic.bo.SampleBO;
 import no.imr.sea2data.imrbase.math.Calc;
 import no.imr.sea2data.imrbase.util.Conversion;
@@ -56,9 +54,9 @@ public class BioticXMLReader extends XMLReader {
             createIndividual(object, key, value);
         } else if (object instanceof AgeDeterminationBO) {
             createAgeDetermination(object, key, value);
-        } else if (object instanceof PreyBO) {
+        } /*else if (object instanceof PreyBO) {
             createPrey(object, key, value);
-        }
+        }*/
     }
 
     /*String getSpecies(String taxa) {
@@ -101,19 +99,18 @@ public class BioticXMLReader extends XMLReader {
         } else if (current instanceof List && elmName.equals("fishstation")) {
             FishstationBO station = new FishstationBO();
             station.setCruise(currentCruise);
-            station.setMissionType(currentMissionType);
-            station.setCatchPlatform(currentPlatform);
-            station.setPlatformName(currentPlatformName);
+            station.setMissiontype(currentMissionType);
+            station.setCatchplatform(currentPlatform);
+            station.setPlatformname(currentPlatformName);
             stations.add(station);
             result = station;
         } else if (current instanceof FishstationBO && elmName.equals("catchsample")) {
             FishstationBO station = (FishstationBO) current;
-            SampleBO sample = new SampleBO();
             String taxa = getCurrentAttributeValue("species");
             if (taxa == null) {
                 taxa = "ukjent";
             }
-            station.addSample(taxa, sample);
+            SampleBO sample = station.addSample(taxa);
             String noName = getCurrentAttributeValue("noname");
             if (noName == null || noName.isEmpty()) {
                 // Back compability when noname is not given in xml file.
@@ -122,26 +119,22 @@ public class BioticXMLReader extends XMLReader {
                 // Rid of single quite since in stock SILD'G03 Jexl is using it as string delimiter
                 noName = noName.replace("'", "")/*.toUpperCase()*/;
             }
-            sample.getCatchBO().setNoname(noName);
+            sample.getCatchBO().setCommonname(noName);
             sample.getCatchBO().setAphia(getCurrentAttributeValue("aphia"));
             result = sample;
         } else if (current instanceof SampleBO && elmName.equals("individual")) {
             SampleBO sample = (SampleBO) current;
-            IndividualBO indBO = new IndividualBO();
-            sample.getIndividualBOCollection().add(indBO);
-            indBO.setSample(sample);
+            IndividualBO indBO = sample.addIndividual();
             result = indBO;
-        } else if (current instanceof SampleBO && elmName.equals("prey")) {
+        } /*else if (current instanceof SampleBO && elmName.equals("prey")) {
             SampleBO sample = (SampleBO) current;
             PreyBO prey = new PreyBO();
             sample.addPrey(Conversion.safeStringtoIntegerNULL(getCurrentAttributeValue("fishno")), prey);
             prey.setSample(sample);
             result = prey;
-        } else if (current instanceof IndividualBO && elmName.equals("agedetermination")) {
+        }*/ else if (current instanceof IndividualBO && elmName.equals("agedetermination")) {
             IndividualBO ind = (IndividualBO) current;
-            AgeDeterminationBO ageBO = new AgeDeterminationBO();
-            ind.getAgeDeterminationBOCollection().add(ageBO);
-            ageBO.setIndividual(ind);
+            AgeDeterminationBO ageBO = ind.addAgeDetermination();
             result = ageBO;
         }
         return result;
@@ -159,26 +152,25 @@ public class BioticXMLReader extends XMLReader {
         if (key.equals("nation")) {
             bo.setNation(value);
         } else if (key.equals("platform")) {
-            bo.setCatchPlatform(value);
+            bo.setCatchplatform(value);
         } else if (key.equals("startdate")) {
-            bo.setStationStartDate(IMRdate.strToDate(value));
-            bo.setYear(IMRdate.getYear(bo.getStationStartDate(), true));
+            bo.setStationstartdate(IMRdate.strToDate(value));
         } else if (key.equals("stopdate")) {
-            bo.setStationStopDate(IMRdate.strToDate(value));
+            bo.setStationstopdate(IMRdate.strToDate(value));
         } else if (key.equals("station")) {
             bo.setStation(Conversion.safeStringtoIntegerNULL(value));
         } else if (key.equals("serialno") || key.equals("catchnumber")) {
-            bo.setSerialNo(Conversion.safeStringtoIntegerNULL(value));
+            bo.setSerialnumber(Conversion.safeStringtoIntegerNULL(value));
         } else if (key.equals("fishstationtype") || key.equals("stationtype")) {
-            bo.setStationType(value);
+            bo.setStationtype(value);
         } else if (key.equals("latitudestart")) {
-            bo.setLatitudeStart(Conversion.safeStringtoDoubleNULL(value));
+            bo.setLatitudestart(Conversion.safeStringtoDoubleNULL(value));
         } else if (key.equals("longitudestart")) {
-            bo.setLongitudeStart(Conversion.safeStringtoDoubleNULL(value));
+            bo.setLongitudestart(Conversion.safeStringtoDoubleNULL(value));
         } else if (key.equals("latitudeend")) {
-            bo.setLatitudeEnd(Conversion.safeStringtoDoubleNULL(value));
+            bo.setLatitudeend(Conversion.safeStringtoDoubleNULL(value));
         } else if (key.equals("longitudeend")) {
-            bo.setLongitudeEnd(Conversion.safeStringtoDoubleNULL(value));
+            bo.setLongitudeend(Conversion.safeStringtoDoubleNULL(value));
         } else if (key.equals("system")) {
             bo.setSystem(Conversion.safeStringtoIntegerNULL(value));
         } else if (key.equals("area")) {
@@ -186,53 +178,53 @@ public class BioticXMLReader extends XMLReader {
         } else if (key.equals("location")) {
             bo.setLocation(value);
         } else if (key.equals("bottomdepthstart")) {
-            bo.setBottomDepthStart(Conversion.safeStringtoDoubleNULL(value));
+            bo.setBottomdepthstart(Conversion.safeStringtoDoubleNULL(value));
         } else if (key.equals("bottomdepthstop")) {
-            bo.setBottomDepthStop(Conversion.safeStringtoDoubleNULL(value));
+            bo.setBottomdepthstop(Conversion.safeStringtoDoubleNULL(value));
         } else if (key.equals("equipmentnumber") || key.equals("gearno")) {
-            bo.setGearNo(Conversion.safeStringtoIntegerNULL(value));
+            bo.setGearno(Conversion.safeStringtoIntegerNULL(value));
         } else if (key.equals("equipment") || key.equals("gear")) {
             bo.setGear(value);
         } else if (key.equals("equipmentcount") || key.equals("gearcount")) {
-            bo.setGearCount(Conversion.safeStringtoIntegerNULL(value));
+            bo.setGearcount(Conversion.safeStringtoIntegerNULL(value));
         } else if (key.equals("directiongps") || key.equals("direction")) {
             bo.setDirection(Conversion.safeStringtoDoubleNULL(value));
         } else if (key.equals("speedequipment") || key.equals("gearspeed")) {
-            bo.setVesselSpeed(Conversion.safeStringtoDoubleNULL(value));
+            bo.setVesselspeed(Conversion.safeStringtoDoubleNULL(value));
         } else if (key.equals("starttime")) {
-            bo.setStationStartTime(IMRdate.strToTime(value));
+            bo.setStationstarttime(IMRdate.strToTime(value));
         } else if (key.equals("logstart") || key.equals("startlog")) {
-            bo.setLogStart(Conversion.safeStringtoDoubleNULL(value));
+            bo.setLogstart(Conversion.safeStringtoDoubleNULL(value));
         } else if (key.equals("stoptime")) {
-            bo.setStationStopTime(IMRdate.strToTime(value));
+            bo.setStationstoptime(IMRdate.strToTime(value));
         } else if (key.equals("distance")) {
             bo.setDistance(Conversion.safeStringtoDoubleNULL(value));
         } else if (key.equals("gearcondition")) {
-            bo.setGearCondition(value);
+            bo.setGearcondition(value);
         } else if (key.equals("trawlquality")) {
-            bo.setTrawlQuality(value);
+            bo.setSamplequality(value);
         } else if (key.equals("fishingdepthmax")) {
-            bo.setFishingDepthMax(Conversion.safeStringtoDoubleNULL(value));
+            bo.setFishingdepthmax(Conversion.safeStringtoDoubleNULL(value));
         } else if (key.equals("fishingdepthmin")) {
-            bo.setFishingDepthMin(Conversion.safeStringtoDoubleNULL(value));
+            bo.setFishingdepthmin(Conversion.safeStringtoDoubleNULL(value));
         } else if (key.equals("fishingdepthcount")) {
-            bo.setFishingDepthCount(Conversion.safeStringtoIntegerNULL(value));
+            bo.setFishingdepthcount(Conversion.safeStringtoIntegerNULL(value));
         } else if (key.equals("trawlopening")) {
             bo.setVerticalTrawlOpening(Conversion.safeStringtoDoubleNULL(value));
         } else if (key.equals("trawlstdopening") || key.equals("trawlopeningsd")) {
-            bo.setTrawlStdOpening(Conversion.safeStringtoDoubleNULL(value));
+            bo.setVerticaltrawlopeningsd(Conversion.safeStringtoDoubleNULL(value));
         } else if (key.equals("trawldoorspread") || key.equals("doorspread")) {
-            bo.setTrawlDoorSpread(Conversion.safeStringtoDoubleNULL(value));
+            bo.setTrawldoorspread(Conversion.safeStringtoDoubleNULL(value));
         } else if (key.equals("doorspreadsd")) {
-            bo.setTrawlStdDoorSpread(Conversion.safeStringtoDoubleNULL(value));
+            bo.setTrawldoorspreadsd(Conversion.safeStringtoDoubleNULL(value));
         } else if (key.equals("wirelength")) {
             bo.setWireLength(Conversion.safeStringtoIntegerNULL(value));
         } else if (key.equals("soaktime")) {
             bo.setSoaktime(Conversion.safeStringtoDoubleNULL(value));
         } else if (key.equals("tripno")) {
-            bo.setTripNo(Conversion.safeStringtoIntegerNULL(value));
+            bo.setTripno(Conversion.safeStringtoIntegerNULL(value));
         } else if (key.equals("comment")) {
-            bo.setComment(value);
+            bo.setStationcomment(value);
         }
     }
 
@@ -246,47 +238,47 @@ public class BioticXMLReader extends XMLReader {
     private void createSample(final Object object, final String key, final String value) {
         SampleBO bo = (SampleBO) object;
         if (key.equals("samplenumber")) {
-            bo.setSampleNo(Conversion.safeStringtoIntegerNULL(value));
+            bo.setCatchpartnumber(Conversion.safeStringtoIntegerNULL(value));
         } else if (key.equals("sampletype")) {
             bo.setSampletype(Conversion.safeStringtoIntegerNULL(value));
         } else if (key.equals("group")) {
             bo.setGroup(value);
         } else if (key.equals("conservation")) {
-            bo.setConservationtype(value);
+            bo.setConservation(value);
         } else if (key.equals("measurement") || key.equals("producttype")) {
-            bo.setMeasurementTypeTotal(value);
+            bo.setCatchproducttype(value);
         } else if (key.equals("weight")) {
-            bo.setTotalWeight(Conversion.safeStringtoDoubleNULL(value));
+            bo.setCatchweight(Conversion.safeStringtoDoubleNULL(value));
         } else if (key.equals("volume")) {
-            bo.setTotalVolume(Conversion.safeStringtoDoubleNULL(value));
+            bo.setCatchvolume(Conversion.safeStringtoDoubleNULL(value));
         } else if (key.equals("count")) {
-            bo.setTotalCount(Conversion.safeStringtoIntegerNULL(value));
+            bo.setCatchcount(Conversion.safeStringtoIntegerNULL(value));
         } else if (key.equals("samplemeasurement") || key.equals("sampleproducttype")) {
-            bo.setMeasurementTypeSampled(value);
+            bo.setSampleproducttype(value);
         } else if (key.equals("lengthmeasurement")) {
-            bo.setLengthType(value);
+            bo.setLengthmeasurement(value);
         } else if (key.equals("lengthsampleweight")) {
-            bo.setSampledWeight(Conversion.safeStringtoDoubleNULL(value));
+            bo.setLengthsampleweight(Conversion.safeStringtoDoubleNULL(value));
         } else if (key.equals("lengthsamplevolume")) {
-            bo.setSampledVolume(Conversion.safeStringtoDoubleNULL(value));
+            bo.setLengthsamplevolume(Conversion.safeStringtoDoubleNULL(value));
         } else if (key.equals("lengthsamplecount")) {
-            bo.setSampledCount(Conversion.safeStringtoIntegerNULL(value));
+            bo.setLengthsamplecount(Conversion.safeStringtoIntegerNULL(value));
         } else if (key.equals("individualsamplecount") || key.equals("specimensamplecount")) {
-            bo.setInumber(Conversion.safeStringtoIntegerNULL(value));
+            bo.setSpecimensamplecount(Conversion.safeStringtoIntegerNULL(value));
         } else if (key.equals("raisingfactor")) {
-            bo.setRaisingFactor(Conversion.safeStringtoDoubleNULL(value));
+            bo.setRaisingfactor(Conversion.safeStringtoDoubleNULL(value));
         } else if (key.equals("agesample") || key.equals("agingstructure")) {
-            bo.setFrozenSample(value);
+            bo.setAgingstructure(value);
         } else if (key.equals("parasite")) {
             bo.setParasite(value);
         } else if (key.equals("stomach")) {
             bo.setStomach(value);
         } else if (key.equals("genetics")) {
-            bo.setGenetics(value);
+            bo.setTissuesample(value);
         } else if (key.equals("nonbiological") || key.equals("foreignobject")) {
-            bo.setNonBiological(value);
+            bo.setForeignobject(value);
         } else if (key.equals("comment")) {
-            bo.setComment(value);
+            bo.setCatchcomment(value);
         }
     }
 
@@ -300,15 +292,15 @@ public class BioticXMLReader extends XMLReader {
     private void createIndividual(final Object object, final String key, final String value) {
         IndividualBO bo = (IndividualBO) object;
         if (key.equals("no") || key.equals("specimenno")) {
-            bo.setIndividualNo(Conversion.safeStringtoIntegerNULL(value));
+            bo.setSpecimenid(Conversion.safeStringtoIntegerNULL(value));
         } else if (key.equals("weightmethod") || key.equals("producttype")) {
-            bo.setProductType(value);
+            bo.setIndividualproducttype(value);
         } else if (key.equals("weight")) {
-            bo.setWeight(Calc.roundTo(StoXMath.kgToGrams(Conversion.safeStringtoDoubleNULL(value)), 8));
+            bo.setIndividualweight(Calc.roundTo(StoXMath.kgToGrams(Conversion.safeStringtoDoubleNULL(value)), 8));
         } else if (key.equals("volume")) {
-            bo.setVolume(Conversion.safeStringtoDoubleNULL(value));
+            bo.setIndividualvolume(Conversion.safeStringtoDoubleNULL(value));
         } else if (key.equals("lengthunit")) {
-            bo.setLengthType(value);
+            bo.setLengthresolution(value);
         } else if (key.equals("length")) {
             // In StoX read length as cm.
             bo.setLength(Calc.roundTo(StoXMath.mToCM(Conversion.safeStringtoDoubleNULL(value)), 8));
@@ -317,45 +309,45 @@ public class BioticXMLReader extends XMLReader {
         } else if (key.equals("sex")) {
             bo.setSex(value);
         } else if (key.equals("stage")) {
-            bo.setStage(value);
+            bo.setMaturationstage(value);
         } else if (key.equals("specialstage")) {
-            bo.setSpecialStage(value);
+            bo.setSpecialstage(value);
         } else if (key.equals("eggstage")) {
-            bo.setEggStage(value);
+            bo.setEggstage(value);
         } else if (key.equals("stomachfillfield")) {
-            bo.setStomachFill(value);
+            bo.setStomachfillfield(value);
         } else if (key.equals("stomachfilllab")) {
-            bo.setStomachFill2(value);
+            bo.setStomachfilllab(value);
         } else if (key.equals("digestdeg") || key.equals("digestion")) {
-            bo.setDigestDeg(value);
+            bo.setDigestion(value);
         } else if (key.equals("liver")) {
             bo.setLiver(value);
         } else if (key.equals("liverparasite")) {
-            bo.setLiverParasite(value);
+            bo.setLiverparasite(value);
         } else if (key.equals("gillworms")) {
-            bo.setGillWorms(value);
+            bo.setGillworms(value);
         } else if (key.equals("swollengills")) {
-            bo.setSwollenGills(value);
+            bo.setSwollengills(value);
         } else if (key.equals("fungusheart")) {
-            bo.setFungusHeart(value);
+            bo.setFungusheart(value);
         } else if (key.equals("fungusspores")) {
-            bo.setFungusSpores(value);
+            bo.setFungusspores(value);
         } else if (key.equals("fungusouter")) {
-            bo.setFungusOuter(value);
+            bo.setFungusouter(value);
         } else if (key.equals("blackspot")) {
-            bo.setBlackSpot(value);
+            bo.setBlackspot(value);
         } else if (key.equals("vertebrae")) {
-            bo.setVertebrae(Conversion.safeStringtoIntegerNULL(value));
+            bo.setVertebraecount(Conversion.safeStringtoIntegerNULL(value));
         } else if (key.equals("gonadweight")) {
-            bo.setGonadWeight(Conversion.safeStringtoDoubleNULL(value));
+            bo.setGonadweight(Conversion.safeStringtoDoubleNULL(value));
         } else if (key.equals("liverweight")) {
-            bo.setLiverWeight(Conversion.safeStringtoDoubleNULL(value));
+            bo.setLiverweight(Conversion.safeStringtoDoubleNULL(value));
         } else if (key.equals("stomachweight")) {
-            bo.setStomachWeight(Conversion.safeStringtoDoubleNULL(value));
+            bo.setStomachweight(Conversion.safeStringtoDoubleNULL(value));
         } else if (key.equals("developmentalstage")) {
-            bo.setDevelopmentalStage(value);
+            //bo.setDevelopmentalStage(value);
         } else if (key.equals("comment")) {
-            bo.setComment(value);
+            bo.setIndividualcomment(value);
         }
     }
 
@@ -369,70 +361,48 @@ public class BioticXMLReader extends XMLReader {
     private void createAgeDetermination(final Object object, final String key, final String value) {
         AgeDeterminationBO bo = (AgeDeterminationBO) object;
         if (key.equals("no")) {
-            bo.setNo(Conversion.safeStringtoIntegerNULL(value));
+            bo.setAgedeterminationid(Conversion.safeStringtoIntegerNULL(value));
         } else if (key.equals("age")) {
             bo.setAge(Conversion.safeStringtoIntegerNULL(value));
         } else if (key.equals("spawningage")) {
-            bo.setSpawningAge(Conversion.safeStringtoIntegerNULL(value));
+            bo.setSpawningage(Conversion.safeStringtoIntegerNULL(value));
         } else if (key.equals("spawningzones")) {
-            bo.setSpawningZones(Conversion.safeStringtoIntegerNULL(value));
+            bo.setSpawningzones(Conversion.safeStringtoIntegerNULL(value));
         } else if (key.equals("readability")) {
             bo.setReadability(value);
         } else if (key.equals("otolithtype")) {
-            bo.setType(value);
+            bo.setOtolithtype(value);
         } else if (key.equals("otolithedge")) {
-            bo.setOtolithEdge(value);
+            bo.setOtolithedge(value);
         } else if (key.equals("otolithcentre")) {
-            bo.setOtolithCentre(value);
+            bo.setOtolithcentre(value);
         } else if (key.equals("calibration")) {
             bo.setCalibration(Conversion.safeStringtoIntegerNULL(value));
         } else if (key.equals("growthzone1")) {
-            bo.setGrowthZone1(Conversion.safeStringtoIntegerNULL(value));
+            bo.setGrowthzone1(Conversion.safeStringtoIntegerNULL(value));
         } else if (key.equals("growthzone2")) {
-            bo.setGrowthZone2(Conversion.safeStringtoIntegerNULL(value));
+            bo.setGrowthzone2(Conversion.safeStringtoIntegerNULL(value));
         } else if (key.equals("growthzone3")) {
-            bo.setGrowthZone3(Conversion.safeStringtoIntegerNULL(value));
+            bo.setGrowthzone3(Conversion.safeStringtoIntegerNULL(value));
         } else if (key.equals("growthzone4")) {
-            bo.setGrowthZone4(Conversion.safeStringtoIntegerNULL(value));
+            bo.setGrowthzone4(Conversion.safeStringtoIntegerNULL(value));
         } else if (key.equals("growthzone5")) {
-            bo.setGrowthZone5(Conversion.safeStringtoIntegerNULL(value));
+            bo.setGrowthzone5(Conversion.safeStringtoIntegerNULL(value));
         } else if (key.equals("growthzone6")) {
-            bo.setGrowthZone6(Conversion.safeStringtoIntegerNULL(value));
+            bo.setGrowthzone6(Conversion.safeStringtoIntegerNULL(value));
         } else if (key.equals("growthzone7")) {
-            bo.setGrowthZone7(Conversion.safeStringtoIntegerNULL(value));
+            bo.setGrowthzone7(Conversion.safeStringtoIntegerNULL(value));
         } else if (key.equals("growthzone8")) {
-            bo.setGrowthZone8(Conversion.safeStringtoIntegerNULL(value));
+            bo.setGrowthzone8(Conversion.safeStringtoIntegerNULL(value));
         } else if (key.equals("growthzone9")) {
-            bo.setGrowthZone9(Conversion.safeStringtoIntegerNULL(value));
+            bo.setGrowthzone9(Conversion.safeStringtoIntegerNULL(value));
         } else if (key.equals("growthzonestotal")) {
-            bo.setGrowthZonesTotal(Conversion.safeStringtoIntegerNULL(value));
+            bo.setGrowthzonestotal(Conversion.safeStringtoIntegerNULL(value));
         } else if (key.equals("coastalannuli")) {
-            bo.setCoastalAnnuli(Conversion.safeStringtoIntegerNULL(value));
+            bo.setCoastalannuli(Conversion.safeStringtoIntegerNULL(value));
         } else if (key.equals("oceanicannuli")) {
-            bo.setOceanicAnnuli(Conversion.safeStringtoIntegerNULL(value));
-        } else if (key.equals("smoltage")) {
-            bo.setSmoltAge(Conversion.safeStringtoIntegerNULL(value));
-        } else if (key.equals("seaage")) {
-            bo.setSeaAge(Conversion.safeStringtoIntegerNULL(value));
-        } else if (key.equals("otolithlength")) {
-            bo.setOtolithLength(Conversion.safeStringtoDoubleNULL(value));
-        } else if (key.equals("hyalinezones")) {
-            bo.setHyalineZones(Conversion.safeStringtoIntegerNULL(value));
-        } else if (key.equals("weight")) {
-            bo.setWeight(Conversion.safeStringtoDoubleNULL(value));
-        } else if (key.equals("weightrightotolith")) {
-            bo.setWeightRightOtolith(Conversion.safeStringtoDoubleNULL(value));
-        } else if (key.equals("weightleftotolith")) {
-            bo.setWeightLeftOtolith(Conversion.safeStringtoDoubleNULL(value));
-        } else if (key.equals("readdate")) {
-            bo.setReadDate(Conversion.safeStringtoIntegerNULL(value));
-        } else if (key.equals("readerlevel")) {
-            bo.setReaderLevel(Conversion.safeStringtoIntegerNULL(value));
-        } else if (key.equals("verifiedby")) {
-            bo.setVerifiedBy(Conversion.safeStringtoIntegerNULL(value));
-        } else if (key.equals("image")) {
-            bo.setImage(value);
-        }
+            bo.setOceanicannuli(Conversion.safeStringtoIntegerNULL(value));
+        } 
     }
 
     /**
@@ -442,7 +412,7 @@ public class BioticXMLReader extends XMLReader {
      * @param key The attribute being set
      * @param value The value being set
      */
-    private void createPrey(final Object object, final String key, final String value) {
+    /*private void createPrey(final Object object, final String key, final String value) {
         PreyBO bo = (PreyBO) object;
         if (key.equals("species")) {
             bo.setTaxa(value);
@@ -453,5 +423,5 @@ public class BioticXMLReader extends XMLReader {
         } else if (key.equals("totalweight")) {
             bo.setTotalWeight(Conversion.safeStringtoDoubleNULL(value));
         }
-    }
+    }*/
 }

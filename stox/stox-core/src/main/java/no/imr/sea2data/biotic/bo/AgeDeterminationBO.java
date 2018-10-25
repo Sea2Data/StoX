@@ -9,187 +9,113 @@ import java.util.Date;
  */
 public class AgeDeterminationBO implements Serializable {
 
-    private Integer original;
-    private Date last_edited;
-    protected transient Integer no; // age read number.
+    private Integer agedeterminationid; // age read number.
     private Integer age;
-    private Integer spawningAge;
-    private Integer spawningZones;
-    protected String readability;
-    protected String type;
-    protected String otolithEdge;
-    protected String otolithCentre;
+    private Integer spawningage;
+    private Integer spawningzones;
+    private String readability;
+    private String otolithtype;
+    private String otolithedge;
+    private String otolitcentre;
     private Integer calibration;
-    private Integer growthZone1;
-    private Integer growthZone2;
-    private Integer growthZone3;
-    private Integer growthZone4;
-    private Integer growthZone5;
-    private Integer growthZone6;
-    private Integer growthZone7;
-    private Integer growthZone8;
-    private Integer growthZone9;
-    private Integer growthZonesTotal;
-    private Integer coastalAnnuli;
-    private Integer oceanicAnnuli;
-    private Integer smoltAge;
-    private Integer seaAge;
-    private Double otolithLength;
-    private Integer hyalineZones;
-    private Double weight;
-    private Double weightRightOtolith;
-    private Double weightLeftOtolith;
-    private Integer readDate;
-    private Integer readerLevel;
-    private Integer verifiedBy;
-    private String image;
-    // The following fields are not used.
-    protected String medium;
-    protected String ageMedium;
-    protected String preparation;
-    protected String genetics;
-    protected String embedding;
-    private String description;
+    private Integer growthzone1;
+    private Integer growthzone2;
+    private Integer growthzone3;
+    private Integer growthzone4;
+    private Integer growthzone5;
+    private Integer growthzone6;
+    private Integer growthzone7;
+    private Integer growthzone8;
+    private Integer growthzone9;
+    private Integer growthzonestotal;
+    private Integer coastalannuli;
+    private Integer oceanicannuli;
     private IndividualBO individual;
 
-    public AgeDeterminationBO() {
+    public AgeDeterminationBO(IndividualBO ind) {
+        this.individual = ind;
     }
 
     public AgeDeterminationBO(IndividualBO ind, AgeDeterminationBO bo) {
+        this(ind);
         // copy age and prey info at individual:
-        no = bo.getNo();
+        agedeterminationid = bo.getagedeterminationid();
         age = bo.getAge();
-        spawningAge = bo.getSpawningAge();
-        spawningZones = bo.getSpawningZones();
+        spawningage = bo.getSpawningage();
+        spawningzones = bo.getSpawningzones();
         readability = bo.getReadability();
-        type = bo.getType();
-        otolithEdge = bo.getOtolithEdge();
-        otolithCentre = bo.getOtolithCentre();
+        otolithtype = bo.getOtolithtype();
+        otolithedge = bo.getOtolithedge();
+        otolitcentre = bo.getOtolithcentre();
         calibration = bo.getCalibration();
-        growthZone1 = bo.getGrowthZone1();
-        growthZone2 = bo.getGrowthZone2();
-        growthZone3 = bo.getGrowthZone3();
-        growthZone4 = bo.getGrowthZone4();
-        growthZone5 = bo.getGrowthZone5();
-        growthZone6 = bo.getGrowthZone6();
-        growthZone7 = bo.getGrowthZone7();
-        growthZone8 = bo.getGrowthZone8();
-        growthZone9 = bo.getGrowthZone9();
-        growthZonesTotal = bo.getGrowthZonesTotal();
-        coastalAnnuli = bo.getCoastalAnnuli();
-        oceanicAnnuli = bo.getOceanicAnnuli();
-        smoltAge = bo.getSmoltAge();
-        seaAge = bo.getSeaAge();
-        otolithLength = bo.getOtolithLength();
-        hyalineZones = bo.getHyalineZones();
-        weight = bo.getWeight();
-        weightRightOtolith = bo.getWeightRightOtolith();
-        weightLeftOtolith = bo.getWeightLeftOtolith();
-        readDate = bo.getReadDate();
-        readerLevel = bo.getReaderLevel();
-        verifiedBy = bo.getVerifiedBy();
-        image = bo.getImage();
-        individual = ind;
+        growthzone1 = bo.getGrowthzone1();
+        growthzone2 = bo.getGrowthzone2();
+        growthzone3 = bo.getGrowthzone3();
+        growthzone4 = bo.getGrowthzone4();
+        growthzone5 = bo.getGrowthzone5();
+        growthzone6 = bo.getGrowthzone6();
+        growthzone7 = bo.getGrowthzone7();
+        growthzone8 = bo.getGrowthzone8();
+        growthzone9 = bo.getGrowthzone9();
+        growthzonestotal = bo.getGrowthzonestotal();
+        coastalannuli = bo.getCoastalannuli();
+        oceanicannuli = bo.getOceanicannuli();
     }
 
-    public void setWeightRightOtolith(Double weightRightOtolith) {
-        this.weightRightOtolith = weightRightOtolith;
+    public void setSpawningzones(Integer spawningzones) {
+        this.spawningzones = spawningzones;
     }
 
-    public void setWeightLeftOtolith(Double weightLeftOtolith) {
-        this.weightLeftOtolith = weightLeftOtolith;
+    public void setSpawningage(Integer spawningage) {
+        this.spawningage = spawningage;
     }
 
-    public void setWeight(Double weight) {
-        this.weight = weight;
+    public void setOceanicannuli(Integer oceanicannuli) {
+        this.oceanicannuli = oceanicannuli;
     }
 
-    public void setVerifiedBy(Integer verifiedBy) {
-        this.verifiedBy = verifiedBy;
+    public void setGrowthzonestotal(Integer growthzonestotal) {
+        this.growthzonestotal = growthzonestotal;
     }
 
-    public void setSpawningZones(Integer spawningZones) {
-        this.spawningZones = spawningZones;
+    public void setGrowthzone9(Integer growthzone9) {
+        this.growthzone9 = growthzone9;
     }
 
-    public void setSpawningAge(Integer spawningAge) {
-        this.spawningAge = spawningAge;
+    public void setGrowthzone8(Integer growthzone8) {
+        this.growthzone8 = growthzone8;
     }
 
-    public void setSmoltAge(Integer smoltAge) {
-        this.smoltAge = smoltAge;
+    public void setGrowthzone7(Integer growthzone7) {
+        this.growthzone7 = growthzone7;
     }
 
-    public void setSeaAge(Integer seaAge) {
-        this.seaAge = seaAge;
+    public void setGrowthzone6(Integer growthzone6) {
+        this.growthzone6 = growthzone6;
     }
 
-    public void setReaderLevel(Integer readerLevel) {
-        this.readerLevel = readerLevel;
+    public void setGrowthzone5(Integer growthzone5) {
+        this.growthzone5 = growthzone5;
     }
 
-    public void setReadDate(Integer readDate) {
-        this.readDate = readDate;
+    public void setGrowthzone4(Integer growthzone4) {
+        this.growthzone4 = growthzone4;
     }
 
-    public void setOtolithLength(Double otolithLength) {
-        this.otolithLength = otolithLength;
+    public void setGrowthzone3(Integer growthzone3) {
+        this.growthzone3 = growthzone3;
     }
 
-    public void setOceanicAnnuli(Integer oceanicAnnuli) {
-        this.oceanicAnnuli = oceanicAnnuli;
+    public void setGrowthzone2(Integer growthzone2) {
+        this.growthzone2 = growthzone2;
     }
 
-    public void setImage(String image) {
-        this.image = image;
+    public void setGrowthzone1(Integer growthzone1) {
+        this.growthzone1 = growthzone1;
     }
 
-    public void setHyalineZones(Integer hyalineZones) {
-        this.hyalineZones = hyalineZones;
-    }
-
-    public void setGrowthZonesTotal(Integer growthZonesTotal) {
-        this.growthZonesTotal = growthZonesTotal;
-    }
-
-    public void setGrowthZone9(Integer growthZone9) {
-        this.growthZone9 = growthZone9;
-    }
-
-    public void setGrowthZone8(Integer growthZone8) {
-        this.growthZone8 = growthZone8;
-    }
-
-    public void setGrowthZone7(Integer growthZone7) {
-        this.growthZone7 = growthZone7;
-    }
-
-    public void setGrowthZone6(Integer growthZone6) {
-        this.growthZone6 = growthZone6;
-    }
-
-    public void setGrowthZone5(Integer growthZone5) {
-        this.growthZone5 = growthZone5;
-    }
-
-    public void setGrowthZone4(Integer growthZone4) {
-        this.growthZone4 = growthZone4;
-    }
-
-    public void setGrowthZone3(Integer growthZone3) {
-        this.growthZone3 = growthZone3;
-    }
-
-    public void setGrowthZone2(Integer growthZone2) {
-        this.growthZone2 = growthZone2;
-    }
-
-    public void setGrowthZone1(Integer growthZone1) {
-        this.growthZone1 = growthZone1;
-    }
-
-    public void setCoastalAnnuli(Integer coastalAnnuli) {
-        this.coastalAnnuli = coastalAnnuli;
+    public void setCoastalannuli(Integer coastalannuli) {
+        this.coastalannuli = coastalannuli;
     }
 
     public void setCalibration(Integer calibration) {
@@ -200,104 +126,60 @@ public class AgeDeterminationBO implements Serializable {
         this.age = age;
     }
 
-    public Double getWeightRightOtolith() {
-        return weightRightOtolith;
+    public Integer getSpawningzones() {
+        return spawningzones;
     }
 
-    public Double getWeightLeftOtolith() {
-        return weightLeftOtolith;
+    public Integer getSpawningage() {
+        return spawningage;
     }
 
-    public Double getWeight() {
-        return weight;
+    public Integer getOceanicannuli() {
+        return oceanicannuli;
     }
 
-    public Integer getVerifiedBy() {
-        return verifiedBy;
+    public Integer getGrowthzonestotal() {
+        return growthzonestotal;
     }
 
-    public Integer getSpawningZones() {
-        return spawningZones;
+    public Integer getGrowthzone9() {
+        return growthzone9;
     }
 
-    public Integer getSpawningAge() {
-        return spawningAge;
+    public Integer getGrowthzone8() {
+        return growthzone8;
     }
 
-    public Integer getSmoltAge() {
-        return smoltAge;
+    public Integer getGrowthzone7() {
+        return growthzone7;
     }
 
-    public Integer getSeaAge() {
-        return seaAge;
+    public Integer getGrowthzone6() {
+        return growthzone6;
     }
 
-    public Integer getReaderLevel() {
-        return readerLevel;
+    public Integer getGrowthzone5() {
+        return growthzone5;
     }
 
-    public Integer getReadDate() {
-        return readDate;
+    public Integer getGrowthzone4() {
+        return growthzone4;
     }
 
-    public Double getOtolithLength() {
-        return otolithLength;
+    public Integer getGrowthzone3() {
+        return growthzone3;
     }
 
-    public Integer getOceanicAnnuli() {
-        return oceanicAnnuli;
+    public Integer getGrowthzone2() {
+        return growthzone2;
     }
 
-    public String getImage() {
-        return image;
+    public Integer getGrowthzone1() {
+        return growthzone1;
     }
 
-    public Integer getHyalineZones() {
-        return hyalineZones;
-    }
-
-    public Integer getGrowthZonesTotal() {
-        return growthZonesTotal;
-    }
-
-    public Integer getGrowthZone9() {
-        return growthZone9;
-    }
-
-    public Integer getGrowthZone8() {
-        return growthZone8;
-    }
-
-    public Integer getGrowthZone7() {
-        return growthZone7;
-    }
-
-    public Integer getGrowthZone6() {
-        return growthZone6;
-    }
-
-    public Integer getGrowthZone5() {
-        return growthZone5;
-    }
-
-    public Integer getGrowthZone4() {
-        return growthZone4;
-    }
-
-    public Integer getGrowthZone3() {
-        return growthZone3;
-    }
-
-    public Integer getGrowthZone2() {
-        return growthZone2;
-    }
-
-    public Integer getGrowthZone1() {
-        return growthZone1;
-    }
-
-    public Integer getCoastalAnnuli() {
-        return coastalAnnuli;
+    public Integer getCoastalannuli() {
+        return coastalannuli;
     }
 
     public Integer getCalibration() {
@@ -308,76 +190,20 @@ public class AgeDeterminationBO implements Serializable {
         return age;
     }
 
-    public void setOriginal(Integer original) {
-        this.original = original;
+    public String getOtolithcentre() {
+        return otolitcentre;
     }
 
-    public void setLast_edited(Date last_edited) {
-        this.last_edited = last_edited;
+    public void setOtolithcentre(String otolithcentre) {
+        this.otolitcentre = otolithcentre;
     }
 
-    public Integer getOriginal() {
-        return original;
+    public String getOtolithedge() {
+        return otolithedge;
     }
 
-    public Date getLast_edited() {
-        return last_edited;
-    }
-
-    public String getAgeMedium() {
-        return ageMedium;
-    }
-
-    public void setAgeMedium(String ageMedium) {
-        this.ageMedium = ageMedium;
-    }
-
-    public String getEmbedding() {
-        return embedding;
-    }
-
-    public void setEmbedding(String embedding) {
-        this.embedding = embedding;
-    }
-
-    public String getGenetics() {
-        return genetics;
-    }
-
-    public void setGenetics(String genetics) {
-        this.genetics = genetics;
-    }
-
-    public String getMedium() {
-        return medium;
-    }
-
-    public void setMedium(String medium) {
-        this.medium = medium;
-    }
-
-    public String getOtolithCentre() {
-        return otolithCentre;
-    }
-
-    public void setOtolithCentre(String otolithCentre) {
-        this.otolithCentre = otolithCentre;
-    }
-
-    public String getOtolithEdge() {
-        return otolithEdge;
-    }
-
-    public void setOtolithEdge(String otolithEdge) {
-        this.otolithEdge = otolithEdge;
-    }
-
-    public String getPreparation() {
-        return preparation;
-    }
-
-    public void setPreparation(String preparation) {
-        this.preparation = preparation;
+    public void setOtolithedge(String otolithedge) {
+        this.otolithedge = otolithedge;
     }
 
     public String getReadability() {
@@ -388,39 +214,29 @@ public class AgeDeterminationBO implements Serializable {
         this.readability = readability;
     }
 
-    public String getType() {
-        return type;
+    public String getOtolithtype() {
+        return otolithtype;
     }
 
-    public void setType(String type) {
-        this.type = type;
+    public void setOtolithtype(String otolithtype) {
+        this.otolithtype = otolithtype;
+    }
+
+
+    public void setAgedeterminationid(Integer agedeterminationid) {
+        this.agedeterminationid = agedeterminationid;
+    }
+
+    public Integer getagedeterminationid() {
+        return agedeterminationid;
+    }
+
+    public IndividualBO getIndividual() {
+        return individual;
     }
 
     @Override
     public String toString() {
-        return "AgeDeterminationBO{" + "otolithEdge=" + otolithEdge + ", type=" + type + ", otolithCentre=" + otolithCentre + ", medium=" + medium + ", ageMedium=" + ageMedium + ", preparation=" + preparation + ", genetics=" + genetics + ", embedding=" + embedding + ", readability=" + readability + '}';
-    }
-
-    public String description() {
-        return this.description;
-    }
-
-    /**
-     * @param description the description to set
-     */
-    public void setDescription(String description) {
-        this.description = description;
-    }
-
-    public void setNo(Integer no) {
-        this.no = no;
-    }
-
-    public Integer getNo() {
-        return no;
-    }
-
-    public void setIndividual(IndividualBO individual) {
-        this.individual = individual;
+        return getagedeterminationid() + "";
     }
 }

@@ -12,10 +12,6 @@ import com.vividsolutions.jts.io.WKTReader;
 import java.util.Arrays;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import no.imr.sea2data.biotic.bo.AgeDeterminationBO;
-import no.imr.sea2data.biotic.bo.IndividualBO;
-import no.imr.sea2data.biotic.bo.PreyBO;
-import no.imr.sea2data.biotic.bo.SampleBO;
 import no.imr.sea2data.imrbase.exceptions.XMLReaderException;
 import no.imr.sea2data.imrbase.util.Conversion;
 import no.imr.sea2data.imrbase.util.XMLReader;
@@ -122,25 +118,7 @@ public class ProjectXMLReader extends XMLReader {
         } else if (current instanceof IProcess && elmName.equals("parameter")) {
             currentParameterName = getCurrentAttributeValue("name");
             return null; // Handle parameter value in onObjectValue and connect to currentParameterName
-        } else if (current instanceof SampleBO && elmName.equals("individual")) {
-            SampleBO sample = (SampleBO) current;
-            IndividualBO indBO = new IndividualBO();
-            sample.getIndividualBOCollection().add(indBO);
-            indBO.setSample(sample);
-            result = indBO;
-        } else if (current instanceof SampleBO && elmName.equals("prey")) {
-            SampleBO sample = (SampleBO) current;
-            PreyBO prey = new PreyBO();
-            sample.addPrey(Conversion.safeStringtoIntegerNULL(getCurrentAttributeValue("fishno")), prey);
-            prey.setSample(sample);
-            result = prey;
-        } else if (current instanceof IndividualBO && elmName.equals("agedetermination")) {
-            IndividualBO ind = (IndividualBO) current;
-            AgeDeterminationBO ageBO = new AgeDeterminationBO();
-            ind.getAgeDeterminationBOCollection().add(ageBO);
-            ageBO.setIndividual(ind);
-            result = ageBO;
-        }
+        } 
         return result;
     }
 

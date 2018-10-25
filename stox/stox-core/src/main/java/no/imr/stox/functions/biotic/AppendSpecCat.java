@@ -59,16 +59,16 @@ public class AppendSpecCat extends AbstractFunction {
         for (FishstationBO f : fList) {
             FishstationBO fn = new FishstationBO(f);
             fishstations.add(fn);
-            for (CatchBO c : f.getCatchBOCollection()) {
+            for (CatchBO c : f.getCatchBOs()) {
                 CatchBO cn = new CatchBO(fn, c);
-                fn.getCatchBOCollection().add(cn);
+                fn.getCatchBOs().add(cn);
 
                 String spec = null;
                 if (m.isEmpty()) {
                     spec = specCat;
                 } else {
-                    if (c.getNoname() != null) {
-                        String str = m.get(c.getNoname().toLowerCase());
+                    if (c.getCommonname() != null) {
+                        String str = m.get(c.getCommonname().toLowerCase());
                         if (str != null) {
                             spec = str;
                         }
@@ -77,11 +77,11 @@ public class AppendSpecCat extends AbstractFunction {
                 if (spec != null) {
                     cn.setSpecCat(spec); // Set spec cat to all catches
                 }
-                for (SampleBO s : c.getSampleBOCollection()) {
+                for (SampleBO s : c.getSampleBOs()) {
                     SampleBO sn = new SampleBO(cn, s);
-                    cn.getSampleBOCollection().add(sn);
-                    for (IndividualBO i : s.getIndividualBOCollection()) {
-                        sn.getIndividualBOCollection().add(new IndividualBO(sn, i));
+                    cn.getSampleBOs().add(sn);
+                    for (IndividualBO i : s.getIndividualBOs()) {
+                        sn.getIndividualBOs().add(new IndividualBO(sn, i));
                     }
                 }
             }

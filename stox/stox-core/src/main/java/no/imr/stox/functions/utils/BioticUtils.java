@@ -52,7 +52,7 @@ public final class BioticUtils {
     public static Object getIndVar(IndividualBO i, String code) {
         switch (code) {
             case Functions.COL_IND_TRAWLQUALITY:
-                return i.getSample().getCatchBO().getStationBO().getTrawlQuality();
+                return i.getSample().getCatchBO().getStationBO().getSamplequality();
             case Functions.COL_IND_GROUP:
                 return i.getSample().getGroup();
             case Functions.COL_IND_SAMPLETYPE:
@@ -60,19 +60,19 @@ public final class BioticUtils {
             case Functions.COL_IND_CRUISE:
                 return i.getSample().getCatchBO().getStationBO().getCruise();
             case Functions.COL_IND_SERIALNO:
-                return i.getSample().getCatchBO().getStationBO().getSerialNo();
+                return i.getSample().getCatchBO().getStationBO().getSerialnumber();
             case Functions.COL_IND_PLATFORM:
-                return i.getSample().getCatchBO().getStationBO().getCatchPlatform();
+                return i.getSample().getCatchBO().getStationBO().getCatchplatform();
             case Functions.COL_IND_STARTDATE:
-                return IMRdate.formatDate(i.getSample().getCatchBO().getStationBO().getStationStartDate());
+                return IMRdate.formatDate(i.getSample().getCatchBO().getStationBO().getStationstartdate());
             case Functions.COL_IND_STARTTIME:
-                return IMRdate.formatTime(i.getSample().getCatchBO().getStationBO().getStationStartTime());
+                return IMRdate.formatTime(i.getSample().getCatchBO().getStationBO().getStationstarttime());
             case Functions.COL_IND_FISHSTATIONTYPE:
-                return i.getSample().getCatchBO().getStationBO().getStationType();
+                return i.getSample().getCatchBO().getStationBO().getStationtype();
             case Functions.COL_IND_LATITUDESTART:
-                return Conversion.formatDoubletoDecimalString(i.getSample().getCatchBO().getStationBO().getLatitudeStart(), 4);
+                return Conversion.formatDoubletoDecimalString(i.getSample().getCatchBO().getStationBO().getLatitudestart(), 4);
             case Functions.COL_IND_LONGITUDESTART:
-                return Conversion.formatDoubletoDecimalString(i.getSample().getCatchBO().getStationBO().getLongitudeStart(), 4);
+                return Conversion.formatDoubletoDecimalString(i.getSample().getCatchBO().getStationBO().getLongitudestart(), 4);
             case Functions.COL_IND_SYSTEM:
                 return i.getSample().getCatchBO().getStationBO().getSystem();
             case Functions.COL_IND_AREA:
@@ -84,25 +84,25 @@ public final class BioticUtils {
             case Functions.COL_IND_SPECCAT:
                 return i.getSample().getCatchBO().getSpeciesCatTableKey();
             case Functions.COL_IND_SPECIES:
-                return i.getSample().getCatchBO().getSpecies();
+                return i.getSample().getCatchBO().getCatchcategory();
             case Functions.COL_IND_NONAME:
-                return i.getSample().getCatchBO().getNoname();
+                return i.getSample().getCatchBO().getCommonname();
             case Functions.COL_IND_APHIA:
                 return i.getSample().getCatchBO().getAphia();
             case Functions.COL_IND_CATCHWEIGHT:
-                return i.getSample().getWeight();
+                return i.getSample().getCatchweight();
             case Functions.COL_IND_CATCHCOUNT:
-                return i.getSample().getCount();
+                return i.getSample().getCatchcount();
             case Functions.COL_IND_SAMPLENUMBER:
-                return i.getSample().getSampleNumber();
+                return i.getSample().getCatchpartnumber();
             case Functions.COL_IND_LENGTHSAMPLEWEIGHT:
-                return i.getSample().getLengthSampleWeight();
+                return i.getSample().getlengthsampleweight();
             case Functions.COL_IND_LENGTHSAMPLECOUNT:
-                return i.getSample().getLengthSampleCount();
+                return i.getSample().getLengthsamplecount();
             case Functions.COL_IND_FREQUENCY:
                 return 1;
             case Functions.COL_IND_NO:
-                return i.getNo();
+                return i.getSpecimenid();
             case Functions.COL_IND_WEIGHT:
                 return i.getWeight();
             case Functions.COL_IND_LENGTH:
@@ -112,45 +112,45 @@ public final class BioticUtils {
             case Functions.COL_IND_SEX:
                 return i.getSex();
             case Functions.COL_IND_DEVELOPMENTALSTAGE:
-                return i.getDevelopmentalStage();
+                return null;//i.getDevelopmentalStage();
             case Functions.COL_IND_STAGE:
-                return i.getStage();
+                return i.getMaturationstage();
             case Functions.COL_IND_SPECIALSTAGE:
-                return i.getSpecialStage();
+                return i.getSpecialstage();
             case Functions.COL_IND_DIGESTDEG:
-                return i.getDigestDeg();
+                return i.getDigestion();
             case Functions.COL_IND_FAT:
                 return i.getFat();
             case Functions.COL_IND_LIVER:
                 return i.getLiver();
             case Functions.COL_IND_LIVERWEIGHT:
-                return i.getLiverWeight();
+                return i.getLiverweight();
             case Functions.COL_IND_GONADWEIGHT:
-                return i.getGonadWeight();
+                return i.getGonadweight();
             case Functions.COL_IND_STOMACHWEIGHT:
-                return i.getStomachWeight();
+                return i.getStomachweight();
             case Functions.COL_IND_VERTEBRAE:
-                return i.getVertebrae();
+                return i.getvertebraecount();
             case Functions.COL_IND_LENGTHUNIT:
-                return i.getLengthUnit();
+                return i.getLengthresolution();
             case Functions.COL_IND_WEIGHTMETHOD:
-                return i.getWeightMethod();
+                return i.getIndividualproducttype();
             case Functions.COL_IND_STOMACHFILLFIELD:
-                return i.getStomachFillField();
+                return i.getStomachfillfield();
             case Functions.COL_IND_LIVERPARASITE:
-                return i.getLiverParasite();
+                return i.getLiverparasite();
             case Functions.COL_IND_SPAWNINGAGE:
-                return i.getSpawningAge();
+                return i.getSpawningage();
             case Functions.COL_IND_SPAWNINGZONES:
-                return i.getSpawningZones();
+                return i.getSpawningzones();
             case Functions.COL_IND_READABILITY:
                 return i.getReadability();
             case Functions.COL_IND_OTOLITHTYPE:
-                return i.getOtolithType();
+                return i.getOtolithtype();
             case Functions.COL_IND_OTOLITHEDGE:
-                return i.getOtolithEdge();
+                return i.getOtolithedge();
             case Functions.COL_IND_OTOLITHCENTRE:
-                return i.getOtolithCentre();
+                return i.getOtolithcentre();
             case Functions.COL_IND_CALIBRATION:
                 return i.getCalibration();
         }
@@ -179,7 +179,7 @@ public final class BioticUtils {
         if (fList == null) {
             return null;
         }
-        return fList.stream().filter(s -> Objects.equals(s.getSerialNo(), serialNo)).findFirst().orElse(null);
+        return fList.stream().filter(s -> Objects.equals(s.getSerialnumber(), serialNo)).findFirst().orElse(null);
     }
 
     public static Collection<FishstationBO> findStations(List<FishstationBO> fList, Collection<String> keys) {
@@ -248,13 +248,13 @@ public final class BioticUtils {
     public static double getLengthInterval(List<FishstationBO> fishStations) {
         Set<Integer> units = new HashSet<>();
         for (FishstationBO fs : fishStations) {
-            for (CatchBO c : fs.getCatchBOCollection()) {
-                for (SampleBO s : c.getSampleBOCollection()) {
-                    for (IndividualBO i : s.getIndividualBOCollection()) {
-                        if (i.getLengthUnit() == null || i.getLengthUnit().isEmpty()) {
+            for (CatchBO c : fs.getCatchBOs()) {
+                for (SampleBO s : c.getSampleBOs()) {
+                    for (IndividualBO i : s.getIndividualBOs()) {
+                        if (i.getLengthresolution()== null || i.getLengthresolution().isEmpty()) {
                             continue;
                         }
-                        units.add(Conversion.safeStringtoIntegerNULL(i.getLengthUnit()));
+                        units.add(Conversion.safeStringtoIntegerNULL(i.getLengthresolution()));
                     }
                 }
             }

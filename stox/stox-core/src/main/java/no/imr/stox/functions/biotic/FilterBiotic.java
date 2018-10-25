@@ -74,27 +74,27 @@ public class FilterBiotic extends AbstractFunction {
             }
             FishstationBO fsF = new FishstationBO(fs);
             fishstations.add(fsF);
-            for (CatchBO cb : fs.getCatchBOCollection()) {
+            for (CatchBO cb : fs.getCatchBOs()) {
                 FilterUtils.resolveContext(ctx, cb);
                 if (!FilterUtils.evaluate(ctx, catchExpression)) {
                     continue;
                 }
                 CatchBO cbF = new CatchBO(fsF, cb);
-                fsF.getCatchBOCollection().add(cbF);
-                for (SampleBO sample : cb.getSampleBOCollection()) {
+                fsF.getCatchBOs().add(cbF);
+                for (SampleBO sample : cb.getSampleBOs()) {
                     FilterUtils.resolveContext(ctx, sample);
                     if (!FilterUtils.evaluate(ctx, sampleExpression)) {
                         continue;
                     }
                     SampleBO sampleF = new SampleBO(cbF, sample);
-                    cbF.getSampleBOCollection().add(sampleF);
-                    for (IndividualBO in : sample.getIndividualBOCollection()) {
+                    cbF.getSampleBOs().add(sampleF);
+                    for (IndividualBO in : sample.getIndividualBOs()) {
                         FilterUtils.resolveContext(ctx, in);
                         if (!FilterUtils.evaluate(ctx, individualExpression)) {
                             continue;
                         }
                         IndividualBO inF = new IndividualBO(sampleF, in);
-                        sampleF.getIndividualBOCollection().add(inF);
+                        sampleF.getIndividualBOs().add(inF);
                     }
                 }
             }

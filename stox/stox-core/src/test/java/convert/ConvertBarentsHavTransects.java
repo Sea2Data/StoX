@@ -323,11 +323,11 @@ public class ConvertBarentsHavTransects {
                 .filter(d -> {
                     return st.stream().filter(fs -> {
                         // return true if station makes the distance not account for in transects.
-                        if (fs.getTrawlQuality() != null && fs.getTrawlQuality().equals("2")) {
+                        if (fs.getSamplequality() != null && fs.getSamplequality().equals("2")) {
                             // exception for trawling by registration
                             return false;
                         }
-                        Coordinate fPos = new Coordinate(fs.getLongitudeStart(), fs.getLatitudeStart());
+                        Coordinate fPos = new Coordinate(fs.getLongitudestart(), fs.getLatitudestart());
                         Coordinate dPos = distPos.get(d);
                         Double gcDist = JTSUtils.gcircledist(fPos, dPos);
                         // inside short radius (2-3 nm)

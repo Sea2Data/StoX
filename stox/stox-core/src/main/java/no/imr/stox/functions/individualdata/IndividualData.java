@@ -56,11 +56,11 @@ public class IndividualData extends AbstractFunction {
                     if (!stations.contains(fs.getKey())) {
                         continue;
                     }
-                    for (CatchBO c : fs.getCatchBOCollection()) {
+                    for (CatchBO c : fs.getCatchBOs()) {
                         String specCatKey = c.getSpeciesCatTableKey();
                         // To do: check species against SpeciesDef in resolution if available. Otherwise this relies on filterbiotic.
-                        for (SampleBO s : c.getSampleBOCollection()) {
-                            for (IndividualBO i : s.getIndividualBOCollection()) {
+                        for (SampleBO s : c.getSampleBOs()) {
+                            for (IndividualBO i : s.getIndividualBOs()) {
                                 /*if (i.getWeight() == null) {
                                     continue;
                                 }*/

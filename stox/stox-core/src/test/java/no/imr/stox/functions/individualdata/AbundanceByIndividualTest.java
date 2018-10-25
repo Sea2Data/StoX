@@ -77,19 +77,15 @@ public class AbundanceByIndividualTest {
         List<IndividualBO> inds = new ArrayList<>();
         FishstationBO f = new FishstationBO();
         f.setDistance(1.5d);
-        f.setYear(2013);
-        f.setSerialNo(1000);
-        SampleBO s = new SampleBO();
-        s.setTotalWeight(100.0);
-        s.setSampledWeight(50.0);
-        f.addSample("havsil", s);
-        s.setSampleNo(Integer.SIZE);
-        IndividualBO i = new IndividualBO();
-        i.setIndividualNo(1);
-        i.setSample(s);
+        f.setSerialnumber(1000);
+        SampleBO s = f.addSample("havsil");
+        s.setCatchweight(100.0);
+        s.setLengthsampleweight(50.0);
+        s.setCatchpartnumber(Integer.SIZE);
+        IndividualBO i = s.addIndividual();
+        i.setSpecimenid(1);
         i.setLength(10.0);
-        i.setWeight(5.0);
-        s.getIndividualBOCollection().add(i);
+        i.setIndividualweight(5.0);
         inds.add(i);
         return inds;
     }

@@ -244,6 +244,14 @@
             </modules>
         </profile>
         <profile>
+            <id>formats</id>
+            <modules>
+                <module>stox-formats</module>
+                <module>stox-base</module>
+                <module>StoX/application</module>
+            </modules>
+        </profile>
+        <profile>
             <id>default</id>
             <activation>
                 <activeByDefault>true</activeByDefault>
@@ -251,7 +259,6 @@
             <modules>
                 <module>stox-util</module>
                 <module>stox-core</module>
-                <module>stox-formats</module>
                 <module>stox-base</module>
                 <module>StoX</module>
             </modules>

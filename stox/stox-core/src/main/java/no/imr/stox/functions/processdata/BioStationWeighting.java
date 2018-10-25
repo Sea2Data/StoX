@@ -138,7 +138,7 @@ public class BioStationWeighting extends AbstractFunction {
                     // Some stations may be defined in assignment but filtered out by i.e missing catch
                     continue;
                 }
-                Coordinate fPos = new Coordinate(fs.getLongitudeStart(), fs.getLatitudeStart());
+                Coordinate fPos = new Coordinate(fs.getLongitudestart(), fs.getLatitudestart());
                 //Double gcDist = Math.sqrt(Math.pow(fPos.x - dPos.x, 2) + Math.pow(fPos.y - dPos.y, 2));
                 dList.stream().forEach(d -> {
                     String distKey = d.getKey();
@@ -242,10 +242,10 @@ public class BioStationWeighting extends AbstractFunction {
                 continue;
             }
             Integer numLengthSamples = 0;
-            for (CatchBO c : fs.getCatchBOCollection()) {
-                for (SampleBO s : c.getSampleBOCollection()) {
-                    if (s.getIndividualBOCollection() != null) {
-                        numLengthSamples += s.getIndividualBOCollection().size();
+            for (CatchBO c : fs.getCatchBOs()) {
+                for (SampleBO s : c.getSampleBOs()) {
+                    if (s.getIndividualBOs() != null) {
+                        numLengthSamples += s.getIndividualBOs().size();
                     }
                 }
             }
@@ -276,16 +276,16 @@ public class BioStationWeighting extends AbstractFunction {
                 continue;
             }
             Double totCatch = 0d;
-            for (CatchBO c : fs.getCatchBOCollection()) {
-                for (SampleBO s : c.getSampleBOCollection()) {
-                    if (s.getIndividualBOCollection() != null) {
+            for (CatchBO c : fs.getCatchBOs()) {
+                for (SampleBO s : c.getSampleBOs()) {
+                    if (s.getIndividualBOs() != null) {
                         Double var = null;
                         switch (weightingMethod) {
                             case Functions.WEIGHTINGMETHOD_NORMTOTALWEIGHT:
-                                var = s.getWeight();
+                                var = s.getCatchweight();
                                 break;
                             case Functions.WEIGHTINGMETHOD_NORMTOTALCOUNT:
-                                var = Conversion.safeIntegerToDouble(s.getCount());
+                                var = Conversion.safeIntegerToDouble(s.getCatchcount());
                                 break;
                         }
                         if (var != null) {
