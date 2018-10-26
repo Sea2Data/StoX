@@ -5,6 +5,7 @@
  */
 package no.imr.stox.functions.utils;
 
+import java.time.LocalDate;
 import java.util.Date;
 import no.imr.sea2data.biotic.bo.FishstationBO;
 import no.imr.sea2data.imrbase.matrix.MatrixBO;
@@ -28,7 +29,7 @@ public class CovariateUtils {
      * @param tempM
      * @return
      */
-    public static String getTemporalFullKey(String covSourceType, Date d, MatrixBO tempM) {
+    public static String getTemporalFullKey(String covSourceType, LocalDate d, MatrixBO tempM) {
         if (d == null) {
             return null;
         }
@@ -46,7 +47,7 @@ public class CovariateUtils {
             seasonal = CovariateUtils.isCovariateSeasonal(cov);
             break;
         }
-        String year = Conversion.safeIntegertoString(IMRdate.getYear(d, true));
+        String year = Conversion.safeIntegertoString(d.getYear());
         switch (timeInterval) {
             case Functions.COVARIATETIMEINTERVAL_YEAR:
                 return year;
@@ -112,16 +113,16 @@ public class CovariateUtils {
         return null;
     }
 
-    public static Integer getSeasonByDate(Date d, String timeInterval) {
+    public static Integer getSeasonByDate(LocalDate d, String timeInterval) {
         switch (timeInterval) {
             case Functions.COVARIATETIMEINTERVAL_YEAR:
-                return IMRdate.getYear(d, true);
+                return IMRdate.getYear(d);
             case Functions.COVARIATETIMEINTERVAL_QUARTER:
                 return IMRdate.getQuarter(d);
             case Functions.COVARIATETIMEINTERVAL_MONTH:
-                return IMRdate.getMonth(d, true);
+                return IMRdate.getMonth(d);
             case Functions.COVARIATETIMEINTERVAL_WEEK:
-                return IMRdate.getWeek(d, true);
+                return IMRdate.getWeek(d);
             case Functions.COVARIATETIMEINTERVAL_PERIOD:
                 return null; // must use the covariate definition to determine the period.
         }
@@ -171,16 +172,16 @@ public class CovariateUtils {
         return null;
     }
 
-    public static Boolean isInPeriod(Date date, String period) {
+    public static Boolean isInPeriod(LocalDate date, String period) {
         if (date == null || period == null) {
             return false;
         }
         String[] s = period.split("-");
         if (s.length == 2) {
-            Integer year = IMRdate.getYear(date, true);
-            Date from = IMRdate.strToDate(getFullPeriod(s[0], year));
-            Date to = IMRdate.strToDate(getFullPeriod(s[1], year));
-            if (IMRdate.isSameDay(date, from) || IMRdate.isSameDay(date, to) || date.after(from) && date.before(to)) {
+            Integer year = date.getYear();
+            LocalDate from = IMRdate.strToLocalDate(getFullPeriod(s[0], year), IMRdate.DATE_FORMAT_DMY);
+            LocalDate to = IMRdate.strToLocalDate(getFullPeriod(s[1], year), IMRdate.DATE_FORMAT_DMY);
+            if (IMRdate.isSameDay(date, from) || IMRdate.isSameDay(date, to) || date.isAfter(from) && date.isBefore(to)) {
                 return true;
             }
         }

@@ -8,10 +8,7 @@ import BioticTypes.v3.IndividualType;
 import BioticTypes.v3.MissionType;
 import BioticTypes.v3.MissionsType;
 import java.io.File;
-import java.time.LocalDate;
-import java.time.ZoneOffset;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 import java.util.Map;
 import no.imr.sea2data.biotic.bo.AgeDeterminationBO;
@@ -20,7 +17,6 @@ import no.imr.sea2data.biotic.bo.IndividualBO;
 import no.imr.sea2data.biotic.bo.CatchSampleBO;
 import no.imr.stox.functions.utils.Functions;
 import no.imr.stox.functions.AbstractFunction;
-import no.imr.sea2data.imrbase.util.Conversion;
 import no.imr.stox.log.ILogger;
 import no.imr.stox.model.IModel;
 
@@ -79,7 +75,7 @@ public class ReadBioticXML extends AbstractFunction {
                 FishstationBO fbo = new FishstationBO();
                 stations.add(fbo);
 
-                fbo.setArea(Conversion.safeStringtoIntegerNULL(fs.getArea()));
+                fbo.setArea(fs.getArea());
                 fbo.setBottomdepthstart(fs.getBottomdepthstart());
                 fbo.setBottomdepthstop(fs.getBottomdepthstop());
                 fbo.setCallsignal(mt.getCallsignal());
@@ -109,12 +105,12 @@ public class ReadBioticXML extends AbstractFunction {
                 fbo.setSoaktime(fs.getSoaktime());
                 fbo.setStation(fs.getStation());
                 fbo.setStationcomment(fs.getStationcomment());
-                fbo.setStationstartdate(fs.getStationstartdate() == null ? null : Date.from(fs.getStationstartdate().atStartOfDay().toInstant(ZoneOffset.UTC)));
-                fbo.setStationstarttime(fs.getStationstarttime() == null ? null : Date.from(fs.getStationstarttime().atDate(LocalDate.ofYearDay(1900, 1)).toInstant(ZoneOffset.UTC)));
-                fbo.setStationstopdate(fs.getStationstopdate() == null ? null : Date.from(fs.getStationstopdate().atStartOfDay().toInstant(ZoneOffset.UTC)));
-                fbo.setStationstoptime(fs.getStationstoptime() == null ? null : Date.from(fs.getStationstoptime().atDate(LocalDate.ofYearDay(1900, 1)).toInstant(ZoneOffset.UTC)));
+                fbo.setStationstartdate(fs.getStationstartdate());
+                fbo.setStationstarttime(fs.getStationstarttime());
+                fbo.setStationstopdate(fs.getStationstopdate());
+                fbo.setStationstoptime(fs.getStationstoptime());
                 fbo.setStationtype(fs.getStationtype());
-                fbo.setSystem(Conversion.safeStringtoIntegerNULL(fs.getSystem()));
+                fbo.setSystem(fs.getSystem());
                 fbo.setTrawldoorspread(fs.getTrawldoorspread());
                 fbo.setTrawldoorspreadsd(fs.getTrawldoorspreadsd());
                 fbo.setTripno(fs.getTripno());
@@ -123,7 +119,7 @@ public class ReadBioticXML extends AbstractFunction {
                 fbo.setVesselspeed(fs.getVesselspeed());
                 fbo.setWingspread(fs.getWingspread());
                 fbo.setWingspreadsd(fs.getWingspreadsd());
-                fbo.setWireLength(fs.getWirelength() != null ? fs.getWirelength().intValue() : null);
+                fbo.setWireLength(fs.getWirelength());
                 for (CatchsampleType cs : fs.getCatchsample()) {
                     CatchSampleBO sbo = fbo.addCatchSample();
                     sbo.setCatchcategory(cs.getCatchcategory());
@@ -145,7 +141,7 @@ public class ReadBioticXML extends AbstractFunction {
                     sbo.setLengthsampleweight(cs.getLengthsampleweight());
                     sbo.setParasite(cs.getParasite());
                     sbo.setRaisingfactor(cs.getRaisingfactor());
-                    sbo.setSampletype(Conversion.safeStringtoIntegerNULL(cs.getSampletype()));
+                    sbo.setSampletype(cs.getSampletype());
                     sbo.setSampleproducttype(cs.getSampleproducttype());
                     sbo.setSpecimensamplecount(cs.getSpecimensamplecount());
                     sbo.setStomach(cs.getStomach());

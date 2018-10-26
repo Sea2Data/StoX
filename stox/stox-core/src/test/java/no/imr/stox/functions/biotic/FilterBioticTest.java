@@ -57,7 +57,7 @@ public class FilterBioticTest {
         CatchSampleBO sample11 = new CatchSampleBO(st1);
         sample11.setCatchcategory("SILD");
         sample11.setGroup("1");
-        sample11.setSampletype(5);
+        sample11.setSampletype("5");
         IndividualBO individ11 = sample11.addIndividual();
         IndividualBO individ12 = sample11.addIndividual();
         IndividualBO individ13 = sample11.addIndividual();
@@ -73,7 +73,7 @@ public class FilterBioticTest {
         CatchSampleBO sample12 = new CatchSampleBO(st2);
         sample12.setCatchcategory("HYSE");
         sample12.setGroup("2");
-        sample12.setSampletype(8);
+        sample12.setSampletype("8");
         IndividualBO individ21 = sample12.addIndividual();
         IndividualBO individ22 = sample12.addIndividual();
         IndividualBO individ23 = sample12.addIndividual();

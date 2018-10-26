@@ -5,12 +5,14 @@
  */
 package no.imr.stox.functions.landing;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
 import no.imr.sea2data.imrbase.matrix.MatrixBO;
 import no.imr.sea2data.imrbase.util.ExportUtil;
+import no.imr.sea2data.imrbase.util.IMRdate;
 import no.imr.stox.bo.LandingCovDataMatrix;
 import no.imr.stox.bo.ProcessDataBO;
 import no.imr.stox.bo.landing.FiskeLinje;
@@ -45,7 +47,7 @@ public class LandingCovData extends AbstractFunction {
         MatrixBO spatialM = AbndEstProcessDataUtil.getSpatial(pd);
         for (SluttSeddel sl : landData) {
             // Filter station against covariates
-            Date d = sl.getSisteFangstDato();
+            LocalDate d = IMRdate.getLocalDate(sl.getSisteFangstDato());
             String tempKey = CovariateUtils.getTemporalFullKey(Functions.SOURCETYPE_LANDING, d, tempM);
             if (tempKey == null) {
                 tempKey = "";

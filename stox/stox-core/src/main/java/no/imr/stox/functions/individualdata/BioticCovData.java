@@ -5,6 +5,7 @@
  */
 package no.imr.stox.functions.individualdata;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -46,7 +47,7 @@ public class BioticCovData extends AbstractFunction {
         MatrixBO spatialM = AbndEstProcessDataUtil.getSpatial(pd);
         for (FishstationBO fs : bioticData) {
             // Filter station against covariates
-            Date d = fs.getStationstartdate();
+            LocalDate d = fs.getStationstartdate();
             String tempKey = CovariateUtils.getTemporalFullKey(Functions.SOURCETYPE_BIOTIC, d, tempM);
             if (tempKey == null) {
                 tempKey = "";

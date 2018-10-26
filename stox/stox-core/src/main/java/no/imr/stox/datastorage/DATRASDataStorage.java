@@ -192,9 +192,9 @@ public class DATRASDataStorage extends FileDataStorage {
                     if (fs.getStationstartdate() == null) {
                         continue;
                     }
-                    Integer year = IMRdate.getYear(fs.getStationstartdate(), true);
-                    Integer month = IMRdate.getMonth(fs.getStationstartdate(), true);
-                    Integer day = IMRdate.getDayOfMonth(fs.getStationstartdate(), true);
+                    Integer year = IMRdate.getYear(fs.getStationstartdate());
+                    Integer month = IMRdate.getMonth(fs.getStationstartdate());
+                    Integer day = IMRdate.getDayOfMonth(fs.getStationstartdate());
                     Integer quarter = (month - 1) / 3 + 1;
                     // Invalid also less/more than 5..90 min. og uten for 62 grader, evt kvartal.
                     String haulVal = (fs.getGearcondition() == null || fs.getGearcondition().equals("1") || fs.getGearcondition().equals("2"))
@@ -225,14 +225,14 @@ public class DATRASDataStorage extends FileDataStorage {
                             // Day
                             day,
                             // TimeShot
-                            StringUtils.leftPad(IMRdate.formatDate(fs.getStationstarttime(), "HHmm"), 4, '0'),
+                            StringUtils.leftPad(IMRdate.formatTime(fs.getStationstarttime(), "HHmm"), 4, '0'),
                             // Stratum
                             -9,
                             // HaulDur
-                            Math.round(IMRdate.minutesDiffD(IMRdate.encodeDate(fs.getStationstartdate(), fs.getStationstarttime()), IMRdate.encodeDate(fs.getStationstopdate(), fs.getStationstoptime()))),
+                            Math.round(IMRdate.minutesDiffD(IMRdate.encodeLocalDateTime(fs.getStationstartdate(), fs.getStationstarttime()), IMRdate.encodeLocalDateTime(fs.getStationstopdate(), fs.getStationstoptime()))),
                             // DayNight
                             // 15 minutes before  official sunrise, 15 min after official sunset.
-                            IMRdate.isDayTime(IMRdate.encodeDate(fs.getStationstartdate(), fs.getStationstarttime()), fs.getLatitudestart(),
+                            IMRdate.isDayTime(IMRdate.encodeLocalDateTime(fs.getStationstartdate(), fs.getStationstarttime()), fs.getLatitudestart(),
                                     fs.getLongitudestart()) ? "D" : "N",
                             // ShootLat
                             unkD(fs.getLatitudestart(), "0.0000"),
@@ -334,8 +334,8 @@ public class DATRASDataStorage extends FileDataStorage {
                     if (fs.getStationstartdate() == null) {
                         continue;
                     }
-                    Integer year = IMRdate.getYear(fs.getStationstartdate(), true);
-                    Integer month = IMRdate.getMonth(fs.getStationstartdate(), true);
+                    Integer year = IMRdate.getYear(fs.getStationstartdate());
+                    Integer month = IMRdate.getMonth(fs.getStationstartdate());
                     Integer quarter = (int) Math.ceil(month / 3.0);
                     String haulVal = (fs.getGearcondition() == null || fs.getGearcondition().equals("1") || fs.getGearcondition().equals("2"))
                             && (fs.getSamplequality() == null || fs.getSamplequality().equals("0") || fs.getSamplequality().equals("1")) ? "V" : "I";
@@ -352,7 +352,7 @@ public class DATRASDataStorage extends FileDataStorage {
                         List<String> crustList = Arrays.asList("107275", "107276", "107369", "107253", "107703", "107704", "107350", "107254", "107205", "140712", "140687", "140658");
                         boolean isCrustacean = crustList.contains(s.getAphia());
 
-                        //Double raiseFac = 60.0 / IMRdate.minutesDiffD(IMRdate.encodeDate(fs.getStationstartdate(), fs.getStationstarttime()), IMRdate.encodeDate(fs.getStationstopdate(), fs.getStationstoptime()));
+                        //Double raiseFac = 60.0 / IMRdate.minutesDiffD(IMRdate.encodeLocalDateTime(fs.getStationstartdate(), fs.getStationstarttime()), IMRdate.encodeLocalDateTime(fs.getStationstopdate(), fs.getStationstoptime()));
                         MatrixBO hlNoAtLngth = new MatrixBO();
                         MatrixBO lsCountTot = new MatrixBO();
 
@@ -477,8 +477,8 @@ public class DATRASDataStorage extends FileDataStorage {
                     if (fs.getStationstartdate() == null) {
                         continue;
                     }
-                    Integer year = IMRdate.getYear(fs.getStationstartdate(), true);
-                    Integer month = IMRdate.getMonth(fs.getStationstartdate(), true);
+                    Integer year = IMRdate.getYear(fs.getStationstartdate());
+                    Integer month = IMRdate.getMonth(fs.getStationstartdate());
                     Integer quarter = (int) Math.ceil(month / 3.0);
                     String areaLoc = fs.getArea() != null && fs.getLocation() != null ? fs.getArea() + fs.getLocation() : "";
 
@@ -592,7 +592,7 @@ public class DATRASDataStorage extends FileDataStorage {
             }
         } else if (i.getMaturationstage() != null) {
             FishstationBO fs = c.getStationBO();
-            Integer month = IMRdate.getMonth(fs.getStationstartdate(), true);
+            Integer month = IMRdate.getMonth(fs.getStationstartdate());
             Integer quarter = month / 4 + 1;
             Integer st = Conversion.safeStringtoIntegerNULL(i.getMaturationstage());
             if (st != null) {

@@ -52,7 +52,7 @@ public class StationNode extends AbstractNode {
                 case PROP_SERIALNO:
                     return fs.getSerialnumber();
                 case PROP_DATE:
-                    return IMRdate.getDefaultDateTimeFormat().format(IMRdate.encodeDate(fs.getStationstartdate(), fs.getStationstarttime())) + " (UTC)";
+                    return IMRdate.getDefaultDateTimeFormat().format(IMRdate.encodeLocalDateTime(fs.getStationstartdate(), fs.getStationstarttime())) + " (UTC)";
                 case PROP_POS:
                     return LatLonUtil.latLonToStr(fs.getLatitudestart(), fs.getLongitudestart());
                 case PROP_PLATFORM:

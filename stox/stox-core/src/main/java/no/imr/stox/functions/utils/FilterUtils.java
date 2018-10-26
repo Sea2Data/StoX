@@ -81,9 +81,9 @@ public final class FilterUtils {
             context.set("stationtype", fs.getStationtype());
             // period as integer: 20140101
             if (fs.getStationstartdate() != null) {
-                context.set("year", IMRdate.getYear(fs.getStationstartdate(), true));
-                Integer period = IMRdate.getYear(fs.getStationstartdate(), true) * 10000 + IMRdate.getMonth(fs.getStationstartdate(), true) * 100
-                        + IMRdate.getDayOfMonth(fs.getStationstartdate(), true);
+                context.set("year", IMRdate.getYear(fs.getStationstartdate()));
+                Integer period = IMRdate.getYear(fs.getStationstartdate()) * 10000 + IMRdate.getMonth(fs.getStationstartdate()) * 100
+                        + IMRdate.getDayOfMonth(fs.getStationstartdate());
                 context.set("period", period);
             }
         } else if (o instanceof CatchSampleBO) {

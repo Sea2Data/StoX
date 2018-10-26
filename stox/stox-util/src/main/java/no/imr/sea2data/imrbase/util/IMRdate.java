@@ -18,7 +18,9 @@ import java.time.ZoneOffset;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
+import java.time.temporal.ChronoUnit;
 import java.time.temporal.TemporalAccessor;
+import java.time.temporal.WeekFields;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.Locale;
@@ -59,6 +61,18 @@ public final class IMRdate {
 
     public static Integer getYear(Date d, boolean gmt) {
         return getField(Calendar.YEAR, d, gmt);
+    }
+
+    public static Integer getYear(LocalDate d) {
+        return d == null ? null : d.getYear();
+    }
+
+    public static Integer getMonth(LocalDate d) {
+        return d == null ? null : d.getMonthValue();
+    }
+
+    public static Integer getDayOfMonth(LocalDate d) {
+        return d == null ? null : d.getDayOfMonth();
     }
 
     public static Integer getMonth(Date d, boolean gmt) {
@@ -110,6 +124,14 @@ public final class IMRdate {
         return getDateFormat(format, gmt).format(d);
     }
 
+    public static String formatDate(LocalDate d, String format) {
+        return d == null ? null : d.format(DateTimeFormatter.ofPattern(format));
+    }
+
+    public static String formatTime(LocalTime t, String format) {
+        return t == null ? null : t.format(DateTimeFormatter.ofPattern(format));
+    }
+
     public static String formatDate(Date d, String format) {
         return formatDate(d, format, true);
     }
@@ -120,8 +142,16 @@ public final class IMRdate {
         return formatDate(d, DATE_FORMAT_DMY);
     }
 
+    public static String formatDate(LocalDate d) {
+        return d == null ? null : d.format(DateTimeFormatter.ofPattern(DATE_FORMAT_DMY));
+    }
+
     public static String formatTime(Date d) {
         return formatDate(d, TIME_FORMAT_HMS);
+    }
+
+    public static String formatTime(LocalTime t) {
+        return t == null ? null : t.format(DateTimeFormatter.ofPattern(TIME_FORMAT_HMS));
     }
 
     public static Date getStartOfDay(Date d, boolean gmt) {
@@ -202,18 +232,26 @@ public final class IMRdate {
         }
         return getLocalTime(time).atDate(getLocalDate(date));
     }
+
+    public static LocalDateTime encodeLocalDateTime(LocalDate date, LocalTime time) {
+        if (date == null || time == null) {
+            return null;
+        }
+        return time.atDate(date);
+    }
+
     public static Date encodeDate(Date date, Date time) {
         if (date == null || time == null) {
             return null;
         }
-        return Date.from(encodeLocalDateTime(date, time).toInstant(ZoneOffset.UTC));
+        return Date.from(IMRdate.encodeLocalDateTime(date, time).toInstant(ZoneOffset.UTC));
         /*Integer year = date != null ? getYear(date, true) : 1900;
         Integer month = date != null ? getMonth(date, true) : 1;
         Integer day = date != null ? getDayOfMonth(date, true) : 1;
         Integer hour = time != null ? getHourOfDay(time, true) : 0;
         Integer minute = time != null ? getMinute(time, true) : 0;
         Integer sec = time != null ? getSecond(time, true) : 0;
-        return encodeDate(year, month, day, hour, minute, sec, 0, true);*/
+        return encodeLocalDateTime(year, month, day, hour, minute, sec, 0, true);*/
     }
 
     private static final String DEFAULT_DATE_TIME_PATTERN = "yyyy-MM-dd HH:mm:ss";
@@ -335,7 +373,7 @@ public final class IMRdate {
             }
         } else {
             s = s.trim();
-            switch(s.length()) {
+            switch (s.length()) {
                 case 1:
                 case 2:
                     hh = Conversion.safeStringtoInteger(s);
@@ -396,6 +434,13 @@ public final class IMRdate {
         return (int) minutesDiffD(d1, d2);
     }
 
+    public static double minutesDiffD(LocalDateTime d1, LocalDateTime d2) {
+        if (d1 == null || d2 == null) {
+            return 0;
+        }
+        return ChronoUnit.MINUTES.between(d1, d2);
+    }
+
     public static double minutesDiffD(Date d1, Date d2) {
         if (d1 == null || d2 == null) {
             return 0;
@@ -426,6 +471,13 @@ public final class IMRdate {
      * @param extendedDayMinutes
      * @return
      */
+    public static Boolean isDayTime(LocalDateTime datetime, double lat, double lon) {
+        if (datetime == null) {
+            return false;
+        }
+        return isDayTime(Date.from(datetime.toInstant(ZoneOffset.UTC)), lat, lon);
+    }
+
     public static Boolean isDayTime(Date datetime, double lat, double lon) {
         return isDayTimeByZenith(datetime, lat, lon, new Zenith(90.5), 15d, false);
     }
@@ -489,6 +541,17 @@ public final class IMRdate {
         return getQuarter(getMonth(d, true));
     }
 
+    public static Integer getQuarter(LocalDate d) {
+        return getQuarter(getMonth(d));
+    }
+
+    public static Integer getWeek(LocalDate d) {
+        if (d == null) {
+            return null;
+        }
+        return d.get(WeekFields.of(Locale.getDefault()).weekOfWeekBasedYear());
+    }
+
     public static Integer getQuarter(Integer month) {
         return month == null ? null : (month - 1) / 3 + 1;
     }
@@ -500,6 +563,13 @@ public final class IMRdate {
         return getField(Calendar.WEEK_OF_YEAR, d, true);
     }
 
+    public static Boolean isSameDay(LocalDate date1, LocalDate date2) {
+        if (date1 == null || date2 == null) {
+            return false;
+        }
+        return date1.getYear() == date2.getYear() && date1.getDayOfYear() == date2.getDayOfYear();
+    }
+    
     public static Boolean isSameDay(Date date1, Date date2) {
         if (date1 == null || date2 == null) {
             return false;

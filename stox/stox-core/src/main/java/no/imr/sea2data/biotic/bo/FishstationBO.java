@@ -1,5 +1,7 @@
 package no.imr.sea2data.biotic.bo;
 
+import java.time.LocalDate;
+import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -19,14 +21,14 @@ public class FishstationBO implements ILatLonEvent {
     private String platformname;
     protected String catchplatform;
     protected String nation;
-    private Date stationstartdate;
+    private LocalDate stationstartdate;
     private Integer station;
     private Integer serialnumber;
     protected String stationtype;
     private Double latitudestart;
     private Double longitudestart;
-    private Integer system;
-    private Integer area;
+    private String system;
+    private String area;
     private String location;
     private Double bottomdepthstart;
     private Double bottomdepthstop;
@@ -35,9 +37,9 @@ public class FishstationBO implements ILatLonEvent {
     private Integer gearcount;
     private Double direction;
     private Double vesselspeed;
-    protected Date stationstarttime;
+    protected LocalTime stationstarttime;
     private Double logstart;
-    protected Date stationStopTime;
+    protected LocalTime stationStopTime;
     private Double distance;
     protected String gearcondition;
     protected String samplequality;
@@ -48,11 +50,11 @@ public class FishstationBO implements ILatLonEvent {
     private Double verticaltrawlopeningsd;
     private Double trawldoorspread;
     private Double trawldoorspreadsd;
-    private Integer wirelength;
+    private Double wirelength;
     private Double soaktime;
     private Integer tripno;
     private String stationcomment;
-    private Date stationstopdate;
+    private LocalDate stationstopdate;
     private Double logstop;
     private List<CatchSampleBO> catchSampleBOs = new ArrayList<>();
     private Integer year;
@@ -143,7 +145,7 @@ public class FishstationBO implements ILatLonEvent {
         return samplequality;
     }
 
-    public void setWireLength(Integer wirelength) {
+    public void setWireLength(Double wirelength) {
         this.wirelength = wirelength;
     }
 
@@ -175,15 +177,15 @@ public class FishstationBO implements ILatLonEvent {
         this.trawldoorspread = trawldoorspread;
     }
 
-    public void setSystem(Integer system) {
+    public void setSystem(String system) {
         this.system = system;
     }
 
-    public void setStationstopdate(Date stationstopdate) {
+    public void setStationstopdate(LocalDate stationstopdate) {
         this.stationstopdate = stationstopdate;
     }
 
-    public void setStationstartdate(Date stationstartdate) {
+    public void setStationstartdate(LocalDate stationstartdate) {
         this.stationstartdate = stationstartdate;
     }
 
@@ -263,7 +265,7 @@ public class FishstationBO implements ILatLonEvent {
         this.bottomdepthstart = bottomdepthstart;
     }
 
-    public void setArea(Integer area) {
+    public void setArea(String area) {
         this.area = area;
     }
 
@@ -276,7 +278,7 @@ public class FishstationBO implements ILatLonEvent {
         this.soaktime = soaktime;
     }
 
-    public Integer getwirelength() {
+    public Double getwirelength() {
         return wirelength;
     }
 
@@ -308,11 +310,11 @@ public class FishstationBO implements ILatLonEvent {
         return trawldoorspread;
     }
 
-    public Integer getSystem() {
+    public String getSystem() {
         return system;
     }
 
-    public Date getStationstopdate() {
+    public LocalDate getStationstopdate() {
         return stationstopdate;
     }
 
@@ -324,7 +326,7 @@ public class FishstationBO implements ILatLonEvent {
         this.station = station;
     }
 
-    public Date getStationstartdate() {
+    public LocalDate getStationstartdate() {
         return stationstartdate;
     }
 
@@ -404,7 +406,7 @@ public class FishstationBO implements ILatLonEvent {
         return bottomdepthstart;
     }
 
-    public Integer getArea() {
+    public String getArea() {
         return area;
     }
 
@@ -416,19 +418,19 @@ public class FishstationBO implements ILatLonEvent {
         this.nation = nation;
     }
 
-    public Date getStationstarttime() {
+    public LocalTime getStationstarttime() {
         return stationstarttime;
     }
 
-    public void setStationstarttime(Date starttime) {
+    public void setStationstarttime(LocalTime starttime) {
         this.stationstarttime = starttime;
     }
 
-    public Date getStationstoptime() {
+    public LocalTime getStationstoptime() {
         return stationStopTime;
     }
 
-    public void setStationstoptime(Date stopTime) {
+    public void setStationstoptime(LocalTime stopTime) {
         this.stationStopTime = stopTime;
     }
 
@@ -566,7 +568,7 @@ public class FishstationBO implements ILatLonEvent {
     }
 
     public Integer getYear() {
-        return getStationstartdate() != null ? IMRdate.getYear(getStationstartdate(), true) : null;
+        return getStationstartdate() != null ? getStationstartdate().getYear() : null;
     }
 
     @Override

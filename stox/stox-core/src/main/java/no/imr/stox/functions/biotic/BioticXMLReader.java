@@ -1,5 +1,8 @@
 package no.imr.stox.functions.biotic;
 
+import java.time.LocalDate;
+import java.time.LocalTime;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 import no.imr.sea2data.biotic.bo.AgeDeterminationBO;
 import no.imr.sea2data.biotic.bo.FishstationBO;
@@ -155,9 +158,9 @@ public class BioticXMLReader extends XMLReader {
         } else if (key.equals("platform")) {
             bo.setCatchplatform(value);
         } else if (key.equals("startdate")) {
-            bo.setStationstartdate(IMRdate.strToDate(value));
+            bo.setStationstartdate(LocalDate.parse(value, DateTimeFormatter.ofPattern(IMRdate.DATE_FORMAT_DMY)));
         } else if (key.equals("stopdate")) {
-            bo.setStationstopdate(IMRdate.strToDate(value));
+            bo.setStationstopdate(LocalDate.parse(value, DateTimeFormatter.ofPattern(IMRdate.DATE_FORMAT_DMY)));
         } else if (key.equals("station")) {
             bo.setStation(Conversion.safeStringtoIntegerNULL(value));
         } else if (key.equals("serialno") || key.equals("catchnumber")) {
@@ -173,9 +176,9 @@ public class BioticXMLReader extends XMLReader {
         } else if (key.equals("longitudeend")) {
             bo.setLongitudeend(Conversion.safeStringtoDoubleNULL(value));
         } else if (key.equals("system")) {
-            bo.setSystem(Conversion.safeStringtoIntegerNULL(value));
+            bo.setSystem(value);
         } else if (key.equals("area")) {
-            bo.setArea(Conversion.safeStringtoIntegerNULL(value));
+            bo.setArea(value);
         } else if (key.equals("location")) {
             bo.setLocation(value);
         } else if (key.equals("bottomdepthstart")) {
@@ -193,11 +196,11 @@ public class BioticXMLReader extends XMLReader {
         } else if (key.equals("speedequipment") || key.equals("gearspeed")) {
             bo.setVesselspeed(Conversion.safeStringtoDoubleNULL(value));
         } else if (key.equals("starttime")) {
-            bo.setStationstarttime(IMRdate.strToTime(value));
+            bo.setStationstarttime(LocalTime.parse(value, DateTimeFormatter.ofPattern(IMRdate.TIME_FORMAT_HMS)));
         } else if (key.equals("logstart") || key.equals("startlog")) {
             bo.setLogstart(Conversion.safeStringtoDoubleNULL(value));
         } else if (key.equals("stoptime")) {
-            bo.setStationstoptime(IMRdate.strToTime(value));
+            bo.setStationstoptime(LocalTime.parse(value, DateTimeFormatter.ofPattern(IMRdate.TIME_FORMAT_HMS)));
         } else if (key.equals("distance")) {
             bo.setDistance(Conversion.safeStringtoDoubleNULL(value));
         } else if (key.equals("gearcondition")) {
@@ -219,7 +222,7 @@ public class BioticXMLReader extends XMLReader {
         } else if (key.equals("doorspreadsd")) {
             bo.setTrawldoorspreadsd(Conversion.safeStringtoDoubleNULL(value));
         } else if (key.equals("wirelength")) {
-            bo.setWireLength(Conversion.safeStringtoIntegerNULL(value));
+            bo.setWireLength(Conversion.safeStringtoDoubleNULL(value));
         } else if (key.equals("soaktime")) {
             bo.setSoaktime(Conversion.safeStringtoDoubleNULL(value));
         } else if (key.equals("tripno")) {
@@ -241,7 +244,7 @@ public class BioticXMLReader extends XMLReader {
         if (key.equals("samplenumber")) {
             bo.setCatchpartnumber(Conversion.safeStringtoIntegerNULL(value));
         } else if (key.equals("sampletype")) {
-            bo.setSampletype(Conversion.safeStringtoIntegerNULL(value));
+            bo.setSampletype(value);
         } else if (key.equals("group")) {
             bo.setGroup(value);
         } else if (key.equals("conservation")) {

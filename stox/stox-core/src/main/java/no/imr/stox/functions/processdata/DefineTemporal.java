@@ -5,6 +5,7 @@
  */
 package no.imr.stox.functions.processdata;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
@@ -30,8 +31,8 @@ import no.imr.stox.log.ILogger;
  */
 public class DefineTemporal extends AbstractFunction {
 
-    Date minDate = null;
-    Date maxDate = null;
+    LocalDate minDate = null;
+    LocalDate maxDate = null;
 
     /**
      * define temporal covariates
@@ -104,7 +105,7 @@ public class DefineTemporal extends AbstractFunction {
             } else if (sourceType.equals(Functions.SOURCETYPE_LANDING)) {
                 if (landingData != null) {
                     for (SluttSeddel sl : landingData) {
-                        String cov = getCovariateFromDate(sl.getSisteFangstDato(), timeInterval, seasonal);
+                        String cov = getCovariateFromDate(IMRdate.getLocalDate(sl.getSisteFangstDato()), timeInterval, seasonal);
                         if (cov != null) {
                             covs.add(cov);
                         }
@@ -126,7 +127,7 @@ public class DefineTemporal extends AbstractFunction {
                     if (seasonal) {
                         covM.setRowColValue(sourceType, "P1", "01/01-31/12");
                     } else if (minDate != null && maxDate != null) {
-                        covM.setRowColValue(sourceType, IMRdate.getYear(minDate, true) + ".P1", IMRdate.formatDate(minDate) + "-" + IMRdate.formatDate(maxDate));
+                        covM.setRowColValue(sourceType, IMRdate.getYear(minDate) + ".P1", IMRdate.formatDate(minDate) + "-" + IMRdate.formatDate(maxDate));
                     }
                     break;
                 default:
@@ -225,12 +226,12 @@ public class DefineTemporal extends AbstractFunction {
         }
     }
 
-    private String getCovariateFromDate(Date d, String timeInterval, Boolean seasonal) {
+    private String getCovariateFromDate(LocalDate d, String timeInterval, Boolean seasonal) {
         if (d == null) {
             return null;
         }
         String cov = null;
-        String year = Conversion.safeIntegertoString(IMRdate.getYear(d, true));
+        String year = Conversion.safeIntegertoString(IMRdate.getYear(d));
         Integer season = CovariateUtils.getSeasonByDate(d, timeInterval);
         switch (timeInterval) {
             case Functions.COVARIATETIMEINTERVAL_YEAR:
@@ -248,12 +249,12 @@ public class DefineTemporal extends AbstractFunction {
                 if (minDate == null) {
                     minDate = d;
                 } else {
-                    minDate = minDate.before(d) ? minDate : d;
+                    minDate = minDate.isBefore(d) ? minDate : d;
                 }
                 if (maxDate == null) {
                     maxDate = d;
                 } else {
-                    maxDate = maxDate.after(d) ? maxDate : d;
+                    maxDate = maxDate.isAfter(d) ? maxDate : d;
                 }
                 break;
         }

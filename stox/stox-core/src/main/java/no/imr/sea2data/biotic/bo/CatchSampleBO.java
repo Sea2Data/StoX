@@ -17,7 +17,7 @@ public class CatchSampleBO {
 
     private String agingstructure;
     private Integer catchpartnumber;
-    protected Integer sampletype;
+    protected String sampletype;
     protected String group;
     protected String conservation;
     protected String catchproducttype;
@@ -137,11 +137,11 @@ public class CatchSampleBO {
         this.parasite = parasite;
     }
 
-    public Integer getSampletype() {
+    public String getSampletype() {
         return sampletype;
     }
 
-    public void setSampletype(Integer sampletype) {
+    public void setSampletype(String sampletype) {
         this.sampletype = sampletype;
     }
 
