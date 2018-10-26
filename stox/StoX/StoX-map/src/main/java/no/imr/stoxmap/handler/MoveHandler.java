@@ -7,12 +7,10 @@ package no.imr.stoxmap.handler;
 
 import java.awt.event.MouseEvent;
 import javax.swing.ToolTipManager;
-import no.imr.sea2data.biotic.bo.CatchBO;
 import no.imr.sea2data.biotic.bo.FishstationBO;
-import no.imr.sea2data.biotic.bo.SampleBO;
+import no.imr.sea2data.biotic.bo.CatchSampleBO;
 import no.imr.sea2data.echosounderbo.DistanceBO;
 import no.imr.sea2data.echosounderbo.FrequencyBO;
-import no.imr.sea2data.echosounderbo.SABO;
 import no.imr.sea2data.imrbase.math.Calc;
 import no.imr.sea2data.imrbase.util.IMRdate;
 import no.imr.sea2data.stox.mapgui.StoXMapSetup;
@@ -92,7 +90,7 @@ public class MoveHandler {
                     }
                 }
                 if (e.isAltDown()) {
-                        s = s + "<br>Pel. thickness: " + d.getPel_ch_thickness();
+                    s = s + "<br>Pel. thickness: " + d.getPel_ch_thickness();
                     for (FrequencyBO f : d.getFrequencies()) {
                         s = s + "<br>Freq/Tr: " + f.getFreq() + "/" + f.getTranceiver();
                         s = s + "<br>Lat/Lon: " + d.getLat_start() + "/" + d.getLon_start();
@@ -115,11 +113,9 @@ public class MoveHandler {
                     s = s + "<br>Bot.depth start-stop: " + b1 + "-" + b2;
                     s = s + "<br>Lat/Lon: " + fs.getStartLat() + "/" + fs.getStartLon();
                     if (e.isShiftDown()) {
-                        for (CatchBO c : fs.getCatchBOs()) {
-                            for (SampleBO samp : c.getSampleBOs()) {
-                                if (c.getCommonname() != null && samp.getCatchweight() != null) {
-                                    s = s + "<br>" + c.getCommonname() + ": " + samp.getCatchweight() + " kg. (" + (samp.getSpecimentsamplecount() != null ? samp.getSpecimentsamplecount() : 0) + " bio. individuals)";
-                                }
+                        for (CatchSampleBO c : fs.getCatchSampleBOs()) {
+                            if (c.getCommonname() != null && c.getCatchweight() != null) {
+                                s = s + "<br>" + c.getCommonname() + ": " + c.getCatchweight() + " kg. (" + (c.getSpecimentsamplecount() != null ? c.getSpecimentsamplecount() : 0) + " bio. individuals)";
                             }
                         }
                     }

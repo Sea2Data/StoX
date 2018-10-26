@@ -9,7 +9,11 @@ import java.util.List;
  *
  * @author oddrune
  */
-public class SampleBO {
+public class CatchSampleBO {
+
+    private String catchcategory; // tsn number as natural key. Use external reference system for lookup by tsn key.
+    private String commonname; // tsn number as natural key. Use external reference system for lookup by tsn key.
+    private String aphia; // tsn number as natural key. Use external reference system for lookup by tsn key.
 
     private String agingstructure;
     private Integer catchpartnumber;
@@ -32,15 +36,20 @@ public class SampleBO {
     protected String tissuesample;
     protected String foreignobject;
     private String catchcomment;
-    private CatchBO catchBO;
+    private FishstationBO fishstationBO;
     final private List<IndividualBO> individualBOs = new ArrayList<>();
+    private String specCat;
+    private String stock;
 
-    public SampleBO(CatchBO catchBO) {
-        this.catchBO = catchBO;
+    public CatchSampleBO(FishstationBO fishstationBO) {
+        this.fishstationBO = fishstationBO;
     }
 
-    public SampleBO(CatchBO cbF, SampleBO bo) {
-        this(cbF);
+    public CatchSampleBO(FishstationBO fsBO, CatchSampleBO bo) {
+        this(fsBO);
+        catchcategory = bo.getCatchcategory();
+        commonname = bo.getCommonname();
+        aphia = bo.getAphia();
         catchpartnumber = bo.getCatchpartnumber();
         sampletype = bo.getSampletype();
         group = bo.getGroup();
@@ -62,6 +71,30 @@ public class SampleBO {
         tissuesample = bo.getGenetics();
         foreignobject = bo.getForeignobject();
         catchcomment = bo.getCatchcomment();
+    }
+
+    public String getCatchcategory() {
+        return catchcategory;
+    }
+
+    public void setCatchcategory(String catchcategory) {
+        this.catchcategory = catchcategory;
+    }
+
+    public String getCommonname() {
+        return commonname;
+    }
+
+    public void setCommonname(String noname) {
+        this.commonname = noname;
+    }
+
+    public String getAphia() {
+        return aphia;
+    }
+
+    public void setAphia(String aphia) {
+        this.aphia = aphia;
     }
 
     public String getGroup() {
@@ -246,16 +279,44 @@ public class SampleBO {
         return bo;
     }
 
-    public CatchBO getCatchBO() {
-        return this.catchBO;
-    }
-
     public String getKey() {
-        return catchBO.getKey() + "/" + catchpartnumber;
+        return fishstationBO.getKey() + "/" + getSpeciesKey() + "/" + catchpartnumber;
     }
 
     @Override
     public String toString() {
         return getKey();
     }
+
+    public String getSpeciesTableKey() {
+        return commonname != null && !commonname.isEmpty() ? commonname : catchcategory;
+    }
+
+    /**
+     * return species category, used as key in matrix stock estimations. default
+     * = species, but can be explicitely defined if missing. I.e. SILD =
+     * SILDG03+SILDG07 or SARDINELLA=SARDA+SARDM
+     *
+     * @return
+     */
+    public String getSpeciesCatTableKey() {
+        return specCat != null ? specCat : getSpeciesTableKey();
+    }
+
+    public String getSpecCat() {
+        return specCat;
+    }
+
+    public void setSpecCat(String specCat) {
+        this.specCat = specCat;
+    }
+
+    public FishstationBO getStationBO() {
+        return this.fishstationBO;
+    }
+
+    public String getSpeciesKey() {
+        return (commonname != null && !commonname.isEmpty() ? commonname : (catchcategory + (stock != null ? "." + stock : "")));
+    }
+
 }

@@ -10,7 +10,7 @@ import java.util.List;
 import java.util.Map;
 import no.imr.sea2data.biotic.bo.FishstationBO;
 import no.imr.sea2data.biotic.bo.IndividualBO;
-import no.imr.sea2data.biotic.bo.SampleBO;
+import no.imr.sea2data.biotic.bo.CatchSampleBO;
 import no.imr.sea2data.imrmap.utils.JTSUtils;
 import no.imr.stox.bo.AbundanceIndividualsMatrix;
 import no.imr.stox.bo.AbundanceMatrix;
@@ -78,14 +78,15 @@ public class AbundanceByIndividualTest {
         FishstationBO f = new FishstationBO();
         f.setDistance(1.5d);
         f.setSerialnumber(1000);
-        SampleBO s = f.addSample("havsil");
+        CatchSampleBO s = f.addCatchSample();
+        s.setCatchcategory("havsil");
         s.setCatchweight(100.0);
         s.setLengthsampleweight(50.0);
         s.setCatchpartnumber(Integer.SIZE);
         IndividualBO i = s.addIndividual();
         i.setSpecimenid(1);
-        i.setLength(10.0);
-        i.setIndividualweight(5.0);
+        i.setLength(0.1);
+        i.setIndividualweight(0.5);
         inds.add(i);
         return inds;
     }

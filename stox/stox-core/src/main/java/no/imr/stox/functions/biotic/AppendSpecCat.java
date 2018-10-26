@@ -5,13 +5,11 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.stream.Stream;
 import no.imr.stox.functions.utils.Functions;
 import no.imr.stox.functions.AbstractFunction;
-import no.imr.sea2data.biotic.bo.CatchBO;
 import no.imr.sea2data.biotic.bo.FishstationBO;
 import no.imr.sea2data.biotic.bo.IndividualBO;
-import no.imr.sea2data.biotic.bo.SampleBO;
+import no.imr.sea2data.biotic.bo.CatchSampleBO;
 
 /**
  * This class is used to filter data with special attributes among all biotic
@@ -59,9 +57,9 @@ public class AppendSpecCat extends AbstractFunction {
         for (FishstationBO f : fList) {
             FishstationBO fn = new FishstationBO(f);
             fishstations.add(fn);
-            for (CatchBO c : f.getCatchBOs()) {
-                CatchBO cn = new CatchBO(fn, c);
-                fn.getCatchBOs().add(cn);
+            for (CatchSampleBO c : f.getCatchSampleBOs()) {
+                CatchSampleBO cn = new CatchSampleBO(fn, c);
+                fn.getCatchSampleBOs().add(cn);
 
                 String spec = null;
                 if (m.isEmpty()) {
@@ -77,12 +75,8 @@ public class AppendSpecCat extends AbstractFunction {
                 if (spec != null) {
                     cn.setSpecCat(spec); // Set spec cat to all catches
                 }
-                for (SampleBO s : c.getSampleBOs()) {
-                    SampleBO sn = new SampleBO(cn, s);
-                    cn.getSampleBOs().add(sn);
-                    for (IndividualBO i : s.getIndividualBOs()) {
-                        sn.getIndividualBOs().add(new IndividualBO(sn, i));
-                    }
+                for (IndividualBO i : c.getIndividualBOs()) {
+                    c.getIndividualBOs().add(new IndividualBO(c, i));
                 }
             }
         }

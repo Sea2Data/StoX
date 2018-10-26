@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.Map;
 import no.imr.stox.functions.AbstractFunction;
 import no.imr.sea2data.biotic.bo.IndividualBO;
+import no.imr.sea2data.imrbase.math.ImrMath;
 import no.imr.sea2data.imrbase.util.Conversion;
 import no.imr.stox.bo.AbundanceMatrix;
 import no.imr.stox.bo.IndividualDataMatrix;
@@ -59,9 +60,9 @@ public class CorrectForInnsufficientSampling extends AbstractFunction {
                         if (indList.isEmpty()) {
                             IndividualBO i = new IndividualBO();
                             Double length = StoXMath.getLength(Conversion.safeStringtoDoubleNULL(lenGrp), lenInterval);
-                            i.setLength(length);
+                            i.setLength(ImrMath.safeMult(0.01, length));
                             // We need to estimate the biomass for this representation with linear regression from all length groups within estimation layer:
-                            i.setIndividualweight(getEstimatedWeight(indData.getData(), species, estLayer, length));
+                            i.setIndividualweight(ImrMath.safeMult(0.001, getEstimatedWeight(indData.getData(), species, estLayer, length)));
                             indList.add(i);
                         }
                         result.getData().setGroupRowColCellValue(species, stratum, estLayer, lenGrp, indList);
@@ -100,8 +101,8 @@ public class CorrectForInnsufficientSampling extends AbstractFunction {
             Double[] wInGrams = new Double[indList.size()];
             for (int i = 0; i < indList.size(); i++) {
                 IndividualBO bo = indList.get(i);
-                lenInCM[i] = bo.getLength();
-                wInGrams[i] = bo.getWeight();
+                lenInCM[i] = bo.getLengthCM();
+                wInGrams[i] = bo.getIndividualweightG();
             }
             LWRelationship lwr = LWRelationship.getLWRelationship(lenInCM, wInGrams);
             return lwr.getWeight(length);

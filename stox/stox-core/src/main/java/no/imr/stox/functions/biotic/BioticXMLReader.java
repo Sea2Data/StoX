@@ -4,7 +4,7 @@ import java.util.List;
 import no.imr.sea2data.biotic.bo.AgeDeterminationBO;
 import no.imr.sea2data.biotic.bo.FishstationBO;
 import no.imr.sea2data.biotic.bo.IndividualBO;
-import no.imr.sea2data.biotic.bo.SampleBO;
+import no.imr.sea2data.biotic.bo.CatchSampleBO;
 import no.imr.sea2data.imrbase.math.Calc;
 import no.imr.sea2data.imrbase.util.Conversion;
 import no.imr.sea2data.imrbase.util.IMRdate;
@@ -48,7 +48,7 @@ public class BioticXMLReader extends XMLReader {
             currentCruise = value;
         } else if (object instanceof FishstationBO) {
             createFishStation(object, key, value);
-        } else if (object instanceof SampleBO) {
+        } else if (object instanceof CatchSampleBO) {
             createSample(object, key, value);
         } else if (object instanceof IndividualBO) {
             createIndividual(object, key, value);
@@ -110,7 +110,8 @@ public class BioticXMLReader extends XMLReader {
             if (taxa == null) {
                 taxa = "ukjent";
             }
-            SampleBO sample = station.addSample(taxa);
+            CatchSampleBO sample = station.addCatchSample();
+            sample.setCatchcategory(taxa);
             String noName = getCurrentAttributeValue("noname");
             if (noName == null || noName.isEmpty()) {
                 // Back compability when noname is not given in xml file.
@@ -119,15 +120,15 @@ public class BioticXMLReader extends XMLReader {
                 // Rid of single quite since in stock SILD'G03 Jexl is using it as string delimiter
                 noName = noName.replace("'", "")/*.toUpperCase()*/;
             }
-            sample.getCatchBO().setCommonname(noName);
-            sample.getCatchBO().setAphia(getCurrentAttributeValue("aphia"));
+            sample.setCommonname(noName);
+            sample.setAphia(getCurrentAttributeValue("aphia"));
             result = sample;
-        } else if (current instanceof SampleBO && elmName.equals("individual")) {
-            SampleBO sample = (SampleBO) current;
+        } else if (current instanceof CatchSampleBO && elmName.equals("individual")) {
+            CatchSampleBO sample = (CatchSampleBO) current;
             IndividualBO indBO = sample.addIndividual();
             result = indBO;
-        } /*else if (current instanceof SampleBO && elmName.equals("prey")) {
-            SampleBO sample = (SampleBO) current;
+        } /*else if (current instanceof CatchSampleBO && elmName.equals("prey")) {
+            CatchSampleBO sample = (CatchSampleBO) current;
             PreyBO prey = new PreyBO();
             sample.addPrey(Conversion.safeStringtoIntegerNULL(getCurrentAttributeValue("fishno")), prey);
             prey.setSample(sample);
@@ -236,7 +237,7 @@ public class BioticXMLReader extends XMLReader {
      * @param value The value being set
      */
     private void createSample(final Object object, final String key, final String value) {
-        SampleBO bo = (SampleBO) object;
+        CatchSampleBO bo = (CatchSampleBO) object;
         if (key.equals("samplenumber")) {
             bo.setCatchpartnumber(Conversion.safeStringtoIntegerNULL(value));
         } else if (key.equals("sampletype")) {
@@ -296,14 +297,14 @@ public class BioticXMLReader extends XMLReader {
         } else if (key.equals("weightmethod") || key.equals("producttype")) {
             bo.setIndividualproducttype(value);
         } else if (key.equals("weight")) {
-            bo.setIndividualweight(Calc.roundTo(StoXMath.kgToGrams(Conversion.safeStringtoDoubleNULL(value)), 8));
+            bo.setIndividualweight(Conversion.safeStringtoDoubleNULL(value));
         } else if (key.equals("volume")) {
             bo.setIndividualvolume(Conversion.safeStringtoDoubleNULL(value));
         } else if (key.equals("lengthunit")) {
             bo.setLengthresolution(value);
         } else if (key.equals("length")) {
             // In StoX read length as cm.
-            bo.setLength(Calc.roundTo(StoXMath.mToCM(Conversion.safeStringtoDoubleNULL(value)), 8));
+            bo.setLength(Conversion.safeStringtoDoubleNULL(value));
         } else if (key.equals("fat")) {
             bo.setFat(value);
         } else if (key.equals("sex")) {

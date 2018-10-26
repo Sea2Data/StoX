@@ -7,10 +7,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import no.imr.stox.functions.utils.Functions;
-import no.imr.sea2data.biotic.bo.CatchBO;
 import no.imr.sea2data.biotic.bo.FishstationBO;
 import no.imr.sea2data.biotic.bo.IndividualBO;
-import no.imr.sea2data.biotic.bo.SampleBO;
+import no.imr.sea2data.biotic.bo.CatchSampleBO;
 import static org.junit.Assert.*;
 import org.junit.Test;
 
@@ -55,34 +54,32 @@ public class FilterBioticTest {
         st1.setSamplequality("1");
         st1.setStationtype("4");
         st1.setFishingdepthmax(200.0);
-        CatchBO c11 = new CatchBO(st1);
-        c11.setCatchcategory("SILD");
-        SampleBO sample11 = new SampleBO(c11);
+        CatchSampleBO sample11 = new CatchSampleBO(st1);
+        sample11.setCatchcategory("SILD");
         sample11.setGroup("1");
         sample11.setSampletype(5);
         IndividualBO individ11 = sample11.addIndividual();
         IndividualBO individ12 = sample11.addIndividual();
         IndividualBO individ13 = sample11.addIndividual();
-        individ11.setLength(2.0);
-        individ12.setLength(3.0);
-        individ13.setLength(5.0);
+        individ11.setLength(0.02);
+        individ12.setLength(0.03);
+        individ13.setLength(0.05);
 
         FishstationBO st2 = new FishstationBO();
         st2.setGearcondition("4");
         st2.setSamplequality("5");
         st2.setStationtype("2");
         st2.setFishingdepthmax(400.0);
-        CatchBO c21 = new CatchBO(st2);
-        c21.setCatchcategory("HYSE");
-        SampleBO sample12 = new SampleBO(c21);
+        CatchSampleBO sample12 = new CatchSampleBO(st2);
+        sample12.setCatchcategory("HYSE");
         sample12.setGroup("2");
         sample12.setSampletype(8);
         IndividualBO individ21 = sample12.addIndividual();
         IndividualBO individ22 = sample12.addIndividual();
         IndividualBO individ23 = sample12.addIndividual();
-        individ21.setLength(1.0);
-        individ22.setLength(3.0);
-        individ23.setLength(6.0);
+        individ21.setLength(0.01);
+        individ22.setLength(0.03);
+        individ23.setLength(0.06);
 
         List<FishstationBO> fishstations = new ArrayList<>(Arrays.asList(st1, st2));
 

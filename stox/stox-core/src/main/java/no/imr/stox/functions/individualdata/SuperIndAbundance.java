@@ -11,7 +11,6 @@ import no.imr.stox.bo.AbundanceMatrix;
 import no.imr.stox.bo.IndividualDataMatrix;
 import no.imr.stox.bo.LengthDistMatrix;
 import no.imr.sea2data.imrbase.matrix.MatrixBO;
-import no.imr.sea2data.imrbase.util.Conversion;
 import no.imr.stox.bo.ProcessDataBO;
 import no.imr.stox.functions.utils.AbndEstProcessDataUtil;
 import no.imr.stox.functions.utils.BioticUtils;
@@ -111,7 +110,7 @@ public class SuperIndAbundance extends AbstractFunction {
                         Double dsum = null;
                         if (splitByStationDens) {
                             for (IndividualBO indBO : indList) {
-                                String stationKey = indBO.getSample().getCatchBO().getStationBO().getKey();
+                                String stationKey = indBO.getCatchSample().getStationBO().getKey();
                                 Double m = stDens.getRowColValueAsDouble("m", stationKey);
                                 m = m == null ? 1 : m + 1;
                                 stDens.setRowColValue("m", stationKey, m);
@@ -137,7 +136,7 @@ public class SuperIndAbundance extends AbstractFunction {
                             // Default unscaled abundance proportion 
                             Double p = 1d / indList.size(); // equal split by default.
                             if (splitByStationDens) {
-                                String stationKey = indBO.getSample().getCatchBO().getStationBO().getKey();                                // Split by station density, like for swept area.
+                                String stationKey = indBO.getCatchSample().getStationBO().getKey();                                // Split by station density, like for swept area.
                                 Double m = stDens.getRowColValueAsDouble("m", stationKey);
                                 Double d = stDens.getRowColValueAsDouble("d", stationKey);
                                 if (d == null) {
@@ -154,10 +153,10 @@ public class SuperIndAbundance extends AbstractFunction {
                             Double abundance = totAbundance * p;
                             String indKey = (++idx).toString();
                             addSuperindividual(resData, indKey, specCatKey, stratumKey, estLayerKey, lenGrp, lenIntv, abundance, precisionLevel);
-                            /*if (indBO.getWeight() != null) {
-                             resData.setRowColValue(indKey, Functions.COL_ABNDBYIND_BIOMASS, Calc.roundTo(StoXMath.safeMult(abundance, StoXMath.gramsToKg(indBO.getWeight())), 4));
+                            /*if (indBO.getIndividualweight() != null) {
+                             resData.setRowColValue(indKey, Functions.COL_ABNDBYIND_BIOMASS, Calc.roundTo(StoXMath.safeMult(abundance, StoXMath.gramsToKg(indBO.getIndividualweight())), 4));
                              }*/
-                            if (indBO.getSample() == null) {
+                            if (indBO.getCatchSample() == null) {
                                 System.out.println("Error in individual " + indBO);
                             }
                             // Add Individual weighting factor
@@ -255,10 +254,10 @@ public class SuperIndAbundance extends AbstractFunction {
 
  /*private Double getIndividualWeightingFactor(String species, String stratum, String estLayer, String lenGrp, MatrixBO lengthDist,
      MatrixBO totalLFQ, IndividualBO indBO, Integer nIndividuals) {
-     if (totalLFQ == null || lengthDist == null || indBO == null || indBO.getSample() == null) {
+     if (totalLFQ == null || lengthDist == null || indBO == null || indBO.getCatchSample() == null) {
      return null;
      }
-     String station = indBO.getSample().getCatchBO().getStationBO().getKey();
+     String station = indBO.getCatchSample().getCatchBO().getStationBO().getKey();
      MatrixBO r = (MatrixBO) lengthDist.getGroupRowValue(species, station);
      if (r == null) {
      return null;

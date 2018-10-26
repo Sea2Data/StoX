@@ -12,9 +12,8 @@ import java.util.Map;
 import java.util.Set;
 import java.util.function.Function;
 import java.util.stream.Collectors;
-import no.imr.sea2data.biotic.bo.CatchBO;
 import no.imr.sea2data.biotic.bo.FishstationBO;
-import no.imr.sea2data.biotic.bo.SampleBO;
+import no.imr.sea2data.biotic.bo.CatchSampleBO;
 import no.imr.sea2data.echosounderbo.DistanceBO;
 import no.imr.sea2data.imrmap.utils.JTSUtils;
 import no.imr.stox.bo.LengthDistMatrix;
@@ -242,11 +241,9 @@ public class BioStationWeighting extends AbstractFunction {
                 continue;
             }
             Integer numLengthSamples = 0;
-            for (CatchBO c : fs.getCatchBOs()) {
-                for (SampleBO s : c.getSampleBOs()) {
-                    if (s.getIndividualBOs() != null) {
-                        numLengthSamples += s.getIndividualBOs().size();
-                    }
+            for (CatchSampleBO s : fs.getCatchSampleBOs()) {
+                if (s.getIndividualBOs() != null) {
+                    numLengthSamples += s.getIndividualBOs().size();
                 }
             }
             if (maxNumlengthSamples != null) {
@@ -276,21 +273,19 @@ public class BioStationWeighting extends AbstractFunction {
                 continue;
             }
             Double totCatch = 0d;
-            for (CatchBO c : fs.getCatchBOs()) {
-                for (SampleBO s : c.getSampleBOs()) {
-                    if (s.getIndividualBOs() != null) {
-                        Double var = null;
-                        switch (weightingMethod) {
-                            case Functions.WEIGHTINGMETHOD_NORMTOTALWEIGHT:
-                                var = s.getCatchweight();
-                                break;
-                            case Functions.WEIGHTINGMETHOD_NORMTOTALCOUNT:
-                                var = Conversion.safeIntegerToDouble(s.getCatchcount());
-                                break;
-                        }
-                        if (var != null) {
-                            totCatch += var;
-                        }
+            for (CatchSampleBO s : fs.getCatchSampleBOs()) {
+                if (s.getIndividualBOs() != null) {
+                    Double var = null;
+                    switch (weightingMethod) {
+                        case Functions.WEIGHTINGMETHOD_NORMTOTALWEIGHT:
+                            var = s.getCatchweight();
+                            break;
+                        case Functions.WEIGHTINGMETHOD_NORMTOTALCOUNT:
+                            var = Conversion.safeIntegerToDouble(s.getCatchcount());
+                            break;
+                    }
+                    if (var != null) {
+                        totCatch += var;
                     }
                 }
             }

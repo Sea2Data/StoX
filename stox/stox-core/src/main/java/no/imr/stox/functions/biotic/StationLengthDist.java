@@ -7,10 +7,9 @@ import java.util.Set;
 import no.imr.sea2data.imrbase.matrix.MatrixBO;
 import no.imr.stox.functions.utils.Functions;
 import no.imr.stox.functions.AbstractFunction;
-import no.imr.sea2data.biotic.bo.CatchBO;
 import no.imr.sea2data.biotic.bo.FishstationBO;
 import no.imr.sea2data.biotic.bo.IndividualBO;
-import no.imr.sea2data.biotic.bo.SampleBO;
+import no.imr.sea2data.biotic.bo.CatchSampleBO;
 import no.imr.sea2data.imrbase.math.Calc;
 import no.imr.sea2data.imrbase.math.ImrMath;
 import no.imr.sea2data.imrbase.util.Conversion;
@@ -56,37 +55,35 @@ public class StationLengthDist extends AbstractFunction {
                 distanceWFac = StoXMath.raiseFac(distanceWFac, fs.getDistance());
             }
             String observation = fs.getKey(); // Using fishstation key as row
-            for (CatchBO c : fs.getCatchBOs()) {
-                String speciesCat = c.getSpeciesCatTableKey(); // Using taxa as group
-                for (SampleBO s : c.getSampleBOs()) {
-                    // Standardize sample to total catch
-                    Double sampleWFac = StoXMath.raiseFac(s.getCatchweight(), s.getlengthsampleweight());
-                    if (s.getIndividualBOs().isEmpty() && (s.getlengthsampleweight() != null && s.getlengthsampleweight() > 0d || s.getLengthsamplecount() != null && s.getLengthsamplecount() > 0d)) {
-                        logger.log("Warning: Length distr. not calculated because of missing length sample individuals in " + s.getKey());
-                        continue;
-                    }
-                    if (sampleWFac == null) {
-                        if (inPercent) {
-                            // Standardize sample to total catch is not needed, the percent (shape) of the LFQ is given.
-                            sampleWFac = 1.0; // not needed
-                        } else {
-                            sampleWFac = ImrMath.safeDivide(s.getCatchcount(), s.getLengthsamplecount());
-                            if (sampleWFac == null) {
-                                logger.log("Warning: Length distr. not calculated because of missing weight or sample weight in " + s.getKey());
-                                continue;
-                            }
+            for (CatchSampleBO s : fs.getCatchSampleBOs()) {
+                String speciesCat = s.getSpeciesCatTableKey(); // Using taxa as group
+                // Standardize sample to total catch
+                Double sampleWFac = StoXMath.raiseFac(s.getCatchweight(), s.getlengthsampleweight());
+                if (s.getIndividualBOs().isEmpty() && (s.getlengthsampleweight() != null && s.getlengthsampleweight() > 0d || s.getLengthsamplecount() != null && s.getLengthsamplecount() > 0d)) {
+                    logger.log("Warning: Length distr. not calculated because of missing length sample individuals in " + s.getKey());
+                    continue;
+                }
+                if (sampleWFac == null) {
+                    if (inPercent) {
+                        // Standardize sample to total catch is not needed, the percent (shape) of the LFQ is given.
+                        sampleWFac = 1.0; // not needed
+                    } else {
+                        sampleWFac = ImrMath.safeDivide(s.getCatchcount(), s.getLengthsamplecount());
+                        if (sampleWFac == null) {
+                            logger.log("Warning: Length distr. not calculated because of missing weight or sample weight in " + s.getKey());
+                            continue;
                         }
                     }
-                    for (IndividualBO i : s.getIndividualBOs()) {
-                        Double lengthInCM = i.getLength();
-                        String lenGrp = BioticUtils.getLenGrp(lengthInCM, lengthInterval);
-                        Double lengthGroupInCM = ImrMath.trunc(lengthInCM, lengthInterval);
-                        if (lengthGroupInCM != null) {
-                            firstLenGrp = Math.min(firstLenGrp, lengthGroupInCM);
-                            lastLenGrp = Math.max(lastLenGrp, lengthGroupInCM);
-                            Double v = StoXMath.combineWFac(sampleWFac, distanceWFac);
-                            result.getData().addGroupRowCellValue(speciesCat, observation, lenGrp, v);
-                        }
+                }
+                for (IndividualBO i : s.getIndividualBOs()) {
+                    Double lengthInCM = i.getLengthCM();
+                    String lenGrp = BioticUtils.getLenGrp(lengthInCM, lengthInterval);
+                    Double lengthGroupInCM = ImrMath.trunc(lengthInCM, lengthInterval);
+                    if (lengthGroupInCM != null) {
+                        firstLenGrp = Math.min(firstLenGrp, lengthGroupInCM);
+                        lastLenGrp = Math.max(lastLenGrp, lengthGroupInCM);
+                        Double v = StoXMath.combineWFac(sampleWFac, distanceWFac);
+                        result.getData().addGroupRowCellValue(speciesCat, observation, lenGrp, v);
                     }
                 }
             }

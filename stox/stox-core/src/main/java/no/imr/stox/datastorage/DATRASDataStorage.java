@@ -9,10 +9,9 @@ import java.io.Writer;
 import java.text.DecimalFormat;
 import java.util.List;
 import java.util.Arrays;
-import no.imr.sea2data.biotic.bo.CatchBO;
 import no.imr.sea2data.biotic.bo.FishstationBO;
 import no.imr.sea2data.biotic.bo.IndividualBO;
-import no.imr.sea2data.biotic.bo.SampleBO;
+import no.imr.sea2data.biotic.bo.CatchSampleBO;
 import no.imr.sea2data.imrbase.math.ImrMath;
 import no.imr.sea2data.imrbase.util.Conversion;
 import no.imr.sea2data.imrbase.util.IMRdate;
@@ -103,7 +102,9 @@ public class DATRASDataStorage extends FileDataStorage {
     }
 
     public static Integer getGOVSweepByEquipment(String eqp) {
-        if(eqp == null) return -9;
+        if (eqp == null) {
+            return -9;
+        }
         switch (eqp) {
             case "3120":
                 return -9;
@@ -144,6 +145,7 @@ public class DATRASDataStorage extends FileDataStorage {
         //}
         return "S";
     }
+
     /*
      ICES survey protocol for IBTS
      Size grades
@@ -166,7 +168,6 @@ public class DATRASDataStorage extends FileDataStorage {
     
     
      */
-
     public static void asTable(List<FishstationBO> list, Integer level, Writer wr) {
         switch (level) {
             case 1:
@@ -188,8 +189,9 @@ public class DATRASDataStorage extends FileDataStorage {
                     if (!(fs.getStationtype() == null || fs.getStationtype().equals(""))) {
                         continue;
                     }
-                    if(fs.getStationstartdate() == null)
+                    if (fs.getStationstartdate() == null) {
                         continue;
+                    }
                     Integer year = IMRdate.getYear(fs.getStationstartdate(), true);
                     Integer month = IMRdate.getMonth(fs.getStationstartdate(), true);
                     Integer day = IMRdate.getDayOfMonth(fs.getStationstartdate(), true);
@@ -329,106 +331,110 @@ public class DATRASDataStorage extends FileDataStorage {
                     if (sweep == null) { // Sweep filter
                         continue;
                     }
-                    if(fs.getStationstartdate() == null)
+                    if (fs.getStationstartdate() == null) {
                         continue;
+                    }
                     Integer year = IMRdate.getYear(fs.getStationstartdate(), true);
                     Integer month = IMRdate.getMonth(fs.getStationstartdate(), true);
                     Integer quarter = (int) Math.ceil(month / 3.0);
                     String haulVal = (fs.getGearcondition() == null || fs.getGearcondition().equals("1") || fs.getGearcondition().equals("2"))
                             && (fs.getSamplequality() == null || fs.getSamplequality().equals("0") || fs.getSamplequality().equals("1")) ? "V" : "I";
 
-                    for (CatchBO c : fs.getCatchBOs()) {
+                    for (CatchSampleBO s : fs.getCatchSampleBOs()) {
                         // IU: Sometimes we get null aphia
-                        if(c.getAphia() == null)
+                        if (s.getAphia() == null) {
                             continue;
+                        }
 
                         // IU: Use aphia for comparison and add crustacean boolean
-                        boolean isHerringOrSprat = c.getAphia().equals("126417") || c.getAphia().equals("126425");
+                        boolean isHerringOrSprat = s.getAphia().equals("126417") || s.getAphia().equals("126425");
 
-                        List<String> crustList = Arrays.asList( "107275", "107276", "107369", "107253", "107703", "107704", "107350", "107254", "107205", "140712", "140687", "140658" );
-                        boolean isCrustacean = crustList.contains(c.getAphia());
+                        List<String> crustList = Arrays.asList("107275", "107276", "107369", "107253", "107703", "107704", "107350", "107254", "107205", "140712", "140687", "140658");
+                        boolean isCrustacean = crustList.contains(s.getAphia());
 
-                        for (SampleBO s : c.getSampleBOs()) {
+                        //Double raiseFac = 60.0 / IMRdate.minutesDiffD(IMRdate.encodeDate(fs.getStationstartdate(), fs.getStationstarttime()), IMRdate.encodeDate(fs.getStationstopdate(), fs.getStationstoptime()));
+                        MatrixBO hlNoAtLngth = new MatrixBO();
+                        MatrixBO lsCountTot = new MatrixBO();
 
-                            //Double raiseFac = 60.0 / IMRdate.minutesDiffD(IMRdate.encodeDate(fs.getStationstartdate(), fs.getStationstarttime()), IMRdate.encodeDate(fs.getStationstopdate(), fs.getStationstoptime()));
-                            MatrixBO hlNoAtLngth = new MatrixBO();
-                            MatrixBO lsCountTot = new MatrixBO();
+                        //Double sampleFac = s.getCatchcount().doubleValue() / s.getLengthsamplecount();
+                        //if (s.getIndividualweight() == null || s.getCatchcount() == null) {
+                        //    continue;
+                        //}
+                        Integer specVal = haulVal.equals("I") ? 0
+                                : s.getCatchcount() != null && s.getLengthsamplecount() != null && s.getCatchweight() != null ? 1
+                                : s.getCatchcount() != null && s.getLengthsamplecount() == null && s.getCatchweight() == null ? 4
+                                : s.getCatchcount() == null && s.getLengthsamplecount() == null && s.getCatchweight() != null ? 6
+                                : s.getCatchcount() != null && s.getLengthsamplecount() == null && s.getCatchweight() != null ? 7
+                                : haulVal.equals("V") && s.getCatchcount() == null && s.getLengthsamplecount() == null && s.getCatchweight() == null ? 5
+                                : s.getCatchcount() != null && s.getLengthsamplecount() != null && s.getCatchweight() == null ? 0 : -9;
 
-                            //Double sampleFac = s.getCatchcount().doubleValue() / s.getLengthsamplecount();
-                            //if (s.getWeight() == null || s.getCatchcount() == null) {
+                        String lngtCode = s.getSampletype() != null ? isCrustacean ? "."/*1mm*/ : isHerringOrSprat ? "0"/*5mm*/ : "1"/*1cm*/ : "-9"/*1cm*/;
+                        Integer lenInterval = lngtCode.equals("0") ? 5 : 1;
+                        Boolean reportInMM = !lngtCode.equals("1");
+
+                        Double catCatchWgt = (s.getCatchweight() != null ? s.getCatchweight() : 0) * 1000;
+
+                        // If weight is below 1, raise it into 1
+                        if (catCatchWgt < 1 && catCatchWgt > 0) {
+                            catCatchWgt = Math.ceil(catCatchWgt) * 1.0;
+                        }
+
+                        Double subWeight = (s.getlengthsampleweight() != null ? s.getlengthsampleweight() : 0) * 1000;
+
+                        // If weight is below 1, raise it into 1
+                        if (subWeight < 1 && subWeight > 0) {
+                            subWeight = Math.ceil(subWeight) * 1.0;
+                        }
+
+                        if (s.getIndividualBOs().isEmpty() || s.getlengthsampleweight() == null) {
+                            String lngtClass = "-9";
+                            String sex = "-9";
+                            hlNoAtLngth.addGroupRowColValue(s.getAphia(), sex, lngtClass, (s.getCatchcount() != null ? s.getCatchcount() : 0) * 1.0);
+                            lsCountTot.addGroupRowColValue(s.getAphia(), sex, lngtClass, (s.getLengthsamplecount() != null ? s.getLengthsamplecount() : 0) * 1.0);
+                        } else {
+                            //if (s.getlengthsampleweight() == null) {
                             //    continue;
                             //}
-
-                            Integer specVal = haulVal.equals("I") ? 0 :
-                                s.getCatchcount() != null && s.getLengthsamplecount() != null && s.getCatchweight() != null ? 1 :
-                                s.getCatchcount() != null && s.getLengthsamplecount() == null && s.getCatchweight() == null ? 4 :
-                                s.getCatchcount() == null && s.getLengthsamplecount() == null && s.getCatchweight() != null ? 6 :
-                                s.getCatchcount() != null && s.getLengthsamplecount() == null && s.getCatchweight() != null ? 7 :
-                                haulVal.equals("V") && s.getCatchcount() == null && s.getLengthsamplecount() == null && s.getCatchweight() == null ? 5 :
-                                s.getCatchcount() != null && s.getLengthsamplecount() != null && s.getCatchweight() == null ? 0 : -9;
-
-                            String lngtCode = s.getSampletype() != null ? isCrustacean ? "."/*1mm*/ : isHerringOrSprat ? "0"/*5mm*/ : "1"/*1cm*/ : "-9"/*1cm*/;
-                            Integer lenInterval = lngtCode.equals("0") ? 5 : 1;
-                            Boolean reportInMM = !lngtCode.equals("1");
-
-                            Double catCatchWgt = (s.getCatchweight() != null ? s.getCatchweight() : 0) * 1000;
-
-                            // If weight is below 1, raise it into 1
-                            if(catCatchWgt < 1 && catCatchWgt > 0)
-                                catCatchWgt = Math.ceil(catCatchWgt) * 1.0;
-
-                            Double subWeight = (s.getlengthsampleweight() != null ? s.getlengthsampleweight() : 0) * 1000;
-
-                            // If weight is below 1, raise it into 1
-                            if(subWeight < 1 && subWeight > 0)
-                                subWeight = Math.ceil(subWeight) * 1.0;
-
-                            if (s.getIndividualBOs().isEmpty() || s.getlengthsampleweight() == null) {
-                                String lngtClass = "-9";
-                                String sex = "-9";
-                                hlNoAtLngth.addGroupRowColValue(c.getAphia(), sex, lngtClass, (s.getCatchcount() != null ? s.getCatchcount() : 0) * 1.0);
-                                lsCountTot.addGroupRowColValue(c.getAphia(), sex, lngtClass, (s.getLengthsamplecount() != null ? s.getLengthsamplecount() : 0) * 1.0);
-                            } else {
-                                //if (s.getlengthsampleweight() == null) {
-                                //    continue;
-                                //}
-                                Double sampleFac = s.getCatchweight() / s.getlengthsampleweight();
-                                for (IndividualBO i : s.getIndividualBOs()) {
-                                    Double length = i.getLength();/*cm*/;
-                                    if (i.getLength() == null) {
-                                        continue;
-                                    }
-                                    if (reportInMM) {
-                                        if (length > 0) length *= 10;
-                                    } else {
-                                        // Some species have very small length in cm, use mm instead
-                                        if (length < 1) {
-                                            lngtCode = ".";
-                                            lenInterval = 1;
-                                            length *= 10;
-                                            reportInMM = true;
-                                        }
-                                    }
-                                    String lngtClass = "" + ImrMath.trunc(length, lenInterval.doubleValue());
-                                    String sex = i.getSex() == null || i.getSex().trim().isEmpty()
-                                            ? "-9" : i.getSex().equals("1") ? "F" : "M";
-                                    hlNoAtLngth.addGroupRowColValue(c.getAphia(), sex, lngtClass, 1.0 * sampleFac);
-                                    lsCountTot.addGroupRowColValue(c.getAphia(), sex, lngtClass, 1.0);
+                            Double sampleFac = s.getCatchweight() / s.getlengthsampleweight();
+                            for (IndividualBO i : s.getIndividualBOs()) {
+                                Double length = i.getLengthCM();/*cm*/;
+                                if (i.getLengthCM() == null) {
+                                    continue;
                                 }
+                                if (reportInMM) {
+                                    if (length > 0) {
+                                        length *= 10;
+                                    }
+                                } else {
+                                    // Some species have very small length in cm, use mm instead
+                                    if (length < 1) {
+                                        lngtCode = ".";
+                                        lenInterval = 1;
+                                        length *= 10;
+                                        reportInMM = true;
+                                    }
+                                }
+                                String lngtClass = "" + ImrMath.trunc(length, lenInterval.doubleValue());
+                                String sex = i.getSex() == null || i.getSex().trim().isEmpty()
+                                        ? "-9" : i.getSex().equals("1") ? "F" : "M";
+                                hlNoAtLngth.addGroupRowColValue(s.getAphia(), sex, lngtClass, 1.0 * sampleFac);
+                                lsCountTot.addGroupRowColValue(s.getAphia(), sex, lngtClass, 1.0);
                             }
-                            // Group Sex and Length class and report counts at catch level (raw)
-                            String aphia = (String) c.getAphia();
-                            for (String sex : hlNoAtLngth.getGroupRowKeys(aphia)) {
-                                Double totalNo = hlNoAtLngth.getGroupRowValueAsMatrix(aphia, sex).getSum();
-                                Double noMeas = lsCountTot.getGroupRowValueAsMatrix(aphia, sex).getSum();
-                                Double subFactor = (totalNo != 0 && noMeas != 0) ? totalNo / noMeas : -9;
+                        }
+                        // Group Sex and Length class and report counts at catch level (raw)
+                        String aphia = (String) s.getAphia();
+                        for (String sex : hlNoAtLngth.getGroupRowKeys(aphia)) {
+                            Double totalNo = hlNoAtLngth.getGroupRowValueAsMatrix(aphia, sex).getSum();
+                            Double noMeas = lsCountTot.getGroupRowValueAsMatrix(aphia, sex).getSum();
+                            Double subFactor = (totalNo != 0 && noMeas != 0) ? totalNo / noMeas : -9;
 
-                                // If subFactor == 1, we can use catCatchWgt
-                                if(subFactor == 1)
-                                    subWeight = catCatchWgt;
+                            // If subFactor == 1, we can use catCatchWgt
+                            if (subFactor == 1) {
+                                subWeight = catCatchWgt;
+                            }
 
-                                for (String lngtClass : hlNoAtLngth.getGroupRowColKeys(aphia, sex)) {
-                                    ImrIO.write(wr, ExportUtil.carrageReturnLineFeed(ExportUtil.csv(
+                            for (String lngtClass : hlNoAtLngth.getGroupRowColKeys(aphia, sex)) {
+                                ImrIO.write(wr, ExportUtil.carrageReturnLineFeed(ExportUtil.csv(
                                         "HL",
                                         quarter,
                                         getTSCountryByIOC(fs.getNation()),
@@ -452,8 +458,7 @@ public class DATRASDataStorage extends FileDataStorage {
                                         catCatchWgt == 0 ? -9 : Math.round(catCatchWgt), /* g */
                                         lngtCode,
                                         lngtClass,
-                                        lsCountTot.getGroupRowColValueAsDouble(aphia, sex, lngtClass) > 0 ? unkD(lsCountTot.getGroupRowColValueAsDouble(aphia, sex, lngtClass), "0.00") : -9.00 )));
-                                }
+                                        lsCountTot.getGroupRowColValueAsDouble(aphia, sex, lngtClass) > 0 ? unkD(lsCountTot.getGroupRowColValueAsDouble(aphia, sex, lngtClass), "0.00") : -9.00)));
                             }
                         }
                     }
@@ -469,96 +474,98 @@ public class DATRASDataStorage extends FileDataStorage {
                     if (sweep == null) { // Sweep filter
                         continue;
                     }
-                    if(fs.getStationstartdate() == null)
+                    if (fs.getStationstartdate() == null) {
                         continue;
+                    }
                     Integer year = IMRdate.getYear(fs.getStationstartdate(), true);
                     Integer month = IMRdate.getMonth(fs.getStationstartdate(), true);
                     Integer quarter = (int) Math.ceil(month / 3.0);
                     String areaLoc = fs.getArea() != null && fs.getLocation() != null ? fs.getArea() + fs.getLocation() : "";
 
-                    for (CatchBO c : fs.getCatchBOs()) {
+                    for (CatchSampleBO s : fs.getCatchSampleBOs()) {
                         // IU: Sometimes we get null aphia
-                        if(c.getAphia() == null)
+                        if (s.getAphia() == null) {
                             continue;
+                        }
                         // IU: Use aphia for comparison and add crustacean boolean
-                        boolean isHerringOrSprat = c.getAphia().equals("126417") || c.getAphia().equals("126425");
+                        boolean isHerringOrSprat = s.getAphia().equals("126417") || s.getAphia().equals("126425");
 
-                        List<String> crustList = Arrays.asList( "107275", "107276", "107369", "107253", "107703", "107704", "107350", "107254", "107205", "140712", "140687", "140658" );
-                        boolean isCrustacean = crustList.contains(c.getAphia());
+                        List<String> crustList = Arrays.asList("107275", "107276", "107369", "107253", "107703", "107704", "107350", "107254", "107205", "140712", "140687", "140658");
+                        boolean isCrustacean = crustList.contains(s.getAphia());
 
-                        for (SampleBO s : c.getSampleBOs()) {
-                            if (s.getIndividualBOs().isEmpty()) {
+                        if (s.getIndividualBOs().isEmpty()) {
+                            continue;
+                        }
+                        MatrixBO nInd = new MatrixBO();
+                        MatrixBO nWithWeight = new MatrixBO();
+                        MatrixBO totWeight = new MatrixBO();
+                        String lngtCode = s.getSampletype() != null ? isCrustacean ? "."/*1mm*/ : isHerringOrSprat ? "0"/*5mm*/ : "1"/*1cm*/ : "-9"/*1cm*/;
+                        Integer lenInterval = lngtCode.equals("0") ? 5 : 1;
+                        Boolean reportInMM = !lngtCode.equals("1");
+                        for (IndividualBO i : s.getIndividualBOs()) {
+                            Double length = i.getLengthCM();/*cm*/;
+                            if (i.getLengthCM() == null) {
                                 continue;
                             }
-                            MatrixBO nInd = new MatrixBO();
-                            MatrixBO nWithWeight = new MatrixBO();
-                            MatrixBO totWeight = new MatrixBO();
-                            String lngtCode = s.getSampletype() != null ? isCrustacean ? "."/*1mm*/ : isHerringOrSprat ? "0"/*5mm*/ : "1"/*1cm*/ : "-9"/*1cm*/;
-                            Integer lenInterval = lngtCode.equals("0") ? 5 : 1;
-                            Boolean reportInMM = !lngtCode.equals("1");
-                            for (IndividualBO i : s.getIndividualBOs()) {
-                                Double length = i.getLength();/*cm*/;
-                                if (i.getLength() == null) {
-                                    continue;
+                            if (reportInMM) {
+                                if (length > 0) {
+                                    length *= 10;
                                 }
-                                if (reportInMM) {
-                                    if (length > 0) length *= 10;
-                                } else {
-                                    // Some species have very small length in cm, use mm instead
-                                    if (length < 1) {
-                                        lngtCode = ".";
-                                        lenInterval = 1;
-                                        length *= 10;
-                                        reportInMM = true;
-                                    }
-                                }
-                                String lngtClass = "" + ImrMath.trunc(length, lenInterval.doubleValue());
-                                String sex = i.getSex() == null || i.getSex().trim().isEmpty() ? "-9" : i.getSex().equals("1") ? "F" : "M";
-                                String maturity = getDATRASMaturity(i);
-                                String age = i.getAge() != null ? i.getAge() + "" : "-9";
-                                nInd.addGroupRowColCellValue(lngtClass, sex, maturity, age, 1.0);
-                                if (i.getWeight()/*g*/ != null) {
-                                    nWithWeight.addGroupRowColCellValue(lngtClass, sex, maturity, age, 1.0);
-                                    totWeight.addGroupRowColCellValue(lngtClass, sex, maturity, age, i.getWeight());
+                            } else {
+                                // Some species have very small length in cm, use mm instead
+                                if (length < 1) {
+                                    lngtCode = ".";
+                                    lenInterval = 1;
+                                    length *= 10;
+                                    reportInMM = true;
                                 }
                             }
-                            // Group Length class - Sex - Maturity - Age and report meanweight and category count at individual level
-                            for (String lngtClass : nInd.getKeys()) {
-                                for (String sex : nInd.getGroupRowKeys(lngtClass)) {
-                                    for (String maturity : nInd.getGroupRowColKeys(lngtClass, sex)) {
-                                        for (String age : nInd.getGroupRowColCellKeys(lngtClass, sex, maturity)) {
-                                            Long n = Math.round(nInd.getGroupRowColCellValueAsDouble(lngtClass, sex, maturity, age));
-                                            Double nWithW = nWithWeight.getGroupRowColCellValueAsDouble(lngtClass, sex, maturity, age);
-                                            Double totW = totWeight.getGroupRowColCellValueAsDouble(lngtClass, sex, maturity, age);
-                                            Double meanW = null;
-                                            if (nWithW != null) {
-                                                meanW = totW / nWithW;
-                                            }
-                                            ImrIO.write(wr, ExportUtil.carrageReturnLineFeed(ExportUtil.csv(
-                                                    "CA",
-                                                    quarter,
-                                                    getTSCountryByIOC(fs.getNation()),
-                                                    getTSShipByPlatform(fs.getCatchplatform()),
-                                                    "GOV",
-                                                    sweep,
-                                                    "S",
-                                                    "P",
-                                                    fs.getSerialnumber(),
-                                                    fs.getStation(),
-                                                    year,
-                                                    "W", // Worms
-                                                    c.getAphia(),
-                                                    0,
-                                                    areaLoc,
-                                                    lngtCode,
-                                                    lngtClass,
-                                                    sex,
-                                                    maturity,
-                                                    -9,
-                                                    age,
-                                                    n,
-                                                    unkD(meanW, "0.0"))));
+                            String lngtClass = "" + ImrMath.trunc(length, lenInterval.doubleValue());
+                            String sex = i.getSex() == null || i.getSex().trim().isEmpty() ? "-9" : i.getSex().equals("1") ? "F" : "M";
+                            String maturity = getDATRASMaturity(i);
+                            String age = i.getAge() != null ? i.getAge() + "" : "-9";
+                            nInd.addGroupRowColCellValue(lngtClass, sex, maturity, age, 1.0);
+                            if (i.getIndividualweightG()/*g*/ != null) {
+                                nWithWeight.addGroupRowColCellValue(lngtClass, sex, maturity, age, 1.0);
+                                totWeight.addGroupRowColCellValue(lngtClass, sex, maturity, age, i.getIndividualweightG());
+                            }
+                        }
+                        // Group Length class - Sex - Maturity - Age and report meanweight and category count at individual level
+                        for (String lngtClass : nInd.getKeys()) {
+                            for (String sex : nInd.getGroupRowKeys(lngtClass)) {
+                                for (String maturity : nInd.getGroupRowColKeys(lngtClass, sex)) {
+                                    for (String age : nInd.getGroupRowColCellKeys(lngtClass, sex, maturity)) {
+                                        Long n = Math.round(nInd.getGroupRowColCellValueAsDouble(lngtClass, sex, maturity, age));
+                                        Double nWithW = nWithWeight.getGroupRowColCellValueAsDouble(lngtClass, sex, maturity, age);
+                                        Double totW = totWeight.getGroupRowColCellValueAsDouble(lngtClass, sex, maturity, age);
+                                        Double meanW = null;
+                                        if (nWithW != null) {
+                                            meanW = totW / nWithW;
                                         }
+                                        ImrIO.write(wr, ExportUtil.carrageReturnLineFeed(ExportUtil.csv(
+                                                "CA",
+                                                quarter,
+                                                getTSCountryByIOC(fs.getNation()),
+                                                getTSShipByPlatform(fs.getCatchplatform()),
+                                                "GOV",
+                                                sweep,
+                                                "S",
+                                                "P",
+                                                fs.getSerialnumber(),
+                                                fs.getStation(),
+                                                year,
+                                                "W", // Worms
+                                                s.getAphia(),
+                                                0,
+                                                areaLoc,
+                                                lngtCode,
+                                                lngtClass,
+                                                sex,
+                                                maturity,
+                                                -9,
+                                                age,
+                                                n,
+                                                unkD(meanW, "0.0"))));
                                     }
                                 }
                             }
@@ -569,7 +576,7 @@ public class DATRASDataStorage extends FileDataStorage {
     }
 
     private static String getDATRASMaturity(IndividualBO i) {
-        CatchBO c = i.getSample().getCatchBO();
+        CatchSampleBO c = i.getCatchSample();
         String noName = c.getCommonname().toUpperCase();
         boolean isHerringOrSpratOrMackerel = c.getAphia().equals("126417") || c.getAphia().equals("126425") || c.getAphia().equals("127023");
 

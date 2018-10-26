@@ -5,13 +5,10 @@
  */
 package no.imr.stox.bo;
 
-import java.util.ArrayList;
-import no.imr.sea2data.biotic.bo.FishstationBO;
-
 /**
  *
  * @author aasmunds
  */
-public class BioticData extends ArrayList<FishstationBO> {
+public class BioticData {
     
 }

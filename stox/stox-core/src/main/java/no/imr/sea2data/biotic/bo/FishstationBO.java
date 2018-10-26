@@ -54,7 +54,7 @@ public class FishstationBO implements ILatLonEvent {
     private String stationcomment;
     private Date stationstopdate;
     private Double logstop;
-    private List<CatchBO> catchBOs = new ArrayList<>();
+    private List<CatchSampleBO> catchSampleBOs = new ArrayList<>();
     private Integer year;
     private Double wingspread;
     private Double wingspreadsd;
@@ -483,7 +483,7 @@ public class FishstationBO implements ILatLonEvent {
     }
 
     public boolean hasCatch(String noName) {
-        for (CatchBO c : getCatchBOs()) {
+        for (CatchSampleBO c : getCatchSampleBOs()) {
             if (c.getCommonname().equals(noName)) {
                 return true;
             }
@@ -491,12 +491,12 @@ public class FishstationBO implements ILatLonEvent {
         return false;
     }
 
-    public int getCountBy(String species, Function<CatchBO, String> spcodeFunc) {
+    public int getCountBy(String species, Function<CatchSampleBO, String> spcodeFunc) {
         int n = 0;
-        if (getCatchBOs() == null) {
+        if (getCatchSampleBOs() == null) {
             return 0;
         }
-        for (CatchBO c : getCatchBOs()) {
+        for (CatchSampleBO c : getCatchSampleBOs()) {
             String spcode = spcodeFunc.apply(c);
             if (spcode == null) {
                 continue;
@@ -504,15 +504,10 @@ public class FishstationBO implements ILatLonEvent {
             if (!spcode.equals(species)) {
                 continue;
             }
-            if (c.getSampleBOs() == null) {
+            if (c.getCatchcount() == null) {
                 continue;
             }
-            for (SampleBO s : c.getSampleBOs()) {
-                if (s.getCatchcount() == null) {
-                    continue;
-                }
-                n += s.getCatchcount();
-            }
+            n += c.getCatchcount();
         }
         return n;
     }
@@ -527,10 +522,10 @@ public class FishstationBO implements ILatLonEvent {
 
     public int getLengthSampleCount(String spec) {
         int n = 0;
-        if (getCatchBOs() == null) {
+        if (getCatchSampleBOs() == null) {
             return 0;
         }
-        for (CatchBO c : getCatchBOs()) {
+        for (CatchSampleBO c : getCatchSampleBOs()) {
             if (c.getCommonname() == null && c.getCatchcategory() == null) {
                 continue;
             }
@@ -538,20 +533,15 @@ public class FishstationBO implements ILatLonEvent {
                 if (!c.getCommonname().equalsIgnoreCase(spec)) { // SILDG03
                     continue;
                 }
-            } else if (c.getCatchcategory()!= null) {
+            } else if (c.getCatchcategory() != null) {
                 if (!c.getCatchcategory().equalsIgnoreCase(spec)) { // 161722.G03
                     continue;
                 }
             }
-            if (c.getSampleBOs() == null) {
+            if (c.getLengthsamplecount() == null) {
                 continue;
             }
-            for (SampleBO s : c.getSampleBOs()) {
-                if (s.getLengthsamplecount() == null) {
-                    continue;
-                }
-                n += s.getLengthsamplecount();
-            }
+            n += c.getLengthsamplecount();
         }
         return n;
     }
@@ -593,32 +583,14 @@ public class FishstationBO implements ILatLonEvent {
         return getKey();
     }
 
-    public List<CatchBO> getCatchBOs() {
-        return catchBOs;
+    public List<CatchSampleBO> getCatchSampleBOs() {
+        return catchSampleBOs;
     }
 
-    public CatchBO addCatch() {
-        return addCatch(null);
-    }
-
-    public CatchBO addCatch(String species) {
-        CatchBO cbo = species == null ? new CatchBO(this) : new CatchBO(this, species);
-        getCatchBOs().add(cbo);
+    public CatchSampleBO addCatchSample() {
+        CatchSampleBO cbo = new CatchSampleBO(this);
+        getCatchSampleBOs().add(cbo);
         return cbo;
-    }
-
-    public SampleBO addSample(String species) {
-        CatchBO cb = null;
-        for (CatchBO cab : getCatchBOs()) {
-            if (cab.getCatchcategory().equals(species)) {
-                cb = cab;
-                break;
-            }
-        }
-        if (cb == null) {
-            cb = addCatch(species);
-        }
-        return cb.addSample();
     }
 
 }

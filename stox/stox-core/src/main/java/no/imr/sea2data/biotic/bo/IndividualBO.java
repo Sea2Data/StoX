@@ -4,6 +4,10 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import no.imr.sea2data.imrbase.math.Calc;
+import no.imr.sea2data.imrbase.math.ImrMath;
+import no.imr.sea2data.imrbase.util.Conversion;
+import no.imr.stox.functions.utils.StoXMath;
 
 /**
  *
@@ -13,10 +17,12 @@ public class IndividualBO implements Serializable {
 
     private Integer specimenid;
     private String individualproducttype;
-    private Double weight;
+    private Double individualweight;
+    private Double individualweightG;
     private Double individualvolume;
     private String lengthresolution;
     private Double length;
+    private Double lengthCM;
     private String fat;
     private String sex;
     private String maturationstage;
@@ -40,23 +46,25 @@ public class IndividualBO implements Serializable {
     private String individualcomment;
     private List<AgeDeterminationBO> ageDeterminationBOs = new ArrayList<>();
 
-    private SampleBO sample;
+    private CatchSampleBO catchsample;
 
     public IndividualBO() {
     }
 
-    public IndividualBO(SampleBO sampleF) {
-        this.sample = sampleF;
+    public IndividualBO(CatchSampleBO sampleF) {
+        this.catchsample = sampleF;
     }
 
-    public IndividualBO(SampleBO sampleF, IndividualBO bo) {
+    public IndividualBO(CatchSampleBO sampleF, IndividualBO bo) {
         this(sampleF);
         specimenid = bo.getSpecimenid();
         individualproducttype = bo.getIndividualproducttype();
-        weight = bo.getWeight();
-        individualvolume = bo.getVolume();
+        individualweight = bo.getIndividualweight();
+        individualweightG = bo.getIndividualweightG();
+        individualvolume = bo.getindividualvolume();
         lengthresolution = bo.getLengthresolution();
         length = bo.getLength();
+        lengthCM = bo.getLengthCM();
         fat = bo.getFat();
         sex = bo.getSex();
         maturationstage = bo.getMaturationstage();
@@ -172,8 +180,9 @@ public class IndividualBO implements Serializable {
         this.stomachfilllab = stomachfilllab;
     }
 
-    public void setIndividualweight(Double weight) {
-        this.weight = weight;
+    public void setIndividualweight(Double individualweight) {
+        this.individualweight = individualweight;
+        this.individualweightG = Calc.roundTo(StoXMath.kgToGrams(individualweight), 8);
     }
 
     public void setIndividualvolume(Double individualvolume) {
@@ -194,17 +203,22 @@ public class IndividualBO implements Serializable {
 
     public void setLength(Double length) {
         this.length = length;
+        this.lengthCM = Calc.roundTo(StoXMath.mToCM(length), 8);
     }
-
+    
     public void setGonadweight(Double gonadweight) {
         this.gonadweight = gonadweight;
     }
 
-    public Double getWeight() {
-        return weight;
+    private Double getIndividualweight() {
+        return individualweight;
     }
 
-    public Double getVolume() {
+    public Double getIndividualweightG() {
+        return individualweightG;
+    }
+    
+    public Double getindividualvolume() {
         return individualvolume;
     }
 
@@ -220,8 +234,12 @@ public class IndividualBO implements Serializable {
         return liverweight;
     }
 
-    public Double getLength() {
+    private Double getLength() {
         return length;
+    }
+
+    public Double getLengthCM() {
+        return lengthCM;
     }
 
     public Integer getSpecimenid() {
@@ -300,8 +318,8 @@ public class IndividualBO implements Serializable {
         this.specimenid = specimenid;
     }
 
-    public SampleBO getSample() {
-        return this.sample;
+    public CatchSampleBO getCatchSample() {
+        return this.catchsample;
     }
 
     public Integer getAge() {
@@ -346,9 +364,9 @@ public class IndividualBO implements Serializable {
     }
 
     public AgeDeterminationBO addAgeDetermination() {
-            AgeDeterminationBO agedet = new AgeDeterminationBO(this);
-            ageDeterminationBOs.add(agedet);
-            return agedet;
+        AgeDeterminationBO agedet = new AgeDeterminationBO(this);
+        ageDeterminationBOs.add(agedet);
+        return agedet;
     }
 
     public AgeDeterminationBO acquireAgeDet() {
@@ -359,7 +377,7 @@ public class IndividualBO implements Serializable {
     }
 
     public String getKey() {
-        return (sample != null ? sample.getKey() + "/" : "") + (specimenid != null ? specimenid : "");
+        return (catchsample != null ? catchsample.getKey() + "/" : "") + (specimenid != null ? specimenid : "");
     }
 
 }

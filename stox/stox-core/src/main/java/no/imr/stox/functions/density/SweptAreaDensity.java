@@ -4,9 +4,8 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import no.imr.sea2data.biotic.bo.CatchBO;
 import no.imr.sea2data.biotic.bo.FishstationBO;
-import no.imr.sea2data.biotic.bo.SampleBO;
+import no.imr.sea2data.biotic.bo.CatchSampleBO;
 import no.imr.sea2data.imrbase.util.Conversion;
 import no.imr.stox.functions.AbstractFunction;
 import no.imr.stox.bo.DensityMatrix;
@@ -254,38 +253,36 @@ public class SweptAreaDensity extends AbstractFunction {
                             logger.error("Station " + station + " not available in Biotic Data.", null);
                             return null;
                         }
-                        for (CatchBO c : fs.getCatchBOs()) {
-                            String specCat = c.getSpeciesCatTableKey(); // Using taxa as group
-                            for (SampleBO s : c.getSampleBOs()) {
-                                Double variable = null;
-                                switch (catchVariable) {
-                                    case Functions.CATCHVARIABLE_WEIGHT:
-                                        variable = s.getCatchweight();
-                                        if(variable == null){
-                                            logger.error("Missing weight at " + s.getKey() + " for psu " + psu, null);
-                                        }
-                                        break;
-                                    case Functions.CATCHVARIABLE_COUNT:
-                                        variable = Conversion.safeIntegerToDouble(s.getCatchcount());
-                                        break;
-                                }
-                                switch (catchVariable) {
-                                    case Functions.CATCHVARIABLE_WEIGHT:
-                                    case Functions.CATCHVARIABLE_COUNT:
-                                        if(variable == null){
-                                            logger.error("Missing " + catchVariable + " at " + s.getKey() + " for psu " + psu, null);
-                                        }
-                                }
-                                Double sweptArea = StoXMath.getSweptArea(sweptDistance, sweepWidthInM);
-                                Double density = getDensity(variable, sweptArea, numEDSUs);
-                                if (density == null) {
-                                    logger.error("Swept area not calculated for " + psu, null);
-                                }
-                                if (density > 0d) {
-                                    posSampleSize.setRowColValue(specCat, station, stationWeight);
-                                }
-                                result.getData().addGroupRowColCellValue(specCat, psu, estLayer, null, density);
+                        for (CatchSampleBO s : fs.getCatchSampleBOs()) {
+                            String specCat = s.getSpeciesCatTableKey(); // Using taxa as group
+                            Double variable = null;
+                            switch (catchVariable) {
+                                case Functions.CATCHVARIABLE_WEIGHT:
+                                    variable = s.getCatchweight();
+                                    if (variable == null) {
+                                        logger.error("Missing weight at " + s.getKey() + " for psu " + psu, null);
+                                    }
+                                    break;
+                                case Functions.CATCHVARIABLE_COUNT:
+                                    variable = Conversion.safeIntegerToDouble(s.getCatchcount());
+                                    break;
                             }
+                            switch (catchVariable) {
+                                case Functions.CATCHVARIABLE_WEIGHT:
+                                case Functions.CATCHVARIABLE_COUNT:
+                                    if (variable == null) {
+                                        logger.error("Missing " + catchVariable + " at " + s.getKey() + " for psu " + psu, null);
+                                    }
+                            }
+                            Double sweptArea = StoXMath.getSweptArea(sweptDistance, sweepWidthInM);
+                            Double density = getDensity(variable, sweptArea, numEDSUs);
+                            if (density == null) {
+                                logger.error("Swept area not calculated for " + psu, null);
+                            }
+                            if (density > 0d) {
+                                posSampleSize.setRowColValue(specCat, station, stationWeight);
+                            }
+                            result.getData().addGroupRowColCellValue(specCat, psu, estLayer, null, density);
                         }
                         break;
                     }

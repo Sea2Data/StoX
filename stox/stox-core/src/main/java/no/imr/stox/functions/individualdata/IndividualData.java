@@ -4,10 +4,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import no.imr.stox.functions.AbstractFunction;
-import no.imr.sea2data.biotic.bo.CatchBO;
 import no.imr.sea2data.biotic.bo.FishstationBO;
-import no.imr.sea2data.biotic.bo.IndividualBO; 
-import no.imr.sea2data.biotic.bo.SampleBO;
+import no.imr.sea2data.biotic.bo.IndividualBO;
+import no.imr.sea2data.biotic.bo.CatchSampleBO;
 import no.imr.stox.bo.IndividualDataMatrix;
 import no.imr.stox.bo.IndividualDataStationsMatrix;
 import no.imr.sea2data.imrbase.matrix.MatrixBO;
@@ -37,15 +36,14 @@ public class IndividualData extends AbstractFunction {
         IndividualDataStationsMatrix indDataSel = (IndividualDataStationsMatrix) input.get(Functions.PM_INDIVIDUALDATA_INDIVIDUALDATASTATIONS);
         IndividualDataMatrix result = new IndividualDataMatrix();
         // Set the resolution:
-        result.getResolutionMatrix().setRowValue(Functions.RES_SAMPLEUNITTYPE, 
+        result.getResolutionMatrix().setRowValue(Functions.RES_SAMPLEUNITTYPE,
                 indDataSel.getResolutionMatrix().getRowValue(Functions.RES_SAMPLEUNITTYPE));
-/*        result.getResolutionMatrix().setRowValue(Functions.RES_LAYERTYPE, 
+        /*        result.getResolutionMatrix().setRowValue(Functions.RES_LAYERTYPE, 
                 indDataSel.getResolutionMatrix().getRowValue(Functions.RES_LAYERTYPE));
-        */
+         */
         // Inherit the length interval resolution from abundance 
         Double lenInterval = (Double) indDataSel.getResolutionMatrix().getRowValue(Functions.RES_LENGTHINTERVAL);
         result.getResolutionMatrix().setRowValue(Functions.RES_LENGTHINTERVAL, lenInterval);
-        
 
         for (String stratumKey : indDataSel.getData().getRowKeys()) {
             MatrixBO stratum = (MatrixBO) indDataSel.getData().getRowValue(stratumKey);
@@ -56,26 +54,24 @@ public class IndividualData extends AbstractFunction {
                     if (!stations.contains(fs.getKey())) {
                         continue;
                     }
-                    for (CatchBO c : fs.getCatchBOs()) {
-                        String specCatKey = c.getSpeciesCatTableKey();
+                    for (CatchSampleBO s : fs.getCatchSampleBOs()) {
+                        String specCatKey = s.getSpeciesCatTableKey();
                         // To do: check species against SpeciesDef in resolution if available. Otherwise this relies on filterbiotic.
-                        for (SampleBO s : c.getSampleBOs()) {
-                            for (IndividualBO i : s.getIndividualBOs()) {
-                                /*if (i.getWeight() == null) {
+                        for (IndividualBO i : s.getIndividualBOs()) {
+                            /*if (i.getIndividualweight() == null) {
                                     continue;
                                 }*/
-                                String lenGrpKey = BioticUtils.getLenGrp(i.getLength(), lenInterval);
-                                List<IndividualBO> indList = (List<IndividualBO>) result.getData().getGroupRowColCellValue(specCatKey, stratumKey, estLayerKey, lenGrpKey);
-                                if (indList == null) {
-                                    indList = new ArrayList<>();
-                                    result.getData().setGroupRowColCellValue(specCatKey, stratumKey, estLayerKey, lenGrpKey, indList);
-                                }
-                                indList.add(i);
-                                if(i.getSample() == null) {
-                                    System.out.println("Error in individual " + i);
-                                }
-                                
+                            String lenGrpKey = BioticUtils.getLenGrp(i.getLengthCM(), lenInterval);
+                            List<IndividualBO> indList = (List<IndividualBO>) result.getData().getGroupRowColCellValue(specCatKey, stratumKey, estLayerKey, lenGrpKey);
+                            if (indList == null) {
+                                indList = new ArrayList<>();
+                                result.getData().setGroupRowColCellValue(specCatKey, stratumKey, estLayerKey, lenGrpKey, indList);
                             }
+                            indList.add(i);
+                            if (i.getCatchSample() == null) {
+                                System.out.println("Error in individual " + i);
+                            }
+
                         }
                     }
                 }

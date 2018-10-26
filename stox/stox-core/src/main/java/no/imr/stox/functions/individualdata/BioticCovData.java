@@ -9,10 +9,9 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
-import no.imr.sea2data.biotic.bo.CatchBO;
 import no.imr.sea2data.biotic.bo.FishstationBO;
 import no.imr.sea2data.biotic.bo.IndividualBO;
-import no.imr.sea2data.biotic.bo.SampleBO;
+import no.imr.sea2data.biotic.bo.CatchSampleBO;
 import no.imr.sea2data.imrbase.matrix.MatrixBO;
 import no.imr.sea2data.imrbase.util.ExportUtil;
 import no.imr.stox.bo.BioticCovDataMatrix;
@@ -57,7 +56,7 @@ public class BioticCovData extends AbstractFunction {
             if (gearKey == null) {
                 gearKey = "";
             }
-            
+
             String spatCovValue = CovariateUtils.getSpatialCovValue(fs/*, var1, var2*/);
             String spatialKey = CovariateUtils.getCovKeyByDefElm(Functions.SOURCETYPE_BIOTIC, spatCovValue, spatialM, false);
             if (spatialKey == null) {
@@ -67,17 +66,15 @@ public class BioticCovData extends AbstractFunction {
             if (platformKey == null) {
                 platformKey = "";
             }
-            for (CatchBO cs : fs.getCatchBOs()) {
-                for (SampleBO s : cs.getSampleBOs()) {
-                    for (IndividualBO i : s.getIndividualBOs()) {
-                        String cov = ExportUtil.separated('/', tempKey, gearKey, spatialKey, platformKey);
-                        List<IndividualBO> l = (List<IndividualBO>) indData.getData().getRowValue(cov);
-                        if (l == null) {
-                            l = new ArrayList<>();
-                            indData.getData().setRowValue(cov, l);
-                        }
-                        l.add(i);
+            for (CatchSampleBO s : fs.getCatchSampleBOs()) {
+                for (IndividualBO i : s.getIndividualBOs()) {
+                    String cov = ExportUtil.separated('/', tempKey, gearKey, spatialKey, platformKey);
+                    List<IndividualBO> l = (List<IndividualBO>) indData.getData().getRowValue(cov);
+                    if (l == null) {
+                        l = new ArrayList<>();
+                        indData.getData().setRowValue(cov, l);
                     }
+                    l.add(i);
                 }
             }
         }

@@ -8,10 +8,9 @@ package no.imr.stox.datastorage;
 import java.io.Writer;
 import java.util.ArrayList;
 import java.util.List;
-import no.imr.sea2data.biotic.bo.CatchBO;
 import no.imr.sea2data.biotic.bo.FishstationBO;
 import no.imr.sea2data.biotic.bo.IndividualBO;
-import no.imr.sea2data.biotic.bo.SampleBO;
+import no.imr.sea2data.biotic.bo.CatchSampleBO;
 import no.imr.sea2data.imrbase.util.Conversion;
 import no.imr.sea2data.imrbase.util.IMRdate;
 import no.imr.stox.functions.utils.BioticUtils;
@@ -90,24 +89,20 @@ public class BioticDataStorage extends FileDataStorage {
                         "conservation", "measurement", "weight", "count", "samplemeasurement", "lengthmeasurement", "lengthsampleweight",
                         "lengthsamplecount", "individualsamplecount", "parasite", "stomach", "genetics", "comment")));
                 for (FishstationBO fs : (List<FishstationBO>) (List) list) {
-                    for (CatchBO c : fs.getCatchBOs()) {
-                        for (SampleBO s : c.getSampleBOs()) {
-                ImrIO.write(wr, ExportUtil.carrageReturnLineFeed(ExportUtil.tabbed(
-                                    /*IMRdate.getYear(fs.getStationstartdate(), true)*/fs.getCruise(), fs.getSerialnumber(), fs.getCatchplatform(),
-                                    s.getCatchBO().getSpeciesCatTableKey(), c.getCatchcategory(), c.getCommonname(), c.getAphia(), s.getCatchpartnumber(), s.getSampletype(), s.getGroup(), s.getConservation(), s.getCatchproducttype(),
-                                    s.getCatchweight(), s.getCatchcount(), s.getSampleproducttype(), s.getLengthmeasurement(), s.getlengthsampleweight(),
-                                    s.getLengthsamplecount(), s.getSpecimensamplecount(), s.getParasite(), s.getStomach(), s.getGenetics(), s.getCatchcomment())));
-                        }
+                    for (CatchSampleBO s : fs.getCatchSampleBOs()) {
+                        ImrIO.write(wr, ExportUtil.carrageReturnLineFeed(ExportUtil.tabbed(
+                                /*IMRdate.getYear(fs.getStationstartdate(), true)*/fs.getCruise(), fs.getSerialnumber(), fs.getCatchplatform(),
+                                s.getSpeciesCatTableKey(), s.getCatchcategory(), s.getCommonname(), s.getAphia(), s.getCatchpartnumber(), s.getSampletype(), s.getGroup(), s.getConservation(), s.getCatchproducttype(),
+                                s.getCatchweight(), s.getCatchcount(), s.getSampleproducttype(), s.getLengthmeasurement(), s.getlengthsampleweight(),
+                                s.getLengthsamplecount(), s.getSpecimensamplecount(), s.getParasite(), s.getStomach(), s.getGenetics(), s.getCatchcomment())));
                     }
                 }
                 break;
             case 3:
                 ImrIO.write(wr, ExportUtil.carrageReturnLineFeed(ExportUtil.tabbed(ExportUtil.tabbed(Functions.INDIVIDUALS))));
                 for (FishstationBO fs : (List<FishstationBO>) (List) list) {
-                    for (CatchBO c : fs.getCatchBOs()) {
-                        for (SampleBO s : c.getSampleBOs()) {
-                            asTable(null, s.getIndividualBOs(), wr);
-                        }
+                    for (CatchSampleBO s : fs.getCatchSampleBOs()) {
+                        asTable(null, s.getIndividualBOs(), wr);
                     }
                 }
                 break;
@@ -121,7 +116,6 @@ public class BioticDataStorage extends FileDataStorage {
      * @param inds
      * @param wr
      */
-    
     public static void asTable(String context, List<IndividualBO> inds, Writer wr) {
         List<String> fields = new ArrayList<>(Functions.INDIVIDUALS);
 //        fields.add("comment");

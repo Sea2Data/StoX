@@ -1,9 +1,8 @@
 package no.imr.stox.functions.utils;
 
-import no.imr.sea2data.biotic.bo.CatchBO;
 import no.imr.sea2data.biotic.bo.FishstationBO;
 import no.imr.sea2data.biotic.bo.IndividualBO;
-import no.imr.sea2data.biotic.bo.SampleBO;
+import no.imr.sea2data.biotic.bo.CatchSampleBO;
 import no.imr.sea2data.echosounderbo.DistanceBO;
 import no.imr.sea2data.echosounderbo.FrequencyBO;
 import no.imr.sea2data.echosounderbo.SABO;
@@ -87,13 +86,9 @@ public final class FilterUtils {
                         + IMRdate.getDayOfMonth(fs.getStationstartdate(), true);
                 context.set("period", period);
             }
-        } else if (o instanceof CatchBO) {
-            CatchBO cs = (CatchBO) o;
+        } else if (o instanceof CatchSampleBO) {
+            CatchSampleBO cs = (CatchSampleBO) o;
             addCatchFilter(context, cs);
-        } else if (o instanceof SampleBO) {
-            SampleBO cs = (SampleBO) o;
-            CatchBO css = cs.getCatchBO();
-            addCatchFilter(context, css);
             context.set("samplenumber", cs.getCatchpartnumber());
             context.set("sampletype", cs.getSampletype());
             context.set("group", cs.getGroup());
@@ -114,12 +109,12 @@ public final class FilterUtils {
             context.set("comment", cs.getCatchcomment());
         } else if (o instanceof IndividualBO) {
             IndividualBO ii = (IndividualBO) o;
-            if (ii.getSample() != null) {
-                CatchBO cs = ii.getSample().getCatchBO();
+            if (ii.getCatchSample() != null) {
+                CatchSampleBO cs = ii.getCatchSample();
                 addCatchFilter(context, cs);
             }
-            context.set("weight", ii.getWeight());
-            context.set("length", ii.getLength());
+            context.set("weight", ii.getIndividualweightG());
+            context.set("length", ii.getLengthCM());
             context.set("fat", ii.getFat());
             context.set("sex", ii.getSex());
 
@@ -158,8 +153,8 @@ public final class FilterUtils {
                 Integer period = IMRdate.getYear(d.getStart_time(), true) * 10000 + IMRdate.getMonth(d.getStart_time(), true) * 100 + IMRdate.getDayOfMonth(d.getStart_time(), true);
                 context.set("period", period);
             }
-            context.set("log", d.getLog_start().doubleValue());
-            context.set("log_start", d.getLog_start().doubleValue());
+            context.set("log", d.getLog_start());
+            context.set("log_start", d.getLog_start());
             context.set("bot_ch_thickness", d.getBot_ch_thickness());
             context.set("cruise", d.getCruise());
             context.set("integrator_dist", d.getIntegrator_dist());
@@ -291,11 +286,11 @@ public final class FilterUtils {
         }
         return li;
     }*/
-    private static void addCatchFilter(JexlContext context, CatchBO cs) {
+    private static void addCatchFilter(JexlContext context, CatchSampleBO cs) {
         if (cs == null) {
             return;
         }
-        context.set("species", cs.getCatchcategory()!= null ? cs.getCatchcategory().toLowerCase() : null);
+        context.set("species", cs.getCatchcategory() != null ? cs.getCatchcategory().toLowerCase() : null);
         context.set("noname", cs.getCommonname() != null ? cs.getCommonname().toLowerCase() : null);
         context.set("aphia", cs.getAphia());
     }

@@ -1,15 +1,14 @@
 package no.imr.stox.functions.biotic;
 
+import java.util.ArrayList;
 import no.imr.stox.functions.utils.FilterUtils;
 import java.util.List;
 import java.util.Map;
 import no.imr.stox.functions.utils.Functions;
 import no.imr.stox.functions.AbstractFunction;
-import no.imr.sea2data.biotic.bo.CatchBO;
 import no.imr.sea2data.biotic.bo.FishstationBO;
 import no.imr.sea2data.biotic.bo.IndividualBO;
-import no.imr.sea2data.biotic.bo.SampleBO;
-import no.imr.stox.bo.BioticData;
+import no.imr.sea2data.biotic.bo.CatchSampleBO;
 import org.apache.commons.jexl2.Expression;
 import org.apache.commons.jexl2.JexlContext;
 import org.apache.commons.jexl2.JexlEngine;
@@ -66,7 +65,7 @@ public class FilterBiotic extends AbstractFunction {
         JexlContext ctx = new MapContext();
         // Old structures:
         List<FishstationBO> allFishstations = (List<FishstationBO>) input.get(Functions.PM_FILTERBIOTIC_BIOTICDATA);
-        List<FishstationBO> fishstations = new BioticData();//FilterUtils.copyBOList((List) allFishstations, null);
+        List<FishstationBO> fishstations = new ArrayList<>();
         for (FishstationBO fs : allFishstations) {
             FilterUtils.resolveContext(ctx, fs);
             if (!FilterUtils.evaluate(ctx, stationExpression)) {
@@ -74,32 +73,24 @@ public class FilterBiotic extends AbstractFunction {
             }
             FishstationBO fsF = new FishstationBO(fs);
             fishstations.add(fsF);
-            for (CatchBO cb : fs.getCatchBOs()) {
+            for (CatchSampleBO cb : fs.getCatchSampleBOs()) {
                 FilterUtils.resolveContext(ctx, cb);
-                if (!FilterUtils.evaluate(ctx, catchExpression)) {
+                // todo join catch and sample expression as input parameter
+                if (!(FilterUtils.evaluate(ctx, catchExpression) && FilterUtils.evaluate(ctx, sampleExpression))) {
                     continue;
                 }
-                CatchBO cbF = new CatchBO(fsF, cb);
-                fsF.getCatchBOs().add(cbF);
-                for (SampleBO sample : cb.getSampleBOs()) {
-                    FilterUtils.resolveContext(ctx, sample);
-                    if (!FilterUtils.evaluate(ctx, sampleExpression)) {
+                CatchSampleBO sampleF = new CatchSampleBO(fsF, cb);
+                fsF.getCatchSampleBOs().add(sampleF);
+                for (IndividualBO in : cb.getIndividualBOs()) {
+                    FilterUtils.resolveContext(ctx, in);
+                    if (!FilterUtils.evaluate(ctx, individualExpression)) {
                         continue;
                     }
-                    SampleBO sampleF = new SampleBO(cbF, sample);
-                    cbF.getSampleBOs().add(sampleF);
-                    for (IndividualBO in : sample.getIndividualBOs()) {
-                        FilterUtils.resolveContext(ctx, in);
-                        if (!FilterUtils.evaluate(ctx, individualExpression)) {
-                            continue;
-                        }
-                        IndividualBO inF = new IndividualBO(sampleF, in);
-                        sampleF.getIndividualBOs().add(inF);
-                    }
+                    IndividualBO inF = new IndividualBO(sampleF, in);
+                    sampleF.getIndividualBOs().add(inF);
                 }
             }
         }
         return fishstations;
     }
-
 }

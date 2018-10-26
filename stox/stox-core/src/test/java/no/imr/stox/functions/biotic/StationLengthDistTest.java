@@ -12,7 +12,7 @@ import java.util.List;
 import java.util.Map;
 import no.imr.sea2data.biotic.bo.FishstationBO;
 import no.imr.sea2data.biotic.bo.IndividualBO;
-import no.imr.sea2data.biotic.bo.SampleBO;
+import no.imr.sea2data.biotic.bo.CatchSampleBO;
 import no.imr.stox.bo.LengthDistMatrix;
 import no.imr.stox.functions.utils.Functions;
 import static org.junit.Assert.assertEquals;
@@ -71,14 +71,15 @@ public class StationLengthDistTest {
         f.setDistance(1.5d);
         f.setCruise("2013");
         f.setSerialnumber(1000);
-        SampleBO s = f.addSample("havsil");
+        CatchSampleBO s = f.addCatchSample();
+        s.setCatchcategory("havsil");
         s.setCatchweight(100.0);
         s.setLengthsampleweight(50.0);
         s.setCatchpartnumber(Integer.SIZE);
         IndividualBO i = s.addIndividual();
-        i.setLength(10.0);
+        i.setLength(0.1);
         i = s.addIndividual();
-        i.setLength(11.0);
+        i.setLength(0.11);
         return fs;
     }
 
@@ -89,13 +90,14 @@ public class StationLengthDistTest {
         f.setDistance(1.5d);
         f.setCruise("2013");
         f.setSerialnumber(1000);
-        SampleBO s = f.addSample("havsil");
+        CatchSampleBO s = f.addCatchSample();
+        s.setCatchcategory("havsil");
         s.setCatchweight(100.0);
         s.setCatchpartnumber(Integer.SIZE);
         IndividualBO i = s.addIndividual();
-        i.setLength(10.0);
+        i.setLength(0.1);
         i = s.addIndividual();
-        i.setLength(11.0);
+        i.setLength(0.11);
         return fs;
     }
 
@@ -106,26 +108,28 @@ public class StationLengthDistTest {
         f.setCruise("2013");
         f.setSerialnumber(1000);
         f.setDistance(1.5d);
-        SampleBO s = f.addSample("havsil");
+        CatchSampleBO s = f.addCatchSample();
+        s.setCatchcategory("havsil");
         s.setCatchweight(100.0);
         s.setLengthsampleweight(50.0);
         s.setCatchpartnumber(Integer.SIZE);
         IndividualBO i = s.addIndividual();
-        i.setLength(10.0);
+        i.setLength(0.1);
         i = s.addIndividual();
-        i.setLength(11.0);
+        i.setLength(0.11);
         f = new FishstationBO();
         fs.add(f);
         f.setCruise("2013");
         f.setSerialnumber(1001);
-        s = f.addSample("havsil");
+        s = f.addCatchSample();
+        s.setCatchcategory("havsil");
         s.setCatchweight(100.0);
         s.setLengthsampleweight(50.0);
         s.setCatchpartnumber(Integer.SIZE);
         i = s.addIndividual();
-        i.setLength(10.0);
+        i.setLength(0.1);
         i = s.addIndividual();
-        i.setLength(11.0);
+        i.setLength(0.11);
         return fs;
     }
 }

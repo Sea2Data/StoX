@@ -8,12 +8,6 @@ import BioticTypes.v3.IndividualType;
 import BioticTypes.v3.MissionType;
 import BioticTypes.v3.MissionsType;
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.math.BigDecimal;
-import java.math.BigInteger;
-import java.time.Instant;
 import java.time.LocalDate;
 import java.time.ZoneOffset;
 import java.util.ArrayList;
@@ -21,13 +15,11 @@ import java.util.Date;
 import java.util.List;
 import java.util.Map;
 import no.imr.sea2data.biotic.bo.AgeDeterminationBO;
-import no.imr.sea2data.biotic.bo.CatchBO;
 import no.imr.sea2data.biotic.bo.FishstationBO;
 import no.imr.sea2data.biotic.bo.IndividualBO;
-import no.imr.sea2data.biotic.bo.SampleBO;
+import no.imr.sea2data.biotic.bo.CatchSampleBO;
 import no.imr.stox.functions.utils.Functions;
 import no.imr.stox.functions.AbstractFunction;
-import no.imr.sea2data.imrbase.exceptions.XMLReaderException;
 import no.imr.sea2data.imrbase.util.Conversion;
 import no.imr.stox.log.ILogger;
 import no.imr.stox.model.IModel;
@@ -73,12 +65,12 @@ public class ReadBioticXML extends AbstractFunction {
 
         }
         // Read by StaX into FishStationBO
-        try (InputStream stream = new FileInputStream(fileName)) {
+        /*try (InputStream stream = new FileInputStream(fileName)) {
             BioticXMLReader reader = new BioticXMLReader(stations, model.getProject());
             reader.readXML(stream);
         } catch (XMLReaderException | IOException ex) {
             logger.error("Error reading Biotic XML", ex);
-        }
+        }*/
     }
 
     private void translateBioticV3ToBO(List<MissionType> mission, List<FishstationBO> stations) {
@@ -133,9 +125,10 @@ public class ReadBioticXML extends AbstractFunction {
                 fbo.setWingspreadsd(fs.getWingspreadsd());
                 fbo.setWireLength(fs.getWirelength() != null ? fs.getWirelength().intValue() : null);
                 for (CatchsampleType cs : fs.getCatchsample()) {
-                    SampleBO sbo = fbo.addSample(cs.getCatchcategory());
-                    sbo.getCatchBO().setAphia(cs.getAphia());
-                    sbo.getCatchBO().setCommonname(cs.getCommonname());
+                    CatchSampleBO sbo = fbo.addCatchSample();
+                    sbo.setCatchcategory(cs.getCatchcategory());
+                    sbo.setAphia(cs.getAphia());
+                    sbo.setCommonname(cs.getCommonname());
                     sbo.setAgingstructure(cs.getAgingstructure());
                     sbo.setCatchcomment(cs.getCatchcomment());
                     sbo.setCatchcount(cs.getCatchcount());

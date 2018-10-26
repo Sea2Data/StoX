@@ -2,9 +2,8 @@ package no.imr.stox.nodes;
 
 import java.util.HashMap;
 import java.util.Map;
-import no.imr.sea2data.biotic.bo.CatchBO;
 import no.imr.sea2data.biotic.bo.FishstationBO;
-import no.imr.sea2data.biotic.bo.SampleBO;
+import no.imr.sea2data.biotic.bo.CatchSampleBO;
 import no.imr.sea2data.imrbase.map.LatLonUtil;
 import no.imr.sea2data.imrbase.util.IMRdate;
 import org.openide.nodes.AbstractNode;
@@ -121,16 +120,14 @@ public class StationNode extends AbstractNode {
         propSet.setName("Catch weight");
         propSet.setDisplayName("Catch weight");
         Map<String, Double> m = new HashMap<>();
-        for (CatchBO c : fs.getCatchBOs()) {
-            String sKey = c.getSpeciesKey();
-            for (SampleBO s : c.getSampleBOs()) {
-                Double w = s.getCatchweight();
-                if (w == null || w == 0) {
-                    continue;
-                }
-                Double d = m.get(sKey);
-                m.put(sKey, d == null ? w : d + w);
+        for (CatchSampleBO s : fs.getCatchSampleBOs()) {
+            String sKey = s.getSpeciesKey();
+            Double w = s.getCatchweight();
+            if (w == null || w == 0) {
+                continue;
             }
+            Double d = m.get(sKey);
+            m.put(sKey, d == null ? w : d + w);
         }
         for (String sp : m.keySet()) {
             propSet.put(new CatchSamplePropertySupport(sp, m.get(sp)));

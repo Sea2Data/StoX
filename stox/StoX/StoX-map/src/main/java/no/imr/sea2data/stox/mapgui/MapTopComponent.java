@@ -438,8 +438,7 @@ public final class MapTopComponent extends TopComponent implements LookupListene
                         .map(d -> (FishstationBO) d)
                         .filter(fs -> {
                             // Empty if no samples exists:
-                            return fs.getCatchBOs().isEmpty()
-                                    || fs.getCatchBOs().size() == 1 && fs.getCatchBOs().get(0).getSampleBOs().isEmpty();
+                            return fs.getCatchSampleBOs().isEmpty();
                         })
                         .collect(Collectors.toList());
     }
