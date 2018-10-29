@@ -56,7 +56,7 @@ public class ReadBioticXML extends AbstractFunction {
             File xml = new File(fileName);
             Biotic3Handler instance = new Biotic3Handler();
             MissionsType result = instance.read(xml);
-            translateBioticV3ToBO(result.getMission(), stations);
+            connectBioticV3ToBO(result.getMission(), stations);
         } catch (Exception e) {
 
         }
@@ -69,89 +69,17 @@ public class ReadBioticXML extends AbstractFunction {
         }*/
     }
 
-    private void translateBioticV3ToBO(List<MissionType> mission, List<FishstationBO> stations) {
+    private void connectBioticV3ToBO(List<MissionType> mission, List<FishstationBO> stations) {
         for (MissionType mt : mission) {
             for (FishstationType fs : mt.getFishstation()) {
                 FishstationBO fbo = new FishstationBO(fs);
                 stations.add(fbo);
-
                 for (CatchsampleType cs : fs.getCatchsample()) {
-                    CatchSampleBO sbo = fbo.addCatchSample();
-                    sbo.setCatchcategory(cs.getCatchcategory());
-                    sbo.setAphia(cs.getAphia());
-                    sbo.setCommonname(cs.getCommonname());
-                    sbo.setAgingstructure(cs.getAgingstructure());
-                    sbo.setCatchcomment(cs.getCatchcomment());
-                    sbo.setCatchcount(cs.getCatchcount());
-                    sbo.setCatchpartnumber(cs.getCatchpartnumber());
-                    sbo.setCatchproducttype(cs.getCatchproducttype());
-                    sbo.setCatchvolume(cs.getCatchvolume());
-                    sbo.setCatchweight(cs.getCatchweight());
-                    sbo.setConservation(cs.getConservation());
-                    sbo.setForeignobject(cs.getForeignobject());
-                    sbo.setGroup(cs.getGroup());
-                    sbo.setLengthmeasurement(cs.getLengthmeasurement());
-                    sbo.setLengthsamplecount(cs.getLengthsamplecount());
-                    sbo.setLengthsamplevolume(cs.getLengthsamplevolume());
-                    sbo.setLengthsampleweight(cs.getLengthsampleweight());
-                    sbo.setParasite(cs.getParasite());
-                    sbo.setRaisingfactor(cs.getRaisingfactor());
-                    sbo.setSampletype(cs.getSampletype());
-                    sbo.setSampleproducttype(cs.getSampleproducttype());
-                    sbo.setSpecimensamplecount(cs.getSpecimensamplecount());
-                    sbo.setStomach(cs.getStomach());
-                    sbo.setTissuesample(cs.getTissuesample());
+                    CatchSampleBO sbo = fbo.addCatchSample(cs);
                     for (IndividualType i : cs.getIndividual()) {
-                        IndividualBO ibo = sbo.addIndividual();
-                        ibo.setBlackspot(i.getBlackspot());
-                        ibo.setDigestion(i.getDigestion());
-                        ibo.setEggstage(i.getEggstage());
-                        ibo.setFat(i.getFat());
-                        ibo.setFungusheart(i.getFungusheart());
-                        ibo.setFungusouter(i.getFungusouter());
-                        ibo.setFungusspores(i.getFungusspores());
-                        ibo.setGillworms(i.getGillworms());
-                        ibo.setGonadweight(i.getGonadweight());
-                        ibo.setIndividualcomment(i.getIndividualcomment());
-                        ibo.setIndividualproducttype(i.getIndividualproducttype());
-                        ibo.setIndividualvolume(i.getIndividualvolume());
-                        ibo.setIndividualweight(i.getIndividualweight());
-                        ibo.setLength(i.getLength());
-                        ibo.setLengthresolution(i.getLengthresolution());
-                        ibo.setLiver(i.getLiver());
-                        ibo.setLiverparasite(i.getLiverparasite());
-                        ibo.setLiverweight(i.getLiverweight());
-                        ibo.setMaturationstage(i.getMaturationstage());
-                        ibo.setSex(i.getSex());
-                        ibo.setSpecialstage(i.getSpecialstage());
-                        ibo.setSpecimenid(i.getSpecimenid());
-                        ibo.setStomachfillfield(i.getStomachfillfield());
-                        ibo.setStomachfilllab(i.getStomachfilllab());
-                        ibo.setSwollengills(i.getSwollengills());
-                        ibo.setVertebraecount(i.getVertebraecount());
+                        IndividualBO ibo = sbo.addIndividual(i);
                         for (AgedeterminationType a : i.getAgedetermination()) {
-                            AgeDeterminationBO abo = ibo.addAgeDetermination();
-                            abo.setAge(a.getAge());
-                            abo.setAgedeterminationid(a.getAgedeterminationid());
-                            abo.setCalibration(a.getCalibration());
-                            abo.setCoastalannuli(a.getCoastalannuli());
-                            abo.setGrowthzonestotal(a.getGrowthzonestotal());
-                            abo.setGrowthzone1(a.getGrowthzone1());
-                            abo.setGrowthzone2(a.getGrowthzone2());
-                            abo.setGrowthzone3(a.getGrowthzone3());
-                            abo.setGrowthzone4(a.getGrowthzone4());
-                            abo.setGrowthzone5(a.getGrowthzone5());
-                            abo.setGrowthzone6(a.getGrowthzone6());
-                            abo.setGrowthzone7(a.getGrowthzone7());
-                            abo.setGrowthzone8(a.getGrowthzone8());
-                            abo.setGrowthzone9(a.getGrowthzone9());
-                            abo.setOceanicannuli(a.getOceanicannuli());
-                            abo.setOtolithedge(a.getOtolithedge());
-                            abo.setOtolithcentre(a.getOtolithcentre());
-                            abo.setOtolithtype(a.getOtolithtype());
-                            abo.setReadability(a.getReadability());
-                            abo.setSpawningage(a.getSpawningage());
-                            abo.setSpawningzones(a.getSpawningzones());
+                            ibo.addAgeDetermination(a);
                         }
                     }
                 }

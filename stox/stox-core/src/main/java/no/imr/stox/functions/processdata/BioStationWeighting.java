@@ -278,10 +278,10 @@ public class BioStationWeighting extends AbstractFunction {
                     Double var = null;
                     switch (weightingMethod) {
                         case Functions.WEIGHTINGMETHOD_NORMTOTALWEIGHT:
-                            var = s.getCatchweight();
+                            var = s.getCs().getCatchweight();
                             break;
                         case Functions.WEIGHTINGMETHOD_NORMTOTALCOUNT:
-                            var = Conversion.safeIntegerToDouble(s.getCatchcount());
+                            var = Conversion.safeIntegerToDouble(s.getCs().getCatchcount());
                             break;
                     }
                     if (var != null) {

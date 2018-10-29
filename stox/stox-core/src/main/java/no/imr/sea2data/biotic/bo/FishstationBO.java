@@ -1,9 +1,8 @@
 package no.imr.sea2data.biotic.bo;
 
+import BioticTypes.v3.CatchsampleType;
 import BioticTypes.v3.FishstationType;
 import BioticTypes.v3.MissionType;
-import java.time.LocalDate;
-import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Function;
@@ -16,9 +15,9 @@ import no.imr.sea2data.imrbase.map.ILatLonEvent;
 public class FishstationBO implements ILatLonEvent {
 
     FishstationType fs;
-    
-    private String key = null;
-    private String stratum;
+
+    private String key = null; // cache
+    private String stratum; // should be moved to datatype
     private Integer year; // cache
     private List<CatchSampleBO> catchSampleBOs = new ArrayList<>();
 
@@ -26,9 +25,11 @@ public class FishstationBO implements ILatLonEvent {
         fs = new FishstationType();
         fs.setParent(ms);
     }
+
     public FishstationBO(FishstationType fs) {
         this.fs = fs;
     }
+
     public FishstationBO(FishstationBO bo) {
         this(bo.getFs());
         stratum = bo.getStratum();
@@ -37,6 +38,7 @@ public class FishstationBO implements ILatLonEvent {
     public MissionType getMission() {
         return (MissionType) fs.getParent();
     }
+
     public FishstationType getFs() {
         return fs;
     }
@@ -53,7 +55,7 @@ public class FishstationBO implements ILatLonEvent {
 
     public boolean hasCatch(String noName) {
         for (CatchSampleBO c : getCatchSampleBOs()) {
-            if (c.getCommonname().equals(noName)) {
+            if (c.getCs().getCommonname().equals(noName)) {
                 return true;
             }
         }
@@ -73,20 +75,20 @@ public class FishstationBO implements ILatLonEvent {
             if (!spcode.equals(species)) {
                 continue;
             }
-            if (c.getCatchcount() == null) {
+            if (c.getCs().getCatchcount() == null) {
                 continue;
             }
-            n += c.getCatchcount();
+            n += c.getCs().getCatchcount();
         }
         return n;
     }
 
     public int getCount(String code) {
-        return getCountBy(code, c -> c.getCommonname());
+        return getCountBy(code, c -> c.getCs().getCommonname());
     }
 
     public int getCountBySpecies(String code) {
-        return getCountBy(code, c -> c.getCatchcategory());
+        return getCountBy(code, c -> c.getCs().getCatchcategory());
     }
 
     public int getLengthSampleCount(String spec) {
@@ -95,22 +97,22 @@ public class FishstationBO implements ILatLonEvent {
             return 0;
         }
         for (CatchSampleBO c : getCatchSampleBOs()) {
-            if (c.getCommonname() == null && c.getCatchcategory() == null) {
+            if (c.getCs().getCommonname() == null && c.getCs().getCatchcategory() == null) {
                 continue;
             }
-            if (c.getCommonname() != null) {
-                if (!c.getCommonname().equalsIgnoreCase(spec)) { // SILDG03
+            if (c.getCs().getCommonname() != null) {
+                if (!c.getCs().getCommonname().equalsIgnoreCase(spec)) { // SILDG03
                     continue;
                 }
-            } else if (c.getCatchcategory() != null) {
-                if (!c.getCatchcategory().equalsIgnoreCase(spec)) { // 161722.G03
+            } else if (c.getCs().getCatchcategory() != null) {
+                if (!c.getCs().getCatchcategory().equalsIgnoreCase(spec)) { // 161722.G03
                     continue;
                 }
             }
-            if (c.getLengthsamplecount() == null) {
+            if (c.getCs().getLengthsamplecount() == null) {
                 continue;
             }
-            n += c.getLengthsamplecount();
+            n += c.getCs().getLengthsamplecount();
         }
         return n;
     }
@@ -135,7 +137,7 @@ public class FishstationBO implements ILatLonEvent {
     }
 
     public Integer getYear() {
-        if(year == null) {
+        if (year == null) {
             year = fs.getStationstartdate() != null ? fs.getStationstartdate().getYear() : null;
         }
         return year;
@@ -146,7 +148,7 @@ public class FishstationBO implements ILatLonEvent {
         if (key != null) {
             return key;
         }
-        String cruise = ((MissionType)fs.getParent()).getCruise();
+        String cruise = ((MissionType) fs.getParent()).getCruise();
         key = (cruise != null ? cruise : (getYear() != null ? getYear() : "")) + "/" + (fs.getSerialnumber() != null ? fs.getSerialnumber() : "");
         return key;
     }
@@ -160,8 +162,13 @@ public class FishstationBO implements ILatLonEvent {
         return catchSampleBOs;
     }
 
-    public CatchSampleBO addCatchSample() {
-        CatchSampleBO cbo = new CatchSampleBO(this);
+    public CatchSampleBO addCatchSample(CatchsampleType cs) {
+
+        if (cs == null) {
+            cs = new CatchsampleType();
+            cs.setParent(fs);
+        }
+        CatchSampleBO cbo = new CatchSampleBO(this, cs);
         getCatchSampleBOs().add(cbo);
         return cbo;
     }

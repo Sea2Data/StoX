@@ -53,9 +53,9 @@ public final class BioticUtils {
             case Functions.COL_IND_TRAWLQUALITY:
                 return i.getCatchSample().getStationBO().getFs().getSamplequality();
             case Functions.COL_IND_GROUP:
-                return i.getCatchSample().getGroup();
+                return i.getCatchSample().getCs().getGroup();
             case Functions.COL_IND_SAMPLETYPE:
-                return i.getCatchSample().getSampletype();
+                return i.getCatchSample().getCs().getSampletype();
             case Functions.COL_IND_CRUISE:
                 return i.getCatchSample().getStationBO().getMission().getCruise();
             case Functions.COL_IND_SERIALNO:
@@ -83,25 +83,25 @@ public final class BioticUtils {
             case Functions.COL_IND_SPECCAT:
                 return i.getCatchSample().getSpeciesCatTableKey();
             case Functions.COL_IND_SPECIES:
-                return i.getCatchSample().getCatchcategory();
+                return i.getCatchSample().getCs().getCatchcategory();
             case Functions.COL_IND_NONAME:
-                return i.getCatchSample().getCommonname();
+                return i.getCatchSample().getCs().getCommonname();
             case Functions.COL_IND_APHIA:
-                return i.getCatchSample().getAphia();
+                return i.getCatchSample().getCs().getAphia();
             case Functions.COL_IND_CATCHWEIGHT:
-                return i.getCatchSample().getCatchweight();
+                return i.getCatchSample().getCs().getCatchweight();
             case Functions.COL_IND_CATCHCOUNT:
-                return i.getCatchSample().getCatchcount();
+                return i.getCatchSample().getCs().getCatchcount();
             case Functions.COL_IND_SAMPLENUMBER:
-                return i.getCatchSample().getCatchpartnumber();
+                return i.getCatchSample().getCs().getCatchpartnumber();
             case Functions.COL_IND_LENGTHSAMPLEWEIGHT:
-                return i.getCatchSample().getlengthsampleweight();
+                return i.getCatchSample().getCs().getLengthsampleweight();
             case Functions.COL_IND_LENGTHSAMPLECOUNT:
-                return i.getCatchSample().getLengthsamplecount();
+                return i.getCatchSample().getCs().getLengthsamplecount();
             case Functions.COL_IND_FREQUENCY:
                 return 1;
             case Functions.COL_IND_NO:
-                return i.getSpecimenid();
+                return i.getI().getSpecimenid();
             case Functions.COL_IND_WEIGHT:
                 return i.getIndividualweightG();
             case Functions.COL_IND_LENGTH:
@@ -109,35 +109,35 @@ public final class BioticUtils {
             case Functions.COL_IND_AGE:
                 return i.getAge();
             case Functions.COL_IND_SEX:
-                return i.getSex();
+                return i.getI().getSex();
             case Functions.COL_IND_DEVELOPMENTALSTAGE:
                 return null;//i.getDevelopmentalStage();
             case Functions.COL_IND_STAGE:
-                return i.getMaturationstage();
+                return i.getI().getMaturationstage();
             case Functions.COL_IND_SPECIALSTAGE:
-                return i.getSpecialstage();
+                return i.getI().getSpecialstage();
             case Functions.COL_IND_DIGESTDEG:
-                return i.getDigestion();
+                return i.getI().getDigestion();
             case Functions.COL_IND_FAT:
-                return i.getFat();
+                return i.getI().getFat();
             case Functions.COL_IND_LIVER:
-                return i.getLiver();
+                return i.getI().getLiver();
             case Functions.COL_IND_LIVERWEIGHT:
-                return i.getLiverweight();
+                return i.getI().getLiverweight();
             case Functions.COL_IND_GONADWEIGHT:
-                return i.getGonadweight();
+                return i.getI().getGonadweight();
             case Functions.COL_IND_STOMACHWEIGHT:
-                return i.getStomachweight();
+                return i.getI().getStomachweight();
             case Functions.COL_IND_VERTEBRAE:
-                return i.getvertebraecount();
+                return i.getI().getVertebraecount();
             case Functions.COL_IND_LENGTHUNIT:
-                return i.getLengthresolution();
+                return i.getI().getLengthresolution();
             case Functions.COL_IND_WEIGHTMETHOD:
-                return i.getIndividualproducttype();
+                return i.getI().getIndividualproducttype();
             case Functions.COL_IND_STOMACHFILLFIELD:
-                return i.getStomachfillfield();
+                return i.getI().getStomachfillfield();
             case Functions.COL_IND_LIVERPARASITE:
-                return i.getLiverparasite();
+                return i.getI().getLiverparasite();
             case Functions.COL_IND_SPAWNINGAGE:
                 return i.getSpawningage();
             case Functions.COL_IND_SPAWNINGZONES:
@@ -249,10 +249,10 @@ public final class BioticUtils {
         for (FishstationBO fs : fishStations) {
             for (CatchSampleBO s : fs.getCatchSampleBOs()) {
                 for (IndividualBO i : s.getIndividualBOs()) {
-                    if (i.getLengthresolution() == null || i.getLengthresolution().isEmpty()) {
+                    if (i.getI().getLengthresolution() == null || i.getI().getLengthresolution().isEmpty()) {
                         continue;
                     }
-                    units.add(Conversion.safeStringtoIntegerNULL(i.getLengthresolution()));
+                    units.add(Conversion.safeStringtoIntegerNULL(i.getI().getLengthresolution()));
                 }
             }
         }

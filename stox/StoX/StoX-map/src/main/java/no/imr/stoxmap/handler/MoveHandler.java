@@ -114,8 +114,8 @@ public class MoveHandler {
                     s = s + "<br>Lat/Lon: " + fs.getStartLat() + "/" + fs.getStartLon();
                     if (e.isShiftDown()) {
                         for (CatchSampleBO c : fs.getCatchSampleBOs()) {
-                            if (c.getCommonname() != null && c.getCatchweight() != null) {
-                                s = s + "<br>" + c.getCommonname() + ": " + c.getCatchweight() + " kg. (" + (c.getSpecimentsamplecount() != null ? c.getSpecimentsamplecount() : 0) + " bio. individuals)";
+                            if (c.getCs().getCommonname() != null && c.getCs().getCatchweight() != null) {
+                                s = s + "<br>" + c.getCs().getCommonname() + ": " + c.getCs().getCatchweight() + " kg. (" + (c.getCs().getSpecimensamplecount() != null ? c.getCs().getSpecimensamplecount() : 0) + " bio. individuals)";
                             }
                         }
                     }

@@ -1,5 +1,7 @@
 package no.imr.sea2data.biotic.bo;
 
+import BioticTypes.v3.AgedeterminationType;
+import BioticTypes.v3.IndividualType;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
@@ -12,307 +14,57 @@ import no.imr.stox.functions.utils.StoXMath;
  */
 public class IndividualBO implements Serializable {
 
-    private Integer specimenid;
-    private String individualproducttype;
-    private Double individualweight;
-    private Double individualvolume;
-    private String lengthresolution;
-    private Double length;
-    private String fat;
-    private String sex;
-    private String maturationstage;
-    private String specialstage;
-    private String eggstage; // Used for forberg at capelin male (not in the database)
-    private String stomachfillfield;
-    private String stomachfilllab;
-    private String digestion;
-    private String liver;
-    private String liverparasite;
-    private String gillworms;
-    private String swollengills;
-    private String fungusheart;
-    private String fungusspores;
-    private String fungusouter;
-    private String blackspot;
-    private Integer vertebraecount;
-    private Double gonadweight;
-    private Double liverweight;
-    private Double stomachweight;
-    private String individualcomment;
+    private IndividualType ii;
 
     private CatchSampleBO catchsample;
     private List<AgeDeterminationBO> ageDeterminationBOs = new ArrayList<>();
     private Double individualweightG;
     private Double lengthCM;
 
-    public IndividualBO() {
-    }
-
-    public IndividualBO(CatchSampleBO sampleF) {
+    
+    private IndividualBO(CatchSampleBO sampleF) {
         this.catchsample = sampleF;
     }
 
-    public IndividualBO(CatchSampleBO sampleF, IndividualBO bo) {
+    public IndividualBO(CatchSampleBO sampleF, IndividualType i) {
         this(sampleF);
-        specimenid = bo.getSpecimenid();
-        individualproducttype = bo.getIndividualproducttype();
-        individualweight = bo.getIndividualweight();
-        individualweightG = bo.getIndividualweightG();
-        individualvolume = bo.getindividualvolume();
-        lengthresolution = bo.getLengthresolution();
-        length = bo.getLength();
-        lengthCM = bo.getLengthCM();
-        fat = bo.getFat();
-        sex = bo.getSex();
-        maturationstage = bo.getMaturationstage();
-        specialstage = bo.getSpecialstage();
-        eggstage = bo.getEggstage();
-        stomachfillfield = bo.getStomachfillfield();
-        stomachfilllab = bo.getStomachfilllab();
-        digestion = bo.getDigestion();
-        liver = bo.getLiver();
-        liverparasite = bo.getLiverparasite();
-        gillworms = bo.getGillworms();
-        swollengills = bo.getSwollengills();
-        fungusheart = bo.getFungusheart();
-        fungusspores = bo.getFungusspores();
-        fungusouter = bo.getFungusouter();
-        blackspot = bo.getBlackspot();
-        vertebraecount = bo.getvertebraecount();
-        gonadweight = bo.getGonadweight();
-        liverweight = bo.getLiverweight();
-        stomachweight = bo.getStomachweight();
-        individualcomment = bo.getIndividualcomment();
+        this.ii = i;
+        recache();
+    }
+
+    public IndividualType getI() {
+        return ii;
+    }
+
+    public IndividualBO(CatchSampleBO sampleF, IndividualBO bo) {
+        this(sampleF, bo.getI());
         for (AgeDeterminationBO aBO : bo.getAgeDeterminationBOs()) {
             AgeDeterminationBO agBO = new AgeDeterminationBO(this, aBO);
             ageDeterminationBOs.add(agBO);
         }
     }
-
-    public String getDigestion() {
-        return digestion;
-    }
-
-    public void setDigestion(String digestion) {
-        this.digestion = digestion;
-    }
-
-    public String getFat() {
-        return fat;
-    }
-
-    public void setFat(String fat) {
-        this.fat = fat;
-    }
-
-    public String getLengthresolution() {
-        return lengthresolution;
-    }
-
-    public void setLengthresolution(String lengthresolution) {
-        this.lengthresolution = lengthresolution;
-    }
-
-    public String getLiver() {
-        return liver;
-    }
-
-    public void setLiver(String liver) {
-        this.liver = liver;
-    }
-
-    public String getIndividualproducttype() {
-        return individualproducttype;
-    }
-
-    public void setIndividualproducttype(String individualproducttype) {
-        this.individualproducttype = individualproducttype;
-    }
-
-    public String getLiverparasite() {
-        return liverparasite;
-    }
-
-    public void setLiverparasite(String liverparasite) {
-        this.liverparasite = liverparasite;
-    }
-
-    public String getSex() {
-        return sex;
-    }
-
-    public void setSex(String sex) {
-        this.sex = sex;
-    }
-
-    public String getSpecialstage() {
-        return specialstage;
-    }
-
-    public void setSpecialstage(String specialstage) {
-        this.specialstage = specialstage;
-    }
-
-    public String getMaturationstage() {
-        return maturationstage;
-    }
-
-    public void setMaturationstage(String maturationstage) {
-        this.maturationstage = maturationstage;
-    }
-
-    public String getStomachfillfield() {
-        return stomachfillfield;
-    }
-
-    public void setStomachfillfield(String stomachfillfield) {
-        this.stomachfillfield = stomachfillfield;
-    }
-
-    public String getStomachfilllab() {
-        return stomachfilllab;
-    }
-
-    public void setStomachfilllab(String stomachfilllab) {
-        this.stomachfilllab = stomachfilllab;
-    }
-
-    public void setIndividualweight(Double individualweight) {
-        this.individualweight = individualweight;
-        this.individualweightG = Calc.roundTo(StoXMath.kgToGrams(individualweight), 8);
-    }
-
-    public void setIndividualvolume(Double individualvolume) {
-        this.individualvolume = individualvolume;
-    }
-
-    public void setVertebraecount(Integer vertebraecount) {
-        this.vertebraecount = vertebraecount;
-    }
-
-    public void setStomachweight(Double stomachweight) {
-        this.stomachweight = stomachweight;
-    }
-
-    public void setLiverweight(Double liverweight) {
-        this.liverweight = liverweight;
+    
+    private void recache() {
+        this.lengthCM = Calc.roundTo(StoXMath.mToCM(ii.getLength()), 8);
+        this.individualweightG = Calc.roundTo(StoXMath.kgToGrams(ii.getIndividualweight()), 8);
     }
 
     public void setLength(Double length) {
-        this.length = length;
-        this.lengthCM = Calc.roundTo(StoXMath.mToCM(length), 8);
-    }
-    
-    public void setGonadweight(Double gonadweight) {
-        this.gonadweight = gonadweight;
+        ii.setLength(length);
+        recache();
     }
 
-    private Double getIndividualweight() {
-        return individualweight;
+    public void setIndividualweight(Double individualweight) {
+        ii.setIndividualweight(individualweight);
+        recache();
     }
 
     public Double getIndividualweightG() {
         return individualweightG;
     }
-    
-    public Double getindividualvolume() {
-        return individualvolume;
-    }
-
-    public Integer getvertebraecount() {
-        return vertebraecount;
-    }
-
-    public Double getStomachweight() {
-        return stomachweight;
-    }
-
-    public Double getLiverweight() {
-        return liverweight;
-    }
-
-    private Double getLength() {
-        return length;
-    }
 
     public Double getLengthCM() {
         return lengthCM;
-    }
-
-    public Integer getSpecimenid() {
-        return specimenid;
-    }
-
-    public Double getGonadweight() {
-        return gonadweight;
-    }
-
-    public void setIndividualcomment(String comment) {
-        this.individualcomment = comment;
-    }
-
-    public String getIndividualcomment() {
-        return individualcomment;
-    }
-
-    public String getEggstage() {
-        return eggstage;
-    }
-
-    public void setEggstage(String eggstage) {
-        this.eggstage = eggstage;
-    }
-
-    public String getGillworms() {
-        return gillworms;
-    }
-
-    public void setGillworms(String gillworms) {
-        this.gillworms = gillworms;
-    }
-
-    public String getSwollengills() {
-        return swollengills;
-    }
-
-    public void setSwollengills(String swollengills) {
-        this.swollengills = swollengills;
-    }
-
-    public String getFungusheart() {
-        return fungusheart;
-    }
-
-    public void setFungusheart(String fungusheart) {
-        this.fungusheart = fungusheart;
-    }
-
-    public String getFungusspores() {
-        return fungusspores;
-    }
-
-    public void setFungusspores(String fungusspores) {
-        this.fungusspores = fungusspores;
-    }
-
-    public String getFungusouter() {
-        return fungusouter;
-    }
-
-    public void setFungusouter(String fungusouter) {
-        this.fungusouter = fungusouter;
-    }
-
-    public String getBlackspot() {
-        return blackspot;
-    }
-
-    public void setBlackspot(String blackspot) {
-        this.blackspot = blackspot;
-    }
-
-    public void setSpecimenid(Integer specimenid) {
-        this.specimenid = specimenid;
     }
 
     public CatchSampleBO getCatchSample() {
@@ -320,35 +72,35 @@ public class IndividualBO implements Serializable {
     }
 
     public Integer getAge() {
-        return acquireAgeDet().getAge();
+        return acquireAgeDet().getAgedet().getAge();
     }
 
     public Object getSpawningage() {
-        return acquireAgeDet().getSpawningage();
+        return acquireAgeDet().getAgedet().getSpawningage();
     }
 
     public Object getSpawningzones() {
-        return acquireAgeDet().getSpawningzones();
+        return acquireAgeDet().getAgedet().getSpawningzones();
     }
 
     public Object getReadability() {
-        return acquireAgeDet().getReadability();
+        return acquireAgeDet().getAgedet().getReadability();
     }
 
     public Object getOtolithtype() {
-        return acquireAgeDet().getOtolithtype();
+        return acquireAgeDet().getAgedet().getOtolithtype();
     }
 
     public Object getOtolithedge() {
-        return acquireAgeDet().getOtolithedge();
+        return acquireAgeDet().getAgedet().getOtolithedge();
     }
 
     public Object getOtolithcentre() {
-        return acquireAgeDet().getOtolithcentre();
+        return acquireAgeDet().getAgedet().getOtolithcentre();
     }
 
     public Object getCalibration() {
-        return acquireAgeDet().getCalibration();
+        return acquireAgeDet().getAgedet().getCalibration();
     }
 
     @Override
@@ -360,21 +112,25 @@ public class IndividualBO implements Serializable {
         return ageDeterminationBOs;
     }
 
-    public AgeDeterminationBO addAgeDetermination() {
-        AgeDeterminationBO agedet = new AgeDeterminationBO(this);
+    public AgeDeterminationBO addAgeDetermination(AgedeterminationType aa) {
+        if(aa == null) {
+            aa = new AgedeterminationType();
+            aa.setParent(ii);
+        }
+        AgeDeterminationBO agedet = new AgeDeterminationBO(this, aa);
         ageDeterminationBOs.add(agedet);
         return agedet;
     }
 
     public AgeDeterminationBO acquireAgeDet() {
         if (ageDeterminationBOs.isEmpty()) {
-            return addAgeDetermination();
+            return addAgeDetermination(null);
         }
         return ageDeterminationBOs.get(0);
     }
 
     public String getKey() {
-        return (catchsample != null ? catchsample.getKey() + "/" : "") + (specimenid != null ? specimenid : "");
+        return (catchsample != null ? catchsample.getKey() + "/" : "") + (ii.getSpecimenid() != null ? ii.getSpecimenid() : "");
     }
 
 }

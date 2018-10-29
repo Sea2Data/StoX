@@ -258,13 +258,13 @@ public class SweptAreaDensity extends AbstractFunction {
                             Double variable = null;
                             switch (catchVariable) {
                                 case Functions.CATCHVARIABLE_WEIGHT:
-                                    variable = s.getCatchweight();
+                                    variable = s.getCs().getCatchweight();
                                     if (variable == null) {
                                         logger.error("Missing weight at " + s.getKey() + " for psu " + psu, null);
                                     }
                                     break;
                                 case Functions.CATCHVARIABLE_COUNT:
-                                    variable = Conversion.safeIntegerToDouble(s.getCatchcount());
+                                    variable = Conversion.safeIntegerToDouble(s.getCs().getCatchcount());
                                     break;
                             }
                             switch (catchVariable) {

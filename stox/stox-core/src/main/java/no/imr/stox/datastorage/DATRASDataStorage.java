@@ -342,15 +342,15 @@ public class DATRASDataStorage extends FileDataStorage {
 
                     for (CatchSampleBO s : fs.getCatchSampleBOs()) {
                         // IU: Sometimes we get null aphia
-                        if (s.getAphia() == null) {
+                        if (s.getCs().getAphia() == null) {
                             continue;
                         }
 
                         // IU: Use aphia for comparison and add crustacean boolean
-                        boolean isHerringOrSprat = s.getAphia().equals("126417") || s.getAphia().equals("126425");
+                        boolean isHerringOrSprat = s.getCs().getAphia().equals("126417") || s.getCs().getAphia().equals("126425");
 
                         List<String> crustList = Arrays.asList("107275", "107276", "107369", "107253", "107703", "107704", "107350", "107254", "107205", "140712", "140687", "140658");
-                        boolean isCrustacean = crustList.contains(s.getAphia());
+                        boolean isCrustacean = crustList.contains(s.getCs().getAphia());
 
                         //Double raiseFac = 60.0 / IMRdate.minutesDiffD(IMRdate.encodeLocalDateTime(fs.getFs().getStationstartdate(), fs.getFs().getStationstarttime()), IMRdate.encodeLocalDateTime(fs.getFs().getStationstopdate(), fs.getFs().getStationstoptime()));
                         MatrixBO hlNoAtLngth = new MatrixBO();
@@ -361,41 +361,41 @@ public class DATRASDataStorage extends FileDataStorage {
                         //    continue;
                         //}
                         Integer specVal = haulVal.equals("I") ? 0
-                                : s.getCatchcount() != null && s.getLengthsamplecount() != null && s.getCatchweight() != null ? 1
-                                : s.getCatchcount() != null && s.getLengthsamplecount() == null && s.getCatchweight() == null ? 4
-                                : s.getCatchcount() == null && s.getLengthsamplecount() == null && s.getCatchweight() != null ? 6
-                                : s.getCatchcount() != null && s.getLengthsamplecount() == null && s.getCatchweight() != null ? 7
-                                : haulVal.equals("V") && s.getCatchcount() == null && s.getLengthsamplecount() == null && s.getCatchweight() == null ? 5
-                                : s.getCatchcount() != null && s.getLengthsamplecount() != null && s.getCatchweight() == null ? 0 : -9;
+                                : s.getCs().getCatchcount() != null && s.getCs().getLengthsamplecount() != null && s.getCs().getCatchweight() != null ? 1
+                                : s.getCs().getCatchcount() != null && s.getCs().getLengthsamplecount() == null && s.getCs().getCatchweight() == null ? 4
+                                : s.getCs().getCatchcount() == null && s.getCs().getLengthsamplecount() == null && s.getCs().getCatchweight() != null ? 6
+                                : s.getCs().getCatchcount() != null && s.getCs().getLengthsamplecount() == null && s.getCs().getCatchweight() != null ? 7
+                                : haulVal.equals("V") && s.getCs().getCatchcount() == null && s.getCs().getLengthsamplecount() == null && s.getCs().getCatchweight() == null ? 5
+                                : s.getCs().getCatchcount() != null && s.getCs().getLengthsamplecount() != null && s.getCs().getCatchweight() == null ? 0 : -9;
 
-                        String lngtCode = s.getSampletype() != null ? isCrustacean ? "."/*1mm*/ : isHerringOrSprat ? "0"/*5mm*/ : "1"/*1cm*/ : "-9"/*1cm*/;
+                        String lngtCode = s.getCs().getSampletype() != null ? isCrustacean ? "."/*1mm*/ : isHerringOrSprat ? "0"/*5mm*/ : "1"/*1cm*/ : "-9"/*1cm*/;
                         Integer lenInterval = lngtCode.equals("0") ? 5 : 1;
                         Boolean reportInMM = !lngtCode.equals("1");
 
-                        Double catCatchWgt = (s.getCatchweight() != null ? s.getCatchweight() : 0) * 1000;
+                        Double catCatchWgt = (s.getCs().getCatchweight() != null ? s.getCs().getCatchweight() : 0) * 1000;
 
                         // If weight is below 1, raise it into 1
                         if (catCatchWgt < 1 && catCatchWgt > 0) {
                             catCatchWgt = Math.ceil(catCatchWgt) * 1.0;
                         }
 
-                        Double subWeight = (s.getlengthsampleweight() != null ? s.getlengthsampleweight() : 0) * 1000;
+                        Double subWeight = (s.getCs().getLengthsampleweight() != null ? s.getCs().getLengthsampleweight() : 0) * 1000;
 
                         // If weight is below 1, raise it into 1
                         if (subWeight < 1 && subWeight > 0) {
                             subWeight = Math.ceil(subWeight) * 1.0;
                         }
 
-                        if (s.getIndividualBOs().isEmpty() || s.getlengthsampleweight() == null) {
+                        if (s.getIndividualBOs().isEmpty() || s.getCs().getLengthsampleweight() == null) {
                             String lngtClass = "-9";
                             String sex = "-9";
-                            hlNoAtLngth.addGroupRowColValue(s.getAphia(), sex, lngtClass, (s.getCatchcount() != null ? s.getCatchcount() : 0) * 1.0);
-                            lsCountTot.addGroupRowColValue(s.getAphia(), sex, lngtClass, (s.getLengthsamplecount() != null ? s.getLengthsamplecount() : 0) * 1.0);
+                            hlNoAtLngth.addGroupRowColValue(s.getCs().getAphia(), sex, lngtClass, (s.getCs().getCatchcount() != null ? s.getCs().getCatchcount() : 0) * 1.0);
+                            lsCountTot.addGroupRowColValue(s.getCs().getAphia(), sex, lngtClass, (s.getCs().getLengthsamplecount() != null ? s.getCs().getLengthsamplecount() : 0) * 1.0);
                         } else {
-                            //if (s.getlengthsampleweight() == null) {
+                            //if (s.getCs().getlengthsampleweight() == null) {
                             //    continue;
                             //}
-                            Double sampleFac = s.getCatchweight() / s.getlengthsampleweight();
+                            Double sampleFac = s.getCs().getCatchweight() / s.getCs().getLengthsampleweight();
                             for (IndividualBO i : s.getIndividualBOs()) {
                                 Double length = i.getLengthCM();/*cm*/;
                                 if (i.getLengthCM() == null) {
@@ -415,14 +415,14 @@ public class DATRASDataStorage extends FileDataStorage {
                                     }
                                 }
                                 String lngtClass = "" + ImrMath.trunc(length, lenInterval.doubleValue());
-                                String sex = i.getSex() == null || i.getSex().trim().isEmpty()
-                                        ? "-9" : i.getSex().equals("1") ? "F" : "M";
-                                hlNoAtLngth.addGroupRowColValue(s.getAphia(), sex, lngtClass, 1.0 * sampleFac);
-                                lsCountTot.addGroupRowColValue(s.getAphia(), sex, lngtClass, 1.0);
+                                String sex = i.getI().getSex() == null || i.getI().getSex().trim().isEmpty()
+                                        ? "-9" : i.getI().getSex().equals("1") ? "F" : "M";
+                                hlNoAtLngth.addGroupRowColValue(s.getCs().getAphia(), sex, lngtClass, 1.0 * sampleFac);
+                                lsCountTot.addGroupRowColValue(s.getCs().getAphia(), sex, lngtClass, 1.0);
                             }
                         }
                         // Group Sex and Length class and report counts at catch level (raw)
-                        String aphia = (String) s.getAphia();
+                        String aphia = (String) s.getCs().getAphia();
                         for (String sex : hlNoAtLngth.getGroupRowKeys(aphia)) {
                             Double totalNo = hlNoAtLngth.getGroupRowValueAsMatrix(aphia, sex).getSum();
                             Double noMeas = lsCountTot.getGroupRowValueAsMatrix(aphia, sex).getSum();
@@ -451,7 +451,7 @@ public class DATRASDataStorage extends FileDataStorage {
                                         specVal,
                                         sex,
                                         totalNo == 0 ? -9 : unkD(totalNo, "0.00"), // n per Hour
-                                        s.getCatchpartnumber(), //CatIdentifier
+                                        s.getCs().getCatchpartnumber(), //CatIdentifier
                                         noMeas == 0 ? -9 : Math.round(noMeas), // n measured as individual
                                         unkD(subFactor, "0.0000"), // SubFactor
                                         subWeight == 0 ? -9 : Math.round(subWeight),
@@ -484,14 +484,14 @@ public class DATRASDataStorage extends FileDataStorage {
 
                     for (CatchSampleBO s : fs.getCatchSampleBOs()) {
                         // IU: Sometimes we get null aphia
-                        if (s.getAphia() == null) {
+                        if (s.getCs().getAphia() == null) {
                             continue;
                         }
                         // IU: Use aphia for comparison and add crustacean boolean
-                        boolean isHerringOrSprat = s.getAphia().equals("126417") || s.getAphia().equals("126425");
+                        boolean isHerringOrSprat = s.getCs().getAphia().equals("126417") || s.getCs().getAphia().equals("126425");
 
                         List<String> crustList = Arrays.asList("107275", "107276", "107369", "107253", "107703", "107704", "107350", "107254", "107205", "140712", "140687", "140658");
-                        boolean isCrustacean = crustList.contains(s.getAphia());
+                        boolean isCrustacean = crustList.contains(s.getCs().getAphia());
 
                         if (s.getIndividualBOs().isEmpty()) {
                             continue;
@@ -499,7 +499,7 @@ public class DATRASDataStorage extends FileDataStorage {
                         MatrixBO nInd = new MatrixBO();
                         MatrixBO nWithWeight = new MatrixBO();
                         MatrixBO totWeight = new MatrixBO();
-                        String lngtCode = s.getSampletype() != null ? isCrustacean ? "."/*1mm*/ : isHerringOrSprat ? "0"/*5mm*/ : "1"/*1cm*/ : "-9"/*1cm*/;
+                        String lngtCode = s.getCs().getSampletype() != null ? isCrustacean ? "."/*1mm*/ : isHerringOrSprat ? "0"/*5mm*/ : "1"/*1cm*/ : "-9"/*1cm*/;
                         Integer lenInterval = lngtCode.equals("0") ? 5 : 1;
                         Boolean reportInMM = !lngtCode.equals("1");
                         for (IndividualBO i : s.getIndividualBOs()) {
@@ -521,7 +521,7 @@ public class DATRASDataStorage extends FileDataStorage {
                                 }
                             }
                             String lngtClass = "" + ImrMath.trunc(length, lenInterval.doubleValue());
-                            String sex = i.getSex() == null || i.getSex().trim().isEmpty() ? "-9" : i.getSex().equals("1") ? "F" : "M";
+                            String sex = i.getI().getSex() == null || i.getI().getSex().trim().isEmpty() ? "-9" : i.getI().getSex().equals("1") ? "F" : "M";
                             String maturity = getDATRASMaturity(i);
                             String age = i.getAge() != null ? i.getAge() + "" : "-9";
                             nInd.addGroupRowColCellValue(lngtClass, sex, maturity, age, 1.0);
@@ -555,7 +555,7 @@ public class DATRASDataStorage extends FileDataStorage {
                                                 fs.getFs().getStation(),
                                                 year,
                                                 "W", // Worms
-                                                s.getAphia(),
+                                                s.getCs().getAphia(),
                                                 0,
                                                 areaLoc,
                                                 lngtCode,
@@ -577,12 +577,12 @@ public class DATRASDataStorage extends FileDataStorage {
 
     private static String getDATRASMaturity(IndividualBO i) {
         CatchSampleBO c = i.getCatchSample();
-        String noName = c.getCommonname().toUpperCase();
-        boolean isHerringOrSpratOrMackerel = c.getAphia().equals("126417") || c.getAphia().equals("126425") || c.getAphia().equals("127023");
+        String noName = c.getCs().getCommonname().toUpperCase();
+        boolean isHerringOrSpratOrMackerel = c.getCs().getAphia().equals("126417") || c.getCs().getAphia().equals("126425") || c.getCs().getAphia().equals("127023");
 
         Integer res = -9;
-        if (i.getSpecialstage() != null) {
-            Integer sp = Conversion.safeStringtoIntegerNULL(i.getSpecialstage());
+        if (i.getI().getSpecialstage() != null) {
+            Integer sp = Conversion.safeStringtoIntegerNULL(i.getI().getSpecialstage());
             if (sp != null) {
                 if (isHerringOrSpratOrMackerel) {
                     res = sp <= 2 ? 61 : sp <= 5 ? 62 : 60 + sp - 3;
@@ -590,11 +590,11 @@ public class DATRASDataStorage extends FileDataStorage {
                     res = 60 + sp;
                 }
             }
-        } else if (i.getMaturationstage() != null) {
+        } else if (i.getI().getMaturationstage() != null) {
             FishstationBO fs = c.getStationBO();
             Integer month = IMRdate.getMonth(fs.getFs().getStationstartdate());
             Integer quarter = month / 4 + 1;
-            Integer st = Conversion.safeStringtoIntegerNULL(i.getMaturationstage());
+            Integer st = Conversion.safeStringtoIntegerNULL(i.getI().getMaturationstage());
             if (st != null) {
                 res = 60 + st;
                 if (st == 5 && quarter == 3) {

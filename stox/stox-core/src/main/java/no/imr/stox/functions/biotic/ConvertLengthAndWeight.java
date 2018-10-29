@@ -47,16 +47,16 @@ public class ConvertLengthAndWeight extends AbstractFunction {
         for (FishstationBO f : bioticData) {
             for (CatchSampleBO c : f.getCatchSampleBOs()) {
                 for (IndividualBO i : c.getIndividualBOs()) {
-                    if (i.getIndividualproducttype() == null) {
+                    if (i.getI().getIndividualproducttype() == null) {
                         continue;
                     }
                     Double w = null;
                     Double l = null;
-                    switch (i.getIndividualproducttype()) {
+                    switch (i.getI().getIndividualproducttype()) {
                         case "3":
                             // Gutted without head - correct length
                             Double le = i.getLengthCM();
-                            Integer lu = Conversion.safeStringtoIntegerNULL(i.getLengthresolution());
+                            Integer lu = Conversion.safeStringtoIntegerNULL(i.getI().getLengthresolution());
                             if (le != null && lu != null && hCutFacA != null && hCutFacB != null) {
                                 Double lucm = BioticUtils.getLengthInterval(lu);
                                 l = hCutFacA * (le + 0.5 * lucm) + hCutFacB;
@@ -65,7 +65,7 @@ public class ConvertLengthAndWeight extends AbstractFunction {
                         case "4":
                             // Gutted with head - correct weight
                             w = i.getIndividualweightG();
-                            Double wFac = i.getIndividualproducttype().equals("3") ? wGutHeadOff : wGutHeadOn;
+                            Double wFac = i.getI().getIndividualproducttype().equals("3") ? wGutHeadOff : wGutHeadOn;
                             if (w != null && wFac != null) {
                                 w = w * wFac;
                             }
@@ -77,7 +77,7 @@ public class ConvertLengthAndWeight extends AbstractFunction {
                         i.setLength(ImrMath.safeMult(0.01, l)); // set weight in g
                     }
                     if (w != null || l != null) {
-                        i.setIndividualproducttype(1 + "");
+                        i.getI().setIndividualproducttype(1 + "");
                     }
                 }
             }

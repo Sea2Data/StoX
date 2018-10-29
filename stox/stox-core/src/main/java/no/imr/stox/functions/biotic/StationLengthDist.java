@@ -58,8 +58,8 @@ public class StationLengthDist extends AbstractFunction {
             for (CatchSampleBO s : fs.getCatchSampleBOs()) {
                 String speciesCat = s.getSpeciesCatTableKey(); // Using taxa as group
                 // Standardize sample to total catch
-                Double sampleWFac = StoXMath.raiseFac(s.getCatchweight(), s.getlengthsampleweight());
-                if (s.getIndividualBOs().isEmpty() && (s.getlengthsampleweight() != null && s.getlengthsampleweight() > 0d || s.getLengthsamplecount() != null && s.getLengthsamplecount() > 0d)) {
+                Double sampleWFac = StoXMath.raiseFac(s.getCs().getCatchweight(), s.getCs().getLengthsampleweight());
+                if (s.getIndividualBOs().isEmpty() && (s.getCs().getLengthsampleweight() != null && s.getCs().getLengthsampleweight() > 0d || s.getCs().getLengthsamplecount() != null && s.getCs().getLengthsamplecount() > 0d)) {
                     logger.log("Warning: Length distr. not calculated because of missing length sample individuals in " + s.getKey());
                     continue;
                 }
@@ -68,7 +68,7 @@ public class StationLengthDist extends AbstractFunction {
                         // Standardize sample to total catch is not needed, the percent (shape) of the LFQ is given.
                         sampleWFac = 1.0; // not needed
                     } else {
-                        sampleWFac = ImrMath.safeDivide(s.getCatchcount(), s.getLengthsamplecount());
+                        sampleWFac = ImrMath.safeDivide(s.getCs().getCatchcount(), s.getCs().getLengthsamplecount());
                         if (sampleWFac == null) {
                             logger.log("Warning: Length distr. not calculated because of missing weight or sample weight in " + s.getKey());
                             continue;

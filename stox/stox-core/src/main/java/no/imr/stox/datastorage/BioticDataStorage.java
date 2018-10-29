@@ -92,9 +92,9 @@ public class BioticDataStorage extends FileDataStorage {
                     for (CatchSampleBO s : fs.getCatchSampleBOs()) {
                         ImrIO.write(wr, ExportUtil.carrageReturnLineFeed(ExportUtil.tabbed(
                                 /*IMRdate.getYear(fs.getFs().getStationstartdate(), true)*/fs.getMission().getCruise(), fs.getFs().getSerialnumber(), fs.getFs().getCatchplatform(),
-                                s.getSpeciesCatTableKey(), s.getCatchcategory(), s.getCommonname(), s.getAphia(), s.getCatchpartnumber(), s.getSampletype(), s.getGroup(), s.getConservation(), s.getCatchproducttype(),
-                                s.getCatchweight(), s.getCatchcount(), s.getSampleproducttype(), s.getLengthmeasurement(), s.getlengthsampleweight(),
-                                s.getLengthsamplecount(), s.getSpecimensamplecount(), s.getParasite(), s.getStomach(), s.getGenetics(), s.getCatchcomment())));
+                                s.getSpeciesCatTableKey(), s.getCs().getCatchcategory(), s.getCs().getCommonname(), s.getCs().getAphia(), s.getCs().getCatchpartnumber(), s.getCs().getSampletype(), s.getCs().getGroup(), s.getCs().getConservation(), s.getCs().getCatchproducttype(),
+                                s.getCs().getCatchweight(), s.getCs().getCatchcount(), s.getCs().getSampleproducttype(), s.getCs().getLengthmeasurement(), s.getCs().getLengthsampleweight(),
+                                s.getCs().getLengthsamplecount(), s.getCs().getSpecimensamplecount(), s.getCs().getParasite(), s.getCs().getStomach(), s.getCs().getTissuesample(), s.getCs().getCatchcomment())));
                     }
                 }
                 break;

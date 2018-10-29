@@ -89,56 +89,44 @@ public final class FilterUtils {
         } else if (o instanceof CatchSampleBO) {
             CatchSampleBO cs = (CatchSampleBO) o;
             addCatchFilter(context, cs);
-            context.set("samplenumber", cs.getCatchpartnumber());
-            context.set("sampletype", cs.getSampletype());
-            context.set("group", cs.getGroup());
-            context.set("conservation", cs.getConservation());
-            context.set("measurement", cs.getCatchproducttype());
-            context.set("weight", cs.getCatchweight());
-            context.set("count", cs.getCatchcount());
-            context.set("samplemeasurement", cs.getSampleproducttype());
-            context.set("lengthmeasurement", cs.getLengthmeasurement());
-            context.set("lengthsampleweight", cs.getlengthsampleweight());
-            context.set("lengthsamplecount", cs.getLengthsamplecount());
-            context.set("individualsamplecount", cs.getSpecimentsamplecount());
-            context.set("agesample", cs.getAgingstructure());
-            context.set("parasite", cs.getParasite());
-            context.set("stomach", cs.getStomach());
-            context.set("genetics", cs.getGenetics());
-            context.set("nonbiological", cs.getForeignobject());
-            context.set("comment", cs.getCatchcomment());
+            context.set("samplenumber", cs.getCs().getCatchpartnumber());
+            context.set("sampletype", cs.getCs().getSampletype());
+            context.set("group", cs.getCs().getGroup());
+            context.set("conservation", cs.getCs().getConservation());
+            context.set("measurement", cs.getCs().getCatchproducttype());
+            context.set("weight", cs.getCs().getCatchweight());
+            context.set("count", cs.getCs().getCatchcount());
+            context.set("samplemeasurement", cs.getCs().getSampleproducttype());
+            context.set("lengthmeasurement", cs.getCs().getLengthmeasurement());
+            context.set("lengthsampleweight", cs.getCs().getLengthsampleweight());
+            context.set("lengthsamplecount", cs.getCs().getLengthsamplecount());
+            context.set("individualsamplecount", cs.getCs().getSpecimensamplecount());
+            context.set("agesample", cs.getCs().getAgingstructure());
+            context.set("parasite", cs.getCs().getParasite());
+            context.set("stomach", cs.getCs().getStomach());
+            context.set("genetics", cs.getCs().getTissuesample());
+            context.set("nonbiological", cs.getCs().getForeignobject());
+            context.set("comment", cs.getCs().getCatchcomment());
         } else if (o instanceof IndividualBO) {
             IndividualBO ii = (IndividualBO) o;
             if (ii.getCatchSample() != null) {
                 CatchSampleBO cs = ii.getCatchSample();
                 addCatchFilter(context, cs);
             }
+            // grams and cm filter
             context.set("weight", ii.getIndividualweightG());
             context.set("length", ii.getLengthCM());
-            context.set("fat", ii.getFat());
-            context.set("sex", ii.getSex());
 
-            context.set("no", ii.getSpecimenid());
-            context.set("weightmethod", ii.getIndividualproducttype());
-            context.set("lengthunit", ii.getLengthresolution());
-            //context.set("developmentalstage", ii.getDevelopmentalStage());
-            context.set("stage", ii.getMaturationstage());
-            context.set("specialstage", ii.getSpecialstage());
-            context.set("stomachfillfield", ii.getStomachfillfield());
-            context.set("digestdeg", ii.getDigestion());
-            context.set("liver", ii.getLiver());
-            context.set("liverparasite", ii.getLiverparasite());
-            context.set("gillworms", ii.getGillworms());
-            context.set("swollengills", ii.getSwollengills());
-            context.set("fungusheart", ii.getFungusheart());
-            context.set("fungusspores", ii.getFungusspores());
-            context.set("fungusouter", ii.getFungusouter());
-            context.set("blackspot", ii.getBlackspot());
-            context.set("vertebrae", ii.getvertebraecount());
-            context.set("gonadweight", ii.getGonadweight());
-            context.set("liverweight", ii.getLiverweight());
-            context.set("stomachweight", ii.getStomachweight());
-            context.set("comment", ii.getIndividualcomment());
+            // old field names support
+            context.set("no", ii.getI().getSpecimenid());
+            context.set("weightmethod", ii.getI().getIndividualproducttype());
+            context.set("lengthunit", ii.getI().getLengthresolution());
+            context.set("stage", ii.getI().getMaturationstage());
+            context.set("digestdeg", ii.getI().getDigestion());
+            context.set("vertebrae", ii.getI().getVertebraecount());
+            context.set("comment", ii.getI().getIndividualcomment());
+
+            // age determination filter on individual
             context.set("age", ii.getAge());
             context.set("spawningage", ii.getSpawningage());
             context.set("spawningzones", ii.getSpawningzones());
@@ -147,6 +135,23 @@ public final class FilterUtils {
             context.set("otolithedge", ii.getOtolithedge());
             context.set("otolithcentre", ii.getOtolithcentre());
             context.set("calibration", ii.getCalibration());
+            
+            // Individual field names
+            context.set("fat", ii.getI().getFat());
+            context.set("sex", ii.getI().getSex());
+            context.set("specialstage", ii.getI().getSpecialstage());
+            context.set("stomachfillfield", ii.getI().getStomachfillfield());
+            context.set("liver", ii.getI().getLiver());
+            context.set("liverparasite", ii.getI().getLiverparasite());
+            context.set("gillworms", ii.getI().getGillworms());
+            context.set("swollengills", ii.getI().getSwollengills());
+            context.set("fungusheart", ii.getI().getFungusheart());
+            context.set("fungusspores", ii.getI().getFungusspores());
+            context.set("fungusouter", ii.getI().getFungusouter());
+            context.set("blackspot", ii.getI().getBlackspot());
+            context.set("gonadweight", ii.getI().getGonadweight());
+            context.set("liverweight", ii.getI().getLiverweight());
+            context.set("stomachweight", ii.getI().getStomachweight());
         } else if (o instanceof DistanceBO) {
             DistanceBO d = (DistanceBO) o;
             if (d.getStart_time() != null) {
@@ -290,8 +295,8 @@ public final class FilterUtils {
         if (cs == null) {
             return;
         }
-        context.set("species", cs.getCatchcategory() != null ? cs.getCatchcategory().toLowerCase() : null);
-        context.set("noname", cs.getCommonname() != null ? cs.getCommonname().toLowerCase() : null);
-        context.set("aphia", cs.getAphia());
+        context.set("species", cs.getCs().getCatchcategory() != null ? cs.getCs().getCatchcategory().toLowerCase() : null);
+        context.set("noname", cs.getCs().getCommonname() != null ? cs.getCs().getCommonname().toLowerCase() : null);
+        context.set("aphia", cs.getCs().getAphia());
     }
 }

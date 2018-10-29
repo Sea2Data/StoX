@@ -122,7 +122,7 @@ public class StationNode extends AbstractNode {
         Map<String, Double> m = new HashMap<>();
         for (CatchSampleBO s : fs.getCatchSampleBOs()) {
             String sKey = s.getSpeciesKey();
-            Double w = s.getCatchweight();
+            Double w = s.getCs().getCatchweight();
             if (w == null || w == 0) {
                 continue;
             }

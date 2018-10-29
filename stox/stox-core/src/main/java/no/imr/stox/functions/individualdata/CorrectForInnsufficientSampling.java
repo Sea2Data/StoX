@@ -57,14 +57,14 @@ public class CorrectForInnsufficientSampling extends AbstractFunction {
                             }
                         }
                         // If no other strata contains individual, estimate it by le-we regression:
-                        if (indList.isEmpty()) {
+                        /*if (indList.isEmpty()) {
                             IndividualBO i = new IndividualBO();
                             Double length = StoXMath.getLength(Conversion.safeStringtoDoubleNULL(lenGrp), lenInterval);
                             i.setLength(ImrMath.safeMult(0.01, length));
                             // We need to estimate the biomass for this representation with linear regression from all length groups within estimation layer:
                             i.setIndividualweight(ImrMath.safeMult(0.001, getEstimatedWeight(indData.getData(), species, estLayer, length)));
                             indList.add(i);
-                        }
+                        }*/
                         result.getData().setGroupRowColCellValue(species, stratum, estLayer, lenGrp, indList);
                     }
                 }
