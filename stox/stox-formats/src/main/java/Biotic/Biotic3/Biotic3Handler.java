@@ -56,7 +56,11 @@ public class Biotic3Handler extends NamespaceVersionHandler<MissionsType> {
     }
 
     /**
-     * @param one2onekeys If true, converters from older formats will attempt to generate new keys as a function of older keys. This might incur additional assumptions, or stricter format compliance, so might throw errors in cases where one 2 one correspondance is not ensured (one2one==false).
+     * @param one2onekeys If true, converters from older formats will attempt to
+     * generate new keys as a function of older keys. This might incur
+     * additional assumptions, or stricter format compliance, so might throw
+     * errors in cases where one 2 one correspondance is not ensured
+     * (one2one==false).
      */
     public Biotic3Handler(boolean one2onekeys) {
         this.latestNamespace = "http://www.imr.no/formats/nmdbiotic/v3_beta";
@@ -65,7 +69,6 @@ public class Biotic3Handler extends NamespaceVersionHandler<MissionsType> {
         this.one2oneKeys = one2onekeys;
     }
 
-    
     @Override
     public MissionsType read(InputStream xml) throws JAXBException, XMLStreamException, ParserConfigurationException, SAXException, IOException {
         return super.read(xml);
@@ -247,7 +250,9 @@ public class Biotic3Handler extends NamespaceVersionHandler<MissionsType> {
         mission.setStartyear(m.getYear());
 
         for (BioticTypes.v1_4.FishstationType f : m.getFishstation()) {
-            mission.getFishstation().add(createFishstationFromBiotic1(f));
+            FishstationType fs = createFishstationFromBiotic1(f);
+            fs.setParent(mission);
+            mission.getFishstation().add(fs);
         }
 
         return mission;
@@ -256,10 +261,9 @@ public class Biotic3Handler extends NamespaceVersionHandler<MissionsType> {
     private FishstationType createFishstationFromBiotic1(BioticTypes.v1_4.FishstationType f) throws BioticConversionException {
         FishstationType fishstation = this.biotic3factory.createFishstationType();
 
-        if (f.getArea() == null){
+        if (f.getArea() == null) {
             fishstation.setArea(null);
-        }
-        else{
+        } else {
             fishstation.setArea(f.getArea().toString());
         }
 
@@ -308,10 +312,9 @@ public class Biotic3Handler extends NamespaceVersionHandler<MissionsType> {
         fishstation.setStationstopdate(f.getStopdate());
         fishstation.setLogstop(f.getStoplog());
         fishstation.setStationstoptime(f.getStoptime());
-        if (f.getSystem()==null){
+        if (f.getSystem() == null) {
             fishstation.setSystem(null);
-        }
-        else{
+        } else {
             fishstation.setSystem(f.getSystem().toString());
         }
         fishstation.setVerticaltrawlopening(f.getTrawlopening());
@@ -326,7 +329,9 @@ public class Biotic3Handler extends NamespaceVersionHandler<MissionsType> {
         fishstation.setWirelength(f.getWirelength());
 
         for (BioticTypes.v1_4.CatchsampleType c : f.getCatchsample()) {
-            fishstation.getCatchsample().add(this.createCatchsampleFromBiotic1(c));
+            CatchsampleType cs = this.createCatchsampleFromBiotic1(c);
+            cs.setParent(fishstation);
+            fishstation.getCatchsample().add(cs);
         }
 
         return fishstation;
@@ -365,7 +370,9 @@ public class Biotic3Handler extends NamespaceVersionHandler<MissionsType> {
         catchsample.setCatchweight(c.getWeight());
 
         for (BioticTypes.v1_4.IndividualType i : c.getIndividual()) {
-            catchsample.getIndividual().add(this.createIndividualFromBiotic1(i));
+            IndividualType ii = this.createIndividualFromBiotic1(i);
+            ii.setParent(catchsample);
+            catchsample.getIndividual().add(ii);
         }
 
         return catchsample;
@@ -424,16 +431,22 @@ public class Biotic3Handler extends NamespaceVersionHandler<MissionsType> {
         individual.setIndividualweight(i.getWeight());
 
         for (BioticTypes.v1_4.AgedeterminationType a : i.getAgedetermination()) {
-            individual.getAgedetermination().add(this.createAgedeterminationFromBiotic1(a));
+            AgedeterminationType aa = this.createAgedeterminationFromBiotic1(a);
+            aa.setParent(individual);
+            individual.getAgedetermination().add(aa);
         }
 
         //handles moving of prey from catchsample
         for (BioticTypes.v1_4.PreyType p : this.getPreyForIndividualBiotic1(i)) {
-            individual.getPrey().add(createPreyFromBiotic1(p));
+            PreyType pr = this.createPreyFromBiotic1(p);
+            pr.setParent(individual);
+            individual.getPrey().add(pr);
         }
 
         for (BioticTypes.v1_4.TagType t : i.getTag()) {
-            individual.getTag().add(createTagFromBiotic1(t));
+            TagType tag = this.createTagFromBiotic1(t);
+            tag.setParent(individual);
+            individual.getTag().add(tag);
         }
 
         return individual;
@@ -624,7 +637,7 @@ public class Biotic3Handler extends NamespaceVersionHandler<MissionsType> {
             }
             return Integer.parseInt(catchn);
         } else {
-            return ((BioticTypes.v1_4.CatchsampleType) p.getParent()).getPrey().indexOf(p) +1;
+            return ((BioticTypes.v1_4.CatchsampleType) p.getParent()).getPrey().indexOf(p) + 1;
         }
     }
 

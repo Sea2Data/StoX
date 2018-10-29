@@ -52,7 +52,7 @@ public class StationLengthDist extends AbstractFunction {
             Double distanceWFac = 1.0;
             // Standardize to 1 NM if NORMLengthDist
             if (normToDist) {
-                distanceWFac = StoXMath.raiseFac(distanceWFac, fs.getDistance());
+                distanceWFac = StoXMath.raiseFac(distanceWFac, fs.getFs().getDistance());
             }
             String observation = fs.getKey(); // Using fishstation key as row
             for (CatchSampleBO s : fs.getCatchSampleBOs()) {

@@ -1,5 +1,7 @@
 package no.imr.stox.functions.biotic;
 
+import BioticTypes.v3.FishstationType;
+import BioticTypes.v3.MissionType;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
@@ -27,10 +29,7 @@ public class BioticXMLReader extends XMLReader {
     /**
      * Fishstations read.
      */
-    private String currentMissionType;
-    private String currentCruise;
-    private String currentPlatform;
-    private String currentPlatformName;
+    private MissionType currentMission;
     private final List<FishstationBO> stations;
     IProject project;
 
@@ -48,7 +47,7 @@ public class BioticXMLReader extends XMLReader {
     @Override
     protected void onObjectValue(final Object object, final String key, final String value) {
         if (key.equals("cruise")) {
-            currentCruise = value;
+            currentMission.setCruise(value);
         } else if (object instanceof FishstationBO) {
             createFishStation(object, key, value);
         } else if (object instanceof CatchSampleBO) {
@@ -92,19 +91,18 @@ public class BioticXMLReader extends XMLReader {
             result = null;
         }
         if (current == null && elmName.equals("mission")) {
-            currentMissionType = getCurrentAttributeValue("missiontype");
+            currentMission = new MissionType();
+            currentMission.setMissiontype(getCurrentAttributeValue("missiontype"));
             boolean useMissionTypeInCruiseTag = project.getResourceVersion() > 1.26;
             String mtPref = useMissionTypeInCruiseTag ? getCurrentAttributeValue("missiontype") + "-" : "";
-            currentCruise = mtPref + getCurrentAttributeValue("year");
-            currentPlatform = getCurrentAttributeValue("platform");
-            currentPlatformName = getCurrentAttributeValue("platformname");
+            String currentCruise = mtPref + getCurrentAttributeValue("year");
+            currentMission.setCruise(currentCruise); // default cruise=missiontype-year in earlier stox
+            currentMission.setPlatform(getCurrentAttributeValue("platform"));
+            currentMission.setPlatformname(getCurrentAttributeValue("platformname"));
             result = stations;
         } else if (current instanceof List && elmName.equals("fishstation")) {
-            FishstationBO station = new FishstationBO();
-            station.setCruise(currentCruise);
-            station.setMissiontype(currentMissionType);
-            station.setCatchplatform(currentPlatform);
-            station.setPlatformname(currentPlatformName);
+            FishstationBO station = new FishstationBO(currentMission);
+            station.getFs().setCatchplatform(station.getMission().getPlatform());
             stations.add(station);
             result = station;
         } else if (current instanceof FishstationBO && elmName.equals("catchsample")) {
@@ -154,81 +152,81 @@ public class BioticXMLReader extends XMLReader {
     private void createFishStation(final Object object, final String key, final String value) {
         FishstationBO bo = (FishstationBO) object;
         if (key.equals("nation")) {
-            bo.setNation(value);
+            bo.getFs().setNation(value);
         } else if (key.equals("platform")) {
-            bo.setCatchplatform(value);
+            bo.getFs().setCatchplatform(value);
         } else if (key.equals("startdate")) {
-            bo.setStationstartdate(LocalDate.parse(value, DateTimeFormatter.ofPattern(IMRdate.DATE_FORMAT_DMY)));
+            bo.getFs().setStationstartdate(LocalDate.parse(value, DateTimeFormatter.ofPattern(IMRdate.DATE_FORMAT_DMY)));
         } else if (key.equals("stopdate")) {
-            bo.setStationstopdate(LocalDate.parse(value, DateTimeFormatter.ofPattern(IMRdate.DATE_FORMAT_DMY)));
+            bo.getFs().setStationstopdate(LocalDate.parse(value, DateTimeFormatter.ofPattern(IMRdate.DATE_FORMAT_DMY)));
         } else if (key.equals("station")) {
-            bo.setStation(Conversion.safeStringtoIntegerNULL(value));
+            bo.getFs().setStation(Conversion.safeStringtoIntegerNULL(value));
         } else if (key.equals("serialno") || key.equals("catchnumber")) {
-            bo.setSerialnumber(Conversion.safeStringtoIntegerNULL(value));
+            bo.getFs().setSerialnumber(Conversion.safeStringtoIntegerNULL(value));
         } else if (key.equals("fishstationtype") || key.equals("stationtype")) {
-            bo.setStationtype(value);
+            bo.getFs().setStationtype(value);
         } else if (key.equals("latitudestart")) {
-            bo.setLatitudestart(Conversion.safeStringtoDoubleNULL(value));
+            bo.getFs().setLatitudestart(Conversion.safeStringtoDoubleNULL(value));
         } else if (key.equals("longitudestart")) {
-            bo.setLongitudestart(Conversion.safeStringtoDoubleNULL(value));
+            bo.getFs().setLongitudestart(Conversion.safeStringtoDoubleNULL(value));
         } else if (key.equals("latitudeend")) {
-            bo.setLatitudeend(Conversion.safeStringtoDoubleNULL(value));
+            bo.getFs().setLatitudeend(Conversion.safeStringtoDoubleNULL(value));
         } else if (key.equals("longitudeend")) {
-            bo.setLongitudeend(Conversion.safeStringtoDoubleNULL(value));
+            bo.getFs().setLongitudeend(Conversion.safeStringtoDoubleNULL(value));
         } else if (key.equals("system")) {
-            bo.setSystem(value);
+            bo.getFs().setSystem(value);
         } else if (key.equals("area")) {
-            bo.setArea(value);
+            bo.getFs().setArea(value);
         } else if (key.equals("location")) {
-            bo.setLocation(value);
+            bo.getFs().setLocation(value);
         } else if (key.equals("bottomdepthstart")) {
-            bo.setBottomdepthstart(Conversion.safeStringtoDoubleNULL(value));
+            bo.getFs().setBottomdepthstart(Conversion.safeStringtoDoubleNULL(value));
         } else if (key.equals("bottomdepthstop")) {
-            bo.setBottomdepthstop(Conversion.safeStringtoDoubleNULL(value));
+            bo.getFs().setBottomdepthstop(Conversion.safeStringtoDoubleNULL(value));
         } else if (key.equals("equipmentnumber") || key.equals("gearno")) {
-            bo.setGearno(Conversion.safeStringtoIntegerNULL(value));
+            bo.getFs().setGearno(Conversion.safeStringtoIntegerNULL(value));
         } else if (key.equals("equipment") || key.equals("gear")) {
-            bo.setGear(value);
+            bo.getFs().setGear(value);
         } else if (key.equals("equipmentcount") || key.equals("gearcount")) {
-            bo.setGearcount(Conversion.safeStringtoIntegerNULL(value));
+            bo.getFs().setGearcount(Conversion.safeStringtoIntegerNULL(value));
         } else if (key.equals("directiongps") || key.equals("direction")) {
-            bo.setDirection(Conversion.safeStringtoDoubleNULL(value));
+            bo.getFs().setDirection(Conversion.safeStringtoDoubleNULL(value));
         } else if (key.equals("speedequipment") || key.equals("gearspeed")) {
-            bo.setVesselspeed(Conversion.safeStringtoDoubleNULL(value));
+            bo.getFs().setVesselspeed(Conversion.safeStringtoDoubleNULL(value));
         } else if (key.equals("starttime")) {
-            bo.setStationstarttime(LocalTime.parse(value, DateTimeFormatter.ofPattern(IMRdate.TIME_FORMAT_HMS)));
+            bo.getFs().setStationstarttime(LocalTime.parse(value, DateTimeFormatter.ofPattern(IMRdate.TIME_FORMAT_HMS)));
         } else if (key.equals("logstart") || key.equals("startlog")) {
-            bo.setLogstart(Conversion.safeStringtoDoubleNULL(value));
+            bo.getFs().setLogstart(Conversion.safeStringtoDoubleNULL(value));
         } else if (key.equals("stoptime")) {
-            bo.setStationstoptime(LocalTime.parse(value, DateTimeFormatter.ofPattern(IMRdate.TIME_FORMAT_HMS)));
+            bo.getFs().setStationstoptime(LocalTime.parse(value, DateTimeFormatter.ofPattern(IMRdate.TIME_FORMAT_HMS)));
         } else if (key.equals("distance")) {
-            bo.setDistance(Conversion.safeStringtoDoubleNULL(value));
+            bo.getFs().setDistance(Conversion.safeStringtoDoubleNULL(value));
         } else if (key.equals("gearcondition")) {
-            bo.setGearcondition(value);
+            bo.getFs().setGearcondition(value);
         } else if (key.equals("trawlquality")) {
-            bo.setSamplequality(value);
+            bo.getFs().setSamplequality(value);
         } else if (key.equals("fishingdepthmax")) {
-            bo.setFishingdepthmax(Conversion.safeStringtoDoubleNULL(value));
+            bo.getFs().setFishingdepthmax(Conversion.safeStringtoDoubleNULL(value));
         } else if (key.equals("fishingdepthmin")) {
-            bo.setFishingdepthmin(Conversion.safeStringtoDoubleNULL(value));
+            bo.getFs().setFishingdepthmin(Conversion.safeStringtoDoubleNULL(value));
         } else if (key.equals("fishingdepthcount")) {
-            bo.setFishingdepthcount(Conversion.safeStringtoIntegerNULL(value));
+            bo.getFs().setFishingdepthcount(Conversion.safeStringtoIntegerNULL(value));
         } else if (key.equals("trawlopening")) {
-            bo.setVerticalTrawlOpening(Conversion.safeStringtoDoubleNULL(value));
+            bo.getFs().setVerticaltrawlopening(Conversion.safeStringtoDoubleNULL(value));
         } else if (key.equals("trawlstdopening") || key.equals("trawlopeningsd")) {
-            bo.setVerticaltrawlopeningsd(Conversion.safeStringtoDoubleNULL(value));
+            bo.getFs().setVerticaltrawlopeningsd(Conversion.safeStringtoDoubleNULL(value));
         } else if (key.equals("trawldoorspread") || key.equals("doorspread")) {
-            bo.setTrawldoorspread(Conversion.safeStringtoDoubleNULL(value));
+            bo.getFs().setTrawldoorspread(Conversion.safeStringtoDoubleNULL(value));
         } else if (key.equals("doorspreadsd")) {
-            bo.setTrawldoorspreadsd(Conversion.safeStringtoDoubleNULL(value));
+            bo.getFs().setTrawldoorspreadsd(Conversion.safeStringtoDoubleNULL(value));
         } else if (key.equals("wirelength")) {
-            bo.setWireLength(Conversion.safeStringtoDoubleNULL(value));
+            bo.getFs().setWirelength(Conversion.safeStringtoDoubleNULL(value));
         } else if (key.equals("soaktime")) {
-            bo.setSoaktime(Conversion.safeStringtoDoubleNULL(value));
+            bo.getFs().setSoaktime(Conversion.safeStringtoDoubleNULL(value));
         } else if (key.equals("tripno")) {
-            bo.setTripno(Conversion.safeStringtoIntegerNULL(value));
+            bo.getFs().setTripno(Conversion.safeStringtoIntegerNULL(value));
         } else if (key.equals("comment")) {
-            bo.setStationcomment(value);
+            bo.getFs().setStationcomment(value);
         }
     }
 

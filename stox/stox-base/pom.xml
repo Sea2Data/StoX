@@ -53,6 +53,7 @@
                         <publicPackage>no.imr.*</publicPackage>
                         <publicPackage>com.vividsolutions.*</publicPackage>
                         <publicPackage>org.apache.commons.*</publicPackage>
+                        <publicPackage>BioticTypes.v3.*</publicPackage>
                     </publicPackages>
                 </configuration>
             </plugin>

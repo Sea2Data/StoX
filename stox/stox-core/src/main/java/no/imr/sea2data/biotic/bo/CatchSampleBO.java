@@ -14,7 +14,6 @@ public class CatchSampleBO {
     private String catchcategory; // tsn number as natural key. Use external reference system for lookup by tsn key.
     private String commonname; // tsn number as natural key. Use external reference system for lookup by tsn key.
     private String aphia; // tsn number as natural key. Use external reference system for lookup by tsn key.
-
     private String agingstructure;
     private Integer catchpartnumber;
     protected String sampletype;
@@ -36,10 +35,10 @@ public class CatchSampleBO {
     protected String tissuesample;
     protected String foreignobject;
     private String catchcomment;
+
     private FishstationBO fishstationBO;
     final private List<IndividualBO> individualBOs = new ArrayList<>();
     private String specCat;
-    private String stock;
 
     public CatchSampleBO(FishstationBO fishstationBO) {
         this.fishstationBO = fishstationBO;
@@ -316,7 +315,7 @@ public class CatchSampleBO {
     }
 
     public String getSpeciesKey() {
-        return (commonname != null && !commonname.isEmpty() ? commonname : (catchcategory + (stock != null ? "." + stock : "")));
+        return (commonname != null && !commonname.isEmpty() ? commonname : catchcategory);
     }
 
 }

@@ -61,7 +61,7 @@ public class RectangleAssignment extends AbstractFunction {
                 String asgKey = asg.toString();
                 Boolean psuIsAssigned = false;
                 for (FishstationBO f : fs) {
-                    Coordinate fPos = new Coordinate(f.getLongitudestart(), f.getLatitudestart());
+                    Coordinate fPos = new Coordinate(f.getFs().getLongitudestart(), f.getFs().getLatitudestart());
                     if (!JTSUtils.within(fPos, psuCoords)) {
                         continue;
                     }

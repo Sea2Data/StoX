@@ -114,7 +114,7 @@ public class DefineTemporal extends AbstractFunction {
             } else if (sourceType.equals(Functions.SOURCETYPE_BIOTIC)) {
                 if (bioticData != null) {
                     for (FishstationBO fs : bioticData) {
-                        String cov = getCovariateFromDate(fs.getStationstartdate(), timeInterval, seasonal);
+                        String cov = getCovariateFromDate(fs.getFs().getStationstartdate(), timeInterval, seasonal);
                         if (cov != null) {
                             covs.add(cov);
                         }

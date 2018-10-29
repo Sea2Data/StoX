@@ -51,35 +51,35 @@ public final class BioticUtils {
     public static Object getIndVar(IndividualBO i, String code) {
         switch (code) {
             case Functions.COL_IND_TRAWLQUALITY:
-                return i.getCatchSample().getStationBO().getSamplequality();
+                return i.getCatchSample().getStationBO().getFs().getSamplequality();
             case Functions.COL_IND_GROUP:
                 return i.getCatchSample().getGroup();
             case Functions.COL_IND_SAMPLETYPE:
                 return i.getCatchSample().getSampletype();
             case Functions.COL_IND_CRUISE:
-                return i.getCatchSample().getStationBO().getCruise();
+                return i.getCatchSample().getStationBO().getMission().getCruise();
             case Functions.COL_IND_SERIALNO:
-                return i.getCatchSample().getStationBO().getSerialnumber();
+                return i.getCatchSample().getStationBO().getFs().getSerialnumber();
             case Functions.COL_IND_PLATFORM:
-                return i.getCatchSample().getStationBO().getCatchplatform();
+                return i.getCatchSample().getStationBO().getFs().getCatchplatform();
             case Functions.COL_IND_STARTDATE:
-                return IMRdate.formatDate(i.getCatchSample().getStationBO().getStationstartdate());
+                return IMRdate.formatDate(i.getCatchSample().getStationBO().getFs().getStationstartdate());
             case Functions.COL_IND_STARTTIME:
-                return IMRdate.formatTime(i.getCatchSample().getStationBO().getStationstarttime());
+                return IMRdate.formatTime(i.getCatchSample().getStationBO().getFs().getStationstarttime());
             case Functions.COL_IND_FISHSTATIONTYPE:
-                return i.getCatchSample().getStationBO().getStationtype();
+                return i.getCatchSample().getStationBO().getFs().getStationtype();
             case Functions.COL_IND_LATITUDESTART:
-                return Conversion.formatDoubletoDecimalString(i.getCatchSample().getStationBO().getLatitudestart(), 4);
+                return Conversion.formatDoubletoDecimalString(i.getCatchSample().getStationBO().getFs().getLatitudestart(), 4);
             case Functions.COL_IND_LONGITUDESTART:
-                return Conversion.formatDoubletoDecimalString(i.getCatchSample().getStationBO().getLongitudestart(), 4);
+                return Conversion.formatDoubletoDecimalString(i.getCatchSample().getStationBO().getFs().getLongitudestart(), 4);
             case Functions.COL_IND_SYSTEM:
-                return i.getCatchSample().getStationBO().getSystem();
+                return i.getCatchSample().getStationBO().getFs().getSystem();
             case Functions.COL_IND_AREA:
-                return i.getCatchSample().getStationBO().getArea();
+                return i.getCatchSample().getStationBO().getFs().getArea();
             case Functions.COL_IND_LOCATION:
-                return i.getCatchSample().getStationBO().getLocation();
+                return i.getCatchSample().getStationBO().getFs().getLocation();
             case Functions.COL_IND_GEAR:
-                return i.getCatchSample().getStationBO().getGear();
+                return i.getCatchSample().getStationBO().getFs().getGear();
             case Functions.COL_IND_SPECCAT:
                 return i.getCatchSample().getSpeciesCatTableKey();
             case Functions.COL_IND_SPECIES:
@@ -178,7 +178,7 @@ public final class BioticUtils {
         if (fList == null) {
             return null;
         }
-        return fList.stream().filter(s -> Objects.equals(s.getSerialnumber(), serialNo)).findFirst().orElse(null);
+        return fList.stream().filter(s -> Objects.equals(s.getFs().getSerialnumber(), serialNo)).findFirst().orElse(null);
     }
 
     public static Collection<FishstationBO> findStations(List<FishstationBO> fList, Collection<String> keys) {

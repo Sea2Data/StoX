@@ -180,44 +180,44 @@ public class DATRASDataStorage extends FileDataStorage {
                         "SpeedWater", "SurCurDir", "SurCurSpeed", "BotCurDir", "BotCurSpeed", "WindDir", "WindSpeed",
                         "SwellDir", "SwellHeight", "SurTemp", "BotTemp", "SurSal", "BotSal", "ThermoCline", "ThClineDepth")));
                 for (FishstationBO fs : list) {
-                    Integer sweep = getGOVSweepByEquipment(fs.getGear());
+                    Integer sweep = getGOVSweepByEquipment(fs.getFs().getGear());
                     if (sweep == null) { // Sweep filter
                         // other gears have sweep == null...
                         continue;
                     }
                     // Filter other station types that blank (vanlig)
-                    if (!(fs.getStationtype() == null || fs.getStationtype().equals(""))) {
+                    if (!(fs.getFs().getStationtype() == null || fs.getFs().getStationtype().equals(""))) {
                         continue;
                     }
-                    if (fs.getStationstartdate() == null) {
+                    if (fs.getFs().getStationstartdate() == null) {
                         continue;
                     }
-                    Integer year = IMRdate.getYear(fs.getStationstartdate());
-                    Integer month = IMRdate.getMonth(fs.getStationstartdate());
-                    Integer day = IMRdate.getDayOfMonth(fs.getStationstartdate());
+                    Integer year = IMRdate.getYear(fs.getFs().getStationstartdate());
+                    Integer month = IMRdate.getMonth(fs.getFs().getStationstartdate());
+                    Integer day = IMRdate.getDayOfMonth(fs.getFs().getStationstartdate());
                     Integer quarter = (month - 1) / 3 + 1;
                     // Invalid also less/more than 5..90 min. og uten for 62 grader, evt kvartal.
-                    String haulVal = (fs.getGearcondition() == null || fs.getGearcondition().equals("1") || fs.getGearcondition().equals("2"))
-                            && (fs.getSamplequality() == null || fs.getSamplequality().equals("0") || fs.getSamplequality().equals("1")) ? "V" : "I";
+                    String haulVal = (fs.getFs().getGearcondition() == null || fs.getFs().getGearcondition().equals("1") || fs.getFs().getGearcondition().equals("2"))
+                            && (fs.getFs().getSamplequality() == null || fs.getFs().getSamplequality().equals("0") || fs.getFs().getSamplequality().equals("1")) ? "V" : "I";
 
                     ImrIO.write(wr, ExportUtil.carrageReturnLineFeed(ExportUtil.csv(// RecordType
                             "HH",
                             // Quarter
                             quarter,
                             // Country
-                            getTSCountryByIOC(fs.getNation()), //TODO reference list
+                            getTSCountryByIOC(fs.getFs().getNation()), //TODO reference list
                             // Ship
-                            getTSShipByPlatform(fs.getCatchplatform()), // TODO reference list
+                            getTSShipByPlatform(fs.getFs().getCatchplatform()), // TODO reference list
                             // Gear
                             "GOV", // TODO reference list
                             // SweepLngth
                             sweep,
                             // GearExp
-                            getGearExp(sweep, fs.getYear(), fs.getSerialnumber(), fs.getBottomdepthstart()), // TODO: S=Single, D=Double, -9 not given
+                            getGearExp(sweep, fs.getYear(), fs.getFs().getSerialnumber(), fs.getFs().getBottomdepthstart()), // TODO: S=Single, D=Double, -9 not given
                             // DoorType
-                            "P", fs.getSerialnumber(),
+                            "P", fs.getFs().getSerialnumber(),
                             // HaulNo
-                            fs.getStation(),
+                            fs.getFs().getStation(),
                             // Year
                             year,
                             // Month
@@ -225,27 +225,27 @@ public class DATRASDataStorage extends FileDataStorage {
                             // Day
                             day,
                             // TimeShot
-                            StringUtils.leftPad(IMRdate.formatTime(fs.getStationstarttime(), "HHmm"), 4, '0'),
+                            StringUtils.leftPad(IMRdate.formatTime(fs.getFs().getStationstarttime(), "HHmm"), 4, '0'),
                             // Stratum
                             -9,
                             // HaulDur
-                            Math.round(IMRdate.minutesDiffD(IMRdate.encodeLocalDateTime(fs.getStationstartdate(), fs.getStationstarttime()), IMRdate.encodeLocalDateTime(fs.getStationstopdate(), fs.getStationstoptime()))),
+                            Math.round(IMRdate.minutesDiffD(IMRdate.encodeLocalDateTime(fs.getFs().getStationstartdate(), fs.getFs().getStationstarttime()), IMRdate.encodeLocalDateTime(fs.getFs().getStationstopdate(), fs.getFs().getStationstoptime()))),
                             // DayNight
                             // 15 minutes before  official sunrise, 15 min after official sunset.
-                            IMRdate.isDayTime(IMRdate.encodeLocalDateTime(fs.getStationstartdate(), fs.getStationstarttime()), fs.getLatitudestart(),
-                                    fs.getLongitudestart()) ? "D" : "N",
+                            IMRdate.isDayTime(IMRdate.encodeLocalDateTime(fs.getFs().getStationstartdate(), fs.getFs().getStationstarttime()), fs.getFs().getLatitudestart(),
+                                    fs.getFs().getLongitudestart()) ? "D" : "N",
                             // ShootLat
-                            unkD(fs.getLatitudestart(), "0.0000"),
+                            unkD(fs.getFs().getLatitudestart(), "0.0000"),
                             // ShootLong
-                            unkD(fs.getLongitudestart(), "0.0000"),
+                            unkD(fs.getFs().getLongitudestart(), "0.0000"),
                             // HaulLat
-                            unkD(fs.getLatitudeend(), "0.0000"),
+                            unkD(fs.getFs().getLatitudeend(), "0.0000"),
                             // HaulLong
-                            unkD(fs.getLongitudeend(), "0.0000"),
+                            unkD(fs.getFs().getLongitudeend(), "0.0000"),
                             // StatRec
-                            AreaUnits.getFDOmrLokFromPos(fs.getLatitudestart(), fs.getLongitudestart()),
+                            AreaUnits.getFDOmrLokFromPos(fs.getFs().getLatitudestart(), fs.getFs().getLongitudestart()),
                             // Depth
-                            Math.round(fs.getBottomdepthstart()),
+                            Math.round(fs.getFs().getBottomdepthstart()),
                             //HaulVal
                             haulVal,
                             // TODO stasjon : match på logg mot toktlogger 5 nm, tid.
@@ -258,15 +258,15 @@ public class DATRASDataStorage extends FileDataStorage {
                             1,
                             // DataType
                             "R",
-                            fs.getVerticaltrawlopening(),
+                            fs.getFs().getVerticaltrawlopening(),
                             // Rigging
                             -9,
                             // Tickler
                             -9,
                             // Distance
-                            unkO(fs.getDistance() != null ? fs.getDistance() * 1852 : null),
+                            unkO(fs.getFs().getDistance() != null ? fs.getFs().getDistance() * 1852 : null),
                             // Warplngt
-                            unkO(fs.getwirelength()),
+                            unkO(fs.getFs().getWirelength()),
                             //Warpdia
                             -9,
                             //Warpden
@@ -276,7 +276,7 @@ public class DATRASDataStorage extends FileDataStorage {
                             //DoorWgt
                             1075,
                             //DoorSpread
-                            unkD(fs.getTrawldoorspread(), "0.0"),
+                            unkD(fs.getFs().getTrawldoorspread(), "0.0"),
                             //WingSpread
                             -9,
                             //Buoyancy
@@ -286,9 +286,9 @@ public class DATRASDataStorage extends FileDataStorage {
                             //WgtGroundRope
                             -9,
                             // Tow dir
-                            unkO(fs.getDirection() != null ? Math.round(fs.getDirection()) : null),
+                            unkO(fs.getFs().getDirection() != null ? Math.round(fs.getFs().getDirection()) : null),
                             // Ground speed (speed of trawl over ground)
-                            unkD(fs.getVesselspeed(), "0.0"),
+                            unkD(fs.getFs().getVesselspeed(), "0.0"),
                             //Speed water
                             -9,
                             //SurCurDir
@@ -327,18 +327,18 @@ public class DATRASDataStorage extends FileDataStorage {
                         "SweepLngt", "GearExp", "DoorType", "StNo", "HaulNo", "Year", "SpecCodeType", "SpecCode", "SpecVal", "Sex", "TotalNo",
                         "CatIdentifier", "NoMeas", "SubFactor", "SubWgt", "CatCatchWgt", "LngtCode", "LngtClass", "HLNoAtLngt")));
                 for (FishstationBO fs : list) {
-                    Integer sweep = getGOVSweepByEquipment(fs.getGear());
+                    Integer sweep = getGOVSweepByEquipment(fs.getFs().getGear());
                     if (sweep == null) { // Sweep filter
                         continue;
                     }
-                    if (fs.getStationstartdate() == null) {
+                    if (fs.getFs().getStationstartdate() == null) {
                         continue;
                     }
-                    Integer year = IMRdate.getYear(fs.getStationstartdate());
-                    Integer month = IMRdate.getMonth(fs.getStationstartdate());
+                    Integer year = IMRdate.getYear(fs.getFs().getStationstartdate());
+                    Integer month = IMRdate.getMonth(fs.getFs().getStationstartdate());
                     Integer quarter = (int) Math.ceil(month / 3.0);
-                    String haulVal = (fs.getGearcondition() == null || fs.getGearcondition().equals("1") || fs.getGearcondition().equals("2"))
-                            && (fs.getSamplequality() == null || fs.getSamplequality().equals("0") || fs.getSamplequality().equals("1")) ? "V" : "I";
+                    String haulVal = (fs.getFs().getGearcondition() == null || fs.getFs().getGearcondition().equals("1") || fs.getFs().getGearcondition().equals("2"))
+                            && (fs.getFs().getSamplequality() == null || fs.getFs().getSamplequality().equals("0") || fs.getFs().getSamplequality().equals("1")) ? "V" : "I";
 
                     for (CatchSampleBO s : fs.getCatchSampleBOs()) {
                         // IU: Sometimes we get null aphia
@@ -352,7 +352,7 @@ public class DATRASDataStorage extends FileDataStorage {
                         List<String> crustList = Arrays.asList("107275", "107276", "107369", "107253", "107703", "107704", "107350", "107254", "107205", "140712", "140687", "140658");
                         boolean isCrustacean = crustList.contains(s.getAphia());
 
-                        //Double raiseFac = 60.0 / IMRdate.minutesDiffD(IMRdate.encodeLocalDateTime(fs.getStationstartdate(), fs.getStationstarttime()), IMRdate.encodeLocalDateTime(fs.getStationstopdate(), fs.getStationstoptime()));
+                        //Double raiseFac = 60.0 / IMRdate.minutesDiffD(IMRdate.encodeLocalDateTime(fs.getFs().getStationstartdate(), fs.getFs().getStationstarttime()), IMRdate.encodeLocalDateTime(fs.getFs().getStationstopdate(), fs.getFs().getStationstoptime()));
                         MatrixBO hlNoAtLngth = new MatrixBO();
                         MatrixBO lsCountTot = new MatrixBO();
 
@@ -437,14 +437,14 @@ public class DATRASDataStorage extends FileDataStorage {
                                 ImrIO.write(wr, ExportUtil.carrageReturnLineFeed(ExportUtil.csv(
                                         "HL",
                                         quarter,
-                                        getTSCountryByIOC(fs.getNation()),
-                                        getTSShipByPlatform(fs.getCatchplatform()),
+                                        getTSCountryByIOC(fs.getFs().getNation()),
+                                        getTSShipByPlatform(fs.getFs().getCatchplatform()),
                                         "GOV",
                                         sweep,
                                         "S",
                                         "P",
-                                        fs.getSerialnumber(),
-                                        fs.getStation(),
+                                        fs.getFs().getSerialnumber(),
+                                        fs.getFs().getStation(),
                                         year,
                                         "W", // Worms
                                         aphia,
@@ -470,17 +470,17 @@ public class DATRASDataStorage extends FileDataStorage {
                         "SweepLngt", "GearExp", "DoorType", "StNo", "HaulNo", "Year", "SpecCodeType", "SpecCode", "AreaType", "AreaCode", "LngtCode",
                         "LngtClass", "Sex", "Maturity", "PlusGr", "AgeRings", "CANoAtLngt", "IndWgt")));
                 for (FishstationBO fs : list) {
-                    Integer sweep = getGOVSweepByEquipment(fs.getGear());
+                    Integer sweep = getGOVSweepByEquipment(fs.getFs().getGear());
                     if (sweep == null) { // Sweep filter
                         continue;
                     }
-                    if (fs.getStationstartdate() == null) {
+                    if (fs.getFs().getStationstartdate() == null) {
                         continue;
                     }
-                    Integer year = IMRdate.getYear(fs.getStationstartdate());
-                    Integer month = IMRdate.getMonth(fs.getStationstartdate());
+                    Integer year = IMRdate.getYear(fs.getFs().getStationstartdate());
+                    Integer month = IMRdate.getMonth(fs.getFs().getStationstartdate());
                     Integer quarter = (int) Math.ceil(month / 3.0);
-                    String areaLoc = fs.getArea() != null && fs.getLocation() != null ? fs.getArea() + fs.getLocation() : "";
+                    String areaLoc = fs.getFs().getArea() != null && fs.getFs().getLocation() != null ? fs.getFs().getArea() + fs.getFs().getLocation() : "";
 
                     for (CatchSampleBO s : fs.getCatchSampleBOs()) {
                         // IU: Sometimes we get null aphia
@@ -545,14 +545,14 @@ public class DATRASDataStorage extends FileDataStorage {
                                         ImrIO.write(wr, ExportUtil.carrageReturnLineFeed(ExportUtil.csv(
                                                 "CA",
                                                 quarter,
-                                                getTSCountryByIOC(fs.getNation()),
-                                                getTSShipByPlatform(fs.getCatchplatform()),
+                                                getTSCountryByIOC(fs.getFs().getNation()),
+                                                getTSShipByPlatform(fs.getFs().getCatchplatform()),
                                                 "GOV",
                                                 sweep,
                                                 "S",
                                                 "P",
-                                                fs.getSerialnumber(),
-                                                fs.getStation(),
+                                                fs.getFs().getSerialnumber(),
+                                                fs.getFs().getStation(),
                                                 year,
                                                 "W", // Worms
                                                 s.getAphia(),
@@ -592,7 +592,7 @@ public class DATRASDataStorage extends FileDataStorage {
             }
         } else if (i.getMaturationstage() != null) {
             FishstationBO fs = c.getStationBO();
-            Integer month = IMRdate.getMonth(fs.getStationstartdate());
+            Integer month = IMRdate.getMonth(fs.getFs().getStationstartdate());
             Integer quarter = month / 4 + 1;
             Integer st = Conversion.safeStringtoIntegerNULL(i.getMaturationstage());
             if (st != null) {

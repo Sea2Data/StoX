@@ -67,7 +67,7 @@ public class SplitNASCAssignment extends AbstractFunction {
             edsuIsAsigned = false;
             Double minDist = Double.MAX_VALUE;
             for (FishstationBO fs : fList) {
-                Coordinate fPos = new Coordinate(fs.getLongitudestart(), fs.getLatitudestart());
+                Coordinate fPos = new Coordinate(fs.getFs().getLongitudestart(), fs.getFs().getLatitudestart());
                 Double gcDist = JTSUtils.gcircledist(fPos, dPos);
                 minDist = Math.min(minDist, gcDist);
                 if (gcDist <= radius) {

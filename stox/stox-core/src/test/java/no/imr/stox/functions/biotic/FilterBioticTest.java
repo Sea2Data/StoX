@@ -1,5 +1,6 @@
 package no.imr.stox.functions.biotic;
 
+import BioticTypes.v3.MissionType;
 import no.imr.stox.functions.biotic.FilterBiotic;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -48,12 +49,12 @@ public class FilterBioticTest {
 //        instance.perform();
         // TODO review the generated test code and remove the default call to fail.
 //        fail("The test case is a prototype.");
-
-        FishstationBO st1 = new FishstationBO();
-        st1.setGearcondition("1");
-        st1.setSamplequality("1");
-        st1.setStationtype("4");
-        st1.setFishingdepthmax(200.0);
+        MissionType mt = new MissionType();
+        FishstationBO st1 = new FishstationBO(mt);
+        st1.getFs().setGearcondition("1");
+        st1.getFs().setSamplequality("1");
+        st1.getFs().setStationtype("4");
+        st1.getFs().setFishingdepthmax(200.0);
         CatchSampleBO sample11 = new CatchSampleBO(st1);
         sample11.setCatchcategory("SILD");
         sample11.setGroup("1");
@@ -65,11 +66,11 @@ public class FilterBioticTest {
         individ12.setLength(0.03);
         individ13.setLength(0.05);
 
-        FishstationBO st2 = new FishstationBO();
-        st2.setGearcondition("4");
-        st2.setSamplequality("5");
-        st2.setStationtype("2");
-        st2.setFishingdepthmax(400.0);
+        FishstationBO st2 = new FishstationBO(mt);
+        st2.getFs().setGearcondition("4");
+        st2.getFs().setSamplequality("5");
+        st2.getFs().setStationtype("2");
+        st2.getFs().setFishingdepthmax(400.0);
         CatchSampleBO sample12 = new CatchSampleBO(st2);
         sample12.setCatchcategory("HYSE");
         sample12.setGroup("2");

@@ -1,5 +1,6 @@
 package no.imr.stox.functions.individualdata;
 
+import BioticTypes.v3.MissionType;
 import com.vividsolutions.jts.geom.Coordinate;
 import com.vividsolutions.jts.geom.MultiPolygon;
 import no.imr.stox.functions.individualdata.SuperIndAbundance;
@@ -75,9 +76,10 @@ public class AbundanceByIndividualTest {
 
     List<IndividualBO> getIndividuals() {
         List<IndividualBO> inds = new ArrayList<>();
-        FishstationBO f = new FishstationBO();
-        f.setDistance(1.5d);
-        f.setSerialnumber(1000);
+        MissionType mt = new MissionType();
+        FishstationBO f = new FishstationBO(mt);
+        f.getFs().setDistance(1.5d);
+        f.getFs().setSerialnumber(1000);
         CatchSampleBO s = f.addCatchSample();
         s.setCatchcategory("havsil");
         s.setCatchweight(100.0);

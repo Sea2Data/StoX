@@ -43,6 +43,9 @@ public abstract class HierarchicalData extends Unmarshaller.Listener {
         return parent;
     }
 
+    public void setParent(HierarchicalData parent) {
+        this.parent = parent;
+    }
     /**
      * Get all children of this HierarchicalData in no particular order. If the
      * HierachicalData object have several types of children, they are all

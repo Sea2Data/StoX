@@ -23,7 +23,7 @@ public class BioticBOUtils {
      */
     public static FishstationBO getFishstationByYearAndSerialNo(List<FishstationBO> fsl, Integer year, Integer serialNo) {
         for (FishstationBO fs : fsl) {
-            if (year != null && serialNo != null && year.equals(fs.getYear()) && serialNo.equals(fs.getSerialnumber())) {
+            if (year != null && serialNo != null && year.equals(fs.getYear()) && serialNo.equals(fs.getFs().getSerialnumber())) {
                 return fs;
             }
         }

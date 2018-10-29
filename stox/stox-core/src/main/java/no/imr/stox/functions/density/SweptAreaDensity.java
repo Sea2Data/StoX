@@ -181,15 +181,15 @@ public class SweptAreaDensity extends AbstractFunction {
                 sweepWidthInM = getSweepWidthByStation(station, sweepWidthInM, sweepWidthMethod, sweepWidthMap);
                 Double sweptDistance = 1.0;
                 if (!distanceGivenInLengthDist) {
-                    sweptDistance = fs.getDistance();
+                    sweptDistance = fs.getFs().getDistance();
                     if (sweptDistance == null || sweptDistance == 0) {
                         logger.error("Missing distance in station " + station + ".", null);
                     }
                 }
                 if (distanceMethod != null && distanceMethod.equals(Functions.DISTANCEMETHOD_BYDEPTH)) {
-                    if (fs.getFishingdepthcount() != null && fs.getFishingdepthcount() > 1) {
+                    if (fs.getFs().getFishingdepthcount() != null && fs.getFs().getFishingdepthcount() > 1) {
                         // Standardize the swept distance to one depth unit
-                        sweptDistance = sweptDistance / fs.getFishingdepthcount();
+                        sweptDistance = sweptDistance / fs.getFs().getFishingdepthcount();
                     }
                 }
                 Double stationWeight = 0d;

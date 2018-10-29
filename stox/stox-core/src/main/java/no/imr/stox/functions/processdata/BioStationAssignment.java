@@ -151,10 +151,10 @@ public class BioStationAssignment extends AbstractFunction {
                         }
                     } else {
                         for (FishstationBO fs : fList) {
-                            if (fs.getLatitudestart() == null || fs.getLongitudestart() == null) {
+                            if (fs.getFs().getLatitudestart() == null || fs.getFs().getLongitudestart() == null) {
                                 logger.error("Missing position at " + fs.getKey(), null);
                             }
-                            Coordinate fPos = new Coordinate(fs.getLongitudestart(), fs.getLatitudestart());
+                            Coordinate fPos = new Coordinate(fs.getFs().getLongitudestart(), fs.getFs().getLatitudestart());
                             boolean assigned = false;
                             if (byRadius) {
                                 // Calculate if the radius is covering some of the distances
@@ -240,7 +240,7 @@ public class BioStationAssignment extends AbstractFunction {
         }
         if (refGCDistance != null && refGCDistance > 0d) {
             Coordinate dPos = new Coordinate(d.getLon_start(), d.getLat_start());
-            Coordinate fPos = new Coordinate(fs.getLongitudestart(), fs.getLatitudestart());
+            Coordinate fPos = new Coordinate(fs.getFs().getLongitudestart(), fs.getFs().getLatitudestart());
             Double gcDist = JTSUtils.gcircledist(fPos, dPos);
             Double val = StoXMath.safeSumRelativeDiffSquared(gcDist, refGCDistance);
             if (val == null) {
@@ -249,12 +249,12 @@ public class BioStationAssignment extends AbstractFunction {
             scalarProduct += val;
         }
         if (refTime != null && refTime > 0d) {
-            if (d.getStart_time() == null || fs.getStationstartdate() == null || fs.getStationstarttime() == null) {
+            if (d.getStart_time() == null || fs.getFs().getStationstartdate() == null || fs.getFs().getStationstarttime() == null) {
                 return null;
             }
             try {
                 Duration dur = Duration.between(IMRdate.getLocalDateTime(d.getStart_time()),
-                        IMRdate.encodeLocalDateTime(fs.getStationstartdate(), fs.getStationstarttime()));
+                        IMRdate.encodeLocalDateTime(fs.getFs().getStationstartdate(), fs.getFs().getStationstarttime()));
                 Double hours = dur.getSeconds() / 3600d;
                 Double val = StoXMath.safeSumRelativeDiffSquared(hours, refTime);
                 if (val == null) {
@@ -266,7 +266,7 @@ public class BioStationAssignment extends AbstractFunction {
             }
         }
         if (refBotDepth != null && refBotDepth > 0d) {
-            Double fsBotDepth = StoXMath.safeAverage(fs.getBottomdepthstart(), fs.getBottomdepthstop());
+            Double fsBotDepth = StoXMath.safeAverage(fs.getFs().getBottomdepthstart(), fs.getFs().getBottomdepthstop());
             Double dBotDepth = null;
             if (d.getFrequencies().size() == 1) {
                 FrequencyBO f = d.getFrequencies().get(0);

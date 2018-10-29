@@ -5,6 +5,7 @@
  */
 package no.imr.stox.functions.individualdata;
 
+import BioticTypes.v3.MissionType;
 import no.imr.stox.functions.individualdata.CorrectForInnsufficientSampling;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -50,9 +51,10 @@ public class CorrectForInsufficientSamplingTest {
 
     List<IndividualBO> getIndividuals() {
         List<IndividualBO> inds = new ArrayList<>();
-        FishstationBO f = new FishstationBO();
-        f.setDistance(1.5d);
-        f.setSerialnumber(1000);
+        MissionType mt = new MissionType();
+        FishstationBO f = new FishstationBO(mt);
+        f.getFs().setDistance(1.5d);
+        f.getFs().setSerialnumber(1000);
         CatchSampleBO s = f.addCatchSample();
         s.setCatchcategory("havsil");
         s.setCatchweight(100.0);

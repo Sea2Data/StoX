@@ -73,14 +73,14 @@ public class BioticDataStorage extends FileDataStorage {
                         "fishingdepthmin", "fishingdepthcount", "trawlopening", "trawldoorspread", "latitudeend", "longitudeend", "wirelength", "stopdate", "logstop", "flowcount",
                         "flowconst", "comment")));
                 for (FishstationBO fs : (List<FishstationBO>) (List) list) {
-                    ImrIO.write(wr, ExportUtil.carrageReturnLineFeed(ExportUtil.tabbed(fs.getMissiontype(), fs.getCruise(), fs.getSerialnumber(), fs.getCatchplatform(), IMRdate.formatDate(fs.getStationstartdate()),
-                            fs.getStation(), fs.getStationtype(), Conversion.formatDoubletoDecimalString(fs.getLatitudestart(), 4),
-                            Conversion.formatDoubletoDecimalString(fs.getLongitudestart(), 4), fs.getSystem(), fs.getArea(),
-                            fs.getLocation(), fs.getStratum(), fs.getBottomdepthstart(), fs.getBottomdepthstop(), fs.getGear(), fs.getGearcount(), fs.getVesselspeed(),
-                            IMRdate.formatTime(fs.getStationstarttime()), fs.getLogstart(), IMRdate.formatTime(fs.getStationstoptime()),
-                            fs.getDistance(), fs.getGearcondition(), fs.getSamplequality(), fs.getFishingdepthmax(), fs.getFishingdepthmin(), fs.getFishingdepthcount(),
-                            fs.getVerticaltrawlopening(), fs.getTrawldoorspread(), fs.getLatitudeend(), fs.getLongitudeend(), fs.getwirelength(),
-                            IMRdate.formatDate(fs.getStationstopdate()), fs.getLogstop(), null, null, fs.getComment())));
+                    ImrIO.write(wr, ExportUtil.carrageReturnLineFeed(ExportUtil.tabbed(fs.getMission().getMissiontype(), fs.getMission().getCruise(), fs.getFs().getSerialnumber(), fs.getFs().getCatchplatform(), IMRdate.formatDate(fs.getFs().getStationstartdate()),
+                            fs.getFs().getStation(), fs.getFs().getStationtype(), Conversion.formatDoubletoDecimalString(fs.getFs().getLatitudestart(), 4),
+                            Conversion.formatDoubletoDecimalString(fs.getFs().getLongitudestart(), 4), fs.getFs().getSystem(), fs.getFs().getArea(),
+                            fs.getFs().getLocation(), fs.getStratum(), fs.getFs().getBottomdepthstart(), fs.getFs().getBottomdepthstop(), fs.getFs().getGear(), fs.getFs().getGearcount(), fs.getFs().getVesselspeed(),
+                            IMRdate.formatTime(fs.getFs().getStationstarttime()), fs.getFs().getLogstart(), IMRdate.formatTime(fs.getFs().getStationstoptime()),
+                            fs.getFs().getDistance(), fs.getFs().getGearcondition(), fs.getFs().getSamplequality(), fs.getFs().getFishingdepthmax(), fs.getFs().getFishingdepthmin(), fs.getFs().getFishingdepthcount(),
+                            fs.getFs().getVerticaltrawlopening(), fs.getFs().getTrawldoorspread(), fs.getFs().getLatitudeend(), fs.getFs().getLongitudeend(), fs.getFs().getWirelength(),
+                            IMRdate.formatDate(fs.getFs().getStationstopdate()), fs.getFs().getLogstop(), null, null, fs.getFs().getStationcomment())));
                 }
                 break;
 
@@ -91,7 +91,7 @@ public class BioticDataStorage extends FileDataStorage {
                 for (FishstationBO fs : (List<FishstationBO>) (List) list) {
                     for (CatchSampleBO s : fs.getCatchSampleBOs()) {
                         ImrIO.write(wr, ExportUtil.carrageReturnLineFeed(ExportUtil.tabbed(
-                                /*IMRdate.getYear(fs.getStationstartdate(), true)*/fs.getCruise(), fs.getSerialnumber(), fs.getCatchplatform(),
+                                /*IMRdate.getYear(fs.getFs().getStationstartdate(), true)*/fs.getMission().getCruise(), fs.getFs().getSerialnumber(), fs.getFs().getCatchplatform(),
                                 s.getSpeciesCatTableKey(), s.getCatchcategory(), s.getCommonname(), s.getAphia(), s.getCatchpartnumber(), s.getSampletype(), s.getGroup(), s.getConservation(), s.getCatchproducttype(),
                                 s.getCatchweight(), s.getCatchcount(), s.getSampleproducttype(), s.getLengthmeasurement(), s.getlengthsampleweight(),
                                 s.getLengthsamplecount(), s.getSpecimensamplecount(), s.getParasite(), s.getStomach(), s.getGenetics(), s.getCatchcomment())));

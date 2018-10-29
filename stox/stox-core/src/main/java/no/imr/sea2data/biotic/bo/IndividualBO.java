@@ -2,11 +2,8 @@ package no.imr.sea2data.biotic.bo;
 
 import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 import no.imr.sea2data.imrbase.math.Calc;
-import no.imr.sea2data.imrbase.math.ImrMath;
-import no.imr.sea2data.imrbase.util.Conversion;
 import no.imr.stox.functions.utils.StoXMath;
 
 /**
@@ -18,11 +15,9 @@ public class IndividualBO implements Serializable {
     private Integer specimenid;
     private String individualproducttype;
     private Double individualweight;
-    private Double individualweightG;
     private Double individualvolume;
     private String lengthresolution;
     private Double length;
-    private Double lengthCM;
     private String fat;
     private String sex;
     private String maturationstage;
@@ -44,9 +39,11 @@ public class IndividualBO implements Serializable {
     private Double liverweight;
     private Double stomachweight;
     private String individualcomment;
-    private List<AgeDeterminationBO> ageDeterminationBOs = new ArrayList<>();
 
     private CatchSampleBO catchsample;
+    private List<AgeDeterminationBO> ageDeterminationBOs = new ArrayList<>();
+    private Double individualweightG;
+    private Double lengthCM;
 
     public IndividualBO() {
     }

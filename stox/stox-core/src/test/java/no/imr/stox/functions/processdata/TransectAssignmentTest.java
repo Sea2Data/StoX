@@ -5,6 +5,7 @@
  */
 package no.imr.stox.functions.processdata;
 
+import BioticTypes.v3.MissionType;
 import com.vividsolutions.jts.geom.Coordinate;
 import com.vividsolutions.jts.geom.MultiPolygon;
 import java.util.ArrayList;
@@ -62,16 +63,17 @@ public class TransectAssignmentTest {
 
     List<FishstationBO> getFishStations() {
         List<FishstationBO> fs = new ArrayList<FishstationBO>();
-        FishstationBO f = new FishstationBO();
+        MissionType mt = new MissionType();
+        FishstationBO f = new FishstationBO(mt);
         fs.add(f);
-        f.setLongitudestart(1.1d);
-        f.setLatitudestart(0.9d);
-        f.setSerialnumber(1000);
-        f = new FishstationBO();
+        f.getFs().setLongitudestart(1.1d);
+        f.getFs().setLatitudestart(0.9d);
+        f.getFs().setSerialnumber(1000);
+        f = new FishstationBO(mt);
         fs.add(f);
-        f.setLongitudestart(2.9d);
-        f.setLatitudestart(0.9d);
-        f.setSerialnumber(1000);
+        f.getFs().setLongitudestart(2.9d);
+        f.getFs().setLatitudestart(0.9d);
+        f.getFs().setSerialnumber(1000);
         return fs;
     }
 

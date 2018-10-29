@@ -137,7 +137,7 @@ public class BioStationWeighting extends AbstractFunction {
                     // Some stations may be defined in assignment but filtered out by i.e missing catch
                     continue;
                 }
-                Coordinate fPos = new Coordinate(fs.getLongitudestart(), fs.getLatitudestart());
+                Coordinate fPos = new Coordinate(fs.getFs().getLongitudestart(), fs.getFs().getLatitudestart());
                 //Double gcDist = Math.sqrt(Math.pow(fPos.x - dPos.x, 2) + Math.pow(fPos.y - dPos.y, 2));
                 dList.stream().forEach(d -> {
                     String distKey = d.getKey();
@@ -290,8 +290,8 @@ public class BioStationWeighting extends AbstractFunction {
                 }
             }
             Double cpue = totCatch;
-            if (fs.getDistance() != null && fs.getDistance() > 0d) {
-                cpue = totCatch / fs.getDistance();
+            if (fs.getFs().getDistance() != null && fs.getFs().getDistance() > 0d) {
+                cpue = totCatch / fs.getFs().getDistance();
             } else {
                 logger.log(weightingMethod + " not possible due to missing distance for station " + fsKey + ".");
             }

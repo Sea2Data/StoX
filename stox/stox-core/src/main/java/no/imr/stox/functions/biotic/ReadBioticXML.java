@@ -72,54 +72,9 @@ public class ReadBioticXML extends AbstractFunction {
     private void translateBioticV3ToBO(List<MissionType> mission, List<FishstationBO> stations) {
         for (MissionType mt : mission) {
             for (FishstationType fs : mt.getFishstation()) {
-                FishstationBO fbo = new FishstationBO();
+                FishstationBO fbo = new FishstationBO(fs);
                 stations.add(fbo);
 
-                fbo.setArea(fs.getArea());
-                fbo.setBottomdepthstart(fs.getBottomdepthstart());
-                fbo.setBottomdepthstop(fs.getBottomdepthstop());
-                fbo.setCallsignal(mt.getCallsignal());
-                fbo.setCatchplatform(fs.getCatchplatform());
-                fbo.setCruise(mt.getCruise());
-                fbo.setDirection(fs.getDirection());
-                fbo.setDistance(fs.getDistance());
-                fbo.setFishingdepthcount(fs.getFishingdepthcount());
-                fbo.setFishingdepthmax(fs.getFishingdepthmax());
-                fbo.setFishingdepthmin(fs.getFishingdepthmin());
-                fbo.setGear(fs.getGear());
-                fbo.setGearcondition(fs.getGearcondition());
-                fbo.setGearcount(fs.getGearcount());
-                fbo.setGearno(fs.getGearno());
-                fbo.setLatitudeend(fs.getLatitudeend());
-                fbo.setLatitudestart(fs.getLatitudestart());
-                fbo.setLocation(fs.getLocation());
-                fbo.setLogstart(fs.getLogstart());
-                fbo.setLogstop(fs.getLogstop());
-                fbo.setLongitudestart(fs.getLongitudestart());
-                fbo.setLongitudeend(fs.getLongitudeend());
-                fbo.setMissiontype(mt.getMissiontype());
-                fbo.setNation(fs.getNation());
-                fbo.setPlatformname(mt.getPlatformname());
-                fbo.setSamplequality(fs.getSamplequality());
-                fbo.setSerialnumber(fs.getSerialnumber());
-                fbo.setSoaktime(fs.getSoaktime());
-                fbo.setStation(fs.getStation());
-                fbo.setStationcomment(fs.getStationcomment());
-                fbo.setStationstartdate(fs.getStationstartdate());
-                fbo.setStationstarttime(fs.getStationstarttime());
-                fbo.setStationstopdate(fs.getStationstopdate());
-                fbo.setStationstoptime(fs.getStationstoptime());
-                fbo.setStationtype(fs.getStationtype());
-                fbo.setSystem(fs.getSystem());
-                fbo.setTrawldoorspread(fs.getTrawldoorspread());
-                fbo.setTrawldoorspreadsd(fs.getTrawldoorspreadsd());
-                fbo.setTripno(fs.getTripno());
-                fbo.setVerticalTrawlOpening(fs.getVerticaltrawlopening());
-                fbo.setVerticaltrawlopeningsd(fs.getVerticaltrawlopeningsd());
-                fbo.setVesselspeed(fs.getVesselspeed());
-                fbo.setWingspread(fs.getWingspread());
-                fbo.setWingspreadsd(fs.getWingspreadsd());
-                fbo.setWireLength(fs.getWirelength());
                 for (CatchsampleType cs : fs.getCatchsample()) {
                     CatchSampleBO sbo = fbo.addCatchSample();
                     sbo.setCatchcategory(cs.getCatchcategory());

@@ -5,6 +5,7 @@
  */
 package no.imr.stox.functions.individualdata;
 
+import BioticTypes.v3.MissionType;
 import no.imr.stox.functions.individualdata.IndividualData;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -44,11 +45,12 @@ public class IndividualDataTest {
 
     List<FishstationBO> getFishStations() {
         List<FishstationBO> fs = new ArrayList<>();
-        FishstationBO f = new FishstationBO();
+        MissionType mt = new MissionType();
+        mt.setCruise("2013");
+        FishstationBO f = new FishstationBO(mt);
         fs.add(f);
-        f.setDistance(1.5d);
-        f.setCruise("2013");
-        f.setSerialnumber(1000);
+        f.getFs().setDistance(1.5d);
+        f.getFs().setSerialnumber(1000);
         CatchSampleBO s = f.addCatchSample();
         s.setCatchcategory("havsil");
         s.setCatchweight(100.0);

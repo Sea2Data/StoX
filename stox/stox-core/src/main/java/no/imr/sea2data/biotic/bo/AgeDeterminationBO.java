@@ -30,6 +30,7 @@ public class AgeDeterminationBO implements Serializable {
     private Integer growthzonestotal;
     private Integer coastalannuli;
     private Integer oceanicannuli;
+
     private IndividualBO individual;
 
     public AgeDeterminationBO(IndividualBO ind) {

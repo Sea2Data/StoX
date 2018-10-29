@@ -78,10 +78,10 @@ public class DefineSweptAreaPSU extends AbstractFunction {
     }
 
     private String getStratumByStation(FishstationBO fs, ProcessDataBO pd) {
-        if (fs.getLongitudestart() == null || fs.getLatitudestart() == null) {
+        if (fs.getFs().getLongitudestart() == null || fs.getFs().getLatitudestart() == null) {
             return null;
         }
-        Coordinate fPos = new Coordinate(fs.getLongitudestart(), fs.getLatitudestart());
+        Coordinate fPos = new Coordinate(fs.getFs().getLongitudestart(), fs.getFs().getLatitudestart());
         MatrixBO stratumPlgs = AbndEstProcessDataUtil.getStratumPolygons(pd);
         for (String stratum : AbndEstProcessDataUtil.getStrata(pd)) {
             MultiPolygon stratumPol = (MultiPolygon) stratumPlgs.getRowColValue(stratum, Functions.COL_POLVAR_POLYGON);

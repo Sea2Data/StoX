@@ -48,23 +48,23 @@ public class StationNode extends AbstractNode {
         public Object getValue() {
             switch (prop) {
                 case PROP_CRUISE:
-                    return fs.getCruise();
+                    return fs.getMission().getCruise();
                 case PROP_SERIALNO:
-                    return fs.getSerialnumber();
+                    return fs.getFs().getSerialnumber();
                 case PROP_DATE:
-                    return IMRdate.getDefaultDateTimeFormat().format(IMRdate.encodeLocalDateTime(fs.getStationstartdate(), fs.getStationstarttime())) + " (UTC)";
+                    return IMRdate.getDefaultDateTimeFormat().format(IMRdate.encodeLocalDateTime(fs.getFs().getStationstartdate(), fs.getFs().getStationstarttime())) + " (UTC)";
                 case PROP_POS:
-                    return LatLonUtil.latLonToStr(fs.getLatitudestart(), fs.getLongitudestart());
+                    return LatLonUtil.latLonToStr(fs.getFs().getLatitudestart(), fs.getFs().getLongitudestart());
                 case PROP_PLATFORM:
-                    return fs.getPlatformname() != null ? fs.getPlatformname() : fs.getCallsignal() != null ? fs.getCallsignal() : "";
+                    return fs.getMission().getPlatformname() != null ? fs.getMission().getPlatformname() : fs.getMission().getCallsignal() != null ? fs.getMission().getCallsignal() : "";
                 case PROP_GEAR:
-                    return fs.getGear();
+                    return fs.getFs().getGear();
                 case PROP_FDEP:
-                    return getMinMaxStr(fs.getFishingdepthmin(), fs.getFishingdepthmax());
+                    return getMinMaxStr(fs.getFs().getFishingdepthmin(), fs.getFs().getFishingdepthmax());
                 case PROP_BDEP:
-                    return getMinMaxStr(fs.getBottomdepthstart(), fs.getBottomdepthstop());
+                    return getMinMaxStr(fs.getFs().getBottomdepthstart(), fs.getFs().getBottomdepthstop());
                 case PROP_DISTANCE:
-                    return fs.getDistance() != null ? fs.getDistance() : "";
+                    return fs.getFs().getDistance() != null ? fs.getFs().getDistance() : "";
             }
             return null;
         }
