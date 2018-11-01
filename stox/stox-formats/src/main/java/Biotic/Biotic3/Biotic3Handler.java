@@ -103,6 +103,7 @@ public class Biotic3Handler extends NamespaceVersionHandler<MissionsType> {
             try {
                 result = this.convertBiotic1(h.read(xml));
             } catch (BioticConversionException ex) {
+                ex.printStackTrace();
                 throw new IOException("Error in conversion from biotic 1" + ex.getMessage());
             }
         }
@@ -126,7 +127,7 @@ public class Biotic3Handler extends NamespaceVersionHandler<MissionsType> {
             MissionType mission = createMissionFromBiotic1(m);
             missions.getMission().add(mission);
         }
-        checkKeys(missions);
+//        checkKeys(missions);
         return missions;
     }
 

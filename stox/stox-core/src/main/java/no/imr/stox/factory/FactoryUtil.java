@@ -185,6 +185,11 @@ public final class FactoryUtil {
                 }
             }
         }
+        if (prj.getResourceVersion() < 1.81) {
+            replaceParameter(prj.getBaseline(), Functions.FN_FILTERBIOTIC, Functions.PM_FILTERBIOTIC_FISHSTATIONEXPR, "sildG0", "sild\\'G0");
+            replaceParameter(prj.getBaseline(), Functions.FN_FILTERBIOTIC, Functions.PM_FILTERBIOTIC_FISHSTATIONEXPR, "SILDG0", "SILD\\'G0");
+        }
+
         // Remove processes not pointing to functions
         for (IModel m : prj.getModels().values()) {
             for (int i = m.getProcessList().size() - 1; i >= 0; i--) {
