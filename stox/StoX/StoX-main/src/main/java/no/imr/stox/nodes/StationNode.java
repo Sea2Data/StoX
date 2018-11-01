@@ -48,7 +48,7 @@ public class StationNode extends AbstractNode {
         public Object getValue() {
             switch (prop) {
                 case PROP_CRUISE:
-                    return fs.getMission().getCruise();
+                    return fs.getMission().getMs().getCruise();
                 case PROP_SERIALNO:
                     return fs.getFs().getSerialnumber();
                 case PROP_DATE:
@@ -56,7 +56,7 @@ public class StationNode extends AbstractNode {
                 case PROP_POS:
                     return LatLonUtil.latLonToStr(fs.getFs().getLatitudestart(), fs.getFs().getLongitudestart());
                 case PROP_PLATFORM:
-                    return fs.getMission().getPlatformname() != null ? fs.getMission().getPlatformname() : fs.getMission().getCallsignal() != null ? fs.getMission().getCallsignal() : "";
+                    return fs.getMission().getMs().getPlatformname() != null ? fs.getMission().getMs().getPlatformname() : fs.getMission().getMs().getCallsignal() != null ? fs.getMission().getMs().getCallsignal() : "";
                 case PROP_GEAR:
                     return fs.getFs().getGear();
                 case PROP_FDEP:

@@ -7,6 +7,7 @@ import no.imr.stox.functions.AbstractFunction;
 import no.imr.sea2data.biotic.bo.FishstationBO;
 import no.imr.sea2data.biotic.bo.IndividualBO;
 import no.imr.sea2data.biotic.bo.CatchSampleBO;
+import no.imr.sea2data.biotic.bo.MissionBO;
 import no.imr.stox.bo.IndividualDataMatrix;
 import no.imr.stox.bo.IndividualDataStationsMatrix;
 import no.imr.sea2data.imrbase.matrix.MatrixBO;
@@ -31,7 +32,7 @@ public class IndividualData extends AbstractFunction {
     public Object perform(Map<String, Object> input) {
         // result = Matrix[GROUP~Species / ROW~Stratum / COL~EstLayer / CELL~LengthGroup / VAR~IndividualList]
         // Fish stations
-        List<FishstationBO> fishStations = (List<FishstationBO>) input.get(Functions.PM_INDIVIDUALDATA_BIOTICDATA);
+        List<MissionBO> fishStations = (List<MissionBO>) input.get(Functions.PM_INDIVIDUALDATA_BIOTICDATA);
         // indDataSel = Matrix[ROW~Stratum / COL~EstLayer / CELL~Station / VAR~Included]
         IndividualDataStationsMatrix indDataSel = (IndividualDataStationsMatrix) input.get(Functions.PM_INDIVIDUALDATA_INDIVIDUALDATASTATIONS);
         IndividualDataMatrix result = new IndividualDataMatrix();
@@ -50,28 +51,30 @@ public class IndividualData extends AbstractFunction {
             for (String estLayerKey : stratum.getKeys()) {
                 MatrixBO estLayer = (MatrixBO) stratum.getValue(estLayerKey);
                 List<String> stations = estLayer.getKeys();
-                for (FishstationBO fs : fishStations) {
-                    if (!stations.contains(fs.getKey())) {
-                        continue;
-                    }
-                    for (CatchSampleBO s : fs.getCatchSampleBOs()) {
-                        String specCatKey = s.getSpeciesCatTableKey();
-                        // To do: check species against SpeciesDef in resolution if available. Otherwise this relies on filterbiotic.
-                        for (IndividualBO i : s.getIndividualBOs()) {
-                            /*if (i.getIndividualweight() == null) {
+                for (MissionBO ms : fishStations) {
+                    for (FishstationBO fs : ms.getFishstationBOs()) {
+                        if (!stations.contains(fs.getKey())) {
+                            continue;
+                        }
+                        for (CatchSampleBO s : fs.getCatchSampleBOs()) {
+                            String specCatKey = s.getSpeciesCatTableKey();
+                            // To do: check species against SpeciesDef in resolution if available. Otherwise this relies on filterbiotic.
+                            for (IndividualBO i : s.getIndividualBOs()) {
+                                /*if (i.getIndividualweight() == null) {
                                     continue;
                                 }*/
-                            String lenGrpKey = BioticUtils.getLenGrp(i.getLengthCM(), lenInterval);
-                            List<IndividualBO> indList = (List<IndividualBO>) result.getData().getGroupRowColCellValue(specCatKey, stratumKey, estLayerKey, lenGrpKey);
-                            if (indList == null) {
-                                indList = new ArrayList<>();
-                                result.getData().setGroupRowColCellValue(specCatKey, stratumKey, estLayerKey, lenGrpKey, indList);
-                            }
-                            indList.add(i);
-                            if (i.getCatchSample() == null) {
-                                System.out.println("Error in individual " + i);
-                            }
+                                String lenGrpKey = BioticUtils.getLenGrp(i.getLengthCM(), lenInterval);
+                                List<IndividualBO> indList = (List<IndividualBO>) result.getData().getGroupRowColCellValue(specCatKey, stratumKey, estLayerKey, lenGrpKey);
+                                if (indList == null) {
+                                    indList = new ArrayList<>();
+                                    result.getData().setGroupRowColCellValue(specCatKey, stratumKey, estLayerKey, lenGrpKey, indList);
+                                }
+                                indList.add(i);
+                                if (i.getCatchSample() == null) {
+                                    System.out.println("Error in individual " + i);
+                                }
 
+                            }
                         }
                     }
                 }

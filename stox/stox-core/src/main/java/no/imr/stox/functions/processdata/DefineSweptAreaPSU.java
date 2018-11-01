@@ -10,6 +10,7 @@ import com.vividsolutions.jts.geom.MultiPolygon;
 import java.util.List;
 import java.util.Map;
 import no.imr.sea2data.biotic.bo.FishstationBO;
+import no.imr.sea2data.biotic.bo.MissionBO;
 import no.imr.sea2data.imrmap.utils.JTSUtils;
 import no.imr.sea2data.imrbase.matrix.MatrixBO;
 import no.imr.stox.bo.ProcessDataBO;
@@ -36,7 +37,7 @@ public class DefineSweptAreaPSU extends AbstractFunction {
         ILogger logger = (ILogger) input.get(Functions.PM_LOGGER);
         ProcessDataBO pd = (ProcessDataBO) input.get(Functions.PM_DEFINESWEPTAREAPSU_PROCESSDATA);
         String method = (String) input.get(Functions.PM_DEFINESWEPTAREAPSU_METHOD);
-        List<FishstationBO> bioticData = (List<FishstationBO>) input.get(Functions.PM_DEFINESWEPTAREAPSU_BIOTICDATA);
+        List<MissionBO> bioticData = (List<MissionBO>) input.get(Functions.PM_DEFINESWEPTAREAPSU_BIOTICDATA);
         if (method == null) {
             return pd;
         }
@@ -56,24 +57,26 @@ public class DefineSweptAreaPSU extends AbstractFunction {
         return pd;
     }
 
-    private void definePSUAndAssignmentsByBioticData(ProcessDataBO pd, List<FishstationBO> bioticData) {
+    private void definePSUAndAssignmentsByBioticData(ProcessDataBO pd, List<MissionBO> bioticData) {
         // Define station as a PSU with an assignment to itself.
         String estLayer = "1"; // Estimation layer 1 hardcoded when depth doesnt play a role.
         AbndEstProcessDataUtil.setAssignmentResolution(pd, Functions.SAMPLEUNIT_PSU);
         Integer i = 1;
-        for (FishstationBO fs : bioticData) {
-            String station = fs.getKey();
-            String edsu = station;
-            String psu = "S" + i;//station.replace('/', '-'); // station key as psu will get dash to avoid splitting on output.
-            String stratum = getStratumByStation(fs, pd);
-            if (stratum == null) {
-                continue;
+        for (MissionBO ms : bioticData) {
+            for (FishstationBO fs : ms.getFishstationBOs()) {
+                String station = fs.getKey();
+                String edsu = station;
+                String psu = "S" + i;//station.replace('/', '-'); // station key as psu will get dash to avoid splitting on output.
+                String stratum = getStratumByStation(fs, pd);
+                if (stratum == null) {
+                    continue;
+                }
+                String asgKey = i++ + "";
+                AbndEstProcessDataUtil.getBioticAssignments(pd).setRowColValue(asgKey, station, 1d);
+                AbndEstProcessDataUtil.setSUAssignment(pd, psu, estLayer, asgKey);
+                AbndEstProcessDataUtil.setEDSUPSU(pd, edsu, psu);
+                AbndEstProcessDataUtil.setPSUStratum(pd, psu, stratum);
             }
-            String asgKey = i++ + "";
-            AbndEstProcessDataUtil.getBioticAssignments(pd).setRowColValue(asgKey, station, 1d);
-            AbndEstProcessDataUtil.setSUAssignment(pd, psu, estLayer, asgKey);
-            AbndEstProcessDataUtil.setEDSUPSU(pd, edsu, psu);
-            AbndEstProcessDataUtil.setPSUStratum(pd, psu, stratum);
         }
     }
 

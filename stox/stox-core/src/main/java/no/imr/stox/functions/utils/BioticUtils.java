@@ -9,6 +9,7 @@ import java.util.Set;
 import no.imr.sea2data.biotic.bo.FishstationBO;
 import no.imr.sea2data.biotic.bo.IndividualBO;
 import no.imr.sea2data.biotic.bo.CatchSampleBO;
+import no.imr.sea2data.biotic.bo.MissionBO;
 import no.imr.sea2data.imrbase.math.ImrMath;
 import no.imr.sea2data.imrbase.matrix.MatrixBO;
 import no.imr.sea2data.imrbase.util.Conversion;
@@ -57,7 +58,7 @@ public final class BioticUtils {
             case Functions.COL_IND_SAMPLETYPE:
                 return i.getCatchSample().getCs().getSampletype();
             case Functions.COL_IND_CRUISE:
-                return i.getCatchSample().getStationBO().getMission().getCruise();
+                return i.getCatchSample().getStationBO().getMission().getMs().getCruise();
             case Functions.COL_IND_SERIALNO:
                 return i.getCatchSample().getStationBO().getFs().getSerialnumber();
             case Functions.COL_IND_PLATFORM:
@@ -158,30 +159,34 @@ public final class BioticUtils {
 
     /**
      *
-     * @param fList
+     * @param mList
      * @param key
      * @return Fishstation from key
      */
-    public static FishstationBO findStation(List<FishstationBO> fList, String key) {
-        if (fList == null) {
+    public static FishstationBO findStation(List<MissionBO> mList, String key) {
+        if (mList == null) {
             return null;
         }
-        for (FishstationBO fs : fList) {
-            if (fs.getKey().equals(key)) {
-                return fs;
+        for (MissionBO ms : mList) {
+            for (FishstationBO fs : ms.getFishstationBOs()) {
+                if (fs.getKey().equals(key)) {
+                    return fs;
+                }
             }
         }
         return null;
     }
 
-    public static FishstationBO findStationBySerialNo(List<FishstationBO> fList, Integer serialNo) {
+    public static FishstationBO findStationBySerialNo(List<MissionBO> fList, Integer serialNo) {
         if (fList == null) {
             return null;
         }
-        return fList.stream().filter(s -> Objects.equals(s.getFs().getSerialnumber(), serialNo)).findFirst().orElse(null);
+        return fList.stream()
+                .flatMap(m -> m.getFishstationBOs().stream())
+                .filter(s -> Objects.equals(s.getFs().getSerialnumber(), serialNo)).findFirst().orElse(null);
     }
 
-    public static Collection<FishstationBO> findStations(List<FishstationBO> fList, Collection<String> keys) {
+    public static Collection<FishstationBO> findStations(List<MissionBO> fList, Collection<String> keys) {
         if (keys == null) {
             return null;
         }
@@ -244,15 +249,17 @@ public final class BioticUtils {
 
     }
 
-    public static double getLengthInterval(List<FishstationBO> fishStations) {
+    public static double getLengthInterval(List<MissionBO> fishStations) {
         Set<Integer> units = new HashSet<>();
-        for (FishstationBO fs : fishStations) {
-            for (CatchSampleBO s : fs.getCatchSampleBOs()) {
-                for (IndividualBO i : s.getIndividualBOs()) {
-                    if (i.getI().getLengthresolution() == null || i.getI().getLengthresolution().isEmpty()) {
-                        continue;
+        for (MissionBO ms : fishStations) {
+            for (FishstationBO fs : ms.getFishstationBOs()) {
+                for (CatchSampleBO s : fs.getCatchSampleBOs()) {
+                    for (IndividualBO i : s.getIndividualBOs()) {
+                        if (i.getI().getLengthresolution() == null || i.getI().getLengthresolution().isEmpty()) {
+                            continue;
+                        }
+                        units.add(Conversion.safeStringtoIntegerNULL(i.getI().getLengthresolution()));
                     }
-                    units.add(Conversion.safeStringtoIntegerNULL(i.getI().getLengthresolution()));
                 }
             }
         }

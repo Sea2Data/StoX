@@ -7,6 +7,7 @@ package no.imr.stox.functions.processdata;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 import java.util.logging.Level;
@@ -66,6 +67,21 @@ public class DefineStratumNeighbour extends AbstractFunction {
                 String var = elements[0];
                 String value = elements[1];
                 stratumNeighbour.setRowValue(var, value);
+            }
+            // check symmetry
+            for (String row : stratumNeighbour.getRowKeys()) {
+                String[] values = ((String) stratumNeighbour.getRowValue(row)).split(",");
+                for (String val : values) {
+                    String sym = (String) stratumNeighbour.getRowValue(val);
+                    if (sym == null) {
+                        logger.log("Area " + row + " have area " + val + " among its neigbhours, but area " + val + " is not defined.\n");
+                    }
+                    String[] symarr = sym.split(",");
+                    Boolean found = Arrays.stream(symarr).filter(s -> s.equals(row)).count() > 0;
+                    if (!found) {
+                        logger.log("Area " + row + " have area " + val + " among its neigbhours, but is not listed among the neighbours of area.\n");
+                    }
+                }
             }
         } catch (IOException ex) {
             Logger.getLogger(DefineGearFactor.class.getName()).log(Level.SEVERE, null, ex);

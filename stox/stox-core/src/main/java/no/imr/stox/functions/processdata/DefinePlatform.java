@@ -10,6 +10,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import no.imr.sea2data.biotic.bo.FishstationBO;
+import no.imr.sea2data.biotic.bo.MissionBO;
 import no.imr.sea2data.imrbase.matrix.MatrixBO;
 import no.imr.stox.bo.ProcessDataBO;
 import no.imr.stox.functions.AbstractFunction;
@@ -42,7 +43,7 @@ public class DefinePlatform extends AbstractFunction {
         MatrixBO covParam = AbndEstProcessDataUtil.getCovParam(pd);
         String covariateType = (String) input.get(Functions.PM_DEFINESPATIAL_COVARIATETYPE);
         covParam.setRowColValue(AbndEstProcessDataUtil.TABLE_PLATFORM, Functions.PM_DEFINEPLATFORM_COVARIATETYPE, covariateType);
-        List<FishstationBO> biotic = (List) input.get(Functions.PM_DEFINESPATIAL_BIOTICDATA);
+        List<MissionBO> biotic = (List) input.get(Functions.PM_DEFINESPATIAL_BIOTICDATA);
         MatrixBO covP = AbndEstProcessDataUtil.getPlatform(pd);
 
         if (defMethod.equals(Functions.DEFINITIONMETHOD_USEDATA)) {
@@ -58,7 +59,7 @@ public class DefinePlatform extends AbstractFunction {
                 if (biotic == null) {
                     return pd;
                 }
-                biotic.stream().map((fs) -> {
+                biotic.stream().flatMap(ms->ms.getFishstationBOs().stream()).map((fs) -> {
                     //fs.
                     return fs.getFs().getCatchplatform();
                 }).filter((def) -> (def != null)).forEach((def) -> {

@@ -15,28 +15,29 @@ import no.imr.sea2data.imrbase.map.ILatLonEvent;
 public class FishstationBO implements ILatLonEvent {
 
     FishstationType fs;
+    MissionBO mission;
 
     private String key = null; // cache
     private String stratum; // should be moved to datatype
     private Integer year; // cache
     private List<CatchSampleBO> catchSampleBOs = new ArrayList<>();
 
-    public FishstationBO(MissionType ms) {
-        fs = new FishstationType();
-        fs.setParent(ms);
+    public FishstationBO(MissionBO ms) {
+        mission = ms;
     }
 
-    public FishstationBO(FishstationType fs) {
+    public FishstationBO(MissionBO ms, FishstationType fs) {
+        this(ms);
         this.fs = fs;
     }
 
-    public FishstationBO(FishstationBO bo) {
-        this(bo.getFs());
+    public FishstationBO(MissionBO ms, FishstationBO bo) {
+        this(ms, bo.getFs());
         stratum = bo.getStratum();
     }
 
-    public MissionType getMission() {
-        return (MissionType) fs.getParent();
+    public MissionBO getMission() {
+        return mission;
     }
 
     public FishstationType getFs() {
@@ -148,7 +149,7 @@ public class FishstationBO implements ILatLonEvent {
         if (key != null) {
             return key;
         }
-        String cruise = ((MissionType) fs.getParent()).getCruise();
+        String cruise = getMission().getMs().getCruise();
         key = (cruise != null ? cruise : (getYear() != null ? getYear() : "")) + "/" + (fs.getSerialnumber() != null ? fs.getSerialnumber() : "");
         return key;
     }
@@ -166,7 +167,7 @@ public class FishstationBO implements ILatLonEvent {
 
         if (cs == null) {
             cs = new CatchsampleType();
-            cs.setParent(fs);
+//            cs.setParent(fs);
         }
         CatchSampleBO cbo = new CatchSampleBO(this, cs);
         getCatchSampleBOs().add(cbo);

@@ -7,6 +7,7 @@ import no.imr.stox.functions.AbstractFunction;
 import no.imr.sea2data.biotic.bo.FishstationBO;
 import no.imr.sea2data.biotic.bo.IndividualBO;
 import no.imr.sea2data.biotic.bo.CatchSampleBO;
+import no.imr.sea2data.biotic.bo.MissionBO;
 import no.imr.sea2data.imrbase.math.ImrMath;
 import no.imr.sea2data.imrbase.util.Conversion;
 import no.imr.stox.functions.utils.BioticUtils;
@@ -36,7 +37,7 @@ public class ConvertLengthAndWeight extends AbstractFunction {
      */
     @Override
     public Object perform(Map<String, Object> input) {
-        List<FishstationBO> bioticData = (List<FishstationBO>) input.get(Functions.PM_CONVERTLENGTHANDWEIGHT_BIOTICDATA);
+        List<MissionBO> bioticData = (List<MissionBO>) input.get(Functions.PM_CONVERTLENGTHANDWEIGHT_BIOTICDATA);
         // product type 3 = Gutted without head
         // product type 4 = Gutted with head
         Double hCutFacA = (Double) input.get(Functions.PM_CONVERTLENGTHANDWEIGHT_HEADCUTFACA); // product type 3
@@ -44,40 +45,42 @@ public class ConvertLengthAndWeight extends AbstractFunction {
         Double wGutHeadOff = (Double) input.get(Functions.PM_CONVERTLENGTHANDWEIGHT_WGUTHEADOFF); // product type 3,4
         Double wGutHeadOn = (Double) input.get(Functions.PM_CONVERTLENGTHANDWEIGHT_WGUTHEADON); // product type 3,4
         // if 
-        for (FishstationBO f : bioticData) {
-            for (CatchSampleBO c : f.getCatchSampleBOs()) {
-                for (IndividualBO i : c.getIndividualBOs()) {
-                    if (i.getI().getIndividualproducttype() == null) {
-                        continue;
-                    }
-                    Double w = null;
-                    Double l = null;
-                    switch (i.getI().getIndividualproducttype()) {
-                        case "3":
-                            // Gutted without head - correct length
-                            Double le = i.getLengthCM();
-                            Integer lu = Conversion.safeStringtoIntegerNULL(i.getI().getLengthresolution());
-                            if (le != null && lu != null && hCutFacA != null && hCutFacB != null) {
-                                Double lucm = BioticUtils.getLengthInterval(lu);
-                                l = hCutFacA * (le + 0.5 * lucm) + hCutFacB;
-                            }
-                        // Drop - to correct weight
-                        case "4":
-                            // Gutted with head - correct weight
-                            w = i.getIndividualweightG();
-                            Double wFac = i.getI().getIndividualproducttype().equals("3") ? wGutHeadOff : wGutHeadOn;
-                            if (w != null && wFac != null) {
-                                w = w * wFac;
-                            }
-                    }
-                    if (w != null) {
-                        i.setIndividualweight(ImrMath.safeMult(0.001, w)); // Set weight in kg
-                    }
-                    if (l != null) {
-                        i.setLength(ImrMath.safeMult(0.01, l)); // set weight in g
-                    }
-                    if (w != null || l != null) {
-                        i.getI().setIndividualproducttype(1 + "");
+        for (MissionBO ms : bioticData) {
+            for (FishstationBO f : ms.getFishstationBOs()) {
+                for (CatchSampleBO c : f.getCatchSampleBOs()) {
+                    for (IndividualBO i : c.getIndividualBOs()) {
+                        if (i.getI().getIndividualproducttype() == null) {
+                            continue;
+                        }
+                        Double w = null;
+                        Double l = null;
+                        switch (i.getI().getIndividualproducttype()) {
+                            case "3":
+                                // Gutted without head - correct length
+                                Double le = i.getLengthCM();
+                                Integer lu = Conversion.safeStringtoIntegerNULL(i.getI().getLengthresolution());
+                                if (le != null && lu != null && hCutFacA != null && hCutFacB != null) {
+                                    Double lucm = BioticUtils.getLengthInterval(lu);
+                                    l = hCutFacA * (le + 0.5 * lucm) + hCutFacB;
+                                }
+                            // Drop - to correct weight
+                            case "4":
+                                // Gutted with head - correct weight
+                                w = i.getIndividualweightG();
+                                Double wFac = i.getI().getIndividualproducttype().equals("3") ? wGutHeadOff : wGutHeadOn;
+                                if (w != null && wFac != null) {
+                                    w = w * wFac;
+                                }
+                        }
+                        if (w != null) {
+                            i.setIndividualweight(ImrMath.safeMult(0.001, w)); // Set weight in kg
+                        }
+                        if (l != null) {
+                            i.setLength(ImrMath.safeMult(0.01, l)); // set weight in g
+                        }
+                        if (w != null || l != null) {
+                            i.getI().setIndividualproducttype(1 + "");
+                        }
                     }
                 }
             }

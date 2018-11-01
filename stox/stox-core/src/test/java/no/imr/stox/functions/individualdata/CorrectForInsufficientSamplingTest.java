@@ -14,6 +14,7 @@ import java.util.Map;
 import no.imr.sea2data.biotic.bo.FishstationBO;
 import no.imr.sea2data.biotic.bo.IndividualBO;
 import no.imr.sea2data.biotic.bo.CatchSampleBO;
+import no.imr.sea2data.biotic.bo.MissionBO;
 import no.imr.stox.bo.AbundanceMatrix;
 import no.imr.stox.bo.IndividualDataMatrix;
 import no.imr.stox.functions.utils.Functions;
@@ -51,8 +52,8 @@ public class CorrectForInsufficientSamplingTest {
 
     List<IndividualBO> getIndividuals() {
         List<IndividualBO> inds = new ArrayList<>();
-        MissionType mt = new MissionType();
-        FishstationBO f = new FishstationBO(mt);
+        MissionBO mt = new MissionBO();
+        FishstationBO f = mt.addFishstation(null);
         f.getFs().setDistance(1.5d);
         f.getFs().setSerialnumber(1000);
         CatchSampleBO s = f.addCatchSample(null);

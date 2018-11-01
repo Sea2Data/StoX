@@ -676,7 +676,7 @@ public class Factory {
                             ? Functions.PM_DEFINETEMPORAL_LANDINGDATA : Functions.PM_DEFINETEMPORAL_BIOTICDATA,
                             sourceType.equals(Functions.SOURCETYPE_LANDING) ? Functions.FN_FILTERLANDING : Functions.FN_FILTERBIOTIC).
                     setParameterValue(Functions.PM_DEFINETEMPORAL_DEFINITIONMETHOD, sourceType.equals(Functions.SOURCETYPE_LANDING)
-                            ? Functions.DEFINITIONMETHOD_USEDATA : Functions.DEFINITIONMETHOD_INHERIT).
+                            ? Functions.DEFINITIONMETHOD_USEDATA : Functions.DEFINITIONMETHOD_COPYFROMLANDING).
                     setRespondInGUI(true).setBreakInGUI(true);
         }
         for (String covariateSourceType : new String[]{Functions.SOURCETYPE_LANDING, Functions.SOURCETYPE_BIOTIC}) {
@@ -685,7 +685,7 @@ public class Factory {
                     setParameterValue(Functions.PM_DEFINEGEARFACTOR_COVARIATETYPE, Functions.COVARIATETYPE_FIXED).
                     setParameterValue(Functions.PM_DEFINEGEARFACTOR_SOURCETYPE, covariateSourceType).
                     setParameterValue(Functions.PM_DEFINEGEARFACTOR_DEFINITIONMETHOD, covariateSourceType.equals(Functions.SOURCETYPE_LANDING)
-                            ? Functions.DEFINITIONMETHOD_USEPROCESSDATA : Functions.DEFINITIONMETHOD_INHERITCOVARID).
+                            ? Functions.DEFINITIONMETHOD_USEPROCESSDATA : Functions.DEFINITIONMETHOD_RESOURCEFILE).
                     setRespondInGUI(true).setBreakInGUI(true);
         }
         for (String covariateSourceType : new String[]{Functions.SOURCETYPE_LANDING, Functions.SOURCETYPE_BIOTIC}) {
@@ -694,7 +694,7 @@ public class Factory {
                     setParameterValue(Functions.PM_DEFINESPATIAL_COVARIATETYPE, Functions.COVARIATETYPE_FIXED).
                     setParameterValue(Functions.PM_DEFINESPATIAL_SOURCETYPE, covariateSourceType).
                     setParameterValue(Functions.PM_DEFINESPATIAL_DEFINITIONMETHOD, covariateSourceType.equals(Functions.SOURCETYPE_LANDING)
-                            ? Functions.DEFINITIONMETHOD_USEDATA : Functions.DEFINITIONMETHOD_INHERIT).
+                            ? Functions.DEFINITIONMETHOD_USEDATA : Functions.DEFINITIONMETHOD_COPYFROMLANDING).
                     setRespondInGUI(true).setBreakInGUI(true);
         }
         for (String covariateSourceType : new String[]{Functions.SOURCETYPE_BIOTIC}) {

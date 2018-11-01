@@ -12,6 +12,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import no.imr.sea2data.biotic.bo.FishstationBO;
+import no.imr.sea2data.biotic.bo.MissionBO;
 import no.imr.sea2data.imrbase.matrix.MatrixBO;
 import no.imr.sea2data.imrbase.util.ImrSort;
 import no.imr.stox.bo.ProcessDataBO;
@@ -20,6 +21,7 @@ import no.imr.stox.functions.AbstractFunction;
 import no.imr.stox.functions.utils.AbndEstProcessDataUtil;
 import no.imr.stox.functions.utils.CovariateUtils;
 import no.imr.stox.functions.utils.Functions;
+import no.imr.stox.log.ILogger;
 
 /**
  *
@@ -37,6 +39,7 @@ public class DefineSpatial extends AbstractFunction {
     public Object perform(Map<String, Object> input) {
         ProcessDataBO pd = (ProcessDataBO) input.get(Functions.PM_DEFINESPATIAL_PROCESSDATA);
         String defMethod = (String) input.get(Functions.PM_DEFINESPATIAL_DEFINITIONMETHOD);
+        ILogger logger = (ILogger)input.get(Functions.PM_LOGGER);
         // Apply transient dimension info to process data about spatial dimensions (used in cell translation/aggregation):
         //String var1 = (String) input.get(Functions.PM_DEFINESPATIAL_VAR1);
         //String var2 = (String) input.get(Functions.PM_DEFINESPATIAL_VAR2);
@@ -63,21 +66,24 @@ public class DefineSpatial extends AbstractFunction {
         MatrixBO covParam = AbndEstProcessDataUtil.getCovParam(pd);
         String covariateType = (String) input.get(Functions.PM_DEFINESPATIAL_COVARIATETYPE);
         covParam.setRowColValue(AbndEstProcessDataUtil.TABLE_SPATIAL, Functions.PM_DEFINESPATIAL_COVARIATETYPE, covariateType);
-        Boolean conditionalAutoRegression = (Boolean) input.get(Functions.PM_DEFINESPATIAL_CONDITIONALAUTOREGRESSION);
+        Boolean conditionalAutoRegression = (Boolean) input.get(Functions.PM_DEFINESPATIAL_USESTRATUMNEIGHBOUR);
         if(conditionalAutoRegression == null) {
             conditionalAutoRegression = false;
         }
         if (covariateType != null && covariateType.equalsIgnoreCase(Functions.COVARIATETYPE_RANDOM)) {
-            covParam.setRowColValue(AbndEstProcessDataUtil.TABLE_SPATIAL, Functions.PM_DEFINESPATIAL_CONDITIONALAUTOREGRESSION, conditionalAutoRegression.toString());
+            covParam.setRowColValue(AbndEstProcessDataUtil.TABLE_SPATIAL, Functions.PM_DEFINESPATIAL_USESTRATUMNEIGHBOUR, conditionalAutoRegression.toString());
         }
         List<SluttSeddel> landingData = (List) input.get(Functions.PM_DEFINESPATIAL_LANDINGDATA);
-        List<FishstationBO> biotic = (List) input.get(Functions.PM_DEFINESPATIAL_BIOTICDATA);
+        List<MissionBO> biotic = (List) input.get(Functions.PM_DEFINESPATIAL_BIOTICDATA);
         MatrixBO covM = AbndEstProcessDataUtil.getSpatial(pd);
 
-        if (defMethod.equals(Functions.DEFINITIONMETHOD_INHERIT)) {
+        if (defMethod.equals(Functions.DEFINITIONMETHOD_COPYFROMLANDING)) {
+            if(sourceType.equals(Functions.SOURCETYPE_LANDING)) {
+                logger.error("Cannot inherit from landing when sourcetype=landing.\n", null);
+            }
             // Inherit covarids and definitions
             String toType = sourceType;
-            String fromType = sourceType.equals(Functions.SOURCETYPE_BIOTIC) ? Functions.SOURCETYPE_LANDING : Functions.SOURCETYPE_BIOTIC;
+            String fromType = Functions.SOURCETYPE_LANDING;
             // Copying cov key from .. to ..
             MatrixBO m = covM.getRowValueAsMatrix(sourceType);
             if (m != null) {
@@ -101,7 +107,7 @@ public class DefineSpatial extends AbstractFunction {
                 if (biotic == null) {
                     return pd;
                 }
-                biotic.stream().map((fs) -> CovariateUtils.getSpatialCovValue(fs/*, var1, var2*/)).filter((def) -> (def != null)).forEach((def) -> {
+                biotic.stream().flatMap(ms->ms.getFishstationBOs().stream()).map((fs) -> CovariateUtils.getSpatialCovValue(fs/*, var1, var2*/)).filter((def) -> (def != null)).forEach((def) -> {
                     covs.add(def);
                 });
             }

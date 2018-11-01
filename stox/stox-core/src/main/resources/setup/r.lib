@@ -41,7 +41,6 @@ Parameter: Name=minage, Required=false, DataType=Integer, DefaultValue=1, Descri
 Parameter: Name=maxage, Required=false, DataType=Integer, DefaultValue=20, Description=Maximumage
 Parameter: Name=delta.age, Required=false, DataType=Double, DefaultValue=0.001, Description=Delta age
 Parameter: Name=maxlength, Required=false, DataType=Double, Description=Max length
-Parameter: Name=use_otolithtype, Required=false, DataType=Boolean, DefaultValue=true, Description=Use otolith type
 Parameter: Name=hatchDaySlashMonth, DataType=String, DefaultValue=01/01, Values=fit, Description=Hatching day and month
 Description: Prepare for eca 
 

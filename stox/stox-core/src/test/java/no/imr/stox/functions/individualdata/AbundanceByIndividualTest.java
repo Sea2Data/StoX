@@ -1,9 +1,7 @@
 package no.imr.stox.functions.individualdata;
 
-import BioticTypes.v3.MissionType;
 import com.vividsolutions.jts.geom.Coordinate;
 import com.vividsolutions.jts.geom.MultiPolygon;
-import no.imr.stox.functions.individualdata.SuperIndAbundance;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -12,6 +10,7 @@ import java.util.Map;
 import no.imr.sea2data.biotic.bo.FishstationBO;
 import no.imr.sea2data.biotic.bo.IndividualBO;
 import no.imr.sea2data.biotic.bo.CatchSampleBO;
+import no.imr.sea2data.biotic.bo.MissionBO;
 import no.imr.sea2data.imrmap.utils.JTSUtils;
 import no.imr.stox.bo.AbundanceIndividualsMatrix;
 import no.imr.stox.bo.AbundanceMatrix;
@@ -76,8 +75,8 @@ public class AbundanceByIndividualTest {
 
     List<IndividualBO> getIndividuals() {
         List<IndividualBO> inds = new ArrayList<>();
-        MissionType mt = new MissionType();
-        FishstationBO f = new FishstationBO(mt);
+        MissionBO mt = new MissionBO();
+        FishstationBO f = mt.addFishstation(null);
         f.getFs().setDistance(1.5d);
         f.getFs().setSerialnumber(1000);
         CatchSampleBO s = f.addCatchSample(null);

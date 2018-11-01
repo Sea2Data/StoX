@@ -14,6 +14,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import no.imr.sea2data.biotic.bo.FishstationBO;
+import no.imr.sea2data.biotic.bo.MissionBO;
 import no.imr.sea2data.imrbase.matrix.MatrixBO;
 import no.imr.sea2data.imrbase.util.Conversion;
 import no.imr.sea2data.imrbase.util.IMRdate;
@@ -58,26 +59,22 @@ public class DefineTemporal extends AbstractFunction {
         String timeInterval = (String) input.get(Functions.PM_DEFINETEMPORAL_TIMEINTERVAL);
         Boolean seasonal = Conversion.safeObjectToBoolean((Boolean) input.get(Functions.PM_DEFINETEMPORAL_SEASONAL));
         List<SluttSeddel> landingData = (List) input.get(Functions.PM_DEFINETEMPORAL_LANDINGDATA);
-        List<FishstationBO> bioticData = (List) input.get(Functions.PM_DEFINETEMPORAL_BIOTICDATA);
+        List<MissionBO> bioticData = (List) input.get(Functions.PM_DEFINETEMPORAL_BIOTICDATA);
         MatrixBO covM = AbndEstProcessDataUtil.getTemporal(pd);
         MatrixBO m = covM.getRowValueAsMatrix(sourceType);
         MatrixBO covParam = AbndEstProcessDataUtil.getCovParam(pd);
         String covariateType = (String) input.get(Functions.PM_DEFINETEMPORAL_COVARIATETYPE);
         covParam.setRowColValue(AbndEstProcessDataUtil.TABLE_TEMPORAL, Functions.PM_DEFINETEMPORAL_COVARIATETYPE, covariateType);
-        Boolean conditionalAutoRegression = (Boolean) input.get(Functions.PM_DEFINETEMPORAL_CONDITIONALAUTOREGRESSION);
-        if(conditionalAutoRegression == null) {
-            conditionalAutoRegression = false;
-        }
-        if (covariateType != null && covariateType.equalsIgnoreCase(Functions.COVARIATETYPE_RANDOM)) {
-            covParam.setRowColValue(AbndEstProcessDataUtil.TABLE_TEMPORAL, Functions.PM_DEFINETEMPORAL_CONDITIONALAUTOREGRESSION, conditionalAutoRegression.toString());
-        }
         if (m != null) {
             m.clear(); // Clear covariates 
         }
-        if (defMethod.equals(Functions.DEFINITIONMETHOD_INHERIT)) {
+        if (defMethod.equals(Functions.DEFINITIONMETHOD_COPYFROMLANDING)) {
+            if (sourceType.equals(Functions.SOURCETYPE_LANDING)) {
+                logger.error("Cannot inherit from landing when sourcetype=landing.\n", null);
+            }
             // Copying cov key and definition from landing to biotic
             covM.getRowColKeys(Functions.SOURCETYPE_LANDING).stream().forEach((covKey) -> {
-                covM.setRowColValue(sourceType, covKey, covM.getRowColValue(sourceType.equals(Functions.SOURCETYPE_BIOTIC) ? Functions.SOURCETYPE_LANDING : Functions.SOURCETYPE_BIOTIC, covKey));
+                covM.setRowColValue(sourceType, covKey, covM.getRowColValue(Functions.SOURCETYPE_LANDING, covKey));
             });
         } else if (defMethod.equals(Functions.DEFINITIONMETHOD_USEDATA)) {
             Set<String> covs = new HashSet<>();
@@ -113,10 +110,12 @@ public class DefineTemporal extends AbstractFunction {
                 }
             } else if (sourceType.equals(Functions.SOURCETYPE_BIOTIC)) {
                 if (bioticData != null) {
-                    for (FishstationBO fs : bioticData) {
-                        String cov = getCovariateFromDate(fs.getFs().getStationstartdate(), timeInterval, seasonal);
-                        if (cov != null) {
-                            covs.add(cov);
+                    for (MissionBO ms : bioticData) {
+                        for (FishstationBO fs : ms.getFishstationBOs()) {
+                            String cov = getCovariateFromDate(fs.getFs().getStationstartdate(), timeInterval, seasonal);
+                            if (cov != null) {
+                                covs.add(cov);
+                            }
                         }
                     }
                 }

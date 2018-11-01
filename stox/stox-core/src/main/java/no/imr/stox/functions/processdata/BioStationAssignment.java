@@ -13,6 +13,7 @@ import no.imr.stox.bo.ProcessDataBO;
 import no.imr.stox.functions.AbstractFunction;
 import no.imr.stox.functions.utils.AbndEstProcessDataUtil;
 import no.imr.sea2data.biotic.bo.FishstationBO;
+import no.imr.sea2data.biotic.bo.MissionBO;
 import no.imr.sea2data.echosounderbo.DistanceBO;
 import no.imr.sea2data.echosounderbo.FrequencyBO;
 import no.imr.sea2data.imrbase.math.ImrMath;
@@ -41,7 +42,7 @@ public class BioStationAssignment extends AbstractFunction {
     public Object perform(Map<String, Object> input) {
         ILogger logger = (ILogger) input.get(Functions.PM_LOGGER);
         ProcessDataBO pd = (ProcessDataBO) input.get(Functions.PM_BIOSTATIONASSIGNMENT_PROCESSDATA);
-        List<FishstationBO> fList = (List<FishstationBO>) input.get(Functions.PM_BIOSTATIONASSIGNMENT_BIOTICDATA);
+        List<MissionBO> fList = (List<MissionBO>) input.get(Functions.PM_BIOSTATIONASSIGNMENT_BIOTICDATA);
 
         List<DistanceBO> distances = (List<DistanceBO>) input.get(Functions.PM_BIOSTATIONASSIGNMENT_ACOUSTICDATA);
         String assignmentMethod = (String) input.get(Functions.PM_BIOSTATIONASSIGNMENT_ASSIGNMENTMETHOD);
@@ -119,14 +120,14 @@ public class BioStationAssignment extends AbstractFunction {
 
                         try {
                             for (DistanceBO d : distsBOPerPSU) {
-                                List<WeightedFishStation> wfsList = fList.parallelStream()
+                                List<WeightedFishStation> wfsList = fList.parallelStream().flatMap(m -> m.getFishstationBOs().parallelStream())
                                         .map(fs -> new WeightedFishStation(getScalarProduct(d, fs, refLatitude, refLongitude, refGCDistance, refTime, refBotDepth), fs))
                                         .filter(wfs -> wfs.getScalar() != null)
                                         .collect(Collectors.toList());
                                 List<WeightedFishStation> wfsListFilter
                                         = wfsList.parallelStream()
-                                                        .filter(wfs -> wfs.getScalar() < scalarProductLimit)
-                                                        .collect(Collectors.toList());
+                                                .filter(wfs -> wfs.getScalar() < scalarProductLimit)
+                                                .collect(Collectors.toList());
 
                                 if (minNumStations != null && wfsListFilter.size() < minNumStations) {
                                     wfsList = wfsList.parallelStream()
@@ -150,34 +151,36 @@ public class BioStationAssignment extends AbstractFunction {
                             e.printStackTrace();
                         }
                     } else {
-                        for (FishstationBO fs : fList) {
-                            if (fs.getFs().getLatitudestart() == null || fs.getFs().getLongitudestart() == null) {
-                                logger.error("Missing position at " + fs.getKey(), null);
-                            }
-                            Coordinate fPos = new Coordinate(fs.getFs().getLongitudestart(), fs.getFs().getLatitudestart());
-                            boolean assigned = false;
-                            if (byRadius) {
-                                // Calculate if the radius is covering some of the distances
-                                for (DistanceBO distBO : distsBOPerPSU) {
-                                    if (distBO == null) {
-                                        continue;
-                                    }
-                                    Coordinate dPos = new Coordinate(distBO.getLon_start(), distBO.getLat_start());
-                                    Double gcDist = JTSUtils.gcircledist(fPos, dPos);
-                                    if (gcDist < radius) {
-                                        assigned = true;
-                                        break;
-                                    }
+                        for (MissionBO ms : fList) {
+                            for (FishstationBO fs : ms.getFishstationBOs()) {
+                                if (fs.getFs().getLatitudestart() == null || fs.getFs().getLongitudestart() == null) {
+                                    logger.error("Missing position at " + fs.getKey(), null);
                                 }
-                            } else {
-                                // assign by strata
-                                // all stations inside stratum to all transects 
-                                assigned = JTSUtils.within(fPos, stratumPol);
-                            }
-                            if (assigned) {
-                                // Define trawl station assignment with default weight=1
-                                bsAsg.setRowColValue(asgKey, fs.getKey(), 1d);
-                                psuIsAssigned = true;
+                                Coordinate fPos = new Coordinate(fs.getFs().getLongitudestart(), fs.getFs().getLatitudestart());
+                                boolean assigned = false;
+                                if (byRadius) {
+                                    // Calculate if the radius is covering some of the distances
+                                    for (DistanceBO distBO : distsBOPerPSU) {
+                                        if (distBO == null) {
+                                            continue;
+                                        }
+                                        Coordinate dPos = new Coordinate(distBO.getLon_start(), distBO.getLat_start());
+                                        Double gcDist = JTSUtils.gcircledist(fPos, dPos);
+                                        if (gcDist < radius) {
+                                            assigned = true;
+                                            break;
+                                        }
+                                    }
+                                } else {
+                                    // assign by strata
+                                    // all stations inside stratum to all transects 
+                                    assigned = JTSUtils.within(fPos, stratumPol);
+                                }
+                                if (assigned) {
+                                    // Define trawl station assignment with default weight=1
+                                    bsAsg.setRowColValue(asgKey, fs.getKey(), 1d);
+                                    psuIsAssigned = true;
+                                }
                             }
                         }
                     }

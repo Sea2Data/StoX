@@ -36,8 +36,8 @@ public final class FilterUtils {
         if (o instanceof FishstationBO) {
             FishstationBO fs = (FishstationBO) o;
             context.set("fs", fs);
-            context.set("missiontype", fs.getMission().getMissiontype());
-            context.set("cruise", fs.getMission().getCruise());
+            context.set("missiontype", fs.getMission().getMs().getMissiontype());
+            context.set("cruise", fs.getMission().getMs().getCruise());
             context.set("platform", fs.getFs().getCatchplatform());
             context.set("nation", fs.getFs().getNation());
             context.set("platform", fs.getFs().getCatchplatform());

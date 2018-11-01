@@ -8,6 +8,7 @@ package no.imr.stox.functions.biotic;
 import java.util.List;
 import java.util.Map;
 import no.imr.sea2data.biotic.bo.FishstationBO;
+import no.imr.sea2data.biotic.bo.MissionBO;
 import no.imr.stox.functions.AbstractFunction;
 import no.imr.stox.functions.utils.Functions;
 
@@ -21,7 +22,7 @@ public class DATRASConvert extends AbstractFunction {
 
     @Override
     public Object perform(Map<String, Object> input) {
-        return (List<FishstationBO>) input.get(Functions.PM_DATRAS_BIOTICDATA);
+        return (List<MissionBO>) input.get(Functions.PM_DATRAS_BIOTICDATA);
     }
 
 }

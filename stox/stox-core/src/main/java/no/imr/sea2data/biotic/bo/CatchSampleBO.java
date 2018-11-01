@@ -42,7 +42,7 @@ public class CatchSampleBO {
     public IndividualBO addIndividual(IndividualType i) {
         if(i == null) {
             i = new IndividualType();
-            i.setParent(getCs());
+            //i.setParent(getCs());
         }
         IndividualBO bo = new IndividualBO(this, i);
         getIndividualBOs().add(bo);
@@ -82,7 +82,7 @@ public class CatchSampleBO {
     }
 
     public FishstationBO getStationBO() {
-        return this.fishstationBO;
+        return fishstationBO;
     }
 
     public String getSpeciesKey() {

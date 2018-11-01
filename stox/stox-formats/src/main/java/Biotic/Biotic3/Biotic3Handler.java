@@ -251,7 +251,7 @@ public class Biotic3Handler extends NamespaceVersionHandler<MissionsType> {
 
         for (BioticTypes.v1_4.FishstationType f : m.getFishstation()) {
             FishstationType fs = createFishstationFromBiotic1(f);
-            fs.setParent(mission);
+            //fs.setParent(mission);
             mission.getFishstation().add(fs);
         }
 
@@ -330,7 +330,7 @@ public class Biotic3Handler extends NamespaceVersionHandler<MissionsType> {
 
         for (BioticTypes.v1_4.CatchsampleType c : f.getCatchsample()) {
             CatchsampleType cs = this.createCatchsampleFromBiotic1(c);
-            cs.setParent(fishstation);
+//            cs.setParent(fishstation);
             fishstation.getCatchsample().add(cs);
         }
 
@@ -371,7 +371,7 @@ public class Biotic3Handler extends NamespaceVersionHandler<MissionsType> {
 
         for (BioticTypes.v1_4.IndividualType i : c.getIndividual()) {
             IndividualType ii = this.createIndividualFromBiotic1(i);
-            ii.setParent(catchsample);
+//            ii.setParent(catchsample);
             catchsample.getIndividual().add(ii);
         }
 
@@ -432,20 +432,20 @@ public class Biotic3Handler extends NamespaceVersionHandler<MissionsType> {
 
         for (BioticTypes.v1_4.AgedeterminationType a : i.getAgedetermination()) {
             AgedeterminationType aa = this.createAgedeterminationFromBiotic1(a);
-            aa.setParent(individual);
+//            aa.setParent(individual);
             individual.getAgedetermination().add(aa);
         }
 
         //handles moving of prey from catchsample
         for (BioticTypes.v1_4.PreyType p : this.getPreyForIndividualBiotic1(i)) {
             PreyType pr = this.createPreyFromBiotic1(p);
-            pr.setParent(individual);
+  //          pr.setParent(individual);
             individual.getPrey().add(pr);
         }
 
         for (BioticTypes.v1_4.TagType t : i.getTag()) {
             TagType tag = this.createTagFromBiotic1(t);
-            tag.setParent(individual);
+//            tag.setParent(individual);
             individual.getTag().add(tag);
         }
 

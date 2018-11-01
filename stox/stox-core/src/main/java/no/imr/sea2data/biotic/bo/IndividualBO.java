@@ -115,7 +115,7 @@ public class IndividualBO implements Serializable {
     public AgeDeterminationBO addAgeDetermination(AgedeterminationType aa) {
         if(aa == null) {
             aa = new AgedeterminationType();
-            aa.setParent(ii);
+//            aa.setParent(ii);
         }
         AgeDeterminationBO agedet = new AgeDeterminationBO(this, aa);
         ageDeterminationBOs.add(agedet);

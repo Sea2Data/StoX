@@ -9,6 +9,7 @@ import java.awt.geom.Point2D;
 import java.util.List;
 import java.util.Map;
 import no.imr.sea2data.biotic.bo.FishstationBO;
+import no.imr.sea2data.biotic.bo.MissionBO;
 import no.imr.sea2data.imrbase.matrix.MatrixBO;
 import no.imr.sea2data.imrbase.util.Conversion;
 import no.imr.stox.bo.landing.SluttSeddel;
@@ -35,7 +36,8 @@ public class ApplyPosToData extends AbstractFunction {
         if (fileName == null) {
             return null;
         }
-        MatrixBO posMap = StratumUtils.getAreaLocationPositionByFile(fileName);
+        String areaCoding = (String) input.get(Functions.PM_APPLYPOSTODATA_AREACODING);
+        MatrixBO posMap = StratumUtils.getAreaLocationPositionByFile(fileName, areaCoding);
         if (posMap == null) {
             return null;
         }
@@ -44,7 +46,7 @@ public class ApplyPosToData extends AbstractFunction {
             return null;
         }
         List<SluttSeddel> landing = (List<SluttSeddel>) input.get(Functions.PM_APPLYPOSTODATA_LANDINGDATA);
-        List<FishstationBO> biotic = (List) input.get(Functions.PM_APPLYPOSTODATA_BIOTICDATA);
+        List<MissionBO> biotic = (List) input.get(Functions.PM_APPLYPOSTODATA_BIOTICDATA);
         switch (dataSource) {
             case Functions.SOURCETYPE_LANDING:
                 for (SluttSeddel sl : landing) {
@@ -52,8 +54,16 @@ public class ApplyPosToData extends AbstractFunction {
                         continue;
                     }
                     String area = sl.getFangstHomr() + "";
+
                     Integer loc = Conversion.safeStringtoIntegerNULL(sl.getFangstLok());
-                    String stratum = area != null && loc != null ? area + "_" + loc : null;
+                    if (area != null && loc != null) {
+                        continue;
+                    }
+
+                    String stratum = area;
+                    if (areaCoding.equals(Functions.AREACODING_MAINAREAANDLOCATION)) {
+                        stratum += "_" + loc;
+                    }
                     Point2D.Double pt = (Point2D.Double) posMap.getRowValue(stratum);
                     if (pt == null) {
                         continue;
@@ -63,17 +73,19 @@ public class ApplyPosToData extends AbstractFunction {
                 }
                 return landing;
             case Functions.SOURCETYPE_BIOTIC:
-                for (FishstationBO fs : biotic) {
-                    if (fs.getFs().getLatitudestart() != null && fs.getFs().getLongitudestart() != null) {
-                        continue;
+                for (MissionBO ms : biotic) {
+                    for (FishstationBO fs : ms.getFishstationBOs()) {
+                        if (fs.getFs().getLatitudestart() != null && fs.getFs().getLongitudestart() != null) {
+                            continue;
+                        }
+                        String area = fs.getFs().getArea() != null ? fs.getFs().getArea() + "" : null;
+                        Point2D.Double pt = (Point2D.Double) posMap.getRowColValue(area, fs.getFs().getLocation());
+                        if (pt == null) {
+                            continue;
+                        }
+                        fs.getFs().setLatitudestart(pt.y);
+                        fs.getFs().setLongitudestart(pt.x);
                     }
-                    String area = fs.getFs().getArea() != null ? fs.getFs().getArea() + "" : null;
-                    Point2D.Double pt = (Point2D.Double) posMap.getRowColValue(area, fs.getFs().getLocation());
-                    if (pt == null) {
-                        continue;
-                    }
-                    fs.getFs().setLatitudestart(pt.y);
-                    fs.getFs().setLongitudestart(pt.x);
                 }
                 return biotic;
         }

@@ -10,6 +10,7 @@ import java.util.List;
 import java.util.Map;
 import no.imr.stox.functions.AbstractFunction;
 import no.imr.sea2data.biotic.bo.FishstationBO;
+import no.imr.sea2data.biotic.bo.MissionBO;
 import no.imr.sea2data.imrmap.utils.JTSUtils;
 import no.imr.sea2data.imrbase.matrix.MatrixBO;
 import no.imr.stox.bo.ProcessDataBO;
@@ -33,7 +34,7 @@ public class RectangleAssignment extends AbstractFunction {
     @Override
     public Object perform(Map<String, Object> input) {
         ProcessDataBO pd = (ProcessDataBO) input.get(Functions.PM_RECTANGLEASSIGNMENT_PROCESSDATA);
-        List<FishstationBO> fs = (List<FishstationBO>) input.get(Functions.PM_RECTANGLEASSIGNMENT_BIOTICDATA);
+        List<MissionBO> fs = (List<MissionBO>) input.get(Functions.PM_RECTANGLEASSIGNMENT_BIOTICDATA);
         Boolean useEx = (Boolean) input.get(Functions.PM_RECTANGLEASSIGNMENT_USEPROCESSDATA);
         String estLayerDef = (String) input.get(Functions.PM_RECTANGLEASSIGNMENT_ESTLAYERS);
         MatrixBO estLayer = AbndEstParamUtil.getEstLayerMatrixFromEstLayerDef(estLayerDef);
@@ -60,14 +61,16 @@ public class RectangleAssignment extends AbstractFunction {
                 Coordinate[] psuCoords = RectangleUtil.getCoordsByRectangleKey(psu);
                 String asgKey = asg.toString();
                 Boolean psuIsAssigned = false;
-                for (FishstationBO f : fs) {
-                    Coordinate fPos = new Coordinate(f.getFs().getLongitudestart(), f.getFs().getLatitudestart());
-                    if (!JTSUtils.within(fPos, psuCoords)) {
-                        continue;
+                for (MissionBO m : fs) {
+                    for (FishstationBO f : m.getFishstationBOs()) {
+                        Coordinate fPos = new Coordinate(f.getFs().getLongitudestart(), f.getFs().getLatitudestart());
+                        if (!JTSUtils.within(fPos, psuCoords)) {
+                            continue;
+                        }
+                        psuIsAssigned = true;
+                        // Assign trawlstation
+                        trawlAsg.setRowColValue(asgKey, f.getKey(), 1.0d);
                     }
-                    psuIsAssigned = true;
-                    // Assign trawlstation
-                    trawlAsg.setRowColValue(asgKey, f.getKey(), 1.0d);
                 }
                 if (psuIsAssigned) {
                     // Set sample unit assignment on all estimation layers by default.

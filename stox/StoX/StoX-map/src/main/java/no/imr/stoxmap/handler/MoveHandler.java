@@ -105,7 +105,7 @@ public class MoveHandler {
                 }
             } else if (sf.getUserData() != null && sf.getUserData() instanceof FishstationBO) {
                 FishstationBO fs = (FishstationBO) sf.getUserData();
-                s = s + "Cruise: " + fs.getMission().getCruise() + "<br>Serialno: " + fs.getFs().getSerialnumber() + "<br>Date: " + fs.getFs().getStationstartdate()
+                s = s + "Cruise: " + fs.getMission().getMs().getCruise() + "<br>Serialno: " + fs.getFs().getSerialnumber() + "<br>Date: " + fs.getFs().getStationstartdate()
                         + "<br>Time: " + fs.getFs().getStationstarttime();
                 if (e.isAltDown()) {
                     Double b1 = Calc.roundTo(fs.getFs().getBottomdepthstart(), 0);

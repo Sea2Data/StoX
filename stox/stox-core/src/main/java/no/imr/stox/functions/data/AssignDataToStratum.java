@@ -10,6 +10,7 @@ import com.vividsolutions.jts.geom.MultiPolygon;
 import java.util.List;
 import java.util.Map;
 import no.imr.sea2data.biotic.bo.FishstationBO;
+import no.imr.sea2data.biotic.bo.MissionBO;
 import no.imr.sea2data.imrbase.matrix.MatrixBO;
 import no.imr.sea2data.imrmap.utils.JTSUtils;
 import no.imr.stox.bo.ProcessDataBO;
@@ -40,7 +41,7 @@ public class AssignDataToStratum extends AbstractFunction {
             return null;
         }
         List<SluttSeddel> landing = (List<SluttSeddel>) input.get(Functions.PM_ASSIGNDATATOSTRATUM_LANDINGDATA);
-        List<FishstationBO> biotic = (List) input.get(Functions.PM_ASSIGNDATATOSTRATUM_BIOTICDATA);
+        List<MissionBO> biotic = (List) input.get(Functions.PM_ASSIGNDATATOSTRATUM_BIOTICDATA);
         switch (dataSource) {
             case Functions.SOURCETYPE_LANDING:
                 for (SluttSeddel sl : landing) {
@@ -51,11 +52,13 @@ public class AssignDataToStratum extends AbstractFunction {
                 }
                 return landing;
             case Functions.SOURCETYPE_BIOTIC:
-                for (FishstationBO fs : biotic) {
-                    if (fs.getFs().getLatitudestart() == null && fs.getFs().getLongitudestart() == null) {
-                        continue;
+                for (MissionBO ms : biotic) {
+                    for (FishstationBO fs : ms.getFishstationBOs()) {
+                        if (fs.getFs().getLatitudestart() == null && fs.getFs().getLongitudestart() == null) {
+                            continue;
+                        }
+                        fs.setStratum(getStratumFromPosition(pd, fs.getFs().getLongitudestart(), fs.getFs().getLatitudestart()));
                     }
-                    fs.setStratum(getStratumFromPosition(pd, fs.getFs().getLongitudestart(), fs.getFs().getLatitudestart()));
                 }
                 return biotic;
         }

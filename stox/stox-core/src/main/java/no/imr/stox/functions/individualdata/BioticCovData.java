@@ -13,6 +13,7 @@ import java.util.Map;
 import no.imr.sea2data.biotic.bo.FishstationBO;
 import no.imr.sea2data.biotic.bo.IndividualBO;
 import no.imr.sea2data.biotic.bo.CatchSampleBO;
+import no.imr.sea2data.biotic.bo.MissionBO;
 import no.imr.sea2data.imrbase.matrix.MatrixBO;
 import no.imr.sea2data.imrbase.util.ExportUtil;
 import no.imr.stox.bo.BioticCovDataMatrix;
@@ -41,41 +42,43 @@ public class BioticCovData extends AbstractFunction {
         //String var2 = (String) pd.getMatrix(Functions.TABLE_SPATIALVAR).getRowValue(Functions.PM_VAR2);
         BioticCovDataMatrix indData = new BioticCovDataMatrix();
         // Default handling (Define by given time interval:
-        List<FishstationBO> bioticData = (List) input.get(Functions.PM_BIOTICCOVDATA_BIOTICDATA);
+        List<MissionBO> bioticData = (List) input.get(Functions.PM_BIOTICCOVDATA_BIOTICDATA);
         MatrixBO tempM = AbndEstProcessDataUtil.getTemporal(pd);
         MatrixBO gearM = AbndEstProcessDataUtil.getGear(pd);
         MatrixBO spatialM = AbndEstProcessDataUtil.getSpatial(pd);
-        for (FishstationBO fs : bioticData) {
-            // Filter station against covariates
-            LocalDate d = fs.getFs().getStationstartdate();
-            String tempKey = CovariateUtils.getTemporalFullKey(Functions.SOURCETYPE_BIOTIC, d, tempM);
-            if (tempKey == null) {
-                tempKey = "";
-            }
-            String gear = fs.getFs().getGear();
-            String gearKey = CovariateUtils.getCovKeyByDefElm(Functions.SOURCETYPE_BIOTIC, gear, gearM, true);
-            if (gearKey == null) {
-                gearKey = "";
-            }
+        for (MissionBO ms : bioticData) {
+            for (FishstationBO fs : ms.getFishstationBOs()) {
+                // Filter station against covariates
+                LocalDate d = fs.getFs().getStationstartdate();
+                String tempKey = CovariateUtils.getTemporalFullKey(Functions.SOURCETYPE_BIOTIC, d, tempM);
+                if (tempKey == null) {
+                    tempKey = "";
+                }
+                String gear = fs.getFs().getGear();
+                String gearKey = CovariateUtils.getCovKeyByDefElm(Functions.SOURCETYPE_BIOTIC, gear, gearM, true);
+                if (gearKey == null) {
+                    gearKey = "";
+                }
 
-            String spatCovValue = CovariateUtils.getSpatialCovValue(fs/*, var1, var2*/);
-            String spatialKey = CovariateUtils.getCovKeyByDefElm(Functions.SOURCETYPE_BIOTIC, spatCovValue, spatialM, false);
-            if (spatialKey == null) {
-                spatialKey = "";
-            }
-            String platformKey = fs.getFs().getCatchplatform();
-            if (platformKey == null) {
-                platformKey = "";
-            }
-            for (CatchSampleBO s : fs.getCatchSampleBOs()) {
-                for (IndividualBO i : s.getIndividualBOs()) {
-                    String cov = ExportUtil.separated('/', tempKey, gearKey, spatialKey, platformKey);
-                    List<IndividualBO> l = (List<IndividualBO>) indData.getData().getRowValue(cov);
-                    if (l == null) {
-                        l = new ArrayList<>();
-                        indData.getData().setRowValue(cov, l);
+                String spatCovValue = CovariateUtils.getSpatialCovValue(fs/*, var1, var2*/);
+                String spatialKey = CovariateUtils.getCovKeyByDefElm(Functions.SOURCETYPE_BIOTIC, spatCovValue, spatialM, false);
+                if (spatialKey == null) {
+                    spatialKey = "";
+                }
+                String platformKey = fs.getFs().getCatchplatform();
+                if (platformKey == null) {
+                    platformKey = "";
+                }
+                for (CatchSampleBO s : fs.getCatchSampleBOs()) {
+                    for (IndividualBO i : s.getIndividualBOs()) {
+                        String cov = ExportUtil.separated('/', tempKey, gearKey, spatialKey, platformKey);
+                        List<IndividualBO> l = (List<IndividualBO>) indData.getData().getRowValue(cov);
+                        if (l == null) {
+                            l = new ArrayList<>();
+                            indData.getData().setRowValue(cov, l);
+                        }
+                        l.add(i);
                     }
-                    l.add(i);
                 }
             }
         }

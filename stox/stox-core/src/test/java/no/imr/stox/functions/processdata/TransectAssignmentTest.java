@@ -14,6 +14,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import no.imr.sea2data.biotic.bo.FishstationBO;
+import no.imr.sea2data.biotic.bo.MissionBO;
 import no.imr.sea2data.imrmap.utils.JTSUtils;
 import no.imr.sea2data.imrbase.matrix.MatrixBO;
 import no.imr.stox.bo.ProcessDataBO;
@@ -61,20 +62,18 @@ public class TransectAssignmentTest {
                 new Coordinate(0d, 0d), new Coordinate(2d, 0d), new Coordinate(2d, 2d), new Coordinate(0d, 2d)))));
     }
 
-    List<FishstationBO> getFishStations() {
-        List<FishstationBO> fs = new ArrayList<FishstationBO>();
-        MissionType mt = new MissionType();
-        FishstationBO f = new FishstationBO(mt);
-        fs.add(f);
+    List<MissionBO> getFishStations() {
+        MissionBO mt = new MissionBO();
+        FishstationBO f = mt.addFishstation(null);
         f.getFs().setLongitudestart(1.1d);
         f.getFs().setLatitudestart(0.9d);
         f.getFs().setSerialnumber(1000);
-        f = new FishstationBO(mt);
-        fs.add(f);
+        
+        f = mt.addFishstation(null);
         f.getFs().setLongitudestart(2.9d);
         f.getFs().setLatitudestart(0.9d);
         f.getFs().setSerialnumber(1000);
-        return fs;
+        return Arrays.asList(mt);
     }
 
 }

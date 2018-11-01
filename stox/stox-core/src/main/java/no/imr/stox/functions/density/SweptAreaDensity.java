@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Map;
 import no.imr.sea2data.biotic.bo.FishstationBO;
 import no.imr.sea2data.biotic.bo.CatchSampleBO;
+import no.imr.sea2data.biotic.bo.MissionBO;
 import no.imr.sea2data.imrbase.util.Conversion;
 import no.imr.stox.functions.AbstractFunction;
 import no.imr.stox.bo.DensityMatrix;
@@ -38,7 +39,7 @@ public class SweptAreaDensity extends AbstractFunction {
         String distanceMethod = (String) input.get(Functions.PM_SWEPTAREADENSITY_DISTANCEMETHOD);
         String sweptAreaMethod = (String) input.get(Functions.PM_SWEPTAREADENSITY_SWEPTAREAMETHOD);
         String catchVariable = (String) input.get(Functions.PM_SWEPTAREADENSITY_CATCHVARIABLE);
-        List<FishstationBO> bioticData = (List<FishstationBO>) input.get(Functions.PM_SWEPTAREADENSITY_BIOTICDATA);
+        List<MissionBO> bioticData = (List<MissionBO>) input.get(Functions.PM_SWEPTAREADENSITY_BIOTICDATA);
         LengthDistMatrix lengthDist = (LengthDistMatrix) input.get(Functions.PM_SWEPTAREADENSITY_LENGTHDIST);
         String lenDistType = lengthDist != null ? (String) lengthDist.getResolutionMatrix().getRowValue(Functions.RES_LENGTHDISTTYPE) : null;
         String sweepWidthMethod = (String) input.get(Functions.PM_SWEPTAREADENSITY_SWEEPWIDTHMETHOD);

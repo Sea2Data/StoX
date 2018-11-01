@@ -146,6 +146,7 @@ public final class Functions {
 
     public static final String FN_APPLYPOSTODATA = "ApplyPosToData";
     public static final String PM_APPLYPOSTODATA_SOURCETYPE = "SourceType";
+    public static final String PM_APPLYPOSTODATA_AREACODING = "AreaCoding";
     public static final String PM_APPLYPOSTODATA_LANDINGDATA = "LandingData";
     public static final String PM_APPLYPOSTODATA_BIOTICDATA = "BioticData";
     public static final String PM_APPLYPOSTODATA_FILENAME = "FileName";
@@ -415,7 +416,6 @@ public final class Functions {
     public static final String PM_DEFINETEMPORAL_PROCESSDATA = "ProcessData";
     public static final String PM_DEFINETEMPORAL_SOURCETYPE = "SourceType";
     public static final String PM_DEFINETEMPORAL_COVARIATETYPE = "CovariateType";
-    public static final String PM_DEFINETEMPORAL_CONDITIONALAUTOREGRESSION = "ConditionalAutoRegression";
     public static final String PM_DEFINETEMPORAL_DEFINITIONMETHOD = "DefinitionMethod";
     public static final String PM_DEFINETEMPORAL_LANDINGDATA = "LandingData";
     public static final String PM_DEFINETEMPORAL_BIOTICDATA = "BioticData";
@@ -427,7 +427,6 @@ public final class Functions {
     public static final String PM_DEFINEGEARFACTOR_PROCESSDATA = "ProcessData";
     public static final String PM_DEFINEGEARFACTOR_SOURCETYPE = "SourceType";
     public static final String PM_DEFINEGEARFACTOR_COVARIATETYPE = "CovariateType";
-    public static final String PM_DEFINEGEARFACTOR_CONDITIONALAUTOREGRESSION = "ConditionalAutoRegression";
     public static final String PM_DEFINEGEARFACTOR_DEFINITIONMETHOD = "DefinitionMethod";
     public static final String PM_DEFINEGEARFACTOR_LANDINGDATA = "LandingData";
     public static final String PM_DEFINEGEARFACTOR_BIOTICDATA = "BioticData";
@@ -437,7 +436,7 @@ public final class Functions {
     public static final String PM_DEFINESPATIAL_PROCESSDATA = "ProcessData";
     public static final String PM_DEFINESPATIAL_SOURCETYPE = "SourceType";
     public static final String PM_DEFINESPATIAL_COVARIATETYPE = "CovariateType";
-    public static final String PM_DEFINESPATIAL_CONDITIONALAUTOREGRESSION = "ConditionalAutoRegression";
+    public static final String PM_DEFINESPATIAL_USESTRATUMNEIGHBOUR = "UseStratumNeighbour";
     public static final String PM_DEFINESPATIAL_DEFINITIONMETHOD = "DefinitionMethod";
     public static final String PM_DEFINESPATIAL_LANDINGDATA = "LandingData";
     public static final String PM_DEFINESPATIAL_BIOTICDATA = "BioticData";
@@ -779,8 +778,7 @@ public final class Functions {
     public static final String ACOUSTICPSU_DEFINITIONMETHOD_USEPROCESSDATA = "UseProcessData";
     public static final String ACOUSTICPSU_DEFINITIONMETHOD_EDSUTOPSU = "EDSUToPSU";
     // Covariate definition method
-    public static final String DEFINITIONMETHOD_INHERIT = "Inherit";
-    public static final String DEFINITIONMETHOD_INHERITCOVARID = "InheritCovarId";
+    public static final String DEFINITIONMETHOD_COPYFROMLANDING = "CopyFromLanding";
     public static final String DEFINITIONMETHOD_USEDATA = "UseData";
     public static final String DEFINITIONMETHOD_RESOURCEFILE = "ResourceFile";
     public static final String DEFINITIONMETHOD_USEPROCESSDATA = "UseProcessData";
@@ -796,6 +794,9 @@ public final class Functions {
     public static final String SPATIALVARIABLE_MAINAREA = "MainArea";
     public static final String SPATIALVARIABLE_LOCATION = "Location";
     public static final String SPATIALVARIABLE_LANDINGSITE = "LandingSite";*/
+    // Area coding
+    public static final String AREACODING_MAINAREA = "MainArea";
+    public static final String AREACODING_MAINAREAANDLOCATION = "MainAreaAndLocation";
     // Transient process data table
     public static final String TABLE_ESTLAYERDEF = "ESTLAYERDEF";
     //public static final String TABLE_SPATIALVAR = "SPATIALDIM";

@@ -11,6 +11,7 @@ import no.imr.stox.functions.utils.Functions;
 import no.imr.sea2data.biotic.bo.FishstationBO;
 import no.imr.sea2data.biotic.bo.IndividualBO;
 import no.imr.sea2data.biotic.bo.CatchSampleBO;
+import no.imr.sea2data.biotic.bo.MissionBO;
 import static org.junit.Assert.*;
 import org.junit.Test;
 
@@ -49,8 +50,8 @@ public class FilterBioticTest {
 //        instance.perform();
         // TODO review the generated test code and remove the default call to fail.
 //        fail("The test case is a prototype.");
-        MissionType mt = new MissionType();
-        FishstationBO st1 = new FishstationBO(mt);
+        MissionBO ms = new MissionBO();
+        FishstationBO st1 = ms.addFishstation(null);
         st1.getFs().setGearcondition("1");
         st1.getFs().setSamplequality("1");
         st1.getFs().setStationtype("4");
@@ -66,7 +67,7 @@ public class FilterBioticTest {
         individ12.setLength(0.03);
         individ13.setLength(0.05);
 
-        FishstationBO st2 = new FishstationBO(mt);
+        FishstationBO st2 = ms.addFishstation(null);
         st2.getFs().setGearcondition("4");
         st2.getFs().setSamplequality("5");
         st2.getFs().setStationtype("2");
@@ -82,7 +83,7 @@ public class FilterBioticTest {
         individ22.setLength(0.03);
         individ23.setLength(0.06);
 
-        List<FishstationBO> fishstations = new ArrayList<>(Arrays.asList(st1, st2));
+        List<MissionBO> missions = Arrays.asList(ms);
 
         String stationExpr = "gearcondition eq 1 and trawlquality eq 1";
         String catchExpr = "species eq 'SILD'";
@@ -94,7 +95,7 @@ public class FilterBioticTest {
         input.put(Functions.PM_FILTERBIOTIC_CATCHEXPR, catchExpr);
         input.put(Functions.PM_FILTERBIOTIC_SAMPLEEXPR, sampleExpr);
         input.put(Functions.PM_FILTERBIOTIC_INDEXPR, individualExpr);
-        input.put(Functions.PM_FILTERBIOTIC_BIOTICDATA, fishstations);
+        input.put(Functions.PM_FILTERBIOTIC_BIOTICDATA, missions);
 
         List l = (List) instance.perform(input);
 

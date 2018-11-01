@@ -9,6 +9,7 @@ import no.imr.stox.functions.AbstractFunction;
 import no.imr.sea2data.biotic.bo.FishstationBO;
 import no.imr.sea2data.biotic.bo.IndividualBO;
 import no.imr.sea2data.biotic.bo.CatchSampleBO;
+import no.imr.sea2data.biotic.bo.MissionBO;
 import org.apache.commons.jexl2.Expression;
 import org.apache.commons.jexl2.JexlContext;
 import org.apache.commons.jexl2.JexlEngine;
@@ -64,30 +65,34 @@ public class FilterBiotic extends AbstractFunction {
         Expression individualExpression = engine.createExpression(individualExpr.toLowerCase());
         JexlContext ctx = new MapContext();
         // Old structures:
-        List<FishstationBO> allFishstations = (List<FishstationBO>) input.get(Functions.PM_FILTERBIOTIC_BIOTICDATA);
-        List<FishstationBO> fishstations = new ArrayList<>();
-        for (FishstationBO fs : allFishstations) {
-            FilterUtils.resolveContext(ctx, fs);
-            if (!FilterUtils.evaluate(ctx, stationExpression)) {
-                continue;
-            }
-            FishstationBO fsF = new FishstationBO(fs);
-            fishstations.add(fsF);
-            for (CatchSampleBO cb : fs.getCatchSampleBOs()) {
-                FilterUtils.resolveContext(ctx, cb);
-                // todo join catch and sample expression as input parameter
-                if (!(FilterUtils.evaluate(ctx, catchExpression) && FilterUtils.evaluate(ctx, sampleExpression))) {
+        List<MissionBO> allFishstations = (List<MissionBO>) input.get(Functions.PM_FILTERBIOTIC_BIOTICDATA);
+        List<MissionBO> fishstations = new ArrayList<>();
+        for (MissionBO ms : allFishstations) {
+            MissionBO msF = new MissionBO(ms);
+            fishstations.add(msF);
+            for (FishstationBO fs : ms.getFishstationBOs()) {
+                FilterUtils.resolveContext(ctx, fs);
+                if (!FilterUtils.evaluate(ctx, stationExpression)) {
                     continue;
                 }
-                CatchSampleBO sampleF = new CatchSampleBO(fsF, cb);
-                fsF.getCatchSampleBOs().add(sampleF);
-                for (IndividualBO in : cb.getIndividualBOs()) {
-                    FilterUtils.resolveContext(ctx, in);
-                    if (!FilterUtils.evaluate(ctx, individualExpression)) {
+                FishstationBO fsF = new FishstationBO(ms, fs);
+                msF.getFishstationBOs().add(fsF);
+                for (CatchSampleBO cb : fs.getCatchSampleBOs()) {
+                    FilterUtils.resolveContext(ctx, cb);
+                    // todo join catch and sample expression as input parameter
+                    if (!(FilterUtils.evaluate(ctx, catchExpression) && FilterUtils.evaluate(ctx, sampleExpression))) {
                         continue;
                     }
-                    IndividualBO inF = new IndividualBO(sampleF, in);
-                    sampleF.getIndividualBOs().add(inF);
+                    CatchSampleBO sampleF = new CatchSampleBO(fsF, cb);
+                    fsF.getCatchSampleBOs().add(sampleF);
+                    for (IndividualBO in : cb.getIndividualBOs()) {
+                        FilterUtils.resolveContext(ctx, in);
+                        if (!FilterUtils.evaluate(ctx, individualExpression)) {
+                            continue;
+                        }
+                        IndividualBO inF = new IndividualBO(sampleF, in);
+                        sampleF.getIndividualBOs().add(inF);
+                    }
                 }
             }
         }

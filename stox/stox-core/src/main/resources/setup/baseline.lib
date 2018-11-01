@@ -143,6 +143,7 @@ Name: ApplyPosToData
 Description: <I>ApplyPosToLanding</I> applies geographical position to landing or biotic based on a resource file given by the filename that maps mainarea/location to position.
 Class: no.imr.stox.functions.data.ApplyPosToData
 Parameter: Name=SourceType, DataType=String, Values=Landing;Biotic, Description=The <I>SourceType</I> The type of source of the covariates defined.
+Parameter: Name=AreaCoding, DataType=String, DefaultValue=MainArea, Values=MainArea;MainAreaAndLocation, Description=The <I>AreaCoding</I> The type of coding (main area or main area with location) 
 Parameter: Name=LandingData, Required=false, DataType=LandingData, ParentTag=SourceType.Landing, Description=Landing data
 Parameter: Name=BioticData, Required=false, DataType=BioticData, ParentTag=SourceType.Biotic, Description=The <I>BioticData</I> parameter is used to specify which previous process has generated the <U>BioticData</U> input data.
 Parameter: Name=FileName, Required=false, DataType=String, Description=The <I>FileName</I> parameter gives the path to the resource file with mainarea/location-position mapping
@@ -589,11 +590,9 @@ Respondable:true
 Parameter: Name=ProcessData, DataType=ProcessData, Description=The <I>ProcessData</I> parameter is used to identify the covariate for the CovariateType and Source given.
 Parameter: Name=SourceType, DataType=String, Values=Landing;Biotic, Description=The <I>SourceType</I> The type of source of the covariates defined.
 Parameter: Name=CovariateType, DefaultValue=Fixed, DataType=String, ParentTag=SourceType.Biotic, Values=Fixed;Random, Description=The <I>CovariateDependenytype</I> The type of error structure dependencies <BR>Fixed: covariate will be treated as fixed effect.<BR>Random: covariate will be treated as random effect.<BR>Dependency: missing documentation
-Parameter: Name=ConditionalAutoRegression, DefaultValue=false, DataType=Boolean, ParentTag=CovariateType.Random, Description=The <I>ConditionalAutoRegression</I> if random covariates are correlated
-Parameter: Name=DefinitionMethod, DefaultValue=UseData, DataType=String, Values=Inherit;UseData;UseProcessData, Description=The <I>DefinitionMethod</I> is how to define the coveriates
+Parameter: Name=DefinitionMethod, DefaultValue=UseData, DataType=String, Values=CopyFromLanding~Inherit;UseData;UseProcessData, Description=The <I>DefinitionMethod</I> is how to define the coveriates
 Parameter: Name=LandingData, Required=false, DataType=LandingData, ParentTag=SourceType.Landing, Description=Landing data
 Parameter: Name=BioticData, Required=false, DataType=BioticData, ParentTag=SourceType.Biotic;DefinitionMethod.UseData, Description=The <I>BioticData</I> parameter is used to specify which previous process has generated the <U>BioticData</U> input data.
-#Parameter: Name=FileName, Required=false, DataType=String, ParentTag=DefinitionMethod.ResourceFile, Description=The <I>FileName</I> parameter is used to give the complete path including filename to the WKT strata system file to be used
 Parameter: Name=TimeInterval, Required=false, DataType=String, ParentTag=DefinitionMethod.UseData, Values=Year;Quarter;Month;Week;Period, Description=The time interval period for temporal covariates
 Parameter: Name=Seasonal, DefaultValue=false, DataType=Boolean, ParentTag=DefinitionMethod.UseData, Description=The <I>Seasonal</I> 
 Output: ProcessData
@@ -607,8 +606,7 @@ Respondable:true
 Parameter: Name=ProcessData, DataType=ProcessData, Description=The <I>ProcessData</I> parameter is used to identify the covariate for the CovariateType and Source given.
 Parameter: Name=SourceType, DataType=String, Values=Landing;Biotic, Description=The <I>SourceType</I> The type of source of the covariates defined.
 Parameter: Name=CovariateType, DefaultValue=Fixed, DataType=String, ParentTag=SourceType.Biotic, Values=Fixed;Random, Description=The <I>CovariateDependenytype</I> The type of error structure dependencies <BR>Fixed: covariate will be treated as fixed effect.<BR>Random: covariate will be treated as random effect.<BR>Dependency: missing documentation
-Parameter: Name=ConditionalAutoRegression, DefaultValue=false, DataType=Boolean, ParentTag=CovariateType.Random, Description=The <I>ConditionalAutoRegression</I> if random covariates are correlated
-Parameter: Name=DefinitionMethod, DefaultValue=UseProcessData, DataType=String, Values=InheritCovarId;ResourceFile;UseProcessData, Description=The <I>DefinitionMethod</I> is how to define the coveriates
+Parameter: Name=DefinitionMethod, DefaultValue=UseProcessData, DataType=String, Values=ResourceFile;UseProcessData, Description=The <I>DefinitionMethod</I> is how to define the coveriates
 Parameter: Name=FileName, Required=false, DataType=String, ParentTag=DefinitionMethod.ResourceFile, Description=The <I>FileName</I> parameter is used to give the complete path including filename to the WKT strata system file to be used
 Output: ProcessData
 
@@ -620,8 +618,8 @@ Respondable:true
 Parameter: Name=ProcessData, DataType=ProcessData, Description=The <I>ProcessData</I> parameter is used to identify the covariate for the CovariateType and Source given.
 Parameter: Name=SourceType, DataType=String, Values=Landing;Biotic, Description=The <I>SourceType</I> The type of source of the covariates defined.
 Parameter: Name=CovariateType, DefaultValue=Fixed, DataType=String, ParentTag=SourceType.Biotic, Values=Fixed;Random, Description=The <I>CovariateDependenytype</I> The type of error structure dependencies <BR>Fixed: covariate will be treated as fixed effect.<BR>Random: covariate will be treated as random effect.<BR>Dependency: missing documentation
-Parameter: Name=ConditionalAutoRegression, DefaultValue=false, DataType=Boolean, ParentTag=CovariateType.Random, Description=The <I>ConditionalAutoRegression</I> if random covariates are correlated
-Parameter: Name=DefinitionMethod, DefaultValue=UseData, DataType=String, Values=Inherit;UseData;UseProcessData, Description=The <I>DefinitionMethod</I> is how to define the coveriates
+Parameter: Name=UseStratumNeighbour, Alias=ConditionalAutoRegression, DefaultValue=false, DataType=Boolean, ParentTag=CovariateType.Random;SourceType.Biotic, Description=The <I>ConditionalAutoRegression</I> if random covariates are correlated
+Parameter: Name=DefinitionMethod, DefaultValue=UseData, DataType=String, Values=CopyFromLanding~Inherit;UseData;UseProcessData, Description=The <I>DefinitionMethod</I> is how to define the coveriates
 Parameter: Name=LandingData, Required=false, DataType=LandingData, ParentTag=SourceType.Landing, Description=Landing data
 Parameter: Name=BioticData, Required=false, DataType=BioticData, ParentTag=SourceType.Biotic;DefinitionMethod.UseData, Description=The <I>BioticData</I> parameter is used to specify which previous process has generated the <U>BioticData</U> input data.
 Parameter: Name=FileName, Required=false, DataType=String, ParentTag=DefinitionMethod.ResourceFile, Description=The <I>FileName</I> parameter is used to give the complete path including filename to the WKT strata system file to be used

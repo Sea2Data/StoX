@@ -98,7 +98,7 @@ public class PgNapesEchoWriter {
                     String log = Conversion.formatDoubletoDecimalString(dist.getLog_start().doubleValue(), "0.0");
 
                     //Check if this is the end of the integrator distance (using the filter value
-                    rr.setIntdist(intDist);
+                    rr.setIntDist(Math.max(intDist, dist.getIntegrator_dist()));
                     rr.setLog(Conversion.safeStringtoDouble(log));
                     isEnd = rr.getIsEnd();
 
@@ -109,12 +109,11 @@ public class PgNapesEchoWriter {
 
                     //Number of ch per 50 meter ch
                     Double vertRes = null;
-                    if (pchThick != null) {
+                    if (pchThick != null && pchThick > dist.getPel_ch_thickness()) {
                         vertRes = pchThick;
                     } else {
                         vertRes = dist.getPel_ch_thickness();
                     }
-
                     Double ww = vertRes / helppct;
                     Integer helpnchch = ww.intValue();
                     //Number of 50 meter channels
@@ -201,8 +200,8 @@ public class PgNapesEchoWriter {
 
                     //Check if distance from previous output distance is not to  large due to holes in data:
                     boolean okPrevDist = false;
-                    if ((rr.getEndLog() != null) && (intDist != null)) {
-                        if ((rr.getLog() - rr.getEndLog()) - 0.05 <= intDist) {
+                    if ((rr.getEndLog() != null) && (rr.getIntDist() != null)) {
+                        if ((rr.getLog() - rr.getEndLog()) - 0.05 <= rr.getIntDist()) {
                             okPrevDist = true;
                         } else {
                             okPrevDist = false;
@@ -212,10 +211,10 @@ public class PgNapesEchoWriter {
                     }
 
                     //Check if sum of distances is correct + check if stoplog minus startlog is equal to sum of distances
-                    if (intDist == null) {
+                    if (rr.getIntDist() == null) {
                         okIntDist = true;
                     } else {
-                        if ((((intDist - 0.05) < totintdist) && (totintdist < (intDist + 0.05))) && okPrevDist) {
+                        if ((((rr.getIntDist() - 0.05) < totintdist) && (totintdist < (rr.getIntDist() + 0.05))) && okPrevDist) {
                             okIntDist = true;
                         }
                     }
@@ -330,12 +329,5 @@ public class PgNapesEchoWriter {
             this.log = log;
         }
 
-        public Double getIntdist() {
-            return intDist;
-        }
-
-        public void setIntdist(Double intDist) {
-            this.intDist = intDist;
-        }
     }
 }

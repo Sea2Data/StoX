@@ -11,6 +11,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 import no.imr.sea2data.biotic.bo.FishstationBO;
+import no.imr.sea2data.biotic.bo.MissionBO;
 import no.imr.sea2data.imrbase.math.ImrMath;
 import no.imr.sea2data.imrbase.matrix.MatrixBO;
 import no.imr.sea2data.imrbase.util.Conversion;
@@ -40,7 +41,7 @@ public class LarvaeDensity extends AbstractFunction {
     public Object perform(Map<String, Object> input) {
         ILogger logger = (ILogger) input.get(Functions.PM_LOGGER);
         ProcessDataBO pd = (ProcessDataBO) input.get(Functions.PM_LARVAEDENSITY_PROCESSDATA);
-        List<FishstationBO> biotic = (List<FishstationBO>) input.get(Functions.PM_LARVAEDENSITY_BIOTICDATA);
+        List<MissionBO> biotic = (List<MissionBO>) input.get(Functions.PM_LARVAEDENSITY_BIOTICDATA);
         LengthDistMatrix lengthDist = (LengthDistMatrix) input.get(Functions.PM_LARVAEDENSITY_LENGTHDIST);
         if (lengthDist == null) {
             return null;

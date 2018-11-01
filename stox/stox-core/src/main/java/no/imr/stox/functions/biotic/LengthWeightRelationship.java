@@ -13,6 +13,7 @@ import java.util.Set;
 import java.util.stream.Collectors;
 import no.imr.sea2data.biotic.bo.FishstationBO;
 import no.imr.sea2data.biotic.bo.IndividualBO;
+import no.imr.sea2data.biotic.bo.MissionBO;
 import no.imr.sea2data.imrbase.math.LWRelationship;
 import no.imr.sea2data.imrbase.util.Conversion;
 import no.imr.stox.bo.LengthWeightRelationshipMatrix;
@@ -39,7 +40,7 @@ public class LengthWeightRelationship extends AbstractFunction {
     public Object perform(Map<String, Object> input) {
         ILogger logger = (ILogger) input.get(Functions.PM_LOGGER);
         ProcessDataBO pd = (ProcessDataBO) input.get(Functions.PM_SWEPTAREADENSITY_PROCESSDATA);
-        List<FishstationBO> bioticData = (List<FishstationBO>) input.get(Functions.PM_SWEPTAREADENSITY_BIOTICDATA);
+        List<MissionBO> bioticData = (List<MissionBO>) input.get(Functions.PM_SWEPTAREADENSITY_BIOTICDATA);
         //logger.error("Length interval " + lenInterval + " must be a multiple integer factor of " + prevLenInterval + ".", null);
 
         LengthWeightRelationshipMatrix result = new LengthWeightRelationshipMatrix();
@@ -88,7 +89,7 @@ public class LengthWeightRelationship extends AbstractFunction {
         }
     }
 
-    private Map<String, List<IndividualBO>> getIndividuals(Set<String> stratumStations, List<FishstationBO> bioticData) {
+    private Map<String, List<IndividualBO>> getIndividuals(Set<String> stratumStations, List<MissionBO> bioticData) {
         return stratumStations.parallelStream()
                 .map(s -> BioticUtils.findStation(bioticData, s))
                 .filter(b -> b != null)

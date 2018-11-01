@@ -9,6 +9,7 @@ import no.imr.sea2data.biotic.bo.AgeDeterminationBO;
 import no.imr.sea2data.biotic.bo.FishstationBO;
 import no.imr.sea2data.biotic.bo.IndividualBO;
 import no.imr.sea2data.biotic.bo.CatchSampleBO;
+import no.imr.sea2data.biotic.bo.MissionBO;
 import no.imr.sea2data.imrbase.util.Conversion;
 import no.imr.sea2data.imrbase.util.IMRdate;
 import no.imr.sea2data.imrbase.util.XMLReader;
@@ -26,8 +27,7 @@ public class BioticXMLReader extends XMLReader {
     /**
      * Fishstations read.
      */
-    private MissionType currentMission;
-    private final List<FishstationBO> stations;
+    private final MissionBO stations;
     IProject project;
 
     /**
@@ -36,7 +36,7 @@ public class BioticXMLReader extends XMLReader {
      * @param stations List to populate.
      * @param project
      */
-    public BioticXMLReader(final List<FishstationBO> stations, IProject project) {
+    public BioticXMLReader(final MissionBO stations, IProject project) {
         this.stations = stations;
         this.project = project;
     }
@@ -44,7 +44,7 @@ public class BioticXMLReader extends XMLReader {
     @Override
     protected void onObjectValue(final Object object, final String key, final String value) {
         if (key.equals("cruise")) {
-            currentMission.setCruise(value);
+            stations.getMs().setCruise(value);
         } else if (object instanceof FishstationBO) {
             createFishStation(object, key, value);
         } else if (object instanceof CatchSampleBO) {
@@ -53,34 +53,9 @@ public class BioticXMLReader extends XMLReader {
             createIndividual(object, key, value);
         } else if (object instanceof AgeDeterminationBO) {
             createAgeDetermination(object, key, value);
-        } /*else if (object instanceof PreyBO) {
-            createPrey(object, key, value);
-        }*/
+        } 
     }
 
-    /*String getSpecies(String taxa) {
-        switch (taxa) {
-            case "171677":
-                return "HAVSIL";
-            case "162035":
-                return "LODDE";
-            case "161722":
-                return "SILD";
-            case "161722.G03":
-                return "SILDG03";
-            case "172414":
-                return "MAKRELL";
-            case "164774":
-                return "KOLMULE";
-            case "164712":
-                return "TORSK";
-            case "164744":
-                return "HYSE";
-            case "164727":
-                return "SEI";
-        }
-        return null;
-    }*/
     @Override
     protected Object getObject(final Object current, final String elmName) {
         Object result = null;
@@ -88,19 +63,18 @@ public class BioticXMLReader extends XMLReader {
             result = null;
         }
         if (current == null && elmName.equals("mission")) {
-            currentMission = new MissionType();
-            currentMission.setMissiontype(getCurrentAttributeValue("missiontype"));
+            MissionBO mission = new MissionBO();
+            mission.getMs().setMissiontype(getCurrentAttributeValue("missiontype"));
             boolean useMissionTypeInCruiseTag = project.getResourceVersion() > 1.26;
             String mtPref = useMissionTypeInCruiseTag ? getCurrentAttributeValue("missiontype") + "-" : "";
             String currentCruise = mtPref + getCurrentAttributeValue("year");
-            currentMission.setCruise(currentCruise); // default cruise=missiontype-year in earlier stox
-            currentMission.setPlatform(getCurrentAttributeValue("platform"));
-            currentMission.setPlatformname(getCurrentAttributeValue("platformname"));
+            mission.getMs().setCruise(currentCruise); // default cruise=missiontype-year in earlier stox
+            mission.getMs().setPlatform(getCurrentAttributeValue("platform"));
+            mission.getMs().setPlatformname(getCurrentAttributeValue("platformname"));
             result = stations;
-        } else if (current instanceof List && elmName.equals("fishstation")) {
-            FishstationBO station = new FishstationBO(currentMission);
-            station.getFs().setCatchplatform(station.getMission().getPlatform());
-            stations.add(station);
+        } else if (current instanceof MissionBO && elmName.equals("fishstation")) {
+            FishstationBO station = stations.addFishstation(null);
+            station.getFs().setCatchplatform(station.getMission().getMs().getPlatform());
             result = station;
         } else if (current instanceof FishstationBO && elmName.equals("catchsample")) {
             FishstationBO station = (FishstationBO) current;

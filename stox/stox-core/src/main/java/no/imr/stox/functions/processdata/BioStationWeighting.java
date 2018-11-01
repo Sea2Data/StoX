@@ -14,6 +14,7 @@ import java.util.function.Function;
 import java.util.stream.Collectors;
 import no.imr.sea2data.biotic.bo.FishstationBO;
 import no.imr.sea2data.biotic.bo.CatchSampleBO;
+import no.imr.sea2data.biotic.bo.MissionBO;
 import no.imr.sea2data.echosounderbo.DistanceBO;
 import no.imr.sea2data.imrmap.utils.JTSUtils;
 import no.imr.stox.bo.LengthDistMatrix;
@@ -85,7 +86,7 @@ public class BioStationWeighting extends AbstractFunction {
     private void weightByNASC(Map<String, Object> input) {
         ILogger logger = (ILogger) input.get(Functions.PM_LOGGER);
         ProcessDataBO pd = (ProcessDataBO) input.get(Functions.PM_BIOSTATIONWEIGHTING_PROCESSDATA);
-        List<FishstationBO> fList = (List<FishstationBO>) input.get(Functions.PM_BIOSTATIONWEIGHTING_BIOTICDATA);
+        List<MissionBO> fList = (List<MissionBO>) input.get(Functions.PM_BIOSTATIONWEIGHTING_BIOTICDATA);
         if (fList == null) {
             logger.error("Missing parameter " + Functions.PM_BIOSTATIONWEIGHTING_BIOTICDATA, null);
             return;
@@ -226,7 +227,7 @@ public class BioStationWeighting extends AbstractFunction {
      */
     private void weightByNumberOfLengthSamples(Map<String, Object> input) {
         ProcessDataBO pd = (ProcessDataBO) input.get(Functions.PM_BIOSTATIONWEIGHTING_PROCESSDATA);
-        List<FishstationBO> fList = (List<FishstationBO>) input.get(Functions.PM_BIOSTATIONWEIGHTING_BIOTICDATA);
+        List<MissionBO> fList = (List<MissionBO>) input.get(Functions.PM_BIOSTATIONWEIGHTING_BIOTICDATA);
         ILogger logger = (ILogger) input.get(Functions.PM_LOGGER);
         if (fList == null) {
             logger.error("Missing parameter " + Functions.PM_BIOSTATIONWEIGHTING_BIOTICDATA, null);
@@ -259,7 +260,7 @@ public class BioStationWeighting extends AbstractFunction {
 
     private void weightByCPUE(Map<String, Object> input, String weightingMethod) {
         ProcessDataBO pd = (ProcessDataBO) input.get(Functions.PM_BIOSTATIONWEIGHTING_PROCESSDATA);
-        List<FishstationBO> fList = (List<FishstationBO>) input.get(Functions.PM_BIOSTATIONWEIGHTING_BIOTICDATA);
+        List<MissionBO> fList = (List<MissionBO>) input.get(Functions.PM_BIOSTATIONWEIGHTING_BIOTICDATA);
         ILogger logger = (ILogger) input.get(Functions.PM_LOGGER);
         if (fList == null) {
             logger.error("Missing parameter " + Functions.PM_BIOSTATIONWEIGHTING_BIOTICDATA, null);

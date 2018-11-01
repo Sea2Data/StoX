@@ -9,6 +9,7 @@ import com.vividsolutions.jts.geom.Coordinate;
 import java.util.List;
 import java.util.Map;
 import no.imr.sea2data.biotic.bo.FishstationBO;
+import no.imr.sea2data.biotic.bo.MissionBO;
 import no.imr.sea2data.echosounderbo.DistanceBO;
 import no.imr.sea2data.imrbase.math.Calc;
 import no.imr.sea2data.imrmap.utils.JTSUtils;
@@ -37,7 +38,7 @@ public class SplitNASCAssignment extends AbstractFunction {
         ILogger logger = (ILogger) input.get(Functions.PM_LOGGER);
         IModel m = (IModel) input.get(Functions.PM_MODEL);
         ProcessDataBO pd = m.getProject().getProcessData();
-        List<FishstationBO> fList = (List<FishstationBO>) input.get(Functions.PM_SPLITNASCASSIGNMENT_BIOTICDATA);
+        List<MissionBO> fList = (List<MissionBO>) input.get(Functions.PM_SPLITNASCASSIGNMENT_BIOTICDATA);
         List<DistanceBO> distances = (List<DistanceBO>) input.get(Functions.PM_SPLITNASCASSIGNMENT_ACOUSTICDATA);
         Double radius = (Double) input.get(Functions.PM_SPLITNASCASSIGNMENT_RADIUS);
         // Transfer the nasc resolution to assignment resolution:
@@ -66,13 +67,15 @@ public class SplitNASCAssignment extends AbstractFunction {
             String edsu = distBO.getKey();
             edsuIsAsigned = false;
             Double minDist = Double.MAX_VALUE;
-            for (FishstationBO fs : fList) {
-                Coordinate fPos = new Coordinate(fs.getFs().getLongitudestart(), fs.getFs().getLatitudestart());
-                Double gcDist = JTSUtils.gcircledist(fPos, dPos);
-                minDist = Math.min(minDist, gcDist);
-                if (gcDist <= radius) {
-                    bsAsg.setRowColValue(asgKey, fs.getKey(), 1d);
-                     edsuIsAsigned = true;
+            for (MissionBO ms : fList) {
+                for (FishstationBO fs : ms.getFishstationBOs()) {
+                    Coordinate fPos = new Coordinate(fs.getFs().getLongitudestart(), fs.getFs().getLatitudestart());
+                    Double gcDist = JTSUtils.gcircledist(fPos, dPos);
+                    minDist = Math.min(minDist, gcDist);
+                    if (gcDist <= radius) {
+                        bsAsg.setRowColValue(asgKey, fs.getKey(), 1d);
+                        edsuIsAsigned = true;
+                    }
                 }
             }
             if (!edsuIsAsigned) {

@@ -29,7 +29,6 @@ public class Catchability extends AbstractFunction {
     @Override
     public Object perform(Map<String, Object> input) {
         ILogger logger = (ILogger) input.get(Functions.PM_LOGGER);
-        //List<FishstationBO> fishStations = (List<FishstationBO>) input.get(Functions.PM_CATCHABILITY_BIOTICDATA);
         // Set the resolution matrix as Observation type and length interval
         LengthDistMatrix lengthDistMatrix = (LengthDistMatrix) input.get(Functions.PM_CATCHABILITY_LENGTHDIST);
         MatrixBO lengthDist = lengthDistMatrix.getData();

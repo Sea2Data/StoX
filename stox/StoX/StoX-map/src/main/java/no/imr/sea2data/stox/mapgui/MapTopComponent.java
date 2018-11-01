@@ -14,6 +14,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 import no.imr.sea2data.biotic.bo.FishstationBO;
+import no.imr.sea2data.biotic.bo.MissionBO;
 import no.imr.sea2data.echosounderbo.DistanceBO;
 import no.imr.sea2data.imrbase.map.ILatLonEvent;
 import no.imr.stoxmap.handler.BioStationAssignmentHandler;
@@ -289,7 +290,7 @@ public final class MapTopComponent extends TopComponent implements LookupListene
                     }
                     break;
                 case Functions.FN_FILTERBIOTIC:
-                    bioticData = (List) ds;
+                    bioticData = ds != null ? ((List<MissionBO>) ds).stream().flatMap(m -> m.getFishstationBOs().stream()).collect(Collectors.toList()) : null;
                     findBioticAbsenceData();
                     if (process.isRespondInGUI()) {
                         checkAcousticLayer();

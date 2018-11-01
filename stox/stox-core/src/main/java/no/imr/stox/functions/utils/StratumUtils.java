@@ -25,7 +25,7 @@ import org.apache.commons.io.FileUtils;
  */
 public class StratumUtils {
 
-    public static MatrixBO getAreaLocationPositionByFile(String fileName) {
+    public static MatrixBO getAreaLocationPositionByFile(String fileName, String areaCoding) {
         MatrixBO posMap = new MatrixBO();
         List<String> lines;
         try {
@@ -45,13 +45,17 @@ public class StratumUtils {
                     String loc = elements[1].trim();
                     String lats = elements[2].trim();
                     String lons = elements[3].trim();
-                    Double lon = Conversion.safeStringtoDoubleNULL(lons); 
+                    Double lon = Conversion.safeStringtoDoubleNULL(lons);
                     Double lat = Conversion.safeStringtoDoubleNULL(lats);
-                    if(lon == null || lat == null) {
+                    if (lon == null || lat == null) {
                         continue;
                     }
                     Point2D.Double pt = new Point2D.Double(lon, lat);
-                    posMap.setRowValue(area + "_" + loc, pt);
+                    String stratum = area;
+                    if (areaCoding.equals(Functions.AREACODING_MAINAREAANDLOCATION)) {
+                        stratum += "_" + loc;
+                    }
+                    posMap.setRowValue(stratum, pt);
                 }
             }
         } catch (IOException ex) {

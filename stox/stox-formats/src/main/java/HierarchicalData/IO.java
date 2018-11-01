@@ -59,7 +59,7 @@ public class IO {
      * @throws XMLStreamException
      * @throws ParserConfigurationException
      * @throws SAXException
-     * @throws IOException 
+     * @throws IOException
      */
     public static <T extends HierarchicalData> T parse(InputStream stream, Class<T> targetClass, XMLFilter filter) throws JAXBException, XMLStreamException, ParserConfigurationException, SAXException, IOException {
 
