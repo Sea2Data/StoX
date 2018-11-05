@@ -48,23 +48,23 @@ public class StationNode extends AbstractNode {
         public Object getValue() {
             switch (prop) {
                 case PROP_CRUISE:
-                    return fs.getMission().getMs().getCruise();
+                    return fs.getMission().bo().getCruise();
                 case PROP_SERIALNO:
-                    return fs.getFs().getSerialnumber();
+                    return fs.bo().getSerialnumber();
                 case PROP_DATE:
-                    return IMRdate.getDefaultDateTimeFormat().format(IMRdate.encodeLocalDateTime(fs.getFs().getStationstartdate(), fs.getFs().getStationstarttime())) + " (UTC)";
+                    return IMRdate.getDefaultDateTimeFormat().format(IMRdate.encodeLocalDateTime(fs.bo().getStationstartdate(), fs.bo().getStationstarttime())) + " (UTC)";
                 case PROP_POS:
-                    return LatLonUtil.latLonToStr(fs.getFs().getLatitudestart(), fs.getFs().getLongitudestart());
+                    return LatLonUtil.latLonToStr(fs.bo().getLatitudestart(), fs.bo().getLongitudestart());
                 case PROP_PLATFORM:
-                    return fs.getMission().getMs().getPlatformname() != null ? fs.getMission().getMs().getPlatformname() : fs.getMission().getMs().getCallsignal() != null ? fs.getMission().getMs().getCallsignal() : "";
+                    return fs.getMission().bo().getPlatformname() != null ? fs.getMission().bo().getPlatformname() : fs.getMission().bo().getCallsignal() != null ? fs.getMission().bo().getCallsignal() : "";
                 case PROP_GEAR:
-                    return fs.getFs().getGear();
+                    return fs.bo().getGear();
                 case PROP_FDEP:
-                    return getMinMaxStr(fs.getFs().getFishingdepthmin(), fs.getFs().getFishingdepthmax());
+                    return getMinMaxStr(fs.bo().getFishingdepthmin(), fs.bo().getFishingdepthmax());
                 case PROP_BDEP:
-                    return getMinMaxStr(fs.getFs().getBottomdepthstart(), fs.getFs().getBottomdepthstop());
+                    return getMinMaxStr(fs.bo().getBottomdepthstart(), fs.bo().getBottomdepthstop());
                 case PROP_DISTANCE:
-                    return fs.getFs().getDistance() != null ? fs.getFs().getDistance() : "";
+                    return fs.bo().getDistance() != null ? fs.bo().getDistance() : "";
             }
             return null;
         }
@@ -122,7 +122,7 @@ public class StationNode extends AbstractNode {
         Map<String, Double> m = new HashMap<>();
         for (CatchSampleBO s : fs.getCatchSampleBOs()) {
             String sKey = s.getSpeciesKey();
-            Double w = s.getCs().getCatchweight();
+            Double w = s.bo().getCatchweight();
             if (w == null || w == 0) {
                 continue;
             }

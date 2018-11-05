@@ -105,17 +105,17 @@ public class MoveHandler {
                 }
             } else if (sf.getUserData() != null && sf.getUserData() instanceof FishstationBO) {
                 FishstationBO fs = (FishstationBO) sf.getUserData();
-                s = s + "Cruise: " + fs.getMission().getMs().getCruise() + "<br>Serialno: " + fs.getFs().getSerialnumber() + "<br>Date: " + fs.getFs().getStationstartdate()
-                        + "<br>Time: " + fs.getFs().getStationstarttime();
+                s = s + "Cruise: " + fs.getMission().bo().getCruise() + "<br>Serialno: " + fs.bo().getSerialnumber() + "<br>Date: " + fs.bo().getStationstartdate()
+                        + "<br>Time: " + fs.bo().getStationstarttime();
                 if (e.isAltDown()) {
-                    Double b1 = Calc.roundTo(fs.getFs().getBottomdepthstart(), 0);
-                    Double b2 = Calc.roundTo(fs.getFs().getBottomdepthstop(), 0);
+                    Double b1 = Calc.roundTo(fs.bo().getBottomdepthstart(), 0);
+                    Double b2 = Calc.roundTo(fs.bo().getBottomdepthstop(), 0);
                     s = s + "<br>Bot.depth start-stop: " + b1 + "-" + b2;
                     s = s + "<br>Lat/Lon: " + fs.getStartLat() + "/" + fs.getStartLon();
                     if (e.isShiftDown()) {
                         for (CatchSampleBO c : fs.getCatchSampleBOs()) {
-                            if (c.getCs().getCommonname() != null && c.getCs().getCatchweight() != null) {
-                                s = s + "<br>" + c.getCs().getCommonname() + ": " + c.getCs().getCatchweight() + " kg. (" + (c.getCs().getSpecimensamplecount() != null ? c.getCs().getSpecimensamplecount() : 0) + " bio. individuals)";
+                            if (c.bo().getCommonname() != null && c.bo().getCatchweight() != null) {
+                                s = s + "<br>" + c.bo().getCommonname() + ": " + c.bo().getCatchweight() + " kg. (" + (c.bo().getSpecimensamplecount() != null ? c.bo().getSpecimensamplecount() : 0) + " bio. individuals)";
                             }
                         }
                     }
