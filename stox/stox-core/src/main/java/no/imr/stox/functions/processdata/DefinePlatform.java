@@ -45,7 +45,9 @@ public class DefinePlatform extends AbstractFunction {
         if (m != null) {
             m.clear(); // Clear covariates for covariate type and source
         }
-        covParam.setRowColValue(AbndEstProcessDataUtil.TABLE_PLATFORM, Functions.PM_DEFINEPLATFORM_COVARIATETYPE, covariateType);
+        if (sourceType.equals(Functions.SOURCETYPE_BIOTIC)) {
+            covParam.setRowColValue(AbndEstProcessDataUtil.TABLE_PLATFORM, Functions.PM_DEFINEPLATFORM_COVARIATETYPE, covariateType);
+        }
         
         // Covariate
         MatrixBO covP = AbndEstProcessDataUtil.getPlatform(pd);

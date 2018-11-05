@@ -60,17 +60,19 @@ public class DefineTemporal extends AbstractFunction {
         if (m != null) {
             m.clear(); // Clear cov param
         }
-        covParam.setRowColValue(AbndEstProcessDataUtil.TABLE_TEMPORAL, Functions.PM_DEFINETEMPORAL_COVARIATETYPE, covariateType);
-        
+        if (sourceType.equals(Functions.SOURCETYPE_BIOTIC)) {
+            covParam.setRowColValue(AbndEstProcessDataUtil.TABLE_TEMPORAL, Functions.PM_DEFINETEMPORAL_COVARIATETYPE, covariateType);
+        }
+
         // Covariate
         MatrixBO covM = AbndEstProcessDataUtil.getTemporal(pd);
         if (defMethod.equals(Functions.DEFINITIONMETHOD_USEPROCESSDATA)) {
             // Use existing, do not read from file.
             return pd;
-        } 
+        }
         m = covM.getRowValueAsMatrix(sourceType);
         if (m != null) {
-            m.clear(); 
+            m.clear();
         }
         if (defMethod.equals(Functions.DEFINITIONMETHOD_COPYFROMLANDING)) {
             if (sourceType.equals(Functions.SOURCETYPE_LANDING)) {

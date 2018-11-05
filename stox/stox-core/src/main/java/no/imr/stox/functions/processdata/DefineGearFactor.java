@@ -37,14 +37,16 @@ public class DefineGearFactor extends AbstractFunction {
         String defMethod = (String) input.get(Functions.PM_DEFINEGEARFACTOR_DEFINITIONMETHOD);
         String covariateSourceType = (String) input.get(Functions.PM_DEFINEGEARFACTOR_SOURCETYPE);
         String covariateType = (String) input.get(Functions.PM_DEFINETEMPORAL_COVARIATETYPE);
-
+        String sourceType = Functions.SOURCETYPE_BIOTIC; // get as parameter
         // cov param
         MatrixBO covParam = AbndEstProcessDataUtil.getCovParam(pd);
         MatrixBO m = covParam.getRowValueAsMatrix(AbndEstProcessDataUtil.TABLE_GEARFACTOR);
-        if(m != null) {
+        if (m != null) {
             m.clear(); // Clear cov param
         }
-        covParam.setRowColValue(AbndEstProcessDataUtil.TABLE_GEARFACTOR, Functions.PM_DEFINEGEARFACTOR_COVARIATETYPE, covariateType);
+        if (sourceType.equals(Functions.SOURCETYPE_BIOTIC)) {
+            covParam.setRowColValue(AbndEstProcessDataUtil.TABLE_GEARFACTOR, Functions.PM_DEFINEGEARFACTOR_COVARIATETYPE, covariateType);
+        }
 
         // covariate matrix
         MatrixBO covM = AbndEstProcessDataUtil.getGear(pd);
@@ -66,7 +68,7 @@ public class DefineGearFactor extends AbstractFunction {
             try {
                 lines = FileUtils.readLines(new File(fileName));
                 // Loop through the lines
-                if(lines.isEmpty()) {
+                if (lines.isEmpty()) {
                     return pd;
                 }
                 lines.remove(0); // Remove header
@@ -78,7 +80,7 @@ public class DefineGearFactor extends AbstractFunction {
                     if (elements.length == 3) {
                         String id = elements[0].trim();
                         String source = elements[1].trim();
-                        if(!source.equalsIgnoreCase(covariateSourceType)) {
+                        if (!source.equalsIgnoreCase(covariateSourceType)) {
                             continue;
                         }
                         String def = elements[2].replace(" ", "");
