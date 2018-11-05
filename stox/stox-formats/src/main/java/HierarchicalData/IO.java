@@ -1,8 +1,12 @@
 package HierarchicalData;
 
+import BioticTypes.v1_4.MissionType;
+import BioticTypes.v1_4.MissionsType;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.util.Arrays;
+import java.util.List;
 import javax.xml.bind.*;
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.stream.XMLEventReader;
@@ -50,6 +54,7 @@ public class IO {
 
     /**
      * parses Hierarchical data from xml, while applying the given xml filter.
+     *
      * @param <T>
      * @param stream
      * @param targetClass
@@ -80,8 +85,21 @@ public class IO {
 
         InputSource xml = new InputSource(stream);
         filter.parse(xml);
-        return targetClass.cast(unmarshallerHandler.getResult());
+        return targetClass.cast(wrap(unmarshallerHandler.getResult()));
 
+    }
+
+    private static Object wrap(Object result) {
+        if (result instanceof BioticTypes.v1_4.MissionType) {
+            // Add Missions to 1_4 xml file with top node mission
+            return new MissionsType() {
+                @Override
+                public List<MissionType> getMission() {
+                    return Arrays.asList((BioticTypes.v1_4.MissionType) result);
+                }
+            };
+        }
+        return result;
     }
 
     /**
@@ -98,4 +116,5 @@ public class IO {
         m.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, Boolean.TRUE);
         m.marshal(data, stream);
     }
+
 }

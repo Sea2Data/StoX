@@ -27,9 +27,11 @@ import org.junit.Test;
 //@Igore
 public class ConvertBiotic {
 
-    //@Test
+    @Test
     public void convert() {
-        String fName = "C:\\Users\\aasmunds\\workspace\\stox\\project\\ECA_sild_2015\\input\\biotic\\2015_biotic.xml";
+        String fName = "C:\\Users\\aasmunds\\workspace\\stox\\project\\Barents Sea Beaked redfish and Sebastes sp in Subareas I and II bottom trawl index in winter_2009\\input\\biotic\\biotic_cruiseNumber_0104_2009_UANA_NANSE_Fridtjof+Nansen.xml";
+        BioticConverter.convertBioticFileToV3(fName, "C:\\temp\\test.xml");
+        //fName = "C:\\Users\\aasmunds\\workspace\\stox\\project\\ECA_sild_2015\\input\\biotic\\2015_biotic.xml";
         BioticConverter.convertBioticFileToV3(fName, "C:\\temp\\2015_biotic3.xml");
         BioticConverter.convertBioticFileToV3("C:\\temp\\4-2010-1173-4.xml", "C:\\temp\\4-2010-1173-4(v3).xml");
         BioticConverter.convertBioticFileToV3("C:\\temp\\4-2010-1173-4.xml", "C:\\temp\\4-2010-1173-4(v3).xml");
