@@ -182,7 +182,7 @@ public class ConvertBarentsHavTransects {
             suAsg.clear();
             bAsg.clear();
             List<DistanceBO> distList = bl.getProcessByFunctionName(Functions.FN_FILTERACOUSTIC).getDataStorage().getData();
-            List<MissionBO> fList = bl.getProcessByFunctionName(Functions.FN_READBIOTICXML).getDataStorage().getData();
+            List<MissionBO> mList = bl.getProcessByFunctionName(Functions.FN_READBIOTICXML).getDataStorage().getData();
             Map<String, Set<Transect>> trgrp = tlist.stream().
                     collect(Collectors.groupingBy(Transect::getTransectKey, Collectors.toSet()));
 
@@ -227,7 +227,7 @@ public class ConvertBarentsHavTransects {
                                     if (ser == null) {
                                         return;
                                     }
-                                    FishstationBO bo = BioticUtils.findStationBySerialNo(fList, ser);
+                                    FishstationBO bo = BioticUtils.findStationBySerialNo(mList, ser);
                                     if (bo == null) {
                                         System.out.println("Stratum " + stratum + ", Serienr " + ser + " not found in data");
                                     }
@@ -324,11 +324,11 @@ public class ConvertBarentsHavTransects {
                 .filter(d -> {
                     return st.stream().filter(fs -> {
                         // return true if station makes the distance not account for in transects.
-                        if (fs.getFs().getSamplequality() != null && fs.getFs().getSamplequality().equals("2")) {
+                        if (fs.bo().getSamplequality() != null && fs.bo().getSamplequality().equals("2")) {
                             // exception for trawling by registration
                             return false;
                         }
-                        Coordinate fPos = new Coordinate(fs.getFs().getLongitudestart(), fs.getFs().getLatitudestart());
+                        Coordinate fPos = new Coordinate(fs.bo().getLongitudestart(), fs.bo().getLatitudestart());
                         Coordinate dPos = distPos.get(d);
                         Double gcDist = JTSUtils.gcircledist(fPos, dPos);
                         // inside short radius (2-3 nm)

@@ -49,12 +49,12 @@ public class BioticCovData extends AbstractFunction {
         for (MissionBO ms : bioticData) {
             for (FishstationBO fs : ms.getFishstationBOs()) {
                 // Filter station against covariates
-                LocalDate d = fs.getFs().getStationstartdate();
+                LocalDate d = fs.bo().getStationstartdate();
                 String tempKey = CovariateUtils.getTemporalFullKey(Functions.SOURCETYPE_BIOTIC, d, tempM);
                 if (tempKey == null) {
                     tempKey = "";
                 }
-                String gear = fs.getFs().getGear();
+                String gear = fs.bo().getGear();
                 String gearKey = CovariateUtils.getCovKeyByDefElm(Functions.SOURCETYPE_BIOTIC, gear, gearM, true);
                 if (gearKey == null) {
                     gearKey = "";
@@ -65,7 +65,7 @@ public class BioticCovData extends AbstractFunction {
                 if (spatialKey == null) {
                     spatialKey = "";
                 }
-                String platformKey = fs.getFs().getCatchplatform();
+                String platformKey = fs.bo().getCatchplatform();
                 if (platformKey == null) {
                     platformKey = "";
                 }

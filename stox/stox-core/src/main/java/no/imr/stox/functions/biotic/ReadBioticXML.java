@@ -57,7 +57,7 @@ public class ReadBioticXML extends AbstractFunction {
             File xml = new File(fileName);
             Biotic3Handler instance = new Biotic3Handler();
             MissionsType result = instance.read(xml);
-            connectBioticV3ToBO(result.getMission(), stations);
+            connectBioticV3ToBO(result.getMission(), stations, model);
         } catch (Exception e) {
 
         }
@@ -70,7 +70,7 @@ public class ReadBioticXML extends AbstractFunction {
         }*/
     }
 
-    private void connectBioticV3ToBO(List<MissionType> mission, List<MissionBO> stations) {
+    private void connectBioticV3ToBO(List<MissionType> mission, List<MissionBO> stations, IModel model) {
         for (MissionType mt : mission) {
             MissionBO mbo = new MissionBO(mt);
             stations.add(mbo);
@@ -84,7 +84,15 @@ public class ReadBioticXML extends AbstractFunction {
                             ibo.addAgeDetermination(a);
                         }
                     }
+
                 }
+            }
+            if (mbo.bo().getCruise() == null) {
+                // set default cruise as missiontype-year if not already set
+                boolean useMissionTypeInCruiseTag = model.getProject().getResourceVersion() > 1.26;
+                String mtPref = useMissionTypeInCruiseTag ? mbo.bo().getMissiontype() + "-" : "";
+                String currentCruise = mtPref + mbo.bo().getStartyear();
+                mbo.bo().setCruise(currentCruise);
             }
         }
     }

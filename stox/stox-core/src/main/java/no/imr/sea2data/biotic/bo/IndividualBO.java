@@ -8,36 +8,26 @@ import java.util.List;
 import no.imr.sea2data.imrbase.math.Calc;
 import no.imr.stox.functions.utils.StoXMath;
 
-/**
- *
- * @author oddrune
- */
-public class IndividualBO implements Serializable {
 
-    private IndividualType ii;
+public class IndividualBO extends BaseBO implements Serializable {
 
-    private CatchSampleBO catchsample;
+
     private List<AgeDeterminationBO> ageDeterminationBOs = new ArrayList<>();
     private Double individualweightG;
     private Double lengthCM;
 
     
-    private IndividualBO(CatchSampleBO sampleF) {
-        this.catchsample = sampleF;
-    }
-
     public IndividualBO(CatchSampleBO sampleF, IndividualType i) {
-        this(sampleF);
-        this.ii = i;
+        super(sampleF, i);
         recache();
     }
 
-    public IndividualType getI() {
-        return ii;
+    public IndividualType bo() {
+        return (IndividualType)bo;
     }
 
     public IndividualBO(CatchSampleBO sampleF, IndividualBO bo) {
-        this(sampleF, bo.getI());
+        this(sampleF, bo.bo());
         for (AgeDeterminationBO aBO : bo.getAgeDeterminationBOs()) {
             AgeDeterminationBO agBO = new AgeDeterminationBO(this, aBO);
             ageDeterminationBOs.add(agBO);
@@ -45,17 +35,17 @@ public class IndividualBO implements Serializable {
     }
     
     private void recache() {
-        this.lengthCM = Calc.roundTo(StoXMath.mToCM(ii.getLength()), 8);
-        this.individualweightG = Calc.roundTo(StoXMath.kgToGrams(ii.getIndividualweight()), 8);
+        this.lengthCM = Calc.roundTo(StoXMath.mToCM(bo().getLength()), 8);
+        this.individualweightG = Calc.roundTo(StoXMath.kgToGrams(bo().getIndividualweight()), 8);
     }
 
     public void setLength(Double length) {
-        ii.setLength(length);
+        bo().setLength(length);
         recache();
     }
 
     public void setIndividualweight(Double individualweight) {
-        ii.setIndividualweight(individualweight);
+        bo().setIndividualweight(individualweight);
         recache();
     }
 
@@ -68,39 +58,39 @@ public class IndividualBO implements Serializable {
     }
 
     public CatchSampleBO getCatchSample() {
-        return this.catchsample;
+        return (CatchSampleBO)getParent();
     }
 
     public Integer getAge() {
-        return acquireAgeDet().getAgedet().getAge();
+        return acquireAgeDet().bo().getAge();
     }
 
     public Object getSpawningage() {
-        return acquireAgeDet().getAgedet().getSpawningage();
+        return acquireAgeDet().bo().getSpawningage();
     }
 
     public Object getSpawningzones() {
-        return acquireAgeDet().getAgedet().getSpawningzones();
+        return acquireAgeDet().bo().getSpawningzones();
     }
 
     public Object getReadability() {
-        return acquireAgeDet().getAgedet().getReadability();
+        return acquireAgeDet().bo().getReadability();
     }
 
     public Object getOtolithtype() {
-        return acquireAgeDet().getAgedet().getOtolithtype();
+        return acquireAgeDet().bo().getOtolithtype();
     }
 
     public Object getOtolithedge() {
-        return acquireAgeDet().getAgedet().getOtolithedge();
+        return acquireAgeDet().bo().getOtolithedge();
     }
 
     public Object getOtolithcentre() {
-        return acquireAgeDet().getAgedet().getOtolithcentre();
+        return acquireAgeDet().bo().getOtolithcentre();
     }
 
     public Object getCalibration() {
-        return acquireAgeDet().getAgedet().getCalibration();
+        return acquireAgeDet().bo().getCalibration();
     }
 
     @Override
@@ -130,7 +120,7 @@ public class IndividualBO implements Serializable {
     }
 
     public String getKey() {
-        return (catchsample != null ? catchsample.getKey() + "/" : "") + (ii.getSpecimenid() != null ? ii.getSpecimenid() : "");
+        return (getCatchSample() != null ? getCatchSample().getKey() + "/" : "") + (bo().getSpecimenid() != null ? bo().getSpecimenid() : "");
     }
 
 }

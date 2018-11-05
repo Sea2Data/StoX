@@ -5,34 +5,23 @@ import BioticTypes.v3.IndividualType;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- *
- * @author oddrune
- */
-public class CatchSampleBO {
 
-    CatchsampleType cs;
+public class CatchSampleBO extends BaseBO {
 
-    private FishstationBO fishstationBO;
     final private List<IndividualBO> individualBOs = new ArrayList<>();
     private String specCat;
 
-    private CatchSampleBO(FishstationBO fishstationBO) {
-        this.fishstationBO = fishstationBO;
-    }
-
     public CatchSampleBO(FishstationBO fsBO, CatchsampleType cs) {
-        this(fsBO);
-        this.cs = cs;
+        super(fsBO, cs);
     }
 
     public CatchSampleBO(FishstationBO fsBO, CatchSampleBO bo) {
-        this(fsBO, bo.getCs());
+        this(fsBO, bo.bo());
         specCat = bo.getSpecCat();
     }
 
-    public CatchsampleType getCs() {
-        return cs;
+    public CatchsampleType bo() {
+        return (CatchsampleType) bo;
     }
 
     public List<IndividualBO> getIndividualBOs() {
@@ -42,7 +31,7 @@ public class CatchSampleBO {
     public IndividualBO addIndividual(IndividualType i) {
         if(i == null) {
             i = new IndividualType();
-            //i.setParent(getCs());
+            //i.setParent(bo());
         }
         IndividualBO bo = new IndividualBO(this, i);
         getIndividualBOs().add(bo);
@@ -50,7 +39,7 @@ public class CatchSampleBO {
     }
 
     public String getKey() {
-        return fishstationBO.getKey() + "/" + getSpeciesKey() + "/" + cs.getCatchpartnumber();
+        return getFishstation().getKey() + "/" + getSpeciesKey() + "/" + bo().getCatchpartnumber();
     }
 
     @Override
@@ -59,7 +48,7 @@ public class CatchSampleBO {
     }
 
     public String getSpeciesTableKey() {
-        return cs.getCommonname() != null && !cs.getCommonname().isEmpty() ? cs.getCommonname() : cs.getCatchcategory();
+        return bo().getCommonname() != null && !bo().getCommonname().isEmpty() ? bo().getCommonname() : bo().getCatchcategory();
     }
 
     /**
@@ -81,12 +70,12 @@ public class CatchSampleBO {
         this.specCat = specCat;
     }
 
-    public FishstationBO getStationBO() {
-        return fishstationBO;
+    public FishstationBO getFishstation() {
+        return (FishstationBO)getParent();
     }
 
     public String getSpeciesKey() {
-        return (cs.getCommonname() != null && !cs.getCommonname().isEmpty() ? cs.getCommonname() : cs.getCatchcategory());
+        return bo().getCommonname() != null && !bo().getCommonname().isEmpty() ? bo().getCommonname() : bo().getCatchcategory();
     }
 
 }

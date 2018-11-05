@@ -54,14 +54,14 @@ public class StationLengthDist extends AbstractFunction {
                 Double distanceWFac = 1.0;
                 // Standardize to 1 NM if NORMLengthDist
                 if (normToDist) {
-                    distanceWFac = StoXMath.raiseFac(distanceWFac, fs.getFs().getDistance());
+                    distanceWFac = StoXMath.raiseFac(distanceWFac, fs.bo().getDistance());
                 }
                 String observation = fs.getKey(); // Using fishstation key as row
                 for (CatchSampleBO s : fs.getCatchSampleBOs()) {
                     String speciesCat = s.getSpeciesCatTableKey(); // Using taxa as group
                     // Standardize sample to total catch
-                    Double sampleWFac = StoXMath.raiseFac(s.getCs().getCatchweight(), s.getCs().getLengthsampleweight());
-                    if (s.getIndividualBOs().isEmpty() && (s.getCs().getLengthsampleweight() != null && s.getCs().getLengthsampleweight() > 0d || s.getCs().getLengthsamplecount() != null && s.getCs().getLengthsamplecount() > 0d)) {
+                    Double sampleWFac = StoXMath.raiseFac(s.bo().getCatchweight(), s.bo().getLengthsampleweight());
+                    if (s.getIndividualBOs().isEmpty() && (s.bo().getLengthsampleweight() != null && s.bo().getLengthsampleweight() > 0d || s.bo().getLengthsamplecount() != null && s.bo().getLengthsamplecount() > 0d)) {
                         logger.log("Warning: Length distr. not calculated because of missing length sample individuals in " + s.getKey());
                         continue;
                     }
@@ -70,7 +70,7 @@ public class StationLengthDist extends AbstractFunction {
                             // Standardize sample to total catch is not needed, the percent (shape) of the LFQ is given.
                             sampleWFac = 1.0; // not needed
                         } else {
-                            sampleWFac = ImrMath.safeDivide(s.getCs().getCatchcount(), s.getCs().getLengthsamplecount());
+                            sampleWFac = ImrMath.safeDivide(s.bo().getCatchcount(), s.bo().getLengthsamplecount());
                             if (sampleWFac == null) {
                                 logger.log("Warning: Length distr. not calculated because of missing weight or sample weight in " + s.getKey());
                                 continue;

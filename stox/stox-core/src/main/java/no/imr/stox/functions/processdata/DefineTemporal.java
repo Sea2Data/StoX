@@ -46,27 +46,31 @@ public class DefineTemporal extends AbstractFunction {
         ProcessDataBO pd = (ProcessDataBO) input.get(Functions.PM_DEFINETEMPORAL_PROCESSDATA);
         String defMethod = (String) input.get(Functions.PM_DEFINETEMPORAL_DEFINITIONMETHOD);
         ILogger logger = (ILogger) input.get(Functions.PM_LOGGER);
-        if (defMethod == null || defMethod.equals(Functions.DEFINITIONMETHOD_USEPROCESSDATA)) {
-            // Use existing, do not read from file.
-            return pd;
-        }
-        if (defMethod.equals(Functions.DEFINITIONMETHOD_RESOURCEFILE)) {
-            // Future: Read from file into process data.
-            return pd;
-        }
         // Default handling (Define by given time interval:
         String sourceType = (String) input.get(Functions.PM_DEFINETEMPORAL_SOURCETYPE);
         String timeInterval = (String) input.get(Functions.PM_DEFINETEMPORAL_TIMEINTERVAL);
         Boolean seasonal = Conversion.safeObjectToBoolean((Boolean) input.get(Functions.PM_DEFINETEMPORAL_SEASONAL));
         List<SluttSeddel> landingData = (List) input.get(Functions.PM_DEFINETEMPORAL_LANDINGDATA);
         List<MissionBO> bioticData = (List) input.get(Functions.PM_DEFINETEMPORAL_BIOTICDATA);
-        MatrixBO covM = AbndEstProcessDataUtil.getTemporal(pd);
-        MatrixBO m = covM.getRowValueAsMatrix(sourceType);
-        MatrixBO covParam = AbndEstProcessDataUtil.getCovParam(pd);
         String covariateType = (String) input.get(Functions.PM_DEFINETEMPORAL_COVARIATETYPE);
-        covParam.setRowColValue(AbndEstProcessDataUtil.TABLE_TEMPORAL, Functions.PM_DEFINETEMPORAL_COVARIATETYPE, covariateType);
+
+        // Cov param
+        MatrixBO covParam = AbndEstProcessDataUtil.getCovParam(pd);
+        MatrixBO m = covParam.getRowValueAsMatrix(AbndEstProcessDataUtil.TABLE_TEMPORAL);
         if (m != null) {
-            m.clear(); // Clear covariates 
+            m.clear(); // Clear cov param
+        }
+        covParam.setRowColValue(AbndEstProcessDataUtil.TABLE_TEMPORAL, Functions.PM_DEFINETEMPORAL_COVARIATETYPE, covariateType);
+        
+        // Covariate
+        MatrixBO covM = AbndEstProcessDataUtil.getTemporal(pd);
+        if (defMethod.equals(Functions.DEFINITIONMETHOD_USEPROCESSDATA)) {
+            // Use existing, do not read from file.
+            return pd;
+        } 
+        m = covM.getRowValueAsMatrix(sourceType);
+        if (m != null) {
+            m.clear(); 
         }
         if (defMethod.equals(Functions.DEFINITIONMETHOD_COPYFROMLANDING)) {
             if (sourceType.equals(Functions.SOURCETYPE_LANDING)) {
@@ -112,7 +116,7 @@ public class DefineTemporal extends AbstractFunction {
                 if (bioticData != null) {
                     for (MissionBO ms : bioticData) {
                         for (FishstationBO fs : ms.getFishstationBOs()) {
-                            String cov = getCovariateFromDate(fs.getFs().getStationstartdate(), timeInterval, seasonal);
+                            String cov = getCovariateFromDate(fs.bo().getStationstartdate(), timeInterval, seasonal);
                             if (cov != null) {
                                 covs.add(cov);
                             }

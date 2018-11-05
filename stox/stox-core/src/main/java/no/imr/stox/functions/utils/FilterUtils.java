@@ -36,77 +36,77 @@ public final class FilterUtils {
         if (o instanceof FishstationBO) {
             FishstationBO fs = (FishstationBO) o;
             context.set("fs", fs);
-            context.set("missiontype", fs.getMission().getMs().getMissiontype());
-            context.set("cruise", fs.getMission().getMs().getCruise());
-            context.set("platform", fs.getFs().getCatchplatform());
-            context.set("nation", fs.getFs().getNation());
-            context.set("platform", fs.getFs().getCatchplatform());
-            context.set("startdate", fs.getFs().getStationstartdate());
-            context.set("station", fs.getFs().getStation());
-            context.set("serialno", fs.getFs().getSerialnumber());
-            context.set("fishstationtype", fs.getFs().getStationtype());
-            context.set("latitudestart", fs.getFs().getLatitudestart());
-            context.set("longitudestart", fs.getFs().getLongitudestart());
-            context.set("system", fs.getFs().getSystem());
-            context.set("area", fs.getFs().getArea());
-            context.set("location", fs.getFs().getLocation());
-            context.set("bottomdepthstart", fs.getFs().getBottomdepthstart());
-            context.set("bottomdepthstop", fs.getFs().getBottomdepthstop());
-            context.set("equipmentnumber", fs.getFs().getGearno());
-            context.set("gearno", fs.getFs().getGearno());
-            context.set("gear", fs.getFs().getGear());
-            context.set("gearcount", fs.getFs().getGearcount());
-            context.set("directiongps", fs.getFs().getDirection());
-            context.set("gearspeed", fs.getFs().getVesselspeed());
-            context.set("starttime", fs.getFs().getStationstarttime());
-            context.set("startlog", fs.getFs().getLogstart());
-            context.set("stoptime", fs.getFs().getStationstoptime());
-            context.set("distance", fs.getFs().getDistance());
-            context.set("gearcondition", fs.getFs().getGearcondition());
-            context.set("trawlquality", fs.getFs().getSamplequality());
-            context.set("fishingdepthmax", fs.getFs().getFishingdepthmax());
-            context.set("fishingdepthmin", fs.getFs().getFishingdepthmin());
-            context.set("fishingdepthcount", fs.getFs().getFishingdepthcount());
-            context.set("trawlopening", fs.getFs().getVerticaltrawlopening());
-            context.set("trawlopeningSD", fs.getFs().getVerticaltrawlopeningsd());
-            context.set("doorspread", fs.getFs().getTrawldoorspread());
-            context.set("doorspreadSD", fs.getFs().getTrawldoorspreadsd());
-            context.set("wirelength", fs.getFs().getWirelength());
-            context.set("soaktime", fs.getFs().getSoaktime());
-            /*context.set("flowcount", fs.getFs().getFlowCount());
-            context.set("flowconst", fs.getFs().getFlowConst());*/
-            context.set("comment", fs.getFs().getStationcomment());
+            context.set("missiontype", fs.getMission().bo().getMissiontype());
+            context.set("cruise", fs.getMission().bo().getCruise());
+            context.set("platform", fs.bo().getCatchplatform());
+            context.set("nation", fs.bo().getNation());
+            context.set("platform", fs.bo().getCatchplatform());
+            context.set("startdate", fs.bo().getStationstartdate());
+            context.set("station", fs.bo().getStation());
+            context.set("serialno", fs.bo().getSerialnumber());
+            context.set("fishstationtype", fs.bo().getStationtype());
+            context.set("latitudestart", fs.bo().getLatitudestart());
+            context.set("longitudestart", fs.bo().getLongitudestart());
+            context.set("system", fs.bo().getSystem());
+            context.set("area", fs.bo().getArea());
+            context.set("location", fs.bo().getLocation());
+            context.set("bottomdepthstart", fs.bo().getBottomdepthstart());
+            context.set("bottomdepthstop", fs.bo().getBottomdepthstop());
+            context.set("equipmentnumber", fs.bo().getGearno());
+            context.set("gearno", fs.bo().getGearno());
+            context.set("gear", fs.bo().getGear());
+            context.set("gearcount", fs.bo().getGearcount());
+            context.set("directiongps", fs.bo().getDirection());
+            context.set("gearspeed", fs.bo().getVesselspeed());
+            context.set("starttime", fs.bo().getStationstarttime());
+            context.set("startlog", fs.bo().getLogstart());
+            context.set("stoptime", fs.bo().getStationstoptime());
+            context.set("distance", fs.bo().getDistance());
+            context.set("gearcondition", fs.bo().getGearcondition());
+            context.set("trawlquality", fs.bo().getSamplequality());
+            context.set("fishingdepthmax", fs.bo().getFishingdepthmax());
+            context.set("fishingdepthmin", fs.bo().getFishingdepthmin());
+            context.set("fishingdepthcount", fs.bo().getFishingdepthcount());
+            context.set("trawlopening", fs.bo().getVerticaltrawlopening());
+            context.set("trawlopeningSD", fs.bo().getVerticaltrawlopeningsd());
+            context.set("doorspread", fs.bo().getTrawldoorspread());
+            context.set("doorspreadSD", fs.bo().getTrawldoorspreadsd());
+            context.set("wirelength", fs.bo().getWirelength());
+            context.set("soaktime", fs.bo().getSoaktime());
+            /*context.set("flowcount", fs.bo().getFlowCount());
+            context.set("flowconst", fs.bo().getFlowConst());*/
+            context.set("comment", fs.bo().getStationcomment());
             // Derived attributes
-            context.set("serialno", fs.getFs().getSerialnumber());
-            context.set("stationtype", fs.getFs().getStationtype());
+            context.set("serialno", fs.bo().getSerialnumber());
+            context.set("stationtype", fs.bo().getStationtype());
             // period as integer: 20140101
-            if (fs.getFs().getStationstartdate() != null) {
-                context.set("year", IMRdate.getYear(fs.getFs().getStationstartdate()));
-                Integer period = IMRdate.getYear(fs.getFs().getStationstartdate()) * 10000 + IMRdate.getMonth(fs.getFs().getStationstartdate()) * 100
-                        + IMRdate.getDayOfMonth(fs.getFs().getStationstartdate());
+            if (fs.bo().getStationstartdate() != null) {
+                context.set("year", IMRdate.getYear(fs.bo().getStationstartdate()));
+                Integer period = IMRdate.getYear(fs.bo().getStationstartdate()) * 10000 + IMRdate.getMonth(fs.bo().getStationstartdate()) * 100
+                        + IMRdate.getDayOfMonth(fs.bo().getStationstartdate());
                 context.set("period", period);
             }
         } else if (o instanceof CatchSampleBO) {
             CatchSampleBO cs = (CatchSampleBO) o;
             addCatchFilter(context, cs);
-            context.set("samplenumber", cs.getCs().getCatchpartnumber());
-            context.set("sampletype", cs.getCs().getSampletype());
-            context.set("group", cs.getCs().getGroup());
-            context.set("conservation", cs.getCs().getConservation());
-            context.set("measurement", cs.getCs().getCatchproducttype());
-            context.set("weight", cs.getCs().getCatchweight());
-            context.set("count", cs.getCs().getCatchcount());
-            context.set("samplemeasurement", cs.getCs().getSampleproducttype());
-            context.set("lengthmeasurement", cs.getCs().getLengthmeasurement());
-            context.set("lengthsampleweight", cs.getCs().getLengthsampleweight());
-            context.set("lengthsamplecount", cs.getCs().getLengthsamplecount());
-            context.set("individualsamplecount", cs.getCs().getSpecimensamplecount());
-            context.set("agesample", cs.getCs().getAgingstructure());
-            context.set("parasite", cs.getCs().getParasite());
-            context.set("stomach", cs.getCs().getStomach());
-            context.set("genetics", cs.getCs().getTissuesample());
-            context.set("nonbiological", cs.getCs().getForeignobject());
-            context.set("comment", cs.getCs().getCatchcomment());
+            context.set("samplenumber", cs.bo().getCatchpartnumber());
+            context.set("sampletype", cs.bo().getSampletype());
+            context.set("group", cs.bo().getGroup());
+            context.set("conservation", cs.bo().getConservation());
+            context.set("measurement", cs.bo().getCatchproducttype());
+            context.set("weight", cs.bo().getCatchweight());
+            context.set("count", cs.bo().getCatchcount());
+            context.set("samplemeasurement", cs.bo().getSampleproducttype());
+            context.set("lengthmeasurement", cs.bo().getLengthmeasurement());
+            context.set("lengthsampleweight", cs.bo().getLengthsampleweight());
+            context.set("lengthsamplecount", cs.bo().getLengthsamplecount());
+            context.set("individualsamplecount", cs.bo().getSpecimensamplecount());
+            context.set("agesample", cs.bo().getAgingstructure());
+            context.set("parasite", cs.bo().getParasite());
+            context.set("stomach", cs.bo().getStomach());
+            context.set("genetics", cs.bo().getTissuesample());
+            context.set("nonbiological", cs.bo().getForeignobject());
+            context.set("comment", cs.bo().getCatchcomment());
         } else if (o instanceof IndividualBO) {
             IndividualBO ii = (IndividualBO) o;
             if (ii.getCatchSample() != null) {
@@ -118,13 +118,13 @@ public final class FilterUtils {
             context.set("length", ii.getLengthCM());
 
             // old field names support
-            context.set("no", ii.getI().getSpecimenid());
-            context.set("weightmethod", ii.getI().getIndividualproducttype());
-            context.set("lengthunit", ii.getI().getLengthresolution());
-            context.set("stage", ii.getI().getMaturationstage());
-            context.set("digestdeg", ii.getI().getDigestion());
-            context.set("vertebrae", ii.getI().getVertebraecount());
-            context.set("comment", ii.getI().getIndividualcomment());
+            context.set("no", ii.bo().getSpecimenid());
+            context.set("weightmethod", ii.bo().getIndividualproducttype());
+            context.set("lengthunit", ii.bo().getLengthresolution());
+            context.set("stage", ii.bo().getMaturationstage());
+            context.set("digestdeg", ii.bo().getDigestion());
+            context.set("vertebrae", ii.bo().getVertebraecount());
+            context.set("comment", ii.bo().getIndividualcomment());
 
             // age determination filter on individual
             context.set("age", ii.getAge());
@@ -137,21 +137,21 @@ public final class FilterUtils {
             context.set("calibration", ii.getCalibration());
             
             // Individual field names
-            context.set("fat", ii.getI().getFat());
-            context.set("sex", ii.getI().getSex());
-            context.set("specialstage", ii.getI().getSpecialstage());
-            context.set("stomachfillfield", ii.getI().getStomachfillfield());
-            context.set("liver", ii.getI().getLiver());
-            context.set("liverparasite", ii.getI().getLiverparasite());
-            context.set("gillworms", ii.getI().getGillworms());
-            context.set("swollengills", ii.getI().getSwollengills());
-            context.set("fungusheart", ii.getI().getFungusheart());
-            context.set("fungusspores", ii.getI().getFungusspores());
-            context.set("fungusouter", ii.getI().getFungusouter());
-            context.set("blackspot", ii.getI().getBlackspot());
-            context.set("gonadweight", ii.getI().getGonadweight());
-            context.set("liverweight", ii.getI().getLiverweight());
-            context.set("stomachweight", ii.getI().getStomachweight());
+            context.set("fat", ii.bo().getFat());
+            context.set("sex", ii.bo().getSex());
+            context.set("specialstage", ii.bo().getSpecialstage());
+            context.set("stomachfillfield", ii.bo().getStomachfillfield());
+            context.set("liver", ii.bo().getLiver());
+            context.set("liverparasite", ii.bo().getLiverparasite());
+            context.set("gillworms", ii.bo().getGillworms());
+            context.set("swollengills", ii.bo().getSwollengills());
+            context.set("fungusheart", ii.bo().getFungusheart());
+            context.set("fungusspores", ii.bo().getFungusspores());
+            context.set("fungusouter", ii.bo().getFungusouter());
+            context.set("blackspot", ii.bo().getBlackspot());
+            context.set("gonadweight", ii.bo().getGonadweight());
+            context.set("liverweight", ii.bo().getLiverweight());
+            context.set("stomachweight", ii.bo().getStomachweight());
         } else if (o instanceof DistanceBO) {
             DistanceBO d = (DistanceBO) o;
             if (d.getStart_time() != null) {
@@ -295,8 +295,8 @@ public final class FilterUtils {
         if (cs == null) {
             return;
         }
-        context.set("species", cs.getCs().getCatchcategory() != null ? cs.getCs().getCatchcategory().toLowerCase() : null);
-        context.set("noname", cs.getCs().getCommonname() != null ? cs.getCs().getCommonname().toLowerCase() : null);
-        context.set("aphia", cs.getCs().getAphia());
+        context.set("species", cs.bo().getCatchcategory() != null ? cs.bo().getCatchcategory().toLowerCase() : null);
+        context.set("noname", cs.bo().getCommonname() != null ? cs.bo().getCommonname().toLowerCase() : null);
+        context.set("aphia", cs.bo().getAphia());
     }
 }

@@ -65,11 +65,11 @@ public class FilterBiotic extends AbstractFunction {
         Expression individualExpression = engine.createExpression(individualExpr.toLowerCase());
         JexlContext ctx = new MapContext();
         // Old structures:
-        List<MissionBO> allFishstations = (List<MissionBO>) input.get(Functions.PM_FILTERBIOTIC_BIOTICDATA);
-        List<MissionBO> fishstations = new ArrayList<>();
-        for (MissionBO ms : allFishstations) {
+        List<MissionBO> origMissions = (List<MissionBO>) input.get(Functions.PM_FILTERBIOTIC_BIOTICDATA);
+        List<MissionBO> missions = new ArrayList<>();
+        for (MissionBO ms : origMissions) {
             MissionBO msF = new MissionBO(ms);
-            fishstations.add(msF);
+            missions.add(msF);
             for (FishstationBO fs : ms.getFishstationBOs()) {
                 FilterUtils.resolveContext(ctx, fs);
                 if (!FilterUtils.evaluate(ctx, stationExpression)) {
@@ -96,6 +96,6 @@ public class FilterBiotic extends AbstractFunction {
                 }
             }
         }
-        return fishstations;
+        return missions;
     }
 }

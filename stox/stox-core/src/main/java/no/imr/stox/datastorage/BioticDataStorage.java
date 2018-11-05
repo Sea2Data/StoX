@@ -75,14 +75,14 @@ public class BioticDataStorage extends FileDataStorage {
                         "flowconst", "comment")));
                 for (MissionBO ms : (List<MissionBO>) (List) list) {
                     for (FishstationBO fs : ms.getFishstationBOs()) {
-                        ImrIO.write(wr, ExportUtil.carrageReturnLineFeed(ExportUtil.tabbed(fs.getMission().getMs().getMissiontype(), fs.getMission().getMs().getCruise(), fs.getFs().getSerialnumber(), fs.getFs().getCatchplatform(), IMRdate.formatDate(fs.getFs().getStationstartdate()),
-                                fs.getFs().getStation(), fs.getFs().getStationtype(), Conversion.formatDoubletoDecimalString(fs.getFs().getLatitudestart(), 4),
-                                Conversion.formatDoubletoDecimalString(fs.getFs().getLongitudestart(), 4), fs.getFs().getSystem(), fs.getFs().getArea(),
-                                fs.getFs().getLocation(), fs.getStratum(), fs.getFs().getBottomdepthstart(), fs.getFs().getBottomdepthstop(), fs.getFs().getGear(), fs.getFs().getGearcount(), fs.getFs().getVesselspeed(),
-                                IMRdate.formatTime(fs.getFs().getStationstarttime()), fs.getFs().getLogstart(), IMRdate.formatTime(fs.getFs().getStationstoptime()),
-                                fs.getFs().getDistance(), fs.getFs().getGearcondition(), fs.getFs().getSamplequality(), fs.getFs().getFishingdepthmax(), fs.getFs().getFishingdepthmin(), fs.getFs().getFishingdepthcount(),
-                                fs.getFs().getVerticaltrawlopening(), fs.getFs().getTrawldoorspread(), fs.getFs().getLatitudeend(), fs.getFs().getLongitudeend(), fs.getFs().getWirelength(),
-                                IMRdate.formatDate(fs.getFs().getStationstopdate()), fs.getFs().getLogstop(), null, null, fs.getFs().getStationcomment())));
+                        ImrIO.write(wr, ExportUtil.carrageReturnLineFeed(ExportUtil.tabbed(fs.getMission().bo().getMissiontype(), fs.getMission().bo().getCruise(), fs.bo().getSerialnumber(), fs.bo().getCatchplatform(), IMRdate.formatDate(fs.bo().getStationstartdate()),
+                                fs.bo().getStation(), fs.bo().getStationtype(), Conversion.formatDoubletoDecimalString(fs.bo().getLatitudestart(), 4),
+                                Conversion.formatDoubletoDecimalString(fs.bo().getLongitudestart(), 4), fs.bo().getSystem(), fs.bo().getArea(),
+                                fs.bo().getLocation(), fs.getStratum(), fs.bo().getBottomdepthstart(), fs.bo().getBottomdepthstop(), fs.bo().getGear(), fs.bo().getGearcount(), fs.bo().getVesselspeed(),
+                                IMRdate.formatTime(fs.bo().getStationstarttime()), fs.bo().getLogstart(), IMRdate.formatTime(fs.bo().getStationstoptime()),
+                                fs.bo().getDistance(), fs.bo().getGearcondition(), fs.bo().getSamplequality(), fs.bo().getFishingdepthmax(), fs.bo().getFishingdepthmin(), fs.bo().getFishingdepthcount(),
+                                fs.bo().getVerticaltrawlopening(), fs.bo().getTrawldoorspread(), fs.bo().getLatitudeend(), fs.bo().getLongitudeend(), fs.bo().getWirelength(),
+                                IMRdate.formatDate(fs.bo().getStationstopdate()), fs.bo().getLogstop(), null, null, fs.bo().getStationcomment())));
                     }
                 }
                 break;
@@ -95,10 +95,10 @@ public class BioticDataStorage extends FileDataStorage {
                     for (FishstationBO fs : ms.getFishstationBOs()) {
                         for (CatchSampleBO s : fs.getCatchSampleBOs()) {
                             ImrIO.write(wr, ExportUtil.carrageReturnLineFeed(ExportUtil.tabbed(
-                                    /*IMRdate.getYear(fs.getFs().getStationstartdate(), true)*/fs.getMission().getMs().getCruise(), fs.getFs().getSerialnumber(), fs.getFs().getCatchplatform(),
-                                    s.getSpeciesCatTableKey(), s.getCs().getCatchcategory(), s.getCs().getCommonname(), s.getCs().getAphia(), s.getCs().getCatchpartnumber(), s.getCs().getSampletype(), s.getCs().getGroup(), s.getCs().getConservation(), s.getCs().getCatchproducttype(),
-                                    s.getCs().getCatchweight(), s.getCs().getCatchcount(), s.getCs().getSampleproducttype(), s.getCs().getLengthmeasurement(), s.getCs().getLengthsampleweight(),
-                                    s.getCs().getLengthsamplecount(), s.getCs().getSpecimensamplecount(), s.getCs().getParasite(), s.getCs().getStomach(), s.getCs().getTissuesample(), s.getCs().getCatchcomment())));
+                                    /*IMRdate.getYear(fs.bo().getStationstartdate(), true)*/fs.getMission().bo().getCruise(), fs.bo().getSerialnumber(), fs.bo().getCatchplatform(),
+                                    s.getSpeciesCatTableKey(), s.bo().getCatchcategory(), s.bo().getCommonname(), s.bo().getAphia(), s.bo().getCatchpartnumber(), s.bo().getSampletype(), s.bo().getGroup(), s.bo().getConservation(), s.bo().getCatchproducttype(),
+                                    s.bo().getCatchweight(), s.bo().getCatchcount(), s.bo().getSampleproducttype(), s.bo().getLengthmeasurement(), s.bo().getLengthsampleweight(),
+                                    s.bo().getLengthsamplecount(), s.bo().getSpecimensamplecount(), s.bo().getParasite(), s.bo().getStomach(), s.bo().getTissuesample(), s.bo().getCatchcomment())));
                         }
                     }
                 }

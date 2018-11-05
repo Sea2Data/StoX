@@ -38,7 +38,7 @@ public class SplitNASCAssignment extends AbstractFunction {
         ILogger logger = (ILogger) input.get(Functions.PM_LOGGER);
         IModel m = (IModel) input.get(Functions.PM_MODEL);
         ProcessDataBO pd = m.getProject().getProcessData();
-        List<MissionBO> fList = (List<MissionBO>) input.get(Functions.PM_SPLITNASCASSIGNMENT_BIOTICDATA);
+        List<MissionBO> missions = (List<MissionBO>) input.get(Functions.PM_SPLITNASCASSIGNMENT_BIOTICDATA);
         List<DistanceBO> distances = (List<DistanceBO>) input.get(Functions.PM_SPLITNASCASSIGNMENT_ACOUSTICDATA);
         Double radius = (Double) input.get(Functions.PM_SPLITNASCASSIGNMENT_RADIUS);
         // Transfer the nasc resolution to assignment resolution:
@@ -58,7 +58,7 @@ public class SplitNASCAssignment extends AbstractFunction {
         suAsg.clear();
         Integer asg = 0;
         Boolean edsuIsAsigned;
-        if (fList.isEmpty()) {
+        if (missions.isEmpty()) {
             return pd;
         }
         for (DistanceBO distBO : distances) {
@@ -67,9 +67,9 @@ public class SplitNASCAssignment extends AbstractFunction {
             String edsu = distBO.getKey();
             edsuIsAsigned = false;
             Double minDist = Double.MAX_VALUE;
-            for (MissionBO ms : fList) {
+            for (MissionBO ms : missions) {
                 for (FishstationBO fs : ms.getFishstationBOs()) {
-                    Coordinate fPos = new Coordinate(fs.getFs().getLongitudestart(), fs.getFs().getLatitudestart());
+                    Coordinate fPos = new Coordinate(fs.bo().getLongitudestart(), fs.bo().getLatitudestart());
                     Double gcDist = JTSUtils.gcircledist(fPos, dPos);
                     minDist = Math.min(minDist, gcDist);
                     if (gcDist <= radius) {

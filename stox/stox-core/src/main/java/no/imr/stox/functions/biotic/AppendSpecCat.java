@@ -66,8 +66,8 @@ public class AppendSpecCat extends AbstractFunction {
                 if (m.isEmpty()) {
                     spec = specCat;
                 } else {
-                    if (c.getCs().getCommonname() != null) {
-                        String str = m.get(c.getCs().getCommonname().toLowerCase());
+                    if (c.bo().getCommonname() != null) {
+                        String str = m.get(c.bo().getCommonname().toLowerCase());
                         if (str != null) {
                             spec = str;
                         }

@@ -34,7 +34,7 @@ public class RectangleAssignment extends AbstractFunction {
     @Override
     public Object perform(Map<String, Object> input) {
         ProcessDataBO pd = (ProcessDataBO) input.get(Functions.PM_RECTANGLEASSIGNMENT_PROCESSDATA);
-        List<MissionBO> fs = (List<MissionBO>) input.get(Functions.PM_RECTANGLEASSIGNMENT_BIOTICDATA);
+        List<MissionBO> missions = (List<MissionBO>) input.get(Functions.PM_RECTANGLEASSIGNMENT_BIOTICDATA);
         Boolean useEx = (Boolean) input.get(Functions.PM_RECTANGLEASSIGNMENT_USEPROCESSDATA);
         String estLayerDef = (String) input.get(Functions.PM_RECTANGLEASSIGNMENT_ESTLAYERS);
         MatrixBO estLayer = AbndEstParamUtil.getEstLayerMatrixFromEstLayerDef(estLayerDef);
@@ -61,9 +61,9 @@ public class RectangleAssignment extends AbstractFunction {
                 Coordinate[] psuCoords = RectangleUtil.getCoordsByRectangleKey(psu);
                 String asgKey = asg.toString();
                 Boolean psuIsAssigned = false;
-                for (MissionBO m : fs) {
+                for (MissionBO m : missions) {
                     for (FishstationBO f : m.getFishstationBOs()) {
-                        Coordinate fPos = new Coordinate(f.getFs().getLongitudestart(), f.getFs().getLatitudestart());
+                        Coordinate fPos = new Coordinate(f.bo().getLongitudestart(), f.bo().getLatitudestart());
                         if (!JTSUtils.within(fPos, psuCoords)) {
                             continue;
                         }

@@ -45,7 +45,7 @@ public class TransectAssignmentTest {
 
     private Map<String, Object> getInput() {
         Map<String, Object> input = new HashMap<String, Object>();
-        input.put(Functions.PM_BIOSTATIONASSIGNMENT_BIOTICDATA, getFishStations());
+        input.put(Functions.PM_BIOSTATIONASSIGNMENT_BIOTICDATA, getMissions());
         ProcessDataBO pd = new ProcessDataBO();
         AbndEstProcessDataUtil.setStratumPolygon(pd, "1",true,  getStrataPlg());
         MatrixBO psuStrata = (MatrixBO) AbndEstProcessDataUtil.getPSUStrata(pd);
@@ -62,17 +62,17 @@ public class TransectAssignmentTest {
                 new Coordinate(0d, 0d), new Coordinate(2d, 0d), new Coordinate(2d, 2d), new Coordinate(0d, 2d)))));
     }
 
-    List<MissionBO> getFishStations() {
+    List<MissionBO> getMissions() {
         MissionBO mt = new MissionBO();
         FishstationBO f = mt.addFishstation(null);
-        f.getFs().setLongitudestart(1.1d);
-        f.getFs().setLatitudestart(0.9d);
-        f.getFs().setSerialnumber(1000);
+        f.bo().setLongitudestart(1.1d);
+        f.bo().setLatitudestart(0.9d);
+        f.bo().setSerialnumber(1000);
         
         f = mt.addFishstation(null);
-        f.getFs().setLongitudestart(2.9d);
-        f.getFs().setLatitudestart(0.9d);
-        f.getFs().setSerialnumber(1000);
+        f.bo().setLongitudestart(2.9d);
+        f.bo().setLatitudestart(0.9d);
+        f.bo().setSerialnumber(1000);
         return Arrays.asList(mt);
     }
 

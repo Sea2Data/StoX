@@ -182,44 +182,44 @@ public class DATRASDataStorage extends FileDataStorage {
                         "SwellDir", "SwellHeight", "SurTemp", "BotTemp", "SurSal", "BotSal", "ThermoCline", "ThClineDepth")));
                 for (MissionBO ms : list) {
                     for (FishstationBO fs : ms.getFishstationBOs()) {
-                        Integer sweep = getGOVSweepByEquipment(fs.getFs().getGear());
+                        Integer sweep = getGOVSweepByEquipment(fs.bo().getGear());
                         if (sweep == null) { // Sweep filter
                             // other gears have sweep == null...
                             continue;
                         }
                         // Filter other station types that blank (vanlig)
-                        if (!(fs.getFs().getStationtype() == null || fs.getFs().getStationtype().equals(""))) {
+                        if (!(fs.bo().getStationtype() == null || fs.bo().getStationtype().equals(""))) {
                             continue;
                         }
-                        if (fs.getFs().getStationstartdate() == null) {
+                        if (fs.bo().getStationstartdate() == null) {
                             continue;
                         }
-                        Integer year = IMRdate.getYear(fs.getFs().getStationstartdate());
-                        Integer month = IMRdate.getMonth(fs.getFs().getStationstartdate());
-                        Integer day = IMRdate.getDayOfMonth(fs.getFs().getStationstartdate());
+                        Integer year = IMRdate.getYear(fs.bo().getStationstartdate());
+                        Integer month = IMRdate.getMonth(fs.bo().getStationstartdate());
+                        Integer day = IMRdate.getDayOfMonth(fs.bo().getStationstartdate());
                         Integer quarter = (month - 1) / 3 + 1;
                         // Invalid also less/more than 5..90 min. og uten for 62 grader, evt kvartal.
-                        String haulVal = (fs.getFs().getGearcondition() == null || fs.getFs().getGearcondition().equals("1") || fs.getFs().getGearcondition().equals("2"))
-                                && (fs.getFs().getSamplequality() == null || fs.getFs().getSamplequality().equals("0") || fs.getFs().getSamplequality().equals("1")) ? "V" : "I";
+                        String haulVal = (fs.bo().getGearcondition() == null || fs.bo().getGearcondition().equals("1") || fs.bo().getGearcondition().equals("2"))
+                                && (fs.bo().getSamplequality() == null || fs.bo().getSamplequality().equals("0") || fs.bo().getSamplequality().equals("1")) ? "V" : "I";
 
                         ImrIO.write(wr, ExportUtil.carrageReturnLineFeed(ExportUtil.csv(// RecordType
                                 "HH",
                                 // Quarter
                                 quarter,
                                 // Country
-                                getTSCountryByIOC(fs.getFs().getNation()), //TODO reference list
+                                getTSCountryByIOC(fs.bo().getNation()), //TODO reference list
                                 // Ship
-                                getTSShipByPlatform(fs.getFs().getCatchplatform()), // TODO reference list
+                                getTSShipByPlatform(fs.bo().getCatchplatform()), // TODO reference list
                                 // Gear
                                 "GOV", // TODO reference list
                                 // SweepLngth
                                 sweep,
                                 // GearExp
-                                getGearExp(sweep, fs.getYear(), fs.getFs().getSerialnumber(), fs.getFs().getBottomdepthstart()), // TODO: S=Single, D=Double, -9 not given
+                                getGearExp(sweep, fs.getYear(), fs.bo().getSerialnumber(), fs.bo().getBottomdepthstart()), // TODO: S=Single, D=Double, -9 not given
                                 // DoorType
-                                "P", fs.getFs().getSerialnumber(),
+                                "P", fs.bo().getSerialnumber(),
                                 // HaulNo
-                                fs.getFs().getStation(),
+                                fs.bo().getStation(),
                                 // Year
                                 year,
                                 // Month
@@ -227,27 +227,27 @@ public class DATRASDataStorage extends FileDataStorage {
                                 // Day
                                 day,
                                 // TimeShot
-                                StringUtils.leftPad(IMRdate.formatTime(fs.getFs().getStationstarttime(), "HHmm"), 4, '0'),
+                                StringUtils.leftPad(IMRdate.formatTime(fs.bo().getStationstarttime(), "HHmm"), 4, '0'),
                                 // Stratum
                                 -9,
                                 // HaulDur
-                                Math.round(IMRdate.minutesDiffD(IMRdate.encodeLocalDateTime(fs.getFs().getStationstartdate(), fs.getFs().getStationstarttime()), IMRdate.encodeLocalDateTime(fs.getFs().getStationstopdate(), fs.getFs().getStationstoptime()))),
+                                Math.round(IMRdate.minutesDiffD(IMRdate.encodeLocalDateTime(fs.bo().getStationstartdate(), fs.bo().getStationstarttime()), IMRdate.encodeLocalDateTime(fs.bo().getStationstopdate(), fs.bo().getStationstoptime()))),
                                 // DayNight
                                 // 15 minutes before  official sunrise, 15 min after official sunset.
-                                IMRdate.isDayTime(IMRdate.encodeLocalDateTime(fs.getFs().getStationstartdate(), fs.getFs().getStationstarttime()), fs.getFs().getLatitudestart(),
-                                        fs.getFs().getLongitudestart()) ? "D" : "N",
+                                IMRdate.isDayTime(IMRdate.encodeLocalDateTime(fs.bo().getStationstartdate(), fs.bo().getStationstarttime()), fs.bo().getLatitudestart(),
+                                        fs.bo().getLongitudestart()) ? "D" : "N",
                                 // ShootLat
-                                unkD(fs.getFs().getLatitudestart(), "0.0000"),
+                                unkD(fs.bo().getLatitudestart(), "0.0000"),
                                 // ShootLong
-                                unkD(fs.getFs().getLongitudestart(), "0.0000"),
+                                unkD(fs.bo().getLongitudestart(), "0.0000"),
                                 // HaulLat
-                                unkD(fs.getFs().getLatitudeend(), "0.0000"),
+                                unkD(fs.bo().getLatitudeend(), "0.0000"),
                                 // HaulLong
-                                unkD(fs.getFs().getLongitudeend(), "0.0000"),
+                                unkD(fs.bo().getLongitudeend(), "0.0000"),
                                 // StatRec
-                                AreaUnits.getFDOmrLokFromPos(fs.getFs().getLatitudestart(), fs.getFs().getLongitudestart()),
+                                AreaUnits.getFDOmrLokFromPos(fs.bo().getLatitudestart(), fs.bo().getLongitudestart()),
                                 // Depth
-                                Math.round(fs.getFs().getBottomdepthstart()),
+                                Math.round(fs.bo().getBottomdepthstart()),
                                 //HaulVal
                                 haulVal,
                                 // TODO stasjon : match på logg mot toktlogger 5 nm, tid.
@@ -260,15 +260,15 @@ public class DATRASDataStorage extends FileDataStorage {
                                 1,
                                 // DataType
                                 "R",
-                                fs.getFs().getVerticaltrawlopening(),
+                                fs.bo().getVerticaltrawlopening(),
                                 // Rigging
                                 -9,
                                 // Tickler
                                 -9,
                                 // Distance
-                                unkO(fs.getFs().getDistance() != null ? fs.getFs().getDistance() * 1852 : null),
+                                unkO(fs.bo().getDistance() != null ? fs.bo().getDistance() * 1852 : null),
                                 // Warplngt
-                                unkO(fs.getFs().getWirelength()),
+                                unkO(fs.bo().getWirelength()),
                                 //Warpdia
                                 -9,
                                 //Warpden
@@ -278,7 +278,7 @@ public class DATRASDataStorage extends FileDataStorage {
                                 //DoorWgt
                                 1075,
                                 //DoorSpread
-                                unkD(fs.getFs().getTrawldoorspread(), "0.0"),
+                                unkD(fs.bo().getTrawldoorspread(), "0.0"),
                                 //WingSpread
                                 -9,
                                 //Buoyancy
@@ -288,9 +288,9 @@ public class DATRASDataStorage extends FileDataStorage {
                                 //WgtGroundRope
                                 -9,
                                 // Tow dir
-                                unkO(fs.getFs().getDirection() != null ? Math.round(fs.getFs().getDirection()) : null),
+                                unkO(fs.bo().getDirection() != null ? Math.round(fs.bo().getDirection()) : null),
                                 // Ground speed (speed of trawl over ground)
-                                unkD(fs.getFs().getVesselspeed(), "0.0"),
+                                unkD(fs.bo().getVesselspeed(), "0.0"),
                                 //Speed water
                                 -9,
                                 //SurCurDir
@@ -331,32 +331,32 @@ public class DATRASDataStorage extends FileDataStorage {
                         "CatIdentifier", "NoMeas", "SubFactor", "SubWgt", "CatCatchWgt", "LngtCode", "LngtClass", "HLNoAtLngt")));
                 for (MissionBO ms : list) {
                     for (FishstationBO fs : ms.getFishstationBOs()) {
-                        Integer sweep = getGOVSweepByEquipment(fs.getFs().getGear());
+                        Integer sweep = getGOVSweepByEquipment(fs.bo().getGear());
                         if (sweep == null) { // Sweep filter
                             continue;
                         }
-                        if (fs.getFs().getStationstartdate() == null) {
+                        if (fs.bo().getStationstartdate() == null) {
                             continue;
                         }
-                        Integer year = IMRdate.getYear(fs.getFs().getStationstartdate());
-                        Integer month = IMRdate.getMonth(fs.getFs().getStationstartdate());
+                        Integer year = IMRdate.getYear(fs.bo().getStationstartdate());
+                        Integer month = IMRdate.getMonth(fs.bo().getStationstartdate());
                         Integer quarter = (int) Math.ceil(month / 3.0);
-                        String haulVal = (fs.getFs().getGearcondition() == null || fs.getFs().getGearcondition().equals("1") || fs.getFs().getGearcondition().equals("2"))
-                                && (fs.getFs().getSamplequality() == null || fs.getFs().getSamplequality().equals("0") || fs.getFs().getSamplequality().equals("1")) ? "V" : "I";
+                        String haulVal = (fs.bo().getGearcondition() == null || fs.bo().getGearcondition().equals("1") || fs.bo().getGearcondition().equals("2"))
+                                && (fs.bo().getSamplequality() == null || fs.bo().getSamplequality().equals("0") || fs.bo().getSamplequality().equals("1")) ? "V" : "I";
 
                         for (CatchSampleBO s : fs.getCatchSampleBOs()) {
                             // IU: Sometimes we get null aphia
-                            if (s.getCs().getAphia() == null) {
+                            if (s.bo().getAphia() == null) {
                                 continue;
                             }
 
                             // IU: Use aphia for comparison and add crustacean boolean
-                            boolean isHerringOrSprat = s.getCs().getAphia().equals("126417") || s.getCs().getAphia().equals("126425");
+                            boolean isHerringOrSprat = s.bo().getAphia().equals("126417") || s.bo().getAphia().equals("126425");
 
                             List<String> crustList = Arrays.asList("107275", "107276", "107369", "107253", "107703", "107704", "107350", "107254", "107205", "140712", "140687", "140658");
-                            boolean isCrustacean = crustList.contains(s.getCs().getAphia());
+                            boolean isCrustacean = crustList.contains(s.bo().getAphia());
 
-                            //Double raiseFac = 60.0 / IMRdate.minutesDiffD(IMRdate.encodeLocalDateTime(fs.getFs().getStationstartdate(), fs.getFs().getStationstarttime()), IMRdate.encodeLocalDateTime(fs.getFs().getStationstopdate(), fs.getFs().getStationstoptime()));
+                            //Double raiseFac = 60.0 / IMRdate.minutesDiffD(IMRdate.encodeLocalDateTime(fs.bo().getStationstartdate(), fs.bo().getStationstarttime()), IMRdate.encodeLocalDateTime(fs.bo().getStationstopdate(), fs.bo().getStationstoptime()));
                             MatrixBO hlNoAtLngth = new MatrixBO();
                             MatrixBO lsCountTot = new MatrixBO();
 
@@ -365,41 +365,41 @@ public class DATRASDataStorage extends FileDataStorage {
                             //    continue;
                             //}
                             Integer specVal = haulVal.equals("I") ? 0
-                                    : s.getCs().getCatchcount() != null && s.getCs().getLengthsamplecount() != null && s.getCs().getCatchweight() != null ? 1
-                                    : s.getCs().getCatchcount() != null && s.getCs().getLengthsamplecount() == null && s.getCs().getCatchweight() == null ? 4
-                                    : s.getCs().getCatchcount() == null && s.getCs().getLengthsamplecount() == null && s.getCs().getCatchweight() != null ? 6
-                                    : s.getCs().getCatchcount() != null && s.getCs().getLengthsamplecount() == null && s.getCs().getCatchweight() != null ? 7
-                                    : haulVal.equals("V") && s.getCs().getCatchcount() == null && s.getCs().getLengthsamplecount() == null && s.getCs().getCatchweight() == null ? 5
-                                    : s.getCs().getCatchcount() != null && s.getCs().getLengthsamplecount() != null && s.getCs().getCatchweight() == null ? 0 : -9;
+                                    : s.bo().getCatchcount() != null && s.bo().getLengthsamplecount() != null && s.bo().getCatchweight() != null ? 1
+                                    : s.bo().getCatchcount() != null && s.bo().getLengthsamplecount() == null && s.bo().getCatchweight() == null ? 4
+                                    : s.bo().getCatchcount() == null && s.bo().getLengthsamplecount() == null && s.bo().getCatchweight() != null ? 6
+                                    : s.bo().getCatchcount() != null && s.bo().getLengthsamplecount() == null && s.bo().getCatchweight() != null ? 7
+                                    : haulVal.equals("V") && s.bo().getCatchcount() == null && s.bo().getLengthsamplecount() == null && s.bo().getCatchweight() == null ? 5
+                                    : s.bo().getCatchcount() != null && s.bo().getLengthsamplecount() != null && s.bo().getCatchweight() == null ? 0 : -9;
 
-                            String lngtCode = s.getCs().getSampletype() != null ? isCrustacean ? "."/*1mm*/ : isHerringOrSprat ? "0"/*5mm*/ : "1"/*1cm*/ : "-9"/*1cm*/;
+                            String lngtCode = s.bo().getSampletype() != null ? isCrustacean ? "."/*1mm*/ : isHerringOrSprat ? "0"/*5mm*/ : "1"/*1cm*/ : "-9"/*1cm*/;
                             Integer lenInterval = lngtCode.equals("0") ? 5 : 1;
                             Boolean reportInMM = !lngtCode.equals("1");
 
-                            Double catCatchWgt = (s.getCs().getCatchweight() != null ? s.getCs().getCatchweight() : 0) * 1000;
+                            Double catCatchWgt = (s.bo().getCatchweight() != null ? s.bo().getCatchweight() : 0) * 1000;
 
                             // If weight is below 1, raise it into 1
                             if (catCatchWgt < 1 && catCatchWgt > 0) {
                                 catCatchWgt = Math.ceil(catCatchWgt) * 1.0;
                             }
 
-                            Double subWeight = (s.getCs().getLengthsampleweight() != null ? s.getCs().getLengthsampleweight() : 0) * 1000;
+                            Double subWeight = (s.bo().getLengthsampleweight() != null ? s.bo().getLengthsampleweight() : 0) * 1000;
 
                             // If weight is below 1, raise it into 1
                             if (subWeight < 1 && subWeight > 0) {
                                 subWeight = Math.ceil(subWeight) * 1.0;
                             }
 
-                            if (s.getIndividualBOs().isEmpty() || s.getCs().getLengthsampleweight() == null) {
+                            if (s.getIndividualBOs().isEmpty() || s.bo().getLengthsampleweight() == null) {
                                 String lngtClass = "-9";
                                 String sex = "-9";
-                                hlNoAtLngth.addGroupRowColValue(s.getCs().getAphia(), sex, lngtClass, (s.getCs().getCatchcount() != null ? s.getCs().getCatchcount() : 0) * 1.0);
-                                lsCountTot.addGroupRowColValue(s.getCs().getAphia(), sex, lngtClass, (s.getCs().getLengthsamplecount() != null ? s.getCs().getLengthsamplecount() : 0) * 1.0);
+                                hlNoAtLngth.addGroupRowColValue(s.bo().getAphia(), sex, lngtClass, (s.bo().getCatchcount() != null ? s.bo().getCatchcount() : 0) * 1.0);
+                                lsCountTot.addGroupRowColValue(s.bo().getAphia(), sex, lngtClass, (s.bo().getLengthsamplecount() != null ? s.bo().getLengthsamplecount() : 0) * 1.0);
                             } else {
-                                //if (s.getCs().getlengthsampleweight() == null) {
+                                //if (s.bo().getlengthsampleweight() == null) {
                                 //    continue;
                                 //}
-                                Double sampleFac = s.getCs().getCatchweight() / s.getCs().getLengthsampleweight();
+                                Double sampleFac = s.bo().getCatchweight() / s.bo().getLengthsampleweight();
                                 for (IndividualBO i : s.getIndividualBOs()) {
                                     Double length = i.getLengthCM();/*cm*/;
                                     if (i.getLengthCM() == null) {
@@ -419,14 +419,14 @@ public class DATRASDataStorage extends FileDataStorage {
                                         }
                                     }
                                     String lngtClass = "" + ImrMath.trunc(length, lenInterval.doubleValue());
-                                    String sex = i.getI().getSex() == null || i.getI().getSex().trim().isEmpty()
-                                            ? "-9" : i.getI().getSex().equals("1") ? "F" : "M";
-                                    hlNoAtLngth.addGroupRowColValue(s.getCs().getAphia(), sex, lngtClass, 1.0 * sampleFac);
-                                    lsCountTot.addGroupRowColValue(s.getCs().getAphia(), sex, lngtClass, 1.0);
+                                    String sex = i.bo().getSex() == null || i.bo().getSex().trim().isEmpty()
+                                            ? "-9" : i.bo().getSex().equals("1") ? "F" : "M";
+                                    hlNoAtLngth.addGroupRowColValue(s.bo().getAphia(), sex, lngtClass, 1.0 * sampleFac);
+                                    lsCountTot.addGroupRowColValue(s.bo().getAphia(), sex, lngtClass, 1.0);
                                 }
                             }
                             // Group Sex and Length class and report counts at catch level (raw)
-                            String aphia = (String) s.getCs().getAphia();
+                            String aphia = (String) s.bo().getAphia();
                             for (String sex : hlNoAtLngth.getGroupRowKeys(aphia)) {
                                 Double totalNo = hlNoAtLngth.getGroupRowValueAsMatrix(aphia, sex).getSum();
                                 Double noMeas = lsCountTot.getGroupRowValueAsMatrix(aphia, sex).getSum();
@@ -441,21 +441,21 @@ public class DATRASDataStorage extends FileDataStorage {
                                     ImrIO.write(wr, ExportUtil.carrageReturnLineFeed(ExportUtil.csv(
                                             "HL",
                                             quarter,
-                                            getTSCountryByIOC(fs.getFs().getNation()),
-                                            getTSShipByPlatform(fs.getFs().getCatchplatform()),
+                                            getTSCountryByIOC(fs.bo().getNation()),
+                                            getTSShipByPlatform(fs.bo().getCatchplatform()),
                                             "GOV",
                                             sweep,
                                             "S",
                                             "P",
-                                            fs.getFs().getSerialnumber(),
-                                            fs.getFs().getStation(),
+                                            fs.bo().getSerialnumber(),
+                                            fs.bo().getStation(),
                                             year,
                                             "W", // Worms
                                             aphia,
                                             specVal,
                                             sex,
                                             totalNo == 0 ? -9 : unkD(totalNo, "0.00"), // n per Hour
-                                            s.getCs().getCatchpartnumber(), //CatIdentifier
+                                            s.bo().getCatchpartnumber(), //CatIdentifier
                                             noMeas == 0 ? -9 : Math.round(noMeas), // n measured as individual
                                             unkD(subFactor, "0.0000"), // SubFactor
                                             subWeight == 0 ? -9 : Math.round(subWeight),
@@ -476,28 +476,28 @@ public class DATRASDataStorage extends FileDataStorage {
                         "LngtClass", "Sex", "Maturity", "PlusGr", "AgeRings", "CANoAtLngt", "IndWgt")));
                 for (MissionBO ms : list) {
                     for (FishstationBO fs : ms.getFishstationBOs()) {
-                        Integer sweep = getGOVSweepByEquipment(fs.getFs().getGear());
+                        Integer sweep = getGOVSweepByEquipment(fs.bo().getGear());
                         if (sweep == null) { // Sweep filter
                             continue;
                         }
-                        if (fs.getFs().getStationstartdate() == null) {
+                        if (fs.bo().getStationstartdate() == null) {
                             continue;
                         }
-                        Integer year = IMRdate.getYear(fs.getFs().getStationstartdate());
-                        Integer month = IMRdate.getMonth(fs.getFs().getStationstartdate());
+                        Integer year = IMRdate.getYear(fs.bo().getStationstartdate());
+                        Integer month = IMRdate.getMonth(fs.bo().getStationstartdate());
                         Integer quarter = (int) Math.ceil(month / 3.0);
-                        String areaLoc = fs.getFs().getArea() != null && fs.getFs().getLocation() != null ? fs.getFs().getArea() + fs.getFs().getLocation() : "";
+                        String areaLoc = fs.bo().getArea() != null && fs.bo().getLocation() != null ? fs.bo().getArea() + fs.bo().getLocation() : "";
 
                         for (CatchSampleBO s : fs.getCatchSampleBOs()) {
                             // IU: Sometimes we get null aphia
-                            if (s.getCs().getAphia() == null) {
+                            if (s.bo().getAphia() == null) {
                                 continue;
                             }
                             // IU: Use aphia for comparison and add crustacean boolean
-                            boolean isHerringOrSprat = s.getCs().getAphia().equals("126417") || s.getCs().getAphia().equals("126425");
+                            boolean isHerringOrSprat = s.bo().getAphia().equals("126417") || s.bo().getAphia().equals("126425");
 
                             List<String> crustList = Arrays.asList("107275", "107276", "107369", "107253", "107703", "107704", "107350", "107254", "107205", "140712", "140687", "140658");
-                            boolean isCrustacean = crustList.contains(s.getCs().getAphia());
+                            boolean isCrustacean = crustList.contains(s.bo().getAphia());
 
                             if (s.getIndividualBOs().isEmpty()) {
                                 continue;
@@ -505,7 +505,7 @@ public class DATRASDataStorage extends FileDataStorage {
                             MatrixBO nInd = new MatrixBO();
                             MatrixBO nWithWeight = new MatrixBO();
                             MatrixBO totWeight = new MatrixBO();
-                            String lngtCode = s.getCs().getSampletype() != null ? isCrustacean ? "."/*1mm*/ : isHerringOrSprat ? "0"/*5mm*/ : "1"/*1cm*/ : "-9"/*1cm*/;
+                            String lngtCode = s.bo().getSampletype() != null ? isCrustacean ? "."/*1mm*/ : isHerringOrSprat ? "0"/*5mm*/ : "1"/*1cm*/ : "-9"/*1cm*/;
                             Integer lenInterval = lngtCode.equals("0") ? 5 : 1;
                             Boolean reportInMM = !lngtCode.equals("1");
                             for (IndividualBO i : s.getIndividualBOs()) {
@@ -527,7 +527,7 @@ public class DATRASDataStorage extends FileDataStorage {
                                     }
                                 }
                                 String lngtClass = "" + ImrMath.trunc(length, lenInterval.doubleValue());
-                                String sex = i.getI().getSex() == null || i.getI().getSex().trim().isEmpty() ? "-9" : i.getI().getSex().equals("1") ? "F" : "M";
+                                String sex = i.bo().getSex() == null || i.bo().getSex().trim().isEmpty() ? "-9" : i.bo().getSex().equals("1") ? "F" : "M";
                                 String maturity = getDATRASMaturity(i);
                                 String age = i.getAge() != null ? i.getAge() + "" : "-9";
                                 nInd.addGroupRowColCellValue(lngtClass, sex, maturity, age, 1.0);
@@ -551,17 +551,17 @@ public class DATRASDataStorage extends FileDataStorage {
                                             ImrIO.write(wr, ExportUtil.carrageReturnLineFeed(ExportUtil.csv(
                                                     "CA",
                                                     quarter,
-                                                    getTSCountryByIOC(fs.getFs().getNation()),
-                                                    getTSShipByPlatform(fs.getFs().getCatchplatform()),
+                                                    getTSCountryByIOC(fs.bo().getNation()),
+                                                    getTSShipByPlatform(fs.bo().getCatchplatform()),
                                                     "GOV",
                                                     sweep,
                                                     "S",
                                                     "P",
-                                                    fs.getFs().getSerialnumber(),
-                                                    fs.getFs().getStation(),
+                                                    fs.bo().getSerialnumber(),
+                                                    fs.bo().getStation(),
                                                     year,
                                                     "W", // Worms
-                                                    s.getCs().getAphia(),
+                                                    s.bo().getAphia(),
                                                     0,
                                                     areaLoc,
                                                     lngtCode,
@@ -584,12 +584,12 @@ public class DATRASDataStorage extends FileDataStorage {
 
     private static String getDATRASMaturity(IndividualBO i) {
         CatchSampleBO c = i.getCatchSample();
-        String noName = c.getCs().getCommonname().toUpperCase();
-        boolean isHerringOrSpratOrMackerel = c.getCs().getAphia().equals("126417") || c.getCs().getAphia().equals("126425") || c.getCs().getAphia().equals("127023");
+        String noName = c.bo().getCommonname().toUpperCase();
+        boolean isHerringOrSpratOrMackerel = c.bo().getAphia().equals("126417") || c.bo().getAphia().equals("126425") || c.bo().getAphia().equals("127023");
 
         Integer res = -9;
-        if (i.getI().getSpecialstage() != null) {
-            Integer sp = Conversion.safeStringtoIntegerNULL(i.getI().getSpecialstage());
+        if (i.bo().getSpecialstage() != null) {
+            Integer sp = Conversion.safeStringtoIntegerNULL(i.bo().getSpecialstage());
             if (sp != null) {
                 if (isHerringOrSpratOrMackerel) {
                     res = sp <= 2 ? 61 : sp <= 5 ? 62 : 60 + sp - 3;
@@ -597,11 +597,11 @@ public class DATRASDataStorage extends FileDataStorage {
                     res = 60 + sp;
                 }
             }
-        } else if (i.getI().getMaturationstage() != null) {
-            FishstationBO fs = c.getStationBO();
-            Integer month = IMRdate.getMonth(fs.getFs().getStationstartdate());
+        } else if (i.bo().getMaturationstage() != null) {
+            FishstationBO fs = c.getFishstation();
+            Integer month = IMRdate.getMonth(fs.bo().getStationstartdate());
             Integer quarter = month / 4 + 1;
-            Integer st = Conversion.safeStringtoIntegerNULL(i.getI().getMaturationstage());
+            Integer st = Conversion.safeStringtoIntegerNULL(i.bo().getMaturationstage());
             if (st != null) {
                 res = 60 + st;
                 if (st == 5 && quarter == 3) {

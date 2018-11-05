@@ -86,8 +86,8 @@ public class BioStationWeighting extends AbstractFunction {
     private void weightByNASC(Map<String, Object> input) {
         ILogger logger = (ILogger) input.get(Functions.PM_LOGGER);
         ProcessDataBO pd = (ProcessDataBO) input.get(Functions.PM_BIOSTATIONWEIGHTING_PROCESSDATA);
-        List<MissionBO> fList = (List<MissionBO>) input.get(Functions.PM_BIOSTATIONWEIGHTING_BIOTICDATA);
-        if (fList == null) {
+        List<MissionBO> missions = (List<MissionBO>) input.get(Functions.PM_BIOSTATIONWEIGHTING_BIOTICDATA);
+        if (missions == null) {
             logger.error("Missing parameter " + Functions.PM_BIOSTATIONWEIGHTING_BIOTICDATA, null);
             return;
         }
@@ -133,12 +133,12 @@ public class BioStationWeighting extends AbstractFunction {
             MatrixBO includedDist = new MatrixBO("Matrix[ROW~Station / COL~Distance / VAR~Included]");
             MatrixBO distStationCount = new MatrixBO("Matrix[ROW~Distance / VAR~Count]");
             for (String fsKey : bioticAsg.getRowColKeys(asgKey)) {
-                FishstationBO fs = BioticUtils.findStation(fList, fsKey);
+                FishstationBO fs = BioticUtils.findStation(missions, fsKey);
                 if (fs == null) {
                     // Some stations may be defined in assignment but filtered out by i.e missing catch
                     continue;
                 }
-                Coordinate fPos = new Coordinate(fs.getFs().getLongitudestart(), fs.getFs().getLatitudestart());
+                Coordinate fPos = new Coordinate(fs.bo().getLongitudestart(), fs.bo().getLatitudestart());
                 //Double gcDist = Math.sqrt(Math.pow(fPos.x - dPos.x, 2) + Math.pow(fPos.y - dPos.y, 2));
                 dList.stream().forEach(d -> {
                     String distKey = d.getKey();
@@ -227,9 +227,9 @@ public class BioStationWeighting extends AbstractFunction {
      */
     private void weightByNumberOfLengthSamples(Map<String, Object> input) {
         ProcessDataBO pd = (ProcessDataBO) input.get(Functions.PM_BIOSTATIONWEIGHTING_PROCESSDATA);
-        List<MissionBO> fList = (List<MissionBO>) input.get(Functions.PM_BIOSTATIONWEIGHTING_BIOTICDATA);
+        List<MissionBO> missions = (List<MissionBO>) input.get(Functions.PM_BIOSTATIONWEIGHTING_BIOTICDATA);
         ILogger logger = (ILogger) input.get(Functions.PM_LOGGER);
-        if (fList == null) {
+        if (missions == null) {
             logger.error("Missing parameter " + Functions.PM_BIOSTATIONWEIGHTING_BIOTICDATA, null);
             return;
         }
@@ -237,7 +237,7 @@ public class BioStationWeighting extends AbstractFunction {
         // trawlAsg = Matrix[ROW~Assignment / COL~Station / VAR~StationWeight]
         MatrixBO trawlAsg = AbndEstProcessDataUtil.getBioticAssignments(pd);
         for (String fsKey : trawlAsg.getColKeys()) {
-            FishstationBO fs = BioticUtils.findStation(fList, fsKey);
+            FishstationBO fs = BioticUtils.findStation(missions, fsKey);
             if (fs == null) {
                 continue;
             }
@@ -260,16 +260,16 @@ public class BioStationWeighting extends AbstractFunction {
 
     private void weightByCPUE(Map<String, Object> input, String weightingMethod) {
         ProcessDataBO pd = (ProcessDataBO) input.get(Functions.PM_BIOSTATIONWEIGHTING_PROCESSDATA);
-        List<MissionBO> fList = (List<MissionBO>) input.get(Functions.PM_BIOSTATIONWEIGHTING_BIOTICDATA);
+        List<MissionBO> missions = (List<MissionBO>) input.get(Functions.PM_BIOSTATIONWEIGHTING_BIOTICDATA);
         ILogger logger = (ILogger) input.get(Functions.PM_LOGGER);
-        if (fList == null) {
+        if (missions == null) {
             logger.error("Missing parameter " + Functions.PM_BIOSTATIONWEIGHTING_BIOTICDATA, null);
             return;
         }
         // trawlAsg = Matrix[ROW~Assignment / COL~Station / VAR~StationWeight]
         MatrixBO trawlAsg = AbndEstProcessDataUtil.getBioticAssignments(pd);
         for (String fsKey : trawlAsg.getColKeys()) {
-            FishstationBO fs = BioticUtils.findStation(fList, fsKey);
+            FishstationBO fs = BioticUtils.findStation(missions, fsKey);
             if (fs == null) {
                 continue;
             }
@@ -279,10 +279,10 @@ public class BioStationWeighting extends AbstractFunction {
                     Double var = null;
                     switch (weightingMethod) {
                         case Functions.WEIGHTINGMETHOD_NORMTOTALWEIGHT:
-                            var = s.getCs().getCatchweight();
+                            var = s.bo().getCatchweight();
                             break;
                         case Functions.WEIGHTINGMETHOD_NORMTOTALCOUNT:
-                            var = Conversion.safeIntegerToDouble(s.getCs().getCatchcount());
+                            var = Conversion.safeIntegerToDouble(s.bo().getCatchcount());
                             break;
                     }
                     if (var != null) {
@@ -291,8 +291,8 @@ public class BioStationWeighting extends AbstractFunction {
                 }
             }
             Double cpue = totCatch;
-            if (fs.getFs().getDistance() != null && fs.getFs().getDistance() > 0d) {
-                cpue = totCatch / fs.getFs().getDistance();
+            if (fs.bo().getDistance() != null && fs.bo().getDistance() > 0d) {
+                cpue = totCatch / fs.bo().getDistance();
             } else {
                 logger.log(weightingMethod + " not possible due to missing distance for station " + fsKey + ".");
             }

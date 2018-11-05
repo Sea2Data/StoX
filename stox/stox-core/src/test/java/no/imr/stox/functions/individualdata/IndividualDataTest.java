@@ -36,7 +36,7 @@ public class IndividualDataTest {
 
     private Map<String, Object> getInput() {
         Map<String, Object> input = new HashMap<>();
-        input.put(Functions.PM_INDIVIDUALDATA_BIOTICDATA, getFishStations());
+        input.put(Functions.PM_INDIVIDUALDATA_BIOTICDATA, getMissions());
         IndividualDataStationsMatrix indDataSel = new IndividualDataStationsMatrix();
         indDataSel.getData().setRowColCellValue("ST1", "E1", "2013/1000", true);
         input.put(Functions.PM_INDIVIDUALDATA_INDIVIDUALDATASTATIONS, indDataSel);
@@ -44,19 +44,19 @@ public class IndividualDataTest {
         return input;
     }
 
-    List<MissionBO> getFishStations() {
+    List<MissionBO> getMissions() {
         MissionBO mt = new MissionBO();
-        mt.getMs().setCruise("2013");
+        mt.bo().setCruise("2013");
         FishstationBO f = mt.addFishstation(null);
-        f.getFs().setDistance(1.5d);
-        f.getFs().setSerialnumber(1000);
+        f.bo().setDistance(1.5d);
+        f.bo().setSerialnumber(1000);
         CatchSampleBO s = f.addCatchSample(null);
-        s.getCs().setCatchcategory("havsil");
-        s.getCs().setCatchweight(100.0);
-        s.getCs().setLengthsampleweight(50.0);
-        s.getCs().setCatchpartnumber(Integer.SIZE);
+        s.bo().setCatchcategory("havsil");
+        s.bo().setCatchweight(100.0);
+        s.bo().setLengthsampleweight(50.0);
+        s.bo().setCatchpartnumber(Integer.SIZE);
         IndividualBO i = s.addIndividual(null);
-        i.getI().setSpecimenid(1);
+        i.bo().setSpecimenid(1);
         i.setLength(.1);
         i.setIndividualweight(0.005);
         return Arrays.asList(mt);

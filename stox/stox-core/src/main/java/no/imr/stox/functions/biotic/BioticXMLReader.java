@@ -44,7 +44,7 @@ public class BioticXMLReader extends XMLReader {
     @Override
     protected void onObjectValue(final Object object, final String key, final String value) {
         if (key.equals("cruise")) {
-            stations.getMs().setCruise(value);
+            stations.bo().setCruise(value);
         } else if (object instanceof FishstationBO) {
             createFishStation(object, key, value);
         } else if (object instanceof CatchSampleBO) {
@@ -64,17 +64,17 @@ public class BioticXMLReader extends XMLReader {
         }
         if (current == null && elmName.equals("mission")) {
             MissionBO mission = new MissionBO();
-            mission.getMs().setMissiontype(getCurrentAttributeValue("missiontype"));
+            mission.bo().setMissiontype(getCurrentAttributeValue("missiontype"));
             boolean useMissionTypeInCruiseTag = project.getResourceVersion() > 1.26;
             String mtPref = useMissionTypeInCruiseTag ? getCurrentAttributeValue("missiontype") + "-" : "";
             String currentCruise = mtPref + getCurrentAttributeValue("year");
-            mission.getMs().setCruise(currentCruise); // default cruise=missiontype-year in earlier stox
-            mission.getMs().setPlatform(getCurrentAttributeValue("platform"));
-            mission.getMs().setPlatformname(getCurrentAttributeValue("platformname"));
+            mission.bo().setCruise(currentCruise); // default cruise=missiontype-year in earlier stox
+            mission.bo().setPlatform(getCurrentAttributeValue("platform"));
+            mission.bo().setPlatformname(getCurrentAttributeValue("platformname"));
             result = stations;
         } else if (current instanceof MissionBO && elmName.equals("fishstation")) {
             FishstationBO station = stations.addFishstation(null);
-            station.getFs().setCatchplatform(station.getMission().getMs().getPlatform());
+            station.bo().setCatchplatform(station.getMission().bo().getPlatform());
             result = station;
         } else if (current instanceof FishstationBO && elmName.equals("catchsample")) {
             FishstationBO station = (FishstationBO) current;
@@ -83,7 +83,7 @@ public class BioticXMLReader extends XMLReader {
                 taxa = "ukjent";
             }
             CatchSampleBO sample = station.addCatchSample(null);
-            sample.getCs().setCatchcategory(taxa);
+            sample.bo().setCatchcategory(taxa);
             String noName = getCurrentAttributeValue("noname");
             if (noName == null || noName.isEmpty()) {
                 // Back compability when noname is not given in xml file.
@@ -92,8 +92,8 @@ public class BioticXMLReader extends XMLReader {
                 // Rid of single quite since in stock SILD'G03 Jexl is using it as string delimiter
                 noName = noName.replace("'", "")/*.toUpperCase()*/;
             }
-            sample.getCs().setCommonname(noName);
-            sample.getCs().setAphia(getCurrentAttributeValue("aphia"));
+            sample.bo().setCommonname(noName);
+            sample.bo().setAphia(getCurrentAttributeValue("aphia"));
             result = sample;
         } else if (current instanceof CatchSampleBO && elmName.equals("individual")) {
             CatchSampleBO sample = (CatchSampleBO) current;
@@ -123,81 +123,81 @@ public class BioticXMLReader extends XMLReader {
     private void createFishStation(final Object object, final String key, final String value) {
         FishstationBO bo = (FishstationBO) object;
         if (key.equals("nation")) {
-            bo.getFs().setNation(value);
+            bo.bo().setNation(value);
         } else if (key.equals("platform")) {
-            bo.getFs().setCatchplatform(value);
+            bo.bo().setCatchplatform(value);
         } else if (key.equals("startdate")) {
-            bo.getFs().setStationstartdate(LocalDate.parse(value, DateTimeFormatter.ofPattern(IMRdate.DATE_FORMAT_DMY)));
+            bo.bo().setStationstartdate(LocalDate.parse(value, DateTimeFormatter.ofPattern(IMRdate.DATE_FORMAT_DMY)));
         } else if (key.equals("stopdate")) {
-            bo.getFs().setStationstopdate(LocalDate.parse(value, DateTimeFormatter.ofPattern(IMRdate.DATE_FORMAT_DMY)));
+            bo.bo().setStationstopdate(LocalDate.parse(value, DateTimeFormatter.ofPattern(IMRdate.DATE_FORMAT_DMY)));
         } else if (key.equals("station")) {
-            bo.getFs().setStation(Conversion.safeStringtoIntegerNULL(value));
+            bo.bo().setStation(Conversion.safeStringtoIntegerNULL(value));
         } else if (key.equals("serialno") || key.equals("catchnumber")) {
-            bo.getFs().setSerialnumber(Conversion.safeStringtoIntegerNULL(value));
+            bo.bo().setSerialnumber(Conversion.safeStringtoIntegerNULL(value));
         } else if (key.equals("fishstationtype") || key.equals("stationtype")) {
-            bo.getFs().setStationtype(value);
+            bo.bo().setStationtype(value);
         } else if (key.equals("latitudestart")) {
-            bo.getFs().setLatitudestart(Conversion.safeStringtoDoubleNULL(value));
+            bo.bo().setLatitudestart(Conversion.safeStringtoDoubleNULL(value));
         } else if (key.equals("longitudestart")) {
-            bo.getFs().setLongitudestart(Conversion.safeStringtoDoubleNULL(value));
+            bo.bo().setLongitudestart(Conversion.safeStringtoDoubleNULL(value));
         } else if (key.equals("latitudeend")) {
-            bo.getFs().setLatitudeend(Conversion.safeStringtoDoubleNULL(value));
+            bo.bo().setLatitudeend(Conversion.safeStringtoDoubleNULL(value));
         } else if (key.equals("longitudeend")) {
-            bo.getFs().setLongitudeend(Conversion.safeStringtoDoubleNULL(value));
+            bo.bo().setLongitudeend(Conversion.safeStringtoDoubleNULL(value));
         } else if (key.equals("system")) {
-            bo.getFs().setSystem(value);
+            bo.bo().setSystem(value);
         } else if (key.equals("area")) {
-            bo.getFs().setArea(value);
+            bo.bo().setArea(value);
         } else if (key.equals("location")) {
-            bo.getFs().setLocation(value);
+            bo.bo().setLocation(value);
         } else if (key.equals("bottomdepthstart")) {
-            bo.getFs().setBottomdepthstart(Conversion.safeStringtoDoubleNULL(value));
+            bo.bo().setBottomdepthstart(Conversion.safeStringtoDoubleNULL(value));
         } else if (key.equals("bottomdepthstop")) {
-            bo.getFs().setBottomdepthstop(Conversion.safeStringtoDoubleNULL(value));
+            bo.bo().setBottomdepthstop(Conversion.safeStringtoDoubleNULL(value));
         } else if (key.equals("equipmentnumber") || key.equals("gearno")) {
-            bo.getFs().setGearno(Conversion.safeStringtoIntegerNULL(value));
+            bo.bo().setGearno(Conversion.safeStringtoIntegerNULL(value));
         } else if (key.equals("equipment") || key.equals("gear")) {
-            bo.getFs().setGear(value);
+            bo.bo().setGear(value);
         } else if (key.equals("equipmentcount") || key.equals("gearcount")) {
-            bo.getFs().setGearcount(Conversion.safeStringtoIntegerNULL(value));
+            bo.bo().setGearcount(Conversion.safeStringtoIntegerNULL(value));
         } else if (key.equals("directiongps") || key.equals("direction")) {
-            bo.getFs().setDirection(Conversion.safeStringtoDoubleNULL(value));
+            bo.bo().setDirection(Conversion.safeStringtoDoubleNULL(value));
         } else if (key.equals("speedequipment") || key.equals("gearspeed")) {
-            bo.getFs().setVesselspeed(Conversion.safeStringtoDoubleNULL(value));
+            bo.bo().setVesselspeed(Conversion.safeStringtoDoubleNULL(value));
         } else if (key.equals("starttime")) {
-            bo.getFs().setStationstarttime(LocalTime.parse(value, DateTimeFormatter.ofPattern(IMRdate.TIME_FORMAT_HMS)));
+            bo.bo().setStationstarttime(LocalTime.parse(value, DateTimeFormatter.ofPattern(IMRdate.TIME_FORMAT_HMS)));
         } else if (key.equals("logstart") || key.equals("startlog")) {
-            bo.getFs().setLogstart(Conversion.safeStringtoDoubleNULL(value));
+            bo.bo().setLogstart(Conversion.safeStringtoDoubleNULL(value));
         } else if (key.equals("stoptime")) {
-            bo.getFs().setStationstoptime(LocalTime.parse(value, DateTimeFormatter.ofPattern(IMRdate.TIME_FORMAT_HMS)));
+            bo.bo().setStationstoptime(LocalTime.parse(value, DateTimeFormatter.ofPattern(IMRdate.TIME_FORMAT_HMS)));
         } else if (key.equals("distance")) {
-            bo.getFs().setDistance(Conversion.safeStringtoDoubleNULL(value));
+            bo.bo().setDistance(Conversion.safeStringtoDoubleNULL(value));
         } else if (key.equals("gearcondition")) {
-            bo.getFs().setGearcondition(value);
+            bo.bo().setGearcondition(value);
         } else if (key.equals("trawlquality")) {
-            bo.getFs().setSamplequality(value);
+            bo.bo().setSamplequality(value);
         } else if (key.equals("fishingdepthmax")) {
-            bo.getFs().setFishingdepthmax(Conversion.safeStringtoDoubleNULL(value));
+            bo.bo().setFishingdepthmax(Conversion.safeStringtoDoubleNULL(value));
         } else if (key.equals("fishingdepthmin")) {
-            bo.getFs().setFishingdepthmin(Conversion.safeStringtoDoubleNULL(value));
+            bo.bo().setFishingdepthmin(Conversion.safeStringtoDoubleNULL(value));
         } else if (key.equals("fishingdepthcount")) {
-            bo.getFs().setFishingdepthcount(Conversion.safeStringtoIntegerNULL(value));
+            bo.bo().setFishingdepthcount(Conversion.safeStringtoIntegerNULL(value));
         } else if (key.equals("trawlopening")) {
-            bo.getFs().setVerticaltrawlopening(Conversion.safeStringtoDoubleNULL(value));
+            bo.bo().setVerticaltrawlopening(Conversion.safeStringtoDoubleNULL(value));
         } else if (key.equals("trawlstdopening") || key.equals("trawlopeningsd")) {
-            bo.getFs().setVerticaltrawlopeningsd(Conversion.safeStringtoDoubleNULL(value));
+            bo.bo().setVerticaltrawlopeningsd(Conversion.safeStringtoDoubleNULL(value));
         } else if (key.equals("trawldoorspread") || key.equals("doorspread")) {
-            bo.getFs().setTrawldoorspread(Conversion.safeStringtoDoubleNULL(value));
+            bo.bo().setTrawldoorspread(Conversion.safeStringtoDoubleNULL(value));
         } else if (key.equals("doorspreadsd")) {
-            bo.getFs().setTrawldoorspreadsd(Conversion.safeStringtoDoubleNULL(value));
+            bo.bo().setTrawldoorspreadsd(Conversion.safeStringtoDoubleNULL(value));
         } else if (key.equals("wirelength")) {
-            bo.getFs().setWirelength(Conversion.safeStringtoDoubleNULL(value));
+            bo.bo().setWirelength(Conversion.safeStringtoDoubleNULL(value));
         } else if (key.equals("soaktime")) {
-            bo.getFs().setSoaktime(Conversion.safeStringtoDoubleNULL(value));
+            bo.bo().setSoaktime(Conversion.safeStringtoDoubleNULL(value));
         } else if (key.equals("tripno")) {
-            bo.getFs().setTripno(Conversion.safeStringtoIntegerNULL(value));
+            bo.bo().setTripno(Conversion.safeStringtoIntegerNULL(value));
         } else if (key.equals("comment")) {
-            bo.getFs().setStationcomment(value);
+            bo.bo().setStationcomment(value);
         }
     }
 
@@ -211,47 +211,47 @@ public class BioticXMLReader extends XMLReader {
     private void createSample(final Object object, final String key, final String value) {
         CatchSampleBO bo = (CatchSampleBO) object;
         if (key.equals("samplenumber")) {
-            bo.getCs().setCatchpartnumber(Conversion.safeStringtoIntegerNULL(value));
+            bo.bo().setCatchpartnumber(Conversion.safeStringtoIntegerNULL(value));
         } else if (key.equals("sampletype")) {
-            bo.getCs().setSampletype(value);
+            bo.bo().setSampletype(value);
         } else if (key.equals("group")) {
-            bo.getCs().setGroup(value);
+            bo.bo().setGroup(value);
         } else if (key.equals("conservation")) {
-            bo.getCs().setConservation(value);
+            bo.bo().setConservation(value);
         } else if (key.equals("measurement") || key.equals("producttype")) {
-            bo.getCs().setCatchproducttype(value);
+            bo.bo().setCatchproducttype(value);
         } else if (key.equals("weight")) {
-            bo.getCs().setCatchweight(Conversion.safeStringtoDoubleNULL(value));
+            bo.bo().setCatchweight(Conversion.safeStringtoDoubleNULL(value));
         } else if (key.equals("volume")) {
-            bo.getCs().setCatchvolume(Conversion.safeStringtoDoubleNULL(value));
+            bo.bo().setCatchvolume(Conversion.safeStringtoDoubleNULL(value));
         } else if (key.equals("count")) {
-            bo.getCs().setCatchcount(Conversion.safeStringtoIntegerNULL(value));
+            bo.bo().setCatchcount(Conversion.safeStringtoIntegerNULL(value));
         } else if (key.equals("samplemeasurement") || key.equals("sampleproducttype")) {
-            bo.getCs().setSampleproducttype(value);
+            bo.bo().setSampleproducttype(value);
         } else if (key.equals("lengthmeasurement")) {
-            bo.getCs().setLengthmeasurement(value);
+            bo.bo().setLengthmeasurement(value);
         } else if (key.equals("lengthsampleweight")) {
-            bo.getCs().setLengthsampleweight(Conversion.safeStringtoDoubleNULL(value));
+            bo.bo().setLengthsampleweight(Conversion.safeStringtoDoubleNULL(value));
         } else if (key.equals("lengthsamplevolume")) {
-            bo.getCs().setLengthsamplevolume(Conversion.safeStringtoDoubleNULL(value));
+            bo.bo().setLengthsamplevolume(Conversion.safeStringtoDoubleNULL(value));
         } else if (key.equals("lengthsamplecount")) {
-            bo.getCs().setLengthsamplecount(Conversion.safeStringtoIntegerNULL(value));
+            bo.bo().setLengthsamplecount(Conversion.safeStringtoIntegerNULL(value));
         } else if (key.equals("individualsamplecount") || key.equals("specimensamplecount")) {
-            bo.getCs().setSpecimensamplecount(Conversion.safeStringtoIntegerNULL(value));
+            bo.bo().setSpecimensamplecount(Conversion.safeStringtoIntegerNULL(value));
         } else if (key.equals("raisingfactor")) {
-            bo.getCs().setRaisingfactor(Conversion.safeStringtoDoubleNULL(value));
+            bo.bo().setRaisingfactor(Conversion.safeStringtoDoubleNULL(value));
         } else if (key.equals("agesample") || key.equals("agingstructure")) {
-            bo.getCs().setAgingstructure(value);
+            bo.bo().setAgingstructure(value);
         } else if (key.equals("parasite")) {
-            bo.getCs().setParasite(value);
+            bo.bo().setParasite(value);
         } else if (key.equals("stomach")) {
-            bo.getCs().setStomach(value);
+            bo.bo().setStomach(value);
         } else if (key.equals("genetics")) {
-            bo.getCs().setTissuesample(value);
+            bo.bo().setTissuesample(value);
         } else if (key.equals("nonbiological") || key.equals("foreignobject")) {
-            bo.getCs().setForeignobject(value);
+            bo.bo().setForeignobject(value);
         } else if (key.equals("comment")) {
-            bo.getCs().setCatchcomment(value);
+            bo.bo().setCatchcomment(value);
         }
     }
 
@@ -265,62 +265,62 @@ public class BioticXMLReader extends XMLReader {
     private void createIndividual(final Object object, final String key, final String value) {
         IndividualBO bo = (IndividualBO) object;
         if (key.equals("no") || key.equals("specimenno")) {
-            bo.getI().setSpecimenid(Conversion.safeStringtoIntegerNULL(value));
+            bo.bo().setSpecimenid(Conversion.safeStringtoIntegerNULL(value));
         } else if (key.equals("weightmethod") || key.equals("producttype")) {
-            bo.getI().setIndividualproducttype(value);
+            bo.bo().setIndividualproducttype(value);
         } else if (key.equals("weight")) {
             bo.setIndividualweight(Conversion.safeStringtoDoubleNULL(value));
         } else if (key.equals("volume")) {
-            bo.getI().setIndividualvolume(Conversion.safeStringtoDoubleNULL(value));
+            bo.bo().setIndividualvolume(Conversion.safeStringtoDoubleNULL(value));
         } else if (key.equals("lengthunit")) {
-            bo.getI().setLengthresolution(value);
+            bo.bo().setLengthresolution(value);
         } else if (key.equals("length")) {
             // In StoX read length as cm.
             bo.setLength(Conversion.safeStringtoDoubleNULL(value));
         } else if (key.equals("fat")) {
-            bo.getI().setFat(value);
+            bo.bo().setFat(value);
         } else if (key.equals("sex")) {
-            bo.getI().setSex(value);
+            bo.bo().setSex(value);
         } else if (key.equals("stage")) {
-            bo.getI().setMaturationstage(value);
+            bo.bo().setMaturationstage(value);
         } else if (key.equals("specialstage")) {
-            bo.getI().setSpecialstage(value);
+            bo.bo().setSpecialstage(value);
         } else if (key.equals("eggstage")) {
-            bo.getI().setEggstage(value);
+            bo.bo().setEggstage(value);
         } else if (key.equals("stomachfillfield")) {
-            bo.getI().setStomachfillfield(value);
+            bo.bo().setStomachfillfield(value);
         } else if (key.equals("stomachfilllab")) {
-            bo.getI().setStomachfilllab(value);
+            bo.bo().setStomachfilllab(value);
         } else if (key.equals("digestdeg") || key.equals("digestion")) {
-            bo.getI().setDigestion(value);
+            bo.bo().setDigestion(value);
         } else if (key.equals("liver")) {
-            bo.getI().setLiver(value);
+            bo.bo().setLiver(value);
         } else if (key.equals("liverparasite")) {
-            bo.getI().setLiverparasite(value);
+            bo.bo().setLiverparasite(value);
         } else if (key.equals("gillworms")) {
-            bo.getI().setGillworms(value);
+            bo.bo().setGillworms(value);
         } else if (key.equals("swollengills")) {
-            bo.getI().setSwollengills(value);
+            bo.bo().setSwollengills(value);
         } else if (key.equals("fungusheart")) {
-            bo.getI().setFungusheart(value);
+            bo.bo().setFungusheart(value);
         } else if (key.equals("fungusspores")) {
-            bo.getI().setFungusspores(value);
+            bo.bo().setFungusspores(value);
         } else if (key.equals("fungusouter")) {
-            bo.getI().setFungusouter(value);
+            bo.bo().setFungusouter(value);
         } else if (key.equals("blackspot")) {
-            bo.getI().setBlackspot(value);
+            bo.bo().setBlackspot(value);
         } else if (key.equals("vertebrae")) {
-            bo.getI().setVertebraecount(Conversion.safeStringtoIntegerNULL(value));
+            bo.bo().setVertebraecount(Conversion.safeStringtoIntegerNULL(value));
         } else if (key.equals("gonadweight")) {
-            bo.getI().setGonadweight(Conversion.safeStringtoDoubleNULL(value));
+            bo.bo().setGonadweight(Conversion.safeStringtoDoubleNULL(value));
         } else if (key.equals("liverweight")) {
-            bo.getI().setLiverweight(Conversion.safeStringtoDoubleNULL(value));
+            bo.bo().setLiverweight(Conversion.safeStringtoDoubleNULL(value));
         } else if (key.equals("stomachweight")) {
-            bo.getI().setStomachweight(Conversion.safeStringtoDoubleNULL(value));
+            bo.bo().setStomachweight(Conversion.safeStringtoDoubleNULL(value));
         } else if (key.equals("developmentalstage")) {
             //bo.setDevelopmentalStage(value);
         } else if (key.equals("comment")) {
-            bo.getI().setIndividualcomment(value);
+            bo.bo().setIndividualcomment(value);
         }
     }
 
@@ -334,47 +334,47 @@ public class BioticXMLReader extends XMLReader {
     private void createAgeDetermination(final Object object, final String key, final String value) {
         AgeDeterminationBO bo = (AgeDeterminationBO) object;
         if (key.equals("no")) {
-            bo.getAgedet().setAgedeterminationid(Conversion.safeStringtoIntegerNULL(value));
+            bo.bo().setAgedeterminationid(Conversion.safeStringtoIntegerNULL(value));
         } else if (key.equals("age")) {
-            bo.getAgedet().setAge(Conversion.safeStringtoIntegerNULL(value));
+            bo.bo().setAge(Conversion.safeStringtoIntegerNULL(value));
         } else if (key.equals("spawningage")) {
-            bo.getAgedet().setSpawningage(Conversion.safeStringtoIntegerNULL(value));
+            bo.bo().setSpawningage(Conversion.safeStringtoIntegerNULL(value));
         } else if (key.equals("spawningzones")) {
-            bo.getAgedet().setSpawningzones(Conversion.safeStringtoIntegerNULL(value));
+            bo.bo().setSpawningzones(Conversion.safeStringtoIntegerNULL(value));
         } else if (key.equals("readability")) {
-            bo.getAgedet().setReadability(value);
+            bo.bo().setReadability(value);
         } else if (key.equals("otolithtype")) {
-            bo.getAgedet().setOtolithtype(value);
+            bo.bo().setOtolithtype(value);
         } else if (key.equals("otolithedge")) {
-            bo.getAgedet().setOtolithedge(value);
+            bo.bo().setOtolithedge(value);
         } else if (key.equals("otolithcentre")) {
-            bo.getAgedet().setOtolithcentre(value);
+            bo.bo().setOtolithcentre(value);
         } else if (key.equals("calibration")) {
-            bo.getAgedet().setCalibration(Conversion.safeStringtoIntegerNULL(value));
+            bo.bo().setCalibration(Conversion.safeStringtoIntegerNULL(value));
         } else if (key.equals("growthzone1")) {
-            bo.getAgedet().setGrowthzone1(Conversion.safeStringtoIntegerNULL(value));
+            bo.bo().setGrowthzone1(Conversion.safeStringtoIntegerNULL(value));
         } else if (key.equals("growthzone2")) {
-            bo.getAgedet().setGrowthzone2(Conversion.safeStringtoIntegerNULL(value));
+            bo.bo().setGrowthzone2(Conversion.safeStringtoIntegerNULL(value));
         } else if (key.equals("growthzone3")) {
-            bo.getAgedet().setGrowthzone3(Conversion.safeStringtoIntegerNULL(value));
+            bo.bo().setGrowthzone3(Conversion.safeStringtoIntegerNULL(value));
         } else if (key.equals("growthzone4")) {
-            bo.getAgedet().setGrowthzone4(Conversion.safeStringtoIntegerNULL(value));
+            bo.bo().setGrowthzone4(Conversion.safeStringtoIntegerNULL(value));
         } else if (key.equals("growthzone5")) {
-            bo.getAgedet().setGrowthzone5(Conversion.safeStringtoIntegerNULL(value));
+            bo.bo().setGrowthzone5(Conversion.safeStringtoIntegerNULL(value));
         } else if (key.equals("growthzone6")) {
-            bo.getAgedet().setGrowthzone6(Conversion.safeStringtoIntegerNULL(value));
+            bo.bo().setGrowthzone6(Conversion.safeStringtoIntegerNULL(value));
         } else if (key.equals("growthzone7")) {
-            bo.getAgedet().setGrowthzone7(Conversion.safeStringtoIntegerNULL(value));
+            bo.bo().setGrowthzone7(Conversion.safeStringtoIntegerNULL(value));
         } else if (key.equals("growthzone8")) {
-            bo.getAgedet().setGrowthzone8(Conversion.safeStringtoIntegerNULL(value));
+            bo.bo().setGrowthzone8(Conversion.safeStringtoIntegerNULL(value));
         } else if (key.equals("growthzone9")) {
-            bo.getAgedet().setGrowthzone9(Conversion.safeStringtoIntegerNULL(value));
+            bo.bo().setGrowthzone9(Conversion.safeStringtoIntegerNULL(value));
         } else if (key.equals("growthzonestotal")) {
-            bo.getAgedet().setGrowthzonestotal(Conversion.safeStringtoIntegerNULL(value));
+            bo.bo().setGrowthzonestotal(Conversion.safeStringtoIntegerNULL(value));
         } else if (key.equals("coastalannuli")) {
-            bo.getAgedet().setCoastalannuli(Conversion.safeStringtoIntegerNULL(value));
+            bo.bo().setCoastalannuli(Conversion.safeStringtoIntegerNULL(value));
         } else if (key.equals("oceanicannuli")) {
-            bo.getAgedet().setOceanicannuli(Conversion.safeStringtoIntegerNULL(value));
+            bo.bo().setOceanicannuli(Conversion.safeStringtoIntegerNULL(value));
         } 
     }
 

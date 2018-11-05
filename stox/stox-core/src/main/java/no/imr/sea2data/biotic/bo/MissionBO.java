@@ -14,25 +14,24 @@ import java.util.List;
  *
  * @author aasmunds
  */
-public class MissionBO {
+public class MissionBO extends BaseBO {
 
-    MissionType ms;
     private List<FishstationBO> fishstationBOs = new ArrayList<>();
 
     public MissionBO() {
-        ms = new MissionType();
+        this(new MissionType());
     }
 
     public MissionBO(MissionType ms) {
-        this.ms = ms;
+        super(null, ms);
     }
 
     public MissionBO(MissionBO bo) {
-        this(bo.getMs());
+        this(bo.bo());
     }
 
-    public MissionType getMs() {
-        return ms;
+    public MissionType bo() {
+        return (MissionType) bo;
     }
 
     public List<FishstationBO> getFishstationBOs() {

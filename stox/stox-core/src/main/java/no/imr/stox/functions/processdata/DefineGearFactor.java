@@ -35,15 +35,26 @@ public class DefineGearFactor extends AbstractFunction {
     public Object perform(Map<String, Object> input) {
         ProcessDataBO pd = (ProcessDataBO) input.get(Functions.PM_DEFINEGEARFACTOR_PROCESSDATA);
         String defMethod = (String) input.get(Functions.PM_DEFINEGEARFACTOR_DEFINITIONMETHOD);
-        MatrixBO covM = AbndEstProcessDataUtil.getGear(pd);
         String covariateSourceType = (String) input.get(Functions.PM_DEFINEGEARFACTOR_SOURCETYPE);
-        MatrixBO covParam = AbndEstProcessDataUtil.getCovParam(pd);
         String covariateType = (String) input.get(Functions.PM_DEFINETEMPORAL_COVARIATETYPE);
+
+        // cov param
+        MatrixBO covParam = AbndEstProcessDataUtil.getCovParam(pd);
+        MatrixBO m = covParam.getRowValueAsMatrix(AbndEstProcessDataUtil.TABLE_GEARFACTOR);
+        if(m != null) {
+            m.clear(); // Clear cov param
+        }
         covParam.setRowColValue(AbndEstProcessDataUtil.TABLE_GEARFACTOR, Functions.PM_DEFINEGEARFACTOR_COVARIATETYPE, covariateType);
-        if (defMethod == null || defMethod.equals(Functions.DEFINITIONMETHOD_USEPROCESSDATA) ||
-                covariateSourceType == null) {
+
+        // covariate matrix
+        MatrixBO covM = AbndEstProcessDataUtil.getGear(pd);
+        if (defMethod.equals(Functions.DEFINITIONMETHOD_USEPROCESSDATA)) {
             // Use existing, do not read from file.
             return pd;
+        }
+        m = covM.getRowValueAsMatrix(covariateSourceType);
+        if (m != null) {
+            m.clear(); // Clear covariates for covariate type and source
         }
         if (defMethod.equals(Functions.DEFINITIONMETHOD_RESOURCEFILE)) {
             // TODO: Read from file into process data.
@@ -79,24 +90,6 @@ public class DefineGearFactor extends AbstractFunction {
             }
 
             return pd;
-        }
-        // Default handling (Define by given time interval:
-//        List<SluttSeddel> landingData = (List) input.get(Functions.PM_DEFINEGEAR_LANDINGDATA);
-        if (covariateSourceType.equals(Functions.SOURCETYPE_BIOTIC)) {
-            // Copying cov key from landing to biotic
-            MatrixBO m = covM.getRowValueAsMatrix(covariateSourceType);
-            if (m != null) {
-                m.clear(); // Clear covariates 
-            }
-            covM.getRowColKeys(Functions.SOURCETYPE_LANDING).stream().forEach((covKey) -> {
-                covM.setRowColValue(Functions.SOURCETYPE_BIOTIC, covKey, "");
-            });
-            return pd;
-        }
-        // Generate covariates:
-        MatrixBO m = covM.getRowValueAsMatrix(covariateSourceType);
-        if (m != null) {
-            m.clear(); // Clear covariates for covariate type and source
         }
         return pd;
     }

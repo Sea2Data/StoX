@@ -32,36 +32,42 @@ public class DefinePlatform extends AbstractFunction {
     @Override
     public Object perform(Map<String, Object> input) {
         ProcessDataBO pd = (ProcessDataBO) input.get(Functions.PM_DEFINESPATIAL_PROCESSDATA);
+        List<MissionBO> biotic = (List) input.get(Functions.PM_DEFINESPATIAL_BIOTICDATA);
         String defMethod = (String) input.get(Functions.PM_DEFINESPATIAL_DEFINITIONMETHOD);
         // Apply transient dimension info to process data about spatial dimensions (used in cell translation/aggregation):
-        if (defMethod == null || defMethod.equals(Functions.DEFINITIONMETHOD_USEPROCESSDATA)) {
+        // Default handling (by data)
+        String sourceType = (String) input.get(Functions.PM_DEFINESPATIAL_SOURCETYPE);
+        String covariateType = (String) input.get(Functions.PM_DEFINESPATIAL_COVARIATETYPE);
+        
+        // Cov param
+        MatrixBO covParam = AbndEstProcessDataUtil.getCovParam(pd);
+        MatrixBO m = covParam.getRowValueAsMatrix(AbndEstProcessDataUtil.TABLE_PLATFORM);
+        if (m != null) {
+            m.clear(); // Clear covariates for covariate type and source
+        }
+        covParam.setRowColValue(AbndEstProcessDataUtil.TABLE_PLATFORM, Functions.PM_DEFINEPLATFORM_COVARIATETYPE, covariateType);
+        
+        // Covariate
+        MatrixBO covP = AbndEstProcessDataUtil.getPlatform(pd);
+        if (defMethod.equals(Functions.DEFINITIONMETHOD_USEPROCESSDATA)) {
             // Use existing, do not read from file.
             return pd;
         }
-        // Default handling (by data)
-        String sourceType = (String) input.get(Functions.PM_DEFINESPATIAL_SOURCETYPE);
-        MatrixBO covParam = AbndEstProcessDataUtil.getCovParam(pd);
-        String covariateType = (String) input.get(Functions.PM_DEFINESPATIAL_COVARIATETYPE);
-        covParam.setRowColValue(AbndEstProcessDataUtil.TABLE_PLATFORM, Functions.PM_DEFINEPLATFORM_COVARIATETYPE, covariateType);
-        List<MissionBO> biotic = (List) input.get(Functions.PM_DEFINESPATIAL_BIOTICDATA);
-        MatrixBO covP = AbndEstProcessDataUtil.getPlatform(pd);
-
+        m = covP.getRowValueAsMatrix(sourceType);
+        if (m != null) {
+            m.clear(); // Clear covariates for covariate type and source
+        }
         if (defMethod.equals(Functions.DEFINITIONMETHOD_USEDATA)) {
             // Use var1 and var2 to generate covariates from landing data.
-            // Generate covariates:
-            MatrixBO m = covP.getRowValueAsMatrix(sourceType);
-            if (m != null) {
-                m.clear(); // Clear covariates for covariate type and source
-            }
 
             Set<String> covs = new HashSet<>();
             if (sourceType.equals(Functions.SOURCETYPE_BIOTIC)) {
                 if (biotic == null) {
                     return pd;
                 }
-                biotic.stream().flatMap(ms->ms.getFishstationBOs().stream()).map((fs) -> {
+                biotic.stream().flatMap(ms -> ms.getFishstationBOs().stream()).map((fs) -> {
                     //fs.
-                    return fs.getFs().getCatchplatform();
+                    return fs.bo().getCatchplatform();
                 }).filter((def) -> (def != null)).forEach((def) -> {
                     covP.setRowColValue(sourceType, def, def);
                 });

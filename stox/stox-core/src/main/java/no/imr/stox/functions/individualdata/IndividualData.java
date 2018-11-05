@@ -32,7 +32,7 @@ public class IndividualData extends AbstractFunction {
     public Object perform(Map<String, Object> input) {
         // result = Matrix[GROUP~Species / ROW~Stratum / COL~EstLayer / CELL~LengthGroup / VAR~IndividualList]
         // Fish stations
-        List<MissionBO> fishStations = (List<MissionBO>) input.get(Functions.PM_INDIVIDUALDATA_BIOTICDATA);
+        List<MissionBO> missions = (List<MissionBO>) input.get(Functions.PM_INDIVIDUALDATA_BIOTICDATA);
         // indDataSel = Matrix[ROW~Stratum / COL~EstLayer / CELL~Station / VAR~Included]
         IndividualDataStationsMatrix indDataSel = (IndividualDataStationsMatrix) input.get(Functions.PM_INDIVIDUALDATA_INDIVIDUALDATASTATIONS);
         IndividualDataMatrix result = new IndividualDataMatrix();
@@ -51,7 +51,7 @@ public class IndividualData extends AbstractFunction {
             for (String estLayerKey : stratum.getKeys()) {
                 MatrixBO estLayer = (MatrixBO) stratum.getValue(estLayerKey);
                 List<String> stations = estLayer.getKeys();
-                for (MissionBO ms : fishStations) {
+                for (MissionBO ms : missions) {
                     for (FishstationBO fs : ms.getFishstationBOs()) {
                         if (!stations.contains(fs.getKey())) {
                             continue;

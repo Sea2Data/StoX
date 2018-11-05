@@ -75,16 +75,16 @@ public class ApplyPosToData extends AbstractFunction {
             case Functions.SOURCETYPE_BIOTIC:
                 for (MissionBO ms : biotic) {
                     for (FishstationBO fs : ms.getFishstationBOs()) {
-                        if (fs.getFs().getLatitudestart() != null && fs.getFs().getLongitudestart() != null) {
+                        if (fs.bo().getLatitudestart() != null && fs.bo().getLongitudestart() != null) {
                             continue;
                         }
-                        String area = fs.getFs().getArea() != null ? fs.getFs().getArea() + "" : null;
-                        Point2D.Double pt = (Point2D.Double) posMap.getRowColValue(area, fs.getFs().getLocation());
+                        String area = fs.bo().getArea() != null ? fs.bo().getArea() + "" : null;
+                        Point2D.Double pt = (Point2D.Double) posMap.getRowColValue(area, fs.bo().getLocation());
                         if (pt == null) {
                             continue;
                         }
-                        fs.getFs().setLatitudestart(pt.y);
-                        fs.getFs().setLongitudestart(pt.x);
+                        fs.bo().setLatitudestart(pt.y);
+                        fs.bo().setLongitudestart(pt.x);
                     }
                 }
                 return biotic;

@@ -37,7 +37,7 @@ public class StationLengthDistTest {
 
     /*@Test(expected = NullPointerException.class)
     public void testDataGoesMissingBecauseOfMissingDistance() {
-        LengthDistMatrix mbo = (LengthDistMatrix) (new StationLengthDist()).perform(getInput(1.0, true, true, getFishStationsMissingDistance()));
+        LengthDistMatrix mbo = (LengthDistMatrix) (new StationLengthDist()).perform(getInput(1.0, true, true, getMissionsMissingDistance()));
         assertEquals(mbo.getData().getGroupRowCellValueAsDouble("havsil", "2013/1000", "10"), 50d, 0);
         MatrixBO test = (MatrixBO) mbo.getData().getGroupValue("havsil");
         for (String key : test.getKeys()) {
@@ -49,12 +49,12 @@ public class StationLengthDistTest {
 
     @Test(expected = NullPointerException.class)
     public void testDataGoesMissingBecauseOfMissingSampleWeight() {
-        LengthDistMatrix mbo = (LengthDistMatrix) (new StationLengthDist()).perform(getInput(1.0, true, true, getFishStationsMissingSampledWeight()));
+        LengthDistMatrix mbo = (LengthDistMatrix) (new StationLengthDist()).perform(getInput(1.0, true, true, getMissionsMissingSampledWeight()));
         assertEquals(mbo.getData().getGroupRowCellValueAsDouble("havsil", "2013/1000", "10"), 50d, 0);
         fail("This should have thrown a nullpointer exception by now");
     }*/
     LengthDistMatrix perform(Boolean inPercent, Boolean normToDist) {
-        return (LengthDistMatrix) (new StationLengthDist()).perform(getInput(inPercent, normToDist, getFishStations()));
+        return (LengthDistMatrix) (new StationLengthDist()).perform(getInput(inPercent, normToDist, getMissions()));
     }
 
     private Map<String, Object> getInput(Boolean inPercent, Boolean normToDist, List<MissionBO> missions) {
@@ -66,17 +66,17 @@ public class StationLengthDistTest {
         return input;
     }
 
-    List<MissionBO> getFishStations() {
+    List<MissionBO> getMissions() {
         MissionBO m = new MissionBO();
-        m.getMs().setCruise("2013");
+        m.bo().setCruise("2013");
         FishstationBO f = m.addFishstation(null);
-        f.getFs().setDistance(1.5d);
-        f.getFs().setSerialnumber(1000);
+        f.bo().setDistance(1.5d);
+        f.bo().setSerialnumber(1000);
         CatchSampleBO s = f.addCatchSample(null);
-        s.getCs().setCatchcategory("havsil");
-        s.getCs().setCatchweight(100.0);
-        s.getCs().setLengthsampleweight(50.0);
-        s.getCs().setCatchpartnumber(Integer.SIZE);
+        s.bo().setCatchcategory("havsil");
+        s.bo().setCatchweight(100.0);
+        s.bo().setLengthsampleweight(50.0);
+        s.bo().setCatchpartnumber(Integer.SIZE);
         IndividualBO i = s.addIndividual(null);
         i.setLength(0.1);
         i = s.addIndividual(null);
@@ -84,16 +84,16 @@ public class StationLengthDistTest {
         return Arrays.asList(m);
     }
 
-    List<MissionBO> getFishStationsMissingSampledWeight() {
+    List<MissionBO> getMissionsMissingSampledWeight() {
         MissionBO ms = new MissionBO();
-        ms.getMs().setCruise("2013");
+        ms.bo().setCruise("2013");
         FishstationBO f = ms.addFishstation(null);
-        f.getFs().setDistance(1.5d);
-        f.getFs().setSerialnumber(1000);
+        f.bo().setDistance(1.5d);
+        f.bo().setSerialnumber(1000);
         CatchSampleBO s = f.addCatchSample(null);
-        s.getCs().setCatchcategory("havsil");
-        s.getCs().setCatchweight(100.0);
-        s.getCs().setCatchpartnumber(Integer.SIZE);
+        s.bo().setCatchcategory("havsil");
+        s.bo().setCatchweight(100.0);
+        s.bo().setCatchpartnumber(Integer.SIZE);
         IndividualBO i = s.addIndividual(null);
         i.setLength(0.1);
         i = s.addIndividual(null);
@@ -101,30 +101,30 @@ public class StationLengthDistTest {
         return Arrays.asList(ms);
     }
 
-    List<MissionBO> getFishStationsMissingDistance() {
+    List<MissionBO> getMissionsMissingDistance() {
         MissionBO ms = new MissionBO();
-        ms.getMs().setCruise("2013");
+        ms.bo().setCruise("2013");
         
         FishstationBO f = ms.addFishstation(null);
-        f.getFs().setSerialnumber(1000);
-        f.getFs().setDistance(1.5d);
+        f.bo().setSerialnumber(1000);
+        f.bo().setDistance(1.5d);
         CatchSampleBO s = f.addCatchSample(null);
-        s.getCs().setCatchcategory("havsil");
-        s.getCs().setCatchweight(100.0);
-        s.getCs().setLengthsampleweight(50.0);
-        s.getCs().setCatchpartnumber(Integer.SIZE);
+        s.bo().setCatchcategory("havsil");
+        s.bo().setCatchweight(100.0);
+        s.bo().setLengthsampleweight(50.0);
+        s.bo().setCatchpartnumber(Integer.SIZE);
         IndividualBO i = s.addIndividual(null);
         i.setLength(0.1);
         i = s.addIndividual(null);
         i.setLength(0.11);
         
         f = ms.addFishstation(null);
-        f.getFs().setSerialnumber(1001);
+        f.bo().setSerialnumber(1001);
         s = f.addCatchSample(null);
-        s.getCs().setCatchcategory("havsil");
-        s.getCs().setCatchweight(100.0);
-        s.getCs().setLengthsampleweight(50.0);
-        s.getCs().setCatchpartnumber(Integer.SIZE);
+        s.bo().setCatchcategory("havsil");
+        s.bo().setCatchweight(100.0);
+        s.bo().setLengthsampleweight(50.0);
+        s.bo().setCatchpartnumber(Integer.SIZE);
         i = s.addIndividual(null);
         i.setLength(0.1);
         i = s.addIndividual(null);

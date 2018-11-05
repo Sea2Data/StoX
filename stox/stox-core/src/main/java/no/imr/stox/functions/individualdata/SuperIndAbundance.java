@@ -110,7 +110,7 @@ public class SuperIndAbundance extends AbstractFunction {
                         Double dsum = null;
                         if (splitByStationDens) {
                             for (IndividualBO indBO : indList) {
-                                String stationKey = indBO.getCatchSample().getStationBO().getKey();
+                                String stationKey = indBO.getCatchSample().getFishstation().getKey();
                                 Double m = stDens.getRowColValueAsDouble("m", stationKey);
                                 m = m == null ? 1 : m + 1;
                                 stDens.setRowColValue("m", stationKey, m);
@@ -136,7 +136,7 @@ public class SuperIndAbundance extends AbstractFunction {
                             // Default unscaled abundance proportion 
                             Double p = 1d / indList.size(); // equal split by default.
                             if (splitByStationDens) {
-                                String stationKey = indBO.getCatchSample().getStationBO().getKey();                                // Split by station density, like for swept area.
+                                String stationKey = indBO.getCatchSample().getFishstation().getKey();                                // Split by station density, like for swept area.
                                 Double m = stDens.getRowColValueAsDouble("m", stationKey);
                                 Double d = stDens.getRowColValueAsDouble("d", stationKey);
                                 if (d == null) {
@@ -257,7 +257,7 @@ public class SuperIndAbundance extends AbstractFunction {
      if (totalLFQ == null || lengthDist == null || indBO == null || indBO.getCatchSample() == null) {
      return null;
      }
-     String station = indBO.getCatchSample().getCatchBO().getStationBO().getKey();
+     String station = indBO.getCatchSample().getCatchBO().getFishstation().getKey();
      MatrixBO r = (MatrixBO) lengthDist.getGroupRowValue(species, station);
      if (r == null) {
      return null;
