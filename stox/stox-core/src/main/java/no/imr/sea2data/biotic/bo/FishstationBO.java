@@ -71,7 +71,7 @@ public class FishstationBO extends BaseBO implements ILatLonEvent {
     @FilterField(category = "function", help = "hasCatch(commonName) returns true if a fishstation has catch with the given species common name")
     public boolean hasCatch(String spec) {
         String s[] = spec.split("==");
-        String field = "catchcategory";
+        String field = "commonname";
         if (s.length == 2) {
             spec = s[1].trim();
             field = s[0].trim();
@@ -107,7 +107,7 @@ public class FishstationBO extends BaseBO implements ILatLonEvent {
             return 0;
         }
         String s[] = spec.split("==");
-        String field = "catchcategory";
+        String field = "commonname";
         if (s.length == 2) {
             spec = s[1].trim();
             field = s[0].trim();
