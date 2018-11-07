@@ -73,7 +73,7 @@ public class BioticXMLReader extends XMLReader {
             mission.bo().setPlatformname(getCurrentAttributeValue("platformname"));
             result = stations;
         } else if (current instanceof MissionBO && elmName.equals("fishstation")) {
-            FishstationBO station = stations.addFishstation(null);
+            FishstationBO station = stations.addFishstation();
             station.bo().setCatchplatform(station.getMission().bo().getPlatform());
             result = station;
         } else if (current instanceof FishstationBO && elmName.equals("catchsample")) {
@@ -82,7 +82,7 @@ public class BioticXMLReader extends XMLReader {
             if (taxa == null) {
                 taxa = "ukjent";
             }
-            CatchSampleBO sample = station.addCatchSample(null);
+            CatchSampleBO sample = station.addCatchSample();
             sample.bo().setCatchcategory(taxa);
             String noName = getCurrentAttributeValue("noname");
             if (noName == null || noName.isEmpty()) {
@@ -97,7 +97,7 @@ public class BioticXMLReader extends XMLReader {
             result = sample;
         } else if (current instanceof CatchSampleBO && elmName.equals("individual")) {
             CatchSampleBO sample = (CatchSampleBO) current;
-            IndividualBO indBO = sample.addIndividual(null);
+            IndividualBO indBO = sample.addIndividual();
             result = indBO;
         } /*else if (current instanceof CatchSampleBO && elmName.equals("prey")) {
             CatchSampleBO sample = (CatchSampleBO) current;
@@ -107,7 +107,7 @@ public class BioticXMLReader extends XMLReader {
             result = prey;
         }*/ else if (current instanceof IndividualBO && elmName.equals("agedetermination")) {
             IndividualBO ind = (IndividualBO) current;
-            AgeDeterminationBO ageBO = ind.addAgeDetermination(null);
+            AgeDeterminationBO ageBO = ind.addAgeDetermination();
             result = ageBO;
         }
         return result;

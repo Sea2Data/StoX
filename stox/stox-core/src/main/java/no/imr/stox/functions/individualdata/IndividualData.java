@@ -57,7 +57,7 @@ public class IndividualData extends AbstractFunction {
                             continue;
                         }
                         for (CatchSampleBO s : fs.getCatchSampleBOs()) {
-                            String specCatKey = s.getSpeciesCatTableKey();
+                            String specCatKey = s.getSpecCat();
                             // To do: check species against SpeciesDef in resolution if available. Otherwise this relies on filterbiotic.
                             for (IndividualBO i : s.getIndividualBOs()) {
                                 /*if (i.getIndividualweight() == null) {

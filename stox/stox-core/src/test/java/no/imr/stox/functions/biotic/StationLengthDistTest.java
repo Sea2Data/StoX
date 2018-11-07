@@ -69,17 +69,17 @@ public class StationLengthDistTest {
     List<MissionBO> getMissions() {
         MissionBO m = new MissionBO();
         m.bo().setCruise("2013");
-        FishstationBO f = m.addFishstation(null);
+        FishstationBO f = m.addFishstation();
         f.bo().setDistance(1.5d);
         f.bo().setSerialnumber(1000);
-        CatchSampleBO s = f.addCatchSample(null);
+        CatchSampleBO s = f.addCatchSample();
         s.bo().setCatchcategory("havsil");
         s.bo().setCatchweight(100.0);
         s.bo().setLengthsampleweight(50.0);
         s.bo().setCatchpartnumber(Integer.SIZE);
-        IndividualBO i = s.addIndividual(null);
+        IndividualBO i = s.addIndividual();
         i.setLength(0.1);
-        i = s.addIndividual(null);
+        i = s.addIndividual();
         i.setLength(0.11);
         return Arrays.asList(m);
     }
@@ -87,16 +87,16 @@ public class StationLengthDistTest {
     List<MissionBO> getMissionsMissingSampledWeight() {
         MissionBO ms = new MissionBO();
         ms.bo().setCruise("2013");
-        FishstationBO f = ms.addFishstation(null);
+        FishstationBO f = ms.addFishstation();
         f.bo().setDistance(1.5d);
         f.bo().setSerialnumber(1000);
-        CatchSampleBO s = f.addCatchSample(null);
+        CatchSampleBO s = f.addCatchSample();
         s.bo().setCatchcategory("havsil");
         s.bo().setCatchweight(100.0);
         s.bo().setCatchpartnumber(Integer.SIZE);
-        IndividualBO i = s.addIndividual(null);
+        IndividualBO i = s.addIndividual();
         i.setLength(0.1);
-        i = s.addIndividual(null);
+        i = s.addIndividual();
         i.setLength(0.11);
         return Arrays.asList(ms);
     }
@@ -105,29 +105,29 @@ public class StationLengthDistTest {
         MissionBO ms = new MissionBO();
         ms.bo().setCruise("2013");
         
-        FishstationBO f = ms.addFishstation(null);
+        FishstationBO f = ms.addFishstation();
         f.bo().setSerialnumber(1000);
         f.bo().setDistance(1.5d);
-        CatchSampleBO s = f.addCatchSample(null);
+        CatchSampleBO s = f.addCatchSample();
         s.bo().setCatchcategory("havsil");
         s.bo().setCatchweight(100.0);
         s.bo().setLengthsampleweight(50.0);
         s.bo().setCatchpartnumber(Integer.SIZE);
-        IndividualBO i = s.addIndividual(null);
+        IndividualBO i = s.addIndividual();
         i.setLength(0.1);
-        i = s.addIndividual(null);
+        i = s.addIndividual();
         i.setLength(0.11);
         
-        f = ms.addFishstation(null);
+        f = ms.addFishstation();
         f.bo().setSerialnumber(1001);
-        s = f.addCatchSample(null);
+        s = f.addCatchSample();
         s.bo().setCatchcategory("havsil");
         s.bo().setCatchweight(100.0);
         s.bo().setLengthsampleweight(50.0);
         s.bo().setCatchpartnumber(Integer.SIZE);
-        i = s.addIndividual(null);
+        i = s.addIndividual();
         i.setLength(0.1);
-        i = s.addIndividual(null);
+        i = s.addIndividual();
         i.setLength(0.11);
         return Arrays.asList(ms);
     }

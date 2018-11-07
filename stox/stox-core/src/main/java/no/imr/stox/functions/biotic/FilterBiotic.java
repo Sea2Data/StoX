@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import no.imr.stox.functions.utils.FilterUtils;
 import java.util.List;
 import java.util.Map;
+import no.imr.sea2data.biotic.bo.AgeDeterminationBO;
 import no.imr.stox.functions.utils.Functions;
 import no.imr.stox.functions.AbstractFunction;
 import no.imr.sea2data.biotic.bo.FishstationBO;
@@ -75,23 +76,23 @@ public class FilterBiotic extends AbstractFunction {
                 if (!FilterUtils.evaluate(ctx, stationExpression)) {
                     continue;
                 }
-                FishstationBO fsF = new FishstationBO(ms, fs);
-                msF.getFishstationBOs().add(fsF);
+                FishstationBO fsF = msF.addFishstation(new FishstationBO(ms, fs));
                 for (CatchSampleBO cb : fs.getCatchSampleBOs()) {
                     FilterUtils.resolveContext(ctx, cb);
                     // todo join catch and sample expression as input parameter
                     if (!(FilterUtils.evaluate(ctx, catchExpression) && FilterUtils.evaluate(ctx, sampleExpression))) {
                         continue;
                     }
-                    CatchSampleBO sampleF = new CatchSampleBO(fsF, cb);
-                    fsF.getCatchSampleBOs().add(sampleF);
+                    CatchSampleBO sampleF = fsF.addCatchSample(new CatchSampleBO(fsF, cb));
                     for (IndividualBO in : cb.getIndividualBOs()) {
                         FilterUtils.resolveContext(ctx, in);
                         if (!FilterUtils.evaluate(ctx, individualExpression)) {
                             continue;
                         }
-                        IndividualBO inF = new IndividualBO(sampleF, in);
-                        sampleF.getIndividualBOs().add(inF);
+                        IndividualBO inF = sampleF.addIndividual(new IndividualBO(sampleF, in));
+                        for (AgeDeterminationBO aBO : in.getAgeDeterminationBOs()) {
+                            inF.addAgeDetermination(new AgeDeterminationBO(inF, aBO));
+                        }
                     }
                 }
             }

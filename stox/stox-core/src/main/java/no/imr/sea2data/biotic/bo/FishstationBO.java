@@ -2,7 +2,6 @@ package no.imr.sea2data.biotic.bo;
 
 import BioticTypes.v3.CatchsampleType;
 import BioticTypes.v3.FishstationType;
-import BioticTypes.v3.MissionType;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Function;
@@ -10,9 +9,7 @@ import no.imr.sea2data.imrbase.map.ILatLonEvent;
 
 public class FishstationBO extends BaseBO implements ILatLonEvent {
 
-    private String key = null; // cache
     private String stratum; // should be moved to datatype
-    private Integer year; // cache
     private List<CatchSampleBO> catchSampleBOs = new ArrayList<>();
 
     public FishstationBO(MissionBO ms, FishstationType fs) {
@@ -71,42 +68,68 @@ public class FishstationBO extends BaseBO implements ILatLonEvent {
         return getCountBy(code, c -> c.bo().getCatchcategory());
     }
 
-    @FilterField(category="function", help="hasCatch(commonName) returns true if a fishstation has catch with the given species common name")
-    public boolean hasCatch(String commonName) {
+    @FilterField(category = "function", help = "hasCatch(commonName) returns true if a fishstation has catch with the given species common name")
+    public boolean hasCatch(String spec) {
+        String s[] = spec.split("==");
+        String field = "catchcategory";
+        if (s.length == 2) {
+            spec = s[1].trim();
+            field = s[0].trim();
+        }
         for (CatchSampleBO c : getCatchSampleBOs()) {
-            if (c.bo().getCommonname().equals(commonName)) {
-                return true;
+            String cspec;
+            switch (field) {
+                case "catchcategory":
+                    cspec = c.bo().getCatchcategory();
+                    break;
+                case "commonname":
+                    cspec = c.bo().getCommonname();
+                    break;
+                case "aphia":
+                    cspec = c.bo().getAphia();
+                    break;
+                default:
+                    cspec = null;
             }
+
+            if (cspec == null || !cspec.equalsIgnoreCase(spec)) {
+                continue;
+            }
+            return true;
         }
         return false;
     }
 
-    @FilterField(category="function", help="getYear() returns the year of station start date")
-    public Integer getYear() {
-        if (year == null) {
-            year = bo().getStationstartdate() != null ? bo().getStationstartdate().getYear() : null;
-        }
-        return year;
-    }
-
-    @FilterField(category="function", help="getLengthSampleCount(spec) returns the number of length samples for a given species common name")
+    @FilterField(category = "function", help = "getLengthSampleCount(spec) returns the number of length samples for a given species common name")
     public int getLengthSampleCount(String spec) {
         int n = 0;
-        if (getCatchSampleBOs() == null) {
+        if (spec == null || getCatchSampleBOs() == null) {
             return 0;
         }
+        String s[] = spec.split("==");
+        String field = "catchcategory";
+        if (s.length == 2) {
+            spec = s[1].trim();
+            field = s[0].trim();
+        }
         for (CatchSampleBO c : getCatchSampleBOs()) {
-            if (c.bo().getCommonname() == null && c.bo().getCatchcategory() == null) {
-                continue;
+            String cspec;
+            switch (field) {
+                case "catchcategory":
+                    cspec = c.bo().getCatchcategory();
+                    break;
+                case "commonname":
+                    cspec = c.bo().getCommonname();
+                    break;
+                case "aphia":
+                    cspec = c.bo().getAphia();
+                    break;
+                default:
+                    cspec = null;
             }
-            if (c.bo().getCommonname() != null) {
-                if (!c.bo().getCommonname().equalsIgnoreCase(spec)) { // SILDG03
-                    continue;
-                }
-            } else if (c.bo().getCatchcategory() != null) {
-                if (!c.bo().getCatchcategory().equalsIgnoreCase(spec)) { // 161722.G03
-                    continue;
-                }
+
+            if (cspec == null || !cspec.equalsIgnoreCase(spec)) {
+                continue;
             }
             if (c.bo().getLengthsamplecount() == null) {
                 continue;
@@ -136,32 +159,26 @@ public class FishstationBO extends BaseBO implements ILatLonEvent {
     }
 
     @Override
-    public String getKey() {
-        if (key != null) {
-            return key;
-        }
-        String cruise = getMission().bo().getCruise();
-        key = (cruise != null ? cruise : (getYear() != null ? getYear() : "")) + "/" + 
-                (bo().getSerialnumber() != null ? bo().getSerialnumber() : "");
-        return key;
-    }
-
-    @Override
-    public String toString() {
-        return getKey();
+    public String getInternalKey() {
+        return bo().getSerialnumber() != null ? bo().getSerialnumber() + "" : "";
     }
 
     public List<CatchSampleBO> getCatchSampleBOs() {
         return catchSampleBOs;
     }
 
-    public CatchSampleBO addCatchSample(CatchsampleType cs) {
+    public CatchSampleBO addCatchSample() {
+        return addCatchSample((CatchsampleType) null);
+    }
 
+    public CatchSampleBO addCatchSample(CatchsampleType cs) {
         if (cs == null) {
             cs = new CatchsampleType();
-//            cs.setParent(fs);
         }
-        CatchSampleBO cbo = new CatchSampleBO(this, cs);
+        return addCatchSample(new CatchSampleBO(this, cs));
+    }
+
+    public CatchSampleBO addCatchSample(CatchSampleBO cbo) {
         getCatchSampleBOs().add(cbo);
         return cbo;
     }

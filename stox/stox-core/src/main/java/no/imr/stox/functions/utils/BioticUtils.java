@@ -6,6 +6,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Objects;
 import java.util.Set;
+import no.imr.sea2data.biotic.bo.AgeDeterminationBO;
 import no.imr.sea2data.biotic.bo.FishstationBO;
 import no.imr.sea2data.biotic.bo.IndividualBO;
 import no.imr.sea2data.biotic.bo.CatchSampleBO;
@@ -82,7 +83,7 @@ public final class BioticUtils {
             case Functions.COL_IND_GEAR:
                 return i.getCatchSample().getFishstation().bo().getGear();
             case Functions.COL_IND_SPECCAT:
-                return i.getCatchSample().getSpeciesCatTableKey();
+                return i.getCatchSample().getSpecCat();
             case Functions.COL_IND_SPECIES:
                 return i.getCatchSample().bo().getCatchcategory();
             case Functions.COL_IND_NONAME:
@@ -287,5 +288,26 @@ public final class BioticUtils {
             } while (i != 5);
         }
         return 1d;
+    }
+
+    public static List<MissionBO> copyBioticData(List<MissionBO> mList) {
+        List<MissionBO> missions = new ArrayList<>();
+        mList.forEach((ms) -> {
+            MissionBO ms2 = new MissionBO(ms);
+            missions.add(ms2);
+            ms.getFishstationBOs().forEach((f) -> {
+                FishstationBO fs = ms2.addFishstation(new FishstationBO(ms2, f));
+                f.getCatchSampleBOs().forEach((c) -> {
+                    CatchSampleBO cs = fs.addCatchSample(new CatchSampleBO(fs, c));
+                    c.getIndividualBOs().forEach((i) -> {
+                        IndividualBO ii = cs.addIndividual(new IndividualBO(cs, i));
+                        i.getAgeDeterminationBOs().forEach((aBO) -> {
+                            ii.addAgeDetermination(new AgeDeterminationBO(ii, aBO));
+                        });
+                    });
+                });
+            });
+        });
+        return missions;
     }
 }

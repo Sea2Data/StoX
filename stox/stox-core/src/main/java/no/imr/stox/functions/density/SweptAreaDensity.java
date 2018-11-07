@@ -255,7 +255,7 @@ public class SweptAreaDensity extends AbstractFunction {
                             return null;
                         }
                         for (CatchSampleBO s : fs.getCatchSampleBOs()) {
-                            String specCat = s.getSpeciesCatTableKey(); // Using taxa as group
+                            String specCat = s.getSpecCat(); // Using taxa as group
                             Double variable = null;
                             switch (catchVariable) {
                                 case Functions.CATCHVARIABLE_WEIGHT:

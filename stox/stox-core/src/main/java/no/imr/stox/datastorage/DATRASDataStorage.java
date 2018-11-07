@@ -215,7 +215,7 @@ public class DATRASDataStorage extends FileDataStorage {
                                 // SweepLngth
                                 sweep,
                                 // GearExp
-                                getGearExp(sweep, fs.getYear(), fs.bo().getSerialnumber(), fs.bo().getBottomdepthstart()), // TODO: S=Single, D=Double, -9 not given
+                                getGearExp(sweep, fs.getMission().bo().getStartyear(), fs.bo().getSerialnumber(), fs.bo().getBottomdepthstart()), // TODO: S=Single, D=Double, -9 not given
                                 // DoorType
                                 "P", fs.bo().getSerialnumber(),
                                 // HaulNo

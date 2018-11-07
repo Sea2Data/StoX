@@ -5,11 +5,10 @@ import BioticTypes.v3.IndividualType;
 import java.util.ArrayList;
 import java.util.List;
 
-
 public class CatchSampleBO extends BaseBO {
 
     final private List<IndividualBO> individualBOs = new ArrayList<>();
-    private String specCat;
+    private String specCat = null;
 
     public CatchSampleBO(FishstationBO fsBO, CatchsampleType cs) {
         super(fsBO, cs);
@@ -28,27 +27,25 @@ public class CatchSampleBO extends BaseBO {
         return individualBOs;
     }
 
+    public IndividualBO addIndividual() {
+        return addIndividual((IndividualType) null);
+    }
+
     public IndividualBO addIndividual(IndividualType i) {
-        if(i == null) {
+        if (i == null) {
             i = new IndividualType();
-            //i.setParent(bo());
         }
-        IndividualBO bo = new IndividualBO(this, i);
+        return addIndividual(new IndividualBO(this, i));
+    }
+
+    public IndividualBO addIndividual(IndividualBO bo) {
         getIndividualBOs().add(bo);
         return bo;
     }
 
-    public String getKey() {
-        return getFishstation().getKey() + "/" + getSpeciesKey() + "/" + bo().getCatchpartnumber();
-    }
-
     @Override
-    public String toString() {
-        return getKey();
-    }
-
-    public String getSpeciesTableKey() {
-        return bo().getCommonname() != null && !bo().getCommonname().isEmpty() ? bo().getCommonname() : bo().getCatchcategory();
+    public String getInternalKey() {
+        return getSpeciesKey() + "/" + bo().getCatchpartnumber();
     }
 
     /**
@@ -58,12 +55,15 @@ public class CatchSampleBO extends BaseBO {
      *
      * @return
      */
-    public String getSpeciesCatTableKey() {
-        return specCat != null ? specCat : getSpeciesTableKey();
+    public String getSpecCat() {
+        if (specCat == null) {
+            specCat = getSpeciesKey();
+        }
+        return specCat;
     }
 
-    public String getSpecCat() {
-        return specCat;
+    public String getSpeciesKey() {
+        return bo().getCommonname() != null && !bo().getCommonname().isEmpty() ? bo().getCommonname() : bo().getCatchcategory();
     }
 
     public void setSpecCat(String specCat) {
@@ -71,11 +71,7 @@ public class CatchSampleBO extends BaseBO {
     }
 
     public FishstationBO getFishstation() {
-        return (FishstationBO)getParent();
-    }
-
-    public String getSpeciesKey() {
-        return bo().getCommonname() != null && !bo().getCommonname().isEmpty() ? bo().getCommonname() : bo().getCatchcategory();
+        return (FishstationBO) getParent();
     }
 
 }

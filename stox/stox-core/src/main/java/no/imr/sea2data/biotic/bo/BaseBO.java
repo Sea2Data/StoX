@@ -13,6 +13,7 @@ public class BaseBO {
 
     BaseBO parent;
     protected Object bo;
+    String key;
 
     public BaseBO(BaseBO parent, Object bo) {
         this.parent = parent;
@@ -21,6 +22,26 @@ public class BaseBO {
 
     public BaseBO getParent() {
         return parent;
+    }
+
+    public String getKey() {
+        if (key == null) {
+            String parentprefix = "";
+            if(parent != null) {
+                parentprefix = parent.getKey() + "/";
+            }
+            key = parentprefix + getInternalKey();
+        }
+        return key;
+    }
+    
+    @Override
+    public String toString() {
+        return getKey();
+    }
+
+    protected String getInternalKey() {
+        return null;
     }
 
 }

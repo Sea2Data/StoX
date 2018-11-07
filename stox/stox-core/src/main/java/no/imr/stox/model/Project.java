@@ -36,7 +36,7 @@ public class Project implements IProject {
 
     private String rootFolder;
     private String projectName;
-    public static final double RESOURCE_VERSION = 1.81; // System version at current program
+    public static final double RESOURCE_VERSION = 1.82; // System version at current program
     private Double resourceVersion = 1.00;                   // System version at program used to create the project file
     private final Map<String, IModel> models = new HashMap<>();
     private final ILibrary library;

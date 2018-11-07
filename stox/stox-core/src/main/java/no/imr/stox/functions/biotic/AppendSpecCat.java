@@ -11,6 +11,7 @@ import no.imr.sea2data.biotic.bo.FishstationBO;
 import no.imr.sea2data.biotic.bo.IndividualBO;
 import no.imr.sea2data.biotic.bo.CatchSampleBO;
 import no.imr.sea2data.biotic.bo.MissionBO;
+import no.imr.stox.functions.utils.BioticUtils;
 
 /**
  * This class is used to filter data with special attributes among all biotic
@@ -37,8 +38,8 @@ public class AppendSpecCat extends AbstractFunction {
      */
     @Override
     public Object perform(Map<String, Object> input) {
-        MissionBO fList = (MissionBO) input.get(Functions.PM_APPENDSPECCAT_BIOTICDATA);
-        MissionBO fishstations = new MissionBO();
+        List<MissionBO> mList = (List<MissionBO>) input.get(Functions.PM_APPENDSPECCAT_BIOTICDATA);
+        List<MissionBO> missions = BioticUtils.copyBioticData(mList);
         String specCat = (String) input.get(Functions.PM_APPENDSPECCAT_SPECCAT);
         Map<String, String> m = new HashMap<>();
         if (specCat != null) {
@@ -55,33 +56,27 @@ public class AppendSpecCat extends AbstractFunction {
                         }
                     });
         }
-        for (FishstationBO f : fList.getFishstationBOs()) {
-            FishstationBO fn = new FishstationBO(fList, f);
-            fishstations.getFishstationBOs().add(fn);
-            for (CatchSampleBO c : f.getCatchSampleBOs()) {
-                CatchSampleBO cn = new CatchSampleBO(fn, c);
-                fn.getCatchSampleBOs().add(cn);
-
-                String spec = null;
-                if (m.isEmpty()) {
-                    spec = specCat;
-                } else {
-                    if (c.bo().getCommonname() != null) {
-                        String str = m.get(c.bo().getCommonname().toLowerCase());
-                        if (str != null) {
-                            spec = str;
+        missions.forEach((ms) -> {
+            ms.getFishstationBOs().forEach((fs) -> {
+                fs.getCatchSampleBOs().forEach((cs) -> {
+                    String spec = null;
+                    if (m.isEmpty()) {
+                        spec = specCat;
+                    } else {
+                        if (cs.bo().getCommonname() != null) {
+                            String str = m.get(cs.bo().getCommonname().toLowerCase());
+                            if (str != null) {
+                                spec = str;
+                            }
                         }
                     }
-                }
-                if (spec != null) {
-                    cn.setSpecCat(spec); // Set spec cat to all catches
-                }
-                for (IndividualBO i : c.getIndividualBOs()) {
-                    c.getIndividualBOs().add(new IndividualBO(c, i));
-                }
-            }
-        }
-        return fishstations;
+                    if (spec != null) {
+                        cs.setSpecCat(spec); // Set spec cat to all catches
+                    }
+                });
+            });
+        });
+        return missions;
     }
 
 }

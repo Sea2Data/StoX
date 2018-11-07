@@ -47,15 +47,15 @@ public class IndividualDataTest {
     List<MissionBO> getMissions() {
         MissionBO mt = new MissionBO();
         mt.bo().setCruise("2013");
-        FishstationBO f = mt.addFishstation(null);
+        FishstationBO f = mt.addFishstation();
         f.bo().setDistance(1.5d);
         f.bo().setSerialnumber(1000);
-        CatchSampleBO s = f.addCatchSample(null);
+        CatchSampleBO s = f.addCatchSample();
         s.bo().setCatchcategory("havsil");
         s.bo().setCatchweight(100.0);
         s.bo().setLengthsampleweight(50.0);
         s.bo().setCatchpartnumber(Integer.SIZE);
-        IndividualBO i = s.addIndividual(null);
+        IndividualBO i = s.addIndividual();
         i.bo().setSpecimenid(1);
         i.setLength(.1);
         i.setIndividualweight(0.005);

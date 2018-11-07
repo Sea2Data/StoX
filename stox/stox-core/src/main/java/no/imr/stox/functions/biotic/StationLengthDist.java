@@ -58,7 +58,7 @@ public class StationLengthDist extends AbstractFunction {
                 }
                 String observation = fs.getKey(); // Using fishstation key as row
                 for (CatchSampleBO s : fs.getCatchSampleBOs()) {
-                    String speciesCat = s.getSpeciesCatTableKey(); // Using taxa as group
+                    String speciesCat = s.getSpecCat(); // Using taxa as group
                     // Standardize sample to total catch
                     Double sampleWFac = StoXMath.raiseFac(s.bo().getCatchweight(), s.bo().getLengthsampleweight());
                     if (s.getIndividualBOs().isEmpty() && (s.bo().getLengthsampleweight() != null && s.bo().getLengthsampleweight() > 0d || s.bo().getLengthsamplecount() != null && s.bo().getLengthsamplecount() > 0d)) {

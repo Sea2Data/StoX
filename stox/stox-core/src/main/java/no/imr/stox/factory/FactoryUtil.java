@@ -185,9 +185,13 @@ public final class FactoryUtil {
                 }
             }
         }
-        if (prj.getResourceVersion() < 1.81) {
+        if (prj.getResourceVersion() < 1.82) {
             replaceParameter(prj.getBaseline(), Functions.FN_FILTERBIOTIC, Functions.PM_FILTERBIOTIC_FISHSTATIONEXPR, "sildG0", "sild\\'G0");
             replaceParameter(prj.getBaseline(), Functions.FN_FILTERBIOTIC, Functions.PM_FILTERBIOTIC_FISHSTATIONEXPR, "SILDG0", "SILD\\'G0");
+            replaceParameter(prj.getBaseline(), Functions.FN_FILTERBIOTIC, Functions.PM_FILTERBIOTIC_CATCHEXPR, "sildG0", "sild\\'G0");
+            replaceParameter(prj.getBaseline(), Functions.FN_FILTERBIOTIC, Functions.PM_FILTERBIOTIC_CATCHEXPR, "SILDG0", "SILD\\'G0");
+            replaceParameter(prj.getBaseline(), Functions.FN_SPLITNASC, Functions.PM_SPLITNASC_SPECIESTS, "sildG0", "sild\\'G0");
+            replaceParameter(prj.getBaseline(), Functions.FN_FILTERBIOTIC, Functions.PM_SPLITNASC_SPECIESTS, "SILDG0", "SILD\\'G0");
         }
 
         // Remove processes not pointing to functions

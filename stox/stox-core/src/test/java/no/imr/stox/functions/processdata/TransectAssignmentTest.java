@@ -64,12 +64,12 @@ public class TransectAssignmentTest {
 
     List<MissionBO> getMissions() {
         MissionBO mt = new MissionBO();
-        FishstationBO f = mt.addFishstation(null);
+        FishstationBO f = mt.addFishstation();
         f.bo().setLongitudestart(1.1d);
         f.bo().setLatitudestart(0.9d);
         f.bo().setSerialnumber(1000);
         
-        f = mt.addFishstation(null);
+        f = mt.addFishstation();
         f.bo().setLongitudestart(2.9d);
         f.bo().setLatitudestart(0.9d);
         f.bo().setSerialnumber(1000);

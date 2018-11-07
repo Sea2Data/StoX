@@ -8,32 +8,25 @@ import java.util.List;
 import no.imr.sea2data.imrbase.math.Calc;
 import no.imr.stox.functions.utils.StoXMath;
 
-
 public class IndividualBO extends BaseBO implements Serializable {
-
 
     private List<AgeDeterminationBO> ageDeterminationBOs = new ArrayList<>();
     private Double individualweightG;
     private Double lengthCM;
 
-    
     public IndividualBO(CatchSampleBO sampleF, IndividualType i) {
         super(sampleF, i);
         recache();
     }
 
     public IndividualType bo() {
-        return (IndividualType)bo;
+        return (IndividualType) bo;
     }
 
     public IndividualBO(CatchSampleBO sampleF, IndividualBO bo) {
         this(sampleF, bo.bo());
-        for (AgeDeterminationBO aBO : bo.getAgeDeterminationBOs()) {
-            AgeDeterminationBO agBO = new AgeDeterminationBO(this, aBO);
-            ageDeterminationBOs.add(agBO);
-        }
     }
-    
+
     private void recache() {
         this.lengthCM = Calc.roundTo(StoXMath.mToCM(bo().getLength()), 8);
         this.individualweightG = Calc.roundTo(StoXMath.kgToGrams(bo().getIndividualweight()), 8);
@@ -58,7 +51,7 @@ public class IndividualBO extends BaseBO implements Serializable {
     }
 
     public CatchSampleBO getCatchSample() {
-        return (CatchSampleBO)getParent();
+        return (CatchSampleBO) getParent();
     }
 
     public Integer getAge() {
@@ -93,34 +86,36 @@ public class IndividualBO extends BaseBO implements Serializable {
         return acquireAgeDet().bo().getCalibration();
     }
 
-    @Override
-    public String toString() {
-        return getKey();
-    }
-
     public List<AgeDeterminationBO> getAgeDeterminationBOs() {
         return ageDeterminationBOs;
     }
 
+    public AgeDeterminationBO addAgeDetermination() {
+        return addAgeDetermination((AgedeterminationType) null);
+    }
+
     public AgeDeterminationBO addAgeDetermination(AgedeterminationType aa) {
-        if(aa == null) {
+        if (aa == null) {
             aa = new AgedeterminationType();
-//            aa.setParent(ii);
         }
-        AgeDeterminationBO agedet = new AgeDeterminationBO(this, aa);
+        return addAgeDetermination(new AgeDeterminationBO(this, aa));
+    }
+
+    final public AgeDeterminationBO addAgeDetermination(AgeDeterminationBO agedet) {
         ageDeterminationBOs.add(agedet);
         return agedet;
     }
 
     public AgeDeterminationBO acquireAgeDet() {
         if (ageDeterminationBOs.isEmpty()) {
-            return addAgeDetermination(null);
+            return addAgeDetermination();
         }
         return ageDeterminationBOs.get(0);
     }
 
-    public String getKey() {
-        return (getCatchSample() != null ? getCatchSample().getKey() + "/" : "") + (bo().getSpecimenid() != null ? bo().getSpecimenid() : "");
+    @Override
+    public String getInternalKey() {
+        return bo().getSpecimenid() != null ? bo().getSpecimenid() + "" : "";
     }
 
 }

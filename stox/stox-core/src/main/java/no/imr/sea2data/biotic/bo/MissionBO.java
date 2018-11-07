@@ -38,12 +38,26 @@ public class MissionBO extends BaseBO {
         return fishstationBOs;
     }
 
+    public FishstationBO addFishstation() {
+        return addFishstation((FishstationType) null);
+    }
+
     public FishstationBO addFishstation(FishstationType fst) {
         if (fst == null) {
             fst = new FishstationType();
         }
-        FishstationBO fs = new FishstationBO(this, fst);
-        getFishstationBOs().add(fs);
-        return fs;
+        return addFishstation(new FishstationBO(this, fst));
     }
+
+    public FishstationBO addFishstation(FishstationBO bo) {
+        getFishstationBOs().add(bo);
+        return bo;
+    }
+
+    @Override
+    public String getInternalKey() {
+        String cruise = bo().getCruise();
+        return cruise != null ? cruise : (bo().getStartyear() != null ? bo().getStartyear() + "" : "");
+    }
+
 }
