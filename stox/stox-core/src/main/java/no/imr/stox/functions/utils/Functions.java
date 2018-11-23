@@ -62,6 +62,7 @@ public final class Functions {
     public static final String DT_ACOUSTICDATA = "AcousticData";
     public static final String DT_NASC = "NASC";
     public static final String DT_POLYGONAREA = "PolygonArea";
+    public static final String DT_SAMPLEUNITS = "SampleUnits";
     public static final String DT_PROCESSDATA = "ProcessData";
     public static final String DT_MATRIX = "Matrix";
 
@@ -89,7 +90,8 @@ public final class Functions {
     public static final String MM_INDIVIDUALDATA_MATRIX = "Matrix[GROUP~SpecCat / ROW~SampleUnit / COL~EstLayer / CELL~LengthGroup / VAR~Individuals]";
     public static final String MM_SUPERINDABUNDANCE_MATRIX = "Matrix[ROW~Individual / COL~IndVariable / VAR~Value]";
     public static final String MM_SAMPLEUNITVARIABLE_MATRIX = "Matrix[ROW~SampleUnit / COL~Variable / VAR~Value]";
-
+    public static final String MM_SAMPLEUNITS_MATRIX = "Matrix[ROW~Stratum / COL~PSU / VAR~EDSU]";
+    
     // Report matrices
     public static final String MM_XCATBYLENGTH_MATRIX = "Matrix[GROUP~SPEC_ESTL_STRATA / ROW~LengthGroup / COL~XCat / CELL~Variable / VAR~Value]";
     public static final String MM_TOTALABUNDANCEREPORT_MATRIX = "Matrix[GROUP~SpecCat / ROW~EstLayer / COL~Stratum / CELL~Variable / VAR~Value]";
@@ -167,6 +169,11 @@ public final class Functions {
     public static final String FN_APPENDSPECCAT = "AppendSpecCat";
     public static final String PM_APPENDSPECCAT_BIOTICDATA = "BioticData";
     public static final String PM_APPENDSPECCAT_SPECCAT = "SpecCat";
+    public static final String PM_APPENDSPECCAT_SPECCATMETHOD = "SpecCatMethod";
+    public static final String PM_APPENDSPECCAT_FILENAME = "FileName";
+    public static final String PM_APPENDSPECCAT_SPECVARSTOX = "SpecVarStoX";
+    public static final String PM_APPENDSPECCAT_SPECVARREF = "SpecVarRef";
+    public static final String PM_APPENDSPECCAT_SPECCATREF = "SpecCatRef";
 
     public static final String FN_FILTERACOUSTIC = "FilterAcoustic";
     public static final String PM_FILTERACOUSTIC_ACOUSTICDATA = "AcousticData";
@@ -526,6 +533,9 @@ public final class Functions {
     public static final String FN_GETREPORTS = "getReports";
     public static final String PM_GETREPORTS_OUT = "out";
     public static final String PM_GETREPORTS_OPTIONS = "options";
+
+    public static final String FN_SAMPLEUNIT = "SampleUnit";
+    public static final String PM_SAMPLEUNIT_PROCESSDATA = "ProcessData";
 
     public static final String COL_POLVAR_INCLUDEINTOTAL = "includeintotal";
     public static final String COL_POLVAR_POLYGON = "polygon";

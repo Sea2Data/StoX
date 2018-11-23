@@ -86,7 +86,12 @@ public class ReadBioticXML extends AbstractFunction {
                     }
 
                 }
+                // catchplatform=platform if null
+                if (fbo.bo().getCatchplatform() == null) {
+                    fbo.bo().setCatchplatform(mbo.bo().getPlatform());
+                }
             }
+            // cruise logic if null
             if (mbo.bo().getCruise() == null) {
                 // set default cruise as missiontype-year if not already set
                 boolean useMissionTypeInCruiseTag = model.getProject().getResourceVersion() > 1.26;
@@ -94,6 +99,7 @@ public class ReadBioticXML extends AbstractFunction {
                 String currentCruise = mtPref + mbo.bo().getStartyear();
                 mbo.bo().setCruise(currentCruise);
             }
+
         }
     }
 }

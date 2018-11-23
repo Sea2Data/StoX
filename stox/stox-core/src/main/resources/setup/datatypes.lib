@@ -93,3 +93,7 @@ Description: Covariance landingdata
 [Datatype]
 Name: LandingWeightCovData
 Description: landing weight Covariance grouped weight
+
+[Datatype]
+Name: SampleUnits
+Description: Sampleunits - Stratum, PSU and EDSU

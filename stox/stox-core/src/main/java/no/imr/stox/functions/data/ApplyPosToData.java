@@ -17,7 +17,9 @@ import no.imr.stox.datastorage.BioticDataStorage;
 import no.imr.stox.datastorage.IDataStorage;
 import no.imr.stox.datastorage.LandingDataStorage;
 import no.imr.stox.functions.AbstractFunction;
+import no.imr.stox.functions.utils.BioticUtils;
 import no.imr.stox.functions.utils.Functions;
+import no.imr.stox.functions.utils.LandingUtils;
 import no.imr.stox.functions.utils.ProjectUtils;
 import no.imr.stox.functions.utils.StratumUtils;
 
@@ -49,21 +51,12 @@ public class ApplyPosToData extends AbstractFunction {
         List<MissionBO> biotic = (List) input.get(Functions.PM_APPLYPOSTODATA_BIOTICDATA);
         switch (dataSource) {
             case Functions.SOURCETYPE_LANDING:
-                for (SluttSeddel sl : landing) {
-                    if (sl.getFangstHomr() == null || sl.getFangstLok() == null) {
+                List<SluttSeddel> landing2 = landing;//LandingUtils.copyLandingData(landing);
+                for (SluttSeddel sl : landing2) {
+                    if (sl.getLongitude() != null && sl.getLatitude() != null) {
                         continue;
                     }
-                    String area = sl.getFangstHomr() + "";
-
-                    Integer loc = Conversion.safeStringtoIntegerNULL(sl.getFangstLok());
-                    if (area != null && loc != null) {
-                        continue;
-                    }
-
-                    String stratum = area;
-                    if (areaCoding.equals(Functions.AREACODING_MAINAREAANDLOCATION)) {
-                        stratum += "_" + loc;
-                    }
+                    String stratum = StratumUtils.getStratumName(areaCoding, sl.getFangstHomr(), sl.getFangstLok());
                     Point2D.Double pt = (Point2D.Double) posMap.getRowValue(stratum);
                     if (pt == null) {
                         continue;
@@ -71,15 +64,16 @@ public class ApplyPosToData extends AbstractFunction {
                     sl.setLongitude(pt.x);
                     sl.setLatitude(pt.y);
                 }
-                return landing;
+                return landing2;
             case Functions.SOURCETYPE_BIOTIC:
-                for (MissionBO ms : biotic) {
+                List<MissionBO> biotic2 = biotic;//BioticUtils.copyBioticData(biotic); cannot copy data 
+                for (MissionBO ms : biotic2) {
                     for (FishstationBO fs : ms.getFishstationBOs()) {
                         if (fs.bo().getLatitudestart() != null && fs.bo().getLongitudestart() != null) {
                             continue;
                         }
-                        String area = fs.bo().getArea() != null ? fs.bo().getArea() + "" : null;
-                        Point2D.Double pt = (Point2D.Double) posMap.getRowColValue(area, fs.bo().getLocation());
+                        String stratum = StratumUtils.getStratumName(areaCoding, fs.bo().getArea(), fs.bo().getLocation());
+                        Point2D.Double pt = (Point2D.Double) posMap.getRowValue(stratum);
                         if (pt == null) {
                             continue;
                         }
@@ -87,7 +81,7 @@ public class ApplyPosToData extends AbstractFunction {
                         fs.bo().setLongitudestart(pt.x);
                     }
                 }
-                return biotic;
+                return biotic2;
         }
 
         return null;

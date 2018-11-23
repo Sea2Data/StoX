@@ -39,10 +39,10 @@ import org.junit.Test;
  */
 public class ConvertPolygon {
 
-    //@Test
+    @Test
     public void combine() {
         try {
-            List<String> wkts = Files.readAllLines(Paths.get("C:\\Users\\aasmunds\\workspace\\stox\\reference\\stratum/Kysttokt_strata3.txt"));
+            List<String> wkts = Files.readAllLines(Paths.get("C:\\Users\\aasmunds\\workspace\\stox\\reference\\stratum/Kysttokt_strata.txt"));
             Map<String, String> wkt = wkts.stream()
                     .map(s -> {
                         String[] str = s.split("\\t");
@@ -60,7 +60,7 @@ public class ConvertPolygon {
                 }
                 if (line.trim().isEmpty()) {
                     if (strata != null) {
-                        System.out.println(strata + "\\t" + combine(strata, strataRefs));
+                        System.out.println(strata + "\t" + combine(strata, strataRefs));
                     }
                     strata = null;
                     strataRefs.clear();

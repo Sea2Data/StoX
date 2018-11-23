@@ -119,7 +119,7 @@ public class LandingXMLReader extends XMLReader {
         } else if (key.equalsIgnoreCase("fangstkysthav")) {
             bo.setFangstKystHav(value);
         } else if (key.equalsIgnoreCase("fangsthomr")) {
-            bo.setFangstHomr(Conversion.safeStringtoIntegerNULL(value));
+            bo.setFangstHomr(value);
         } else if (key.equalsIgnoreCase("fangstlok")) {
             bo.setFangstLok(value);
         } else if (key.equalsIgnoreCase("fangstsone")) {

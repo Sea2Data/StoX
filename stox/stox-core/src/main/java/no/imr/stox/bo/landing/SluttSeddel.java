@@ -36,7 +36,7 @@ public class SluttSeddel {
     Date sisteFangstDato;
     String fangstRegion;
     String fangstKystHav;
-    Integer fangstHomr;
+    String fangstHomr;
     String fangstLok;
     Double latitude;
     Double longitude;
@@ -265,11 +265,11 @@ public class SluttSeddel {
         this.fangstKystHav = fangstKystHav;
     }
 
-    public Integer getFangstHomr() {
+    public String getFangstHomr() {
         return fangstHomr;
     }
 
-    public void setFangstHomr(Integer fangstHomr) {
+    public void setFangstHomr(String fangstHomr) {
         this.fangstHomr = fangstHomr;
     }
 
@@ -374,4 +374,7 @@ public class SluttSeddel {
         return fangstAar + "/" + id;
     }
 
+    public void addFiskeLinje(FiskeLinje fl) {
+        getFiskelinjer().add(fl);
+    }
 }

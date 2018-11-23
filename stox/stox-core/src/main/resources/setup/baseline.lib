@@ -106,7 +106,7 @@ Output: BioticData
 
 [Function]
 Name: ConvertLengthAndWeight
-Description: Estimates live length from partial length measurements.
+Description: Estimates full length L&#61a*Lgut+b from gutted length, and full weight W&#61f*W from gutted weight. f is the factor for gutted weight (head on or off). The individual product type is used to determine the gut type.
 Class: no.imr.stox.functions.biotic.ConvertLengthAndWeight
 Parameter: Name=BioticData, Required=false, DataType=BioticData, Description=The <I>BioticData</I> parameter is used to specify which previous process has generated the <U>BioticData</U> input data.
 Parameter: Name=HeadCutFacA, Required=false, DataType=Double, Description=Head cutted factor A 
@@ -173,6 +173,11 @@ Description: <I>FilterBiotic</I> filters an input dataset of data type <U>Biotic
 Class: no.imr.stox.functions.biotic.AppendSpecCat
 Parameter: Name=BioticData, Alias=FishStations, Required=true, DataType=BioticData, Description=The <I>BioticData</I> parameter is used to specify which previous process has generated the <U>BioticData</U> input data.
 Parameter: Name=SpecCat, DataType=String, Description=The species category to append to catches. 
+Parameter: Name=SpecCatMethod, DataType=String, Values=Expression;ResourceFile, Description=The <I>SpecCatType</I> The type of method to define specat. This can be an expression entered as a parameter, or a mapping to a column in a csv file
+Parameter: Name=FileName, Required=false, DataType=String, ParentTag=SpecCatMethod.ResourceFile, Description=The reference file with the one column giving the species and one giving the species categories to use.
+Parameter: Name=SpecVarStoX, Required=false, DataType=String, ParentTag=SpecCatMethod.ResourceFile, Description=The name of the column in BioticData defining species. To be linked with SpecVarRef
+Parameter: Name=SpecVarRef, Required=false, DataType=String, ParentTag=SpecCatMethod.ResourceFile, Description=The name of the column in the reference file defining species. To be linked with SpecVarStoX.
+Parameter: Name=SpecCatRef, Required=false, DataType=String, ParentTag=SpecCatMethod.ResourceFile, Description= The name of the column in the reference file defining (new) species category. Will be renamed to SpecCat in StoX.
 DataStorage:no.imr.stox.datastorage.BioticDataStorage
 Output: BioticData
 
@@ -680,3 +685,21 @@ Class: no.imr.stox.functions.landing.LandingWeightCovData
 Parameter: Name=LandingCovData, Required=true, DataType=LandingCovData, Description=Landing data
 DataStorage: no.imr.stox.datastorage.LandingWeightCovDataStorage
 Output: LandingWeightCovData
+
+[Function]
+Name: SampleUnit
+Description: EDSU, PSU and Stratum merged
+Class: no.imr.stox.functions.processdata.SampleUnit
+Parameter: Name=ProcessData, DataType=ProcessData, Description=The <I>ProcessData</I> parameter is used to identify the sampleunits for EDSU, PSU and Stratum.
+DataStorage: no.imr.stox.datastorage.SampleUnitStorage
+Output: ProcessData
+
+[Function]
+Name: StationSweptAreaDensity
+Description: Station and Density merged when station is used as EDSU and PSU
+Class: no.imr.stox.functions.report.StationSweptAreaDensity
+Parameter: Name=BioticData, Alias=FishStations, Required=true, DataType=BioticData, Description=The <I>BioticData</I> parameter is used to specify which previous process has generated the <U>BioticData</U> input data.
+Parameter: Name=ProcessData, DataType=ProcessData, Description=The <I>ProcessData</I> parameter is used to specify which previous process has generated the <U>ProcessData</U> input data.<BR>The <U>ProcessData</U> matrixes EDSUPSUMatrix and PSUStratumMatrix are used to identify which EDSU belong to which PSU and Stratum. Based on this information&#44; horizontal aggregation of mean densities can be performed.
+Parameter: Name=Density, Alias=Densities, DataType=Density, Description=The <I>Density</I> parameter is used to specify which previous process has generated the <U>Density</U> input data.<BR>These input data will be aggregated to a courser horizontal resolution in the functions <U>Density</U> output data.<BR><BR>Depending on the resolution of the input data&#44; the aggregation may be from EDSU to PSU or Stratum. Or alternatively&#44; from PSU to Stratum.
+DataStorage: no.imr.stox.datastorage.StationSweptAreaDensityStorage
+Output: ProcessData

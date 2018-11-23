@@ -7,6 +7,7 @@ import com.vividsolutions.jts.geom.GeometryFactory;
 import com.vividsolutions.jts.geom.LineString;
 import com.vividsolutions.jts.geom.MultiLineString;
 import com.vividsolutions.jts.geom.Point;
+import com.vividsolutions.jts.geom.TopologyException;
 import com.vividsolutions.jts.io.ParseException;
 import com.vividsolutions.jts.io.WKTReader;
 import java.awt.event.MouseEvent;
@@ -258,7 +259,7 @@ public class FeatureUtil {
             /*if (lon2 == null ) {
                 continue;
             }*/
-            /*// Check distance
+ /*// Check distance
              Double dNM = JTSUtils.gcircledist(new Coordinate(lon1, lat1), new Coordinate(lon2, lat2));
              if (dNM > maxDist) {
              continue;
@@ -351,6 +352,8 @@ public class FeatureUtil {
             }
         } catch (DataStoreException ex) {
             Exceptions.printStackTrace(ex);
+        } catch (TopologyException e) {
+            return null;
         }
 
         return null;

@@ -21,18 +21,29 @@ import no.imr.stox.functions.utils.Functions;
 public class ProcessDataBO extends MatricesBO {
 
     public ProcessDataBO() {
+        // Assignment datatype
         getMatrix(AbndEstProcessDataUtil.TABLE_BIOTICASSIGNMENT).setMetaMatrix(Functions.MM_BIOTICASSIGNMENT_MATRIX);
         getMatrix(AbndEstProcessDataUtil.TABLE_SUASSIGNMENT).setMetaMatrix(Functions.MM_SUASSIGNMENT_MATRIX);
         getMatrix(AbndEstProcessDataUtil.TABLE_ASSIGNMENTRESOLUTION).setMetaMatrix(Functions.MM_VARIABLE_MATRIX);
+        
+        // SampleUnit datatype
         getMatrix(AbndEstProcessDataUtil.TABLE_EDSUPSU).setMetaMatrix(Functions.MM_EDSUPSU_MATRIX);
         getMatrix(AbndEstProcessDataUtil.TABLE_PSUSTRATUM).setMetaMatrix(Functions.MM_PSUSTRATUM_MATRIX);
+        
+        // StratumPolygon datatype
         getMatrix(AbndEstProcessDataUtil.TABLE_STRATUMPOLYGON).setMetaMatrix(Functions.MM_POLYGON_MATRIX);
+
+        // Covariate datatype
         getMatrix(AbndEstProcessDataUtil.TABLE_TEMPORAL).setMetaMatrix(Functions.MM_COVARIATE_MATRIX);
         getMatrix(AbndEstProcessDataUtil.TABLE_GEARFACTOR).setMetaMatrix(Functions.MM_COVARIATE_MATRIX);
         getMatrix(AbndEstProcessDataUtil.TABLE_SPATIAL).setMetaMatrix(Functions.MM_COVARIATE_MATRIX);
         getMatrix(AbndEstProcessDataUtil.TABLE_PLATFORM).setMetaMatrix(Functions.MM_COVARIATE_MATRIX);
         getMatrix(AbndEstProcessDataUtil.TABLE_COVPARAM).setMetaMatrix(Functions.MM_COVARIATEPARAMETER_MATRIX);
+        
+        // Age error datatype
         getMatrix(AbndEstProcessDataUtil.TABLE_AGEERROR).setMetaMatrix(Functions.MM_AGEERROR_MATRIX);
+        
+        // Stratum neighbour datatype
         getMatrix(AbndEstProcessDataUtil.TABLE_STRATUMNEIGHBOUR).setMetaMatrix(Functions.MM_VARIABLE_MATRIX);
     }
 

@@ -25,6 +25,23 @@ import org.apache.commons.io.FileUtils;
  */
 public class StratumUtils {
 
+    public static String getStratumName(String areaCoding, String area, String loc) {
+        if (areaCoding.equals(Functions.AREACODING_MAINAREA) && (area == null || area.isEmpty())
+                || areaCoding.equals(Functions.AREACODING_MAINAREAANDLOCATION) && ((area == null || area.isEmpty()) || (loc == null || loc.isEmpty()))) {
+            return null;
+        }
+        Integer areaN = Conversion.safeStringtoIntegerNULL(area);
+        area = areaN == null ? area : areaN + "";
+        Integer locN = Conversion.safeStringtoIntegerNULL(loc);
+        loc = locN == null ? loc : locN + "";
+        if (areaCoding.equals(Functions.AREACODING_MAINAREAANDLOCATION)) {
+            return area + "_" + loc;
+        } else if (areaCoding.equals(Functions.AREACODING_MAINAREA)) {
+            return area;
+        }
+        return null;
+    }
+
     public static MatrixBO getAreaLocationPositionByFile(String fileName, String areaCoding) {
         MatrixBO posMap = new MatrixBO();
         List<String> lines;
@@ -51,11 +68,10 @@ public class StratumUtils {
                         continue;
                     }
                     Point2D.Double pt = new Point2D.Double(lon, lat);
-                    String stratum = area;
-                    if (areaCoding.equals(Functions.AREACODING_MAINAREAANDLOCATION)) {
-                        stratum += "_" + loc;
+                    String stratum = getStratumName(areaCoding, area, loc);
+                    if (stratum != null) {
+                        posMap.setRowValue(stratum, pt);
                     }
-                    posMap.setRowValue(stratum, pt);
                 }
             }
         } catch (IOException ex) {
