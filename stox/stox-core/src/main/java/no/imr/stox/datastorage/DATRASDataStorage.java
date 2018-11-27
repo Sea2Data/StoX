@@ -401,8 +401,8 @@ public class DATRASDataStorage extends FileDataStorage {
                                 //}
                                 Double sampleFac = s.bo().getCatchweight() / s.bo().getLengthsampleweight();
                                 for (IndividualBO i : s.getIndividualBOs()) {
-                                    Double length = i.getLengthCM();/*cm*/;
-                                    if (i.getLengthCM() == null) {
+                                    Double length = i.bo().getLength();/*cm*/;
+                                    if (i.bo().getLength() == null) {
                                         continue;
                                     }
                                     if (reportInMM) {
@@ -509,8 +509,8 @@ public class DATRASDataStorage extends FileDataStorage {
                             Integer lenInterval = lngtCode.equals("0") ? 5 : 1;
                             Boolean reportInMM = !lngtCode.equals("1");
                             for (IndividualBO i : s.getIndividualBOs()) {
-                                Double length = i.getLengthCM();/*cm*/;
-                                if (i.getLengthCM() == null) {
+                                Double length = i.bo().getLength();/*cm*/;
+                                if (i.bo().getLength() == null) {
                                     continue;
                                 }
                                 if (reportInMM) {
@@ -531,9 +531,9 @@ public class DATRASDataStorage extends FileDataStorage {
                                 String maturity = getDATRASMaturity(i);
                                 String age = i.getAge() != null ? i.getAge() + "" : "-9";
                                 nInd.addGroupRowColCellValue(lngtClass, sex, maturity, age, 1.0);
-                                if (i.getIndividualweightG()/*g*/ != null) {
+                                if (i.bo().getIndividualweight()/*g*/ != null) {
                                     nWithWeight.addGroupRowColCellValue(lngtClass, sex, maturity, age, 1.0);
-                                    totWeight.addGroupRowColCellValue(lngtClass, sex, maturity, age, i.getIndividualweightG());
+                                    totWeight.addGroupRowColCellValue(lngtClass, sex, maturity, age, i.bo().getIndividualweight());
                                 }
                             }
                             // Group Length class - Sex - Maturity - Age and report meanweight and category count at individual level

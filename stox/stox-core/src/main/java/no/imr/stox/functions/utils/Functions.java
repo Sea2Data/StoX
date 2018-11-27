@@ -537,6 +537,12 @@ public final class Functions {
     public static final String FN_SAMPLEUNIT = "SampleUnit";
     public static final String PM_SAMPLEUNIT_PROCESSDATA = "ProcessData";
 
+    public static final String FN_STATIONSWEPTAREADENSITY = "StationSweptAreaDensity";
+    public static final String PM_STATIONSWEPTAREADENSITY_SAMPLEUNIT = "SampleUnit";
+    public static final String PM_STATIONSWEPTAREADENSITY_BIOTICDATA = "BioticData";
+    public static final String PM_STATIONSWEPTAREADENSITY_DENSITY = "Density";
+    
+
     public static final String COL_POLVAR_INCLUDEINTOTAL = "includeintotal";
     public static final String COL_POLVAR_POLYGON = "polygon";
 
@@ -828,4 +834,7 @@ public final class Functions {
     public static final String LENGTHWEIGHT_COEFF_A = "a";
     public static final String LENGTHWEIGHT_COEFF_B = "b";
     public static final String LENGTHWEIGHT_COEFF_R2 = "r2";
+    
+    public static final String SPECCATMETHOD_EXPRESSION = "Expression";
+    public static final String SPECCATMETHOD_RESOURCEFILE = "ResourceFile";
 }

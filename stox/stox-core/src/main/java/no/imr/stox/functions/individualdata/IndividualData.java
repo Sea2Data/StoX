@@ -63,7 +63,7 @@ public class IndividualData extends AbstractFunction {
                                 /*if (i.getIndividualweight() == null) {
                                     continue;
                                 }*/
-                                String lenGrpKey = BioticUtils.getLenGrp(i.getLengthCM(), lenInterval);
+                                String lenGrpKey = BioticUtils.getLenGrp(i.bo().getLength(), lenInterval);
                                 List<IndividualBO> indList = (List<IndividualBO>) result.getData().getGroupRowColCellValue(specCatKey, stratumKey, estLayerKey, lenGrpKey);
                                 if (indList == null) {
                                     indList = new ArrayList<>();

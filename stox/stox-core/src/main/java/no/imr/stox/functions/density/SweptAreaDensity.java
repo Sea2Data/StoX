@@ -12,6 +12,7 @@ import no.imr.stox.functions.AbstractFunction;
 import no.imr.stox.bo.DensityMatrix;
 import no.imr.stox.bo.LengthDistMatrix;
 import no.imr.sea2data.imrbase.matrix.MatrixBO;
+import no.imr.stox.bo.BioticData;
 import no.imr.stox.bo.ProcessDataBO;
 import no.imr.stox.functions.utils.AbndEstProcessDataUtil;
 import no.imr.stox.functions.utils.BioticUtils;
@@ -39,7 +40,7 @@ public class SweptAreaDensity extends AbstractFunction {
         String distanceMethod = (String) input.get(Functions.PM_SWEPTAREADENSITY_DISTANCEMETHOD);
         String sweptAreaMethod = (String) input.get(Functions.PM_SWEPTAREADENSITY_SWEPTAREAMETHOD);
         String catchVariable = (String) input.get(Functions.PM_SWEPTAREADENSITY_CATCHVARIABLE);
-        List<MissionBO> bioticData = (List<MissionBO>) input.get(Functions.PM_SWEPTAREADENSITY_BIOTICDATA);
+        BioticData bioticData = (BioticData) input.get(Functions.PM_SWEPTAREADENSITY_BIOTICDATA);
         LengthDistMatrix lengthDist = (LengthDistMatrix) input.get(Functions.PM_SWEPTAREADENSITY_LENGTHDIST);
         String lenDistType = lengthDist != null ? (String) lengthDist.getResolutionMatrix().getRowValue(Functions.RES_LENGTHDISTTYPE) : null;
         String sweepWidthMethod = (String) input.get(Functions.PM_SWEPTAREADENSITY_SWEEPWIDTHMETHOD);

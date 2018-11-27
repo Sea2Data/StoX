@@ -1,6 +1,10 @@
 package no.imr.stox.functions.utils;
 
+import java.lang.reflect.Method;
 import java.time.LocalDate;
+import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 import no.imr.sea2data.biotic.bo.FishstationBO;
 import no.imr.sea2data.biotic.bo.IndividualBO;
 import no.imr.sea2data.biotic.bo.CatchSampleBO;
@@ -38,7 +42,7 @@ public final class FilterUtils {
             FishstationBO fs = (FishstationBO) o;
             context.set("missiontype", fs.getMission().bo().getMissiontype());
             context.set("cruise", fs.getMission().bo().getCruise());
-            
+
             context.set("fs", fs);
 
             context.set("nation", fs.bo().getNation());
@@ -131,8 +135,8 @@ public final class FilterUtils {
             context.set("stomachweight", ii.bo().getStomachweight());
 
             // grams and cm filter
-            context.set("weight", ii.getIndividualweightG());
-            context.set("length", ii.getLengthCM());
+            context.set("weight", ii.bo().getIndividualweight());
+            context.set("length", ii.bo().getLength());
 
             // old field names support
             context.set("no", ii.bo().getSpecimenid());
@@ -152,7 +156,7 @@ public final class FilterUtils {
             context.set("otolithedge", ii.getOtolithedge());
             context.set("otolithcentre", ii.getOtolithcentre());
             context.set("calibration", ii.getCalibration());
-            
+
         } else if (o instanceof DistanceBO) {
             DistanceBO d = (DistanceBO) o;
             if (d.getStart_time() != null) {

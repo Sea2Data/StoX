@@ -8,6 +8,7 @@ package no.imr.stox.bo;
 import java.util.Arrays;
 import java.util.List;
 import no.imr.sea2data.imrbase.matrix.MatricesBO;
+import no.imr.sea2data.imrbase.matrix.MatrixBO;
 import no.imr.stox.functions.utils.AbndEstProcessDataUtil;
 import no.imr.stox.functions.utils.Functions;
 
@@ -31,4 +32,11 @@ public class SampleUnitBO extends MatricesBO {
         );
     }
 
+    public MatrixBO getEDSUPSU() {
+        return getMatrix(AbndEstProcessDataUtil.TABLE_EDSUPSU);
+    }
+
+    public MatrixBO getPSUStratum() {
+        return getMatrix(AbndEstProcessDataUtil.TABLE_PSUSTRATUM);
+    }
 }

@@ -78,7 +78,7 @@ public class StationLengthDist extends AbstractFunction {
                         }
                     }
                     for (IndividualBO i : s.getIndividualBOs()) {
-                        Double lengthInCM = i.getLengthCM();
+                        Double lengthInCM = i.bo().getLength();
                         String lenGrp = BioticUtils.getLenGrp(lengthInCM, lengthInterval);
                         Double lengthGroupInCM = ImrMath.trunc(lengthInCM, lengthInterval);
                         if (lengthGroupInCM != null) {

@@ -101,8 +101,8 @@ public class CorrectForInnsufficientSampling extends AbstractFunction {
             Double[] wInGrams = new Double[indList.size()];
             for (int i = 0; i < indList.size(); i++) {
                 IndividualBO bo = indList.get(i);
-                lenInCM[i] = bo.getLengthCM();
-                wInGrams[i] = bo.getIndividualweightG();
+                lenInCM[i] = bo.bo().getLength();
+                wInGrams[i] = bo.bo().getIndividualweight();
             }
             LWRelationship lwr = LWRelationship.getLWRelationship(lenInCM, wInGrams);
             return lwr.getWeight(length);

@@ -11,6 +11,7 @@ import no.imr.sea2data.biotic.bo.FishstationBO;
 import no.imr.sea2data.biotic.bo.IndividualBO;
 import no.imr.sea2data.biotic.bo.CatchSampleBO;
 import no.imr.sea2data.biotic.bo.MissionBO;
+import no.imr.stox.bo.BioticData;
 import org.apache.commons.jexl2.Expression;
 import org.apache.commons.jexl2.JexlContext;
 import org.apache.commons.jexl2.JexlEngine;
@@ -67,7 +68,7 @@ public class FilterBiotic extends AbstractFunction {
         JexlContext ctx = new MapContext();
         // Old structures:
         List<MissionBO> origMissions = (List<MissionBO>) input.get(Functions.PM_FILTERBIOTIC_BIOTICDATA);
-        List<MissionBO> missions = new ArrayList<>();
+        List<MissionBO> missions = new BioticData();
         for (MissionBO ms : origMissions) {
             MissionBO msF = new MissionBO(ms);
             missions.add(msF);

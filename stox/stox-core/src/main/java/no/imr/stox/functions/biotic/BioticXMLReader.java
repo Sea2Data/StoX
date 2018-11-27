@@ -269,14 +269,14 @@ public class BioticXMLReader extends XMLReader {
         } else if (key.equals("weightmethod") || key.equals("producttype")) {
             bo.bo().setIndividualproducttype(value);
         } else if (key.equals("weight")) {
-            bo.setIndividualweight(Conversion.safeStringtoDoubleNULL(value));
+            bo.bo().setIndividualweight(Conversion.safeStringtoDoubleNULL(value));
         } else if (key.equals("volume")) {
             bo.bo().setIndividualvolume(Conversion.safeStringtoDoubleNULL(value));
         } else if (key.equals("lengthunit")) {
             bo.bo().setLengthresolution(value);
         } else if (key.equals("length")) {
             // In StoX read length as cm.
-            bo.setLength(Conversion.safeStringtoDoubleNULL(value));
+            bo.bo().setLength(Conversion.safeStringtoDoubleNULL(value));
         } else if (key.equals("fat")) {
             bo.bo().setFat(value);
         } else if (key.equals("sex")) {

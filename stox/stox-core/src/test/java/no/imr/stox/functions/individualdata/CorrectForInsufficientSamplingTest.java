@@ -63,8 +63,8 @@ public class CorrectForInsufficientSamplingTest {
         s.bo().setCatchpartnumber(Integer.SIZE);
         IndividualBO i = s.addIndividual();
         i.bo().setSpecimenid(1);
-        i.setLength(0.1);
-        i.setIndividualweight(0.005);
+        i.bo().setLength(10d);
+        i.bo().setIndividualweight(0.5d);
         inds.add(i);
         return inds;
     }

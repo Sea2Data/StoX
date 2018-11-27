@@ -31,11 +31,14 @@ public class MatricesBO {
         MatrixBO m = matrices.get(table);
         if (m == null) {
             m = createMatrix(table);
-            matrices.put(table, m);
+            setMatrix(table, m);
         }
         return m;
     }
 
+    public void setMatrix(String table, MatrixBO m) {
+            matrices.put(table, m);
+    }
     protected MatrixBO createMatrix(String table) {
         return new MatrixBO();
     }

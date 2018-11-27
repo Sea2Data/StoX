@@ -25,7 +25,11 @@ public class SampleUnit extends AbstractFunction {
     public Object perform(Map<String, Object> input) {
         ProcessDataBO pd = (ProcessDataBO) input.get(Functions.PM_STRATUMAREA_PROCESSDATA);
         ILogger logger = (ILogger) input.get(Functions.PM_LOGGER);
-        return pd; // forward output to datastorage
+        SampleUnitBO sampleUnit= new SampleUnitBO();
+        // Transfer 
+        sampleUnit.setMatrix(AbndEstProcessDataUtil.TABLE_EDSUPSU, pd.getMatrix(AbndEstProcessDataUtil.TABLE_EDSUPSU));
+        sampleUnit.setMatrix(AbndEstProcessDataUtil.TABLE_PSUSTRATUM, pd.getMatrix(AbndEstProcessDataUtil.TABLE_PSUSTRATUM));
+        return sampleUnit; 
     }
 
 }

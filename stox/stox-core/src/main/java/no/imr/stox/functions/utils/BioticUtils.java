@@ -15,6 +15,7 @@ import no.imr.sea2data.imrbase.math.ImrMath;
 import no.imr.sea2data.imrbase.matrix.MatrixBO;
 import no.imr.sea2data.imrbase.util.Conversion;
 import no.imr.sea2data.imrbase.util.IMRdate;
+import no.imr.stox.bo.BioticData;
 import no.imr.stox.bo.LengthDistMatrix;
 
 /**
@@ -105,9 +106,9 @@ public final class BioticUtils {
             case Functions.COL_IND_NO:
                 return i.bo().getSpecimenid();
             case Functions.COL_IND_WEIGHT:
-                return i.getIndividualweightG();
+                return i.bo().getIndividualweight();
             case Functions.COL_IND_LENGTH:
-                return i.getLengthCM();
+                return i.bo().getLength();
             case Functions.COL_IND_AGE:
                 return i.getAge();
             case Functions.COL_IND_SEX:
@@ -164,7 +165,7 @@ public final class BioticUtils {
      * @param key
      * @return Fishstation from key
      */
-    public static FishstationBO findStation(List<MissionBO> mList, String key) {
+    public static FishstationBO findStation(BioticData mList, String key) {
         if (mList == null) {
             return null;
         }
@@ -187,7 +188,7 @@ public final class BioticUtils {
                 .filter(s -> Objects.equals(s.bo().getSerialnumber(), serialNo)).findFirst().orElse(null);
     }
 
-    public static Collection<FishstationBO> findStations(List<MissionBO> mList, Collection<String> keys) {
+    public static Collection<FishstationBO> findStations(BioticData mList, Collection<String> keys) {
         if (keys == null) {
             return null;
         }
@@ -291,7 +292,7 @@ public final class BioticUtils {
     }
 
     public static List<MissionBO> copyBioticData(List<MissionBO> mList) {
-        List<MissionBO> missions = new ArrayList<>();
+        List<MissionBO> missions = new BioticData();
         mList.forEach((ms) -> {
             MissionBO ms2 = new MissionBO(ms);
             missions.add(ms2);

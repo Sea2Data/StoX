@@ -15,6 +15,7 @@ import no.imr.sea2data.biotic.bo.MissionBO;
 import no.imr.sea2data.imrbase.math.ImrMath;
 import no.imr.sea2data.imrbase.matrix.MatrixBO;
 import no.imr.sea2data.imrbase.util.Conversion;
+import no.imr.stox.bo.BioticData;
 import no.imr.stox.bo.DensityMatrix;
 import no.imr.stox.bo.LengthDistMatrix;
 import no.imr.stox.bo.ProcessDataBO;
@@ -41,7 +42,7 @@ public class LarvaeDensity extends AbstractFunction {
     public Object perform(Map<String, Object> input) {
         ILogger logger = (ILogger) input.get(Functions.PM_LOGGER);
         ProcessDataBO pd = (ProcessDataBO) input.get(Functions.PM_LARVAEDENSITY_PROCESSDATA);
-        List<MissionBO> biotic = (List<MissionBO>) input.get(Functions.PM_LARVAEDENSITY_BIOTICDATA);
+        BioticData  biotic = (BioticData) input.get(Functions.PM_LARVAEDENSITY_BIOTICDATA);
         LengthDistMatrix lengthDist = (LengthDistMatrix) input.get(Functions.PM_LARVAEDENSITY_LENGTHDIST);
         if (lengthDist == null) {
             return null;

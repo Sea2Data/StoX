@@ -16,6 +16,7 @@ import no.imr.sea2data.biotic.bo.IndividualBO;
 import no.imr.sea2data.biotic.bo.MissionBO;
 import no.imr.sea2data.imrbase.math.LWRelationship;
 import no.imr.sea2data.imrbase.util.Conversion;
+import no.imr.stox.bo.BioticData;
 import no.imr.stox.bo.LengthWeightRelationshipMatrix;
 import no.imr.stox.bo.ProcessDataBO;
 import no.imr.stox.functions.AbstractFunction;
@@ -40,7 +41,7 @@ public class LengthWeightRelationship extends AbstractFunction {
     public Object perform(Map<String, Object> input) {
         ILogger logger = (ILogger) input.get(Functions.PM_LOGGER);
         ProcessDataBO pd = (ProcessDataBO) input.get(Functions.PM_SWEPTAREADENSITY_PROCESSDATA);
-        List<MissionBO> bioticData = (List<MissionBO>) input.get(Functions.PM_SWEPTAREADENSITY_BIOTICDATA);
+        BioticData bioticData = (BioticData) input.get(Functions.PM_SWEPTAREADENSITY_BIOTICDATA);
         //logger.error("Length interval " + lenInterval + " must be a multiple integer factor of " + prevLenInterval + ".", null);
 
         LengthWeightRelationshipMatrix result = new LengthWeightRelationshipMatrix();
@@ -77,9 +78,9 @@ public class LengthWeightRelationship extends AbstractFunction {
             for (int i = 0; i < indList.size(); i++) {
                 IndividualBO row = indList.get(i);
                 Double lengthInterval = BioticUtils.getLengthInterval(Conversion.safeStringtoIntegerNULL(row.bo().getLengthresolution()));
-                Double length = StoXMath.getLength(row.getLengthCM(), lengthInterval);
+                Double length = StoXMath.getLength(row.bo().getLength(), lengthInterval);
                 lenInCM[i] = length;
-                wInGrams[i] = row.getIndividualweightG();
+                wInGrams[i] = row.bo().getIndividualweight();
             }
             LWRelationship lwr = LWRelationship.getLWRelationship(lenInCM, wInGrams);
             //lwr.get
@@ -89,14 +90,14 @@ public class LengthWeightRelationship extends AbstractFunction {
         }
     }
 
-    private Map<String, List<IndividualBO>> getIndividuals(Set<String> stratumStations, List<MissionBO> bioticData) {
+    private Map<String, List<IndividualBO>> getIndividuals(Set<String> stratumStations, BioticData bioticData) {
         return stratumStations.parallelStream()
                 .map(s -> BioticUtils.findStation(bioticData, s))
                 .filter(b -> b != null)
                 .flatMap(b -> b.getCatchSampleBOs().stream())
                 .filter(c -> c.bo().getAphia() != null)
                 .flatMap(b -> b.getIndividualBOs().stream())
-                .filter(i -> i.getIndividualweightG() != null && i.getIndividualweightG() > 0d && i.getLengthCM() != null && i.getLengthCM() > 0d)
+                .filter(i -> i.bo().getIndividualweight() != null && i.bo().getIndividualweight() > 0d && i.bo().getLength() != null && i.bo().getLength() > 0d)
                 .collect(Collectors.groupingBy(i -> i.getCatchSample().bo().getAphia(), Collectors.toList()));
 
     }

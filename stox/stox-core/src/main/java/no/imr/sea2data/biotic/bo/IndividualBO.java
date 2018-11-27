@@ -5,18 +5,13 @@ import BioticTypes.v3.IndividualType;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
-import no.imr.sea2data.imrbase.math.Calc;
-import no.imr.stox.functions.utils.StoXMath;
 
 public class IndividualBO extends BaseBO implements Serializable {
 
     private List<AgeDeterminationBO> ageDeterminationBOs = new ArrayList<>();
-    private Double individualweightG;
-    private Double lengthCM;
 
     public IndividualBO(CatchSampleBO sampleF, IndividualType i) {
         super(sampleF, i);
-        recache();
     }
 
     public IndividualType bo() {
@@ -25,29 +20,6 @@ public class IndividualBO extends BaseBO implements Serializable {
 
     public IndividualBO(CatchSampleBO sampleF, IndividualBO bo) {
         this(sampleF, bo.bo());
-    }
-
-    private void recache() {
-        this.lengthCM = Calc.roundTo(StoXMath.mToCM(bo().getLength()), 8);
-        this.individualweightG = Calc.roundTo(StoXMath.kgToGrams(bo().getIndividualweight()), 8);
-    }
-
-    public void setLength(Double length) {
-        bo().setLength(length);
-        recache();
-    }
-
-    public void setIndividualweight(Double individualweight) {
-        bo().setIndividualweight(individualweight);
-        recache();
-    }
-
-    public Double getIndividualweightG() {
-        return individualweightG;
-    }
-
-    public Double getLengthCM() {
-        return lengthCM;
     }
 
     public CatchSampleBO getCatchSample() {

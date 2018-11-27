@@ -16,8 +16,11 @@ import no.imr.sea2data.biotic.bo.FishstationBO;
 import no.imr.sea2data.biotic.bo.IndividualBO;
 import no.imr.sea2data.biotic.bo.CatchSampleBO;
 import no.imr.sea2data.biotic.bo.MissionBO;
+import no.imr.sea2data.imrbase.math.Calc;
+import no.imr.stox.bo.BioticData;
 import no.imr.stox.functions.utils.Functions;
 import no.imr.stox.functions.AbstractFunction;
+import no.imr.stox.functions.utils.StoXMath;
 import no.imr.stox.log.ILogger;
 import no.imr.stox.model.IModel;
 
@@ -36,7 +39,7 @@ public class ReadBioticXML extends AbstractFunction {
      */
     @Override
     public Object perform(Map<String, Object> input) {
-        List<MissionBO> stations = new ArrayList<>();
+        List<MissionBO> stations = new BioticData();
         for (int i = 1; i <= 20; i++) {
             String fileName = (String) input.get("FileName" + i);
             if (fileName == null) {
@@ -83,6 +86,9 @@ public class ReadBioticXML extends AbstractFunction {
                         for (AgedeterminationType a : i.getAgedetermination()) {
                             ibo.addAgeDetermination(a);
                         }
+                        // Conversion - length to cm / individualweight to gram
+                        i.setLength(Calc.roundTo(StoXMath.mToCM(i.getLength()), 8));
+                        i.setIndividualweight(Calc.roundTo(StoXMath.kgToGrams(i.getIndividualweight()), 8));
                     }
 
                 }
