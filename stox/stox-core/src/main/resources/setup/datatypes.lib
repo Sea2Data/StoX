@@ -75,12 +75,8 @@ Name: Reports
 Description: List of Reports of aggregated data
 
 [Datatype]
-Name: SampleUnit
-Description: SampleUnit EDSU - PSU - Stratum
-
-[Datatype]
-Name: StationSweptAreaDensity
-Description: SampleUnit, Biotic stations and Density connected
+Name: StationSpecCatDensity
+Description: StationSpecCatDensity, Swept are Density over Station and SpecCat 
 
 [Datatype]
 Name: Matrix

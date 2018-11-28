@@ -16,6 +16,7 @@ import no.imr.stox.functions.utils.Functions;
  *
  * @author aasmunds
  */
+@Deprecated//needs discussion
 public class SampleUnitBO extends MatricesBO {
 
     public SampleUnitBO() {

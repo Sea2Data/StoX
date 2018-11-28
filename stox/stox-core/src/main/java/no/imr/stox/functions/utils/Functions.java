@@ -166,14 +166,14 @@ public final class Functions {
     public static final String PM_READACOUSTICLUF5_ACOUSTICDATA = "AcousticData";
     public static final String PM_READACOUSTICLUF5_FILENAME = "FileName";
 
-    public static final String FN_APPENDSPECCAT = "AppendSpecCat";
-    public static final String PM_APPENDSPECCAT_BIOTICDATA = "BioticData";
-    public static final String PM_APPENDSPECCAT_SPECCAT = "SpecCat";
-    public static final String PM_APPENDSPECCAT_SPECCATMETHOD = "SpecCatMethod";
-    public static final String PM_APPENDSPECCAT_FILENAME = "FileName";
-    public static final String PM_APPENDSPECCAT_SPECVARSTOX = "SpecVarStoX";
-    public static final String PM_APPENDSPECCAT_SPECVARREF = "SpecVarRef";
-    public static final String PM_APPENDSPECCAT_SPECCATREF = "SpecCatRef";
+    public static final String FN_DEFINESPECCAT = "DefineSpecCat";
+    public static final String PM_DEFINESPECCAT_BIOTICDATA = "BioticData";
+    public static final String PM_DEFINESPECCAT_SPECCAT = "SpecCat";
+    public static final String PM_DEFINESPECCAT_SPECCATMETHOD = "SpecCatMethod";
+    public static final String PM_DEFINESPECCAT_FILENAME = "FileName";
+    public static final String PM_DEFINESPECCAT_SPECVARBIOTIC = "SpecVarBiotic";
+    public static final String PM_DEFINESPECCAT_SPECVARREF = "SpecVarRef";
+    public static final String PM_DEFINESPECCAT_SPECCATREF = "SpecCatRef";
 
     public static final String FN_FILTERACOUSTIC = "FilterAcoustic";
     public static final String PM_FILTERACOUSTIC_ACOUSTICDATA = "AcousticData";
@@ -324,11 +324,11 @@ public final class Functions {
     public static final String PM_LENGTHWEIGHTRELATIONSHIP_PROCESSDATA = "ProcessData";
     public static final String PM_LENGTHWEIGHTRELATIONSHIP_BIOTICDATA = "BioticData";
 
-    public static final String FN_LARVAEDENSITY = "LarvaeDensity";
+/*    public static final String FN_LARVAEDENSITY = "LarvaeDensity";
     public static final String PM_LARVAEDENSITY_PROCESSDATA = "ProcessData";
     public static final String PM_LARVAEDENSITY_LENGTHDIST = "LengthDist";
     public static final String PM_LARVAEDENSITY_BIOTICDATA = "BioticData";
-    public static final String PM_LARVAEDENSITY_GEAROPENINGAREA = "GearOpeningArea";
+    public static final String PM_LARVAEDENSITY_GEAROPENINGAREA = "GearOpeningArea";*/
 
     public static final String FN_MEANDENSITY = "MeanDensity";
     public static final String PM_MEANDENSITY_PROCESSDATA = "ProcessData";
@@ -537,10 +537,10 @@ public final class Functions {
     public static final String FN_SAMPLEUNIT = "SampleUnit";
     public static final String PM_SAMPLEUNIT_PROCESSDATA = "ProcessData";
 
-    public static final String FN_STATIONSWEPTAREADENSITY = "StationSweptAreaDensity";
-    public static final String PM_STATIONSWEPTAREADENSITY_SAMPLEUNIT = "SampleUnit";
-    public static final String PM_STATIONSWEPTAREADENSITY_BIOTICDATA = "BioticData";
-    public static final String PM_STATIONSWEPTAREADENSITY_DENSITY = "Density";
+    public static final String FN_STATIONSPECCATDENSITY = "StationSpecCatDensity";
+    public static final String PM_STATIONSPECCATDENSITY_PROCESSDATA = "ProcessData";
+    public static final String PM_STATIONSPECCATDENSITY_BIOTICDATA = "BioticData";
+    public static final String PM_STATIONSPECCATDENSITY_DENSITY = "Density";
     
 
     public static final String COL_POLVAR_INCLUDEINTOTAL = "includeintotal";

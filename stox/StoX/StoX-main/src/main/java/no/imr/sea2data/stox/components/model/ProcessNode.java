@@ -1,5 +1,6 @@
 package no.imr.sea2data.stox.components.model;
 
+import BioticTypes.v3.CatchsampleType;
 import java.awt.Image;
 import java.beans.BeanInfo;
 import java.beans.IntrospectionException;
@@ -17,8 +18,10 @@ import no.imr.sea2data.stox.editor.ListPropertyEditor;
 import no.imr.sea2data.stox.editor.SpeciesTSPropertyEditor;
 import no.imr.sea2data.stox.editor.TextPropertyEditor;
 import no.imr.stox.exception.UserErrorException;
+import no.imr.stox.functions.biotic.DefineSpecCat;
 import no.imr.stox.functions.utils.Functions;
 import no.imr.stox.functions.utils.ProjectUtils;
+import no.imr.stox.functions.utils.ReflectionUtil;
 import no.imr.stox.library.IMetaFunction;
 import no.imr.stox.library.IMetaParameter;
 import no.imr.stox.model.IModel;
@@ -234,7 +237,7 @@ public class ProcessNode extends AbstractNode {
             } else if (mp.getMetaDataType() != null && mp.getMetaDataType().isReference()) {
                 val = process.getModel().getProject().findProcess(process.getProcessNameFromParameter(mp));
             } else if (isReferencingBaselineFromR()) {
-                val = process.getModel().getProject().findProcess(ProjectUtils.getProcessNameFromParameter((String)val));
+                val = process.getModel().getProject().findProcess(ProjectUtils.getProcessNameFromParameter((String) val));
             }
             if (val == null) {
                 val = ""; // null represented as empty string
@@ -296,6 +299,18 @@ public class ProcessNode extends AbstractNode {
                 return new ListPropertyEditor(mp.getValues());
             } else if (mp.getMetaDataType().isReference() || isReferencingBaselineFromR()) {
                 return new ListPropertyEditor(getBackwardCompatibleProcesses(process, mp));
+            } else if (process.getMetaFunction().getName().equals(Functions.FN_DEFINESPECCAT)) {
+                switch (mp.getName()) {
+                    case Functions.PM_DEFINESPECCAT_SPECVARBIOTIC:
+                        return new ListPropertyEditor(ReflectionUtil.getFieldNames(CatchsampleType.class));
+                    case Functions.PM_DEFINESPECCAT_SPECVARREF:
+                    case Functions.PM_DEFINESPECCAT_SPECCATREF: {
+                        List<String> ls = DefineSpecCat.getHeader(process);
+                        if (ls != null) {
+                            return new ListPropertyEditor(ls);
+                        }
+                    }
+                }
             }
             PropertyEditor pe = new TextPropertyEditor();
             return pe;

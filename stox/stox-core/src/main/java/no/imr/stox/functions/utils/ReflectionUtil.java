@@ -9,6 +9,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
+import javax.xml.bind.annotation.XmlAttribute;
 import org.apache.commons.lang.StringUtils;
 
 /**
@@ -84,7 +85,16 @@ public final class ReflectionUtil {
                 .filter(f -> Modifier.isProtected(f.getModifiers()) && !f.getType().isAssignableFrom(List.class))
                 //                .filter(m -> m.getName().startsWith("set") && m.getParameters().length == 1)
                 //               .map(m -> m.getName().substring(3).toLowerCase())
+                .sorted((f1, f2) -> {
+                    Boolean isAtt1 = f1.getAnnotation(XmlAttribute.class) != null;
+                    Boolean isAtt2 = f2.getAnnotation(XmlAttribute.class) != null;
+                    return isAtt2.compareTo(isAtt1);
+                })
                 .collect(Collectors.toList());
+    }
+
+    public static List<String> getFieldNames(Class c) {
+        return getFields(c).stream().map(f -> f.getName()).collect(Collectors.toList());
     }
     /* List<String> call(Object o, String field, Clas) {
         o.getClass().getm

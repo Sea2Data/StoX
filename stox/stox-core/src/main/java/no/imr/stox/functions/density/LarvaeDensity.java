@@ -40,7 +40,7 @@ public class LarvaeDensity extends AbstractFunction {
 
     @Override
     public Object perform(Map<String, Object> input) {
-        ILogger logger = (ILogger) input.get(Functions.PM_LOGGER);
+/*        ILogger logger = (ILogger) input.get(Functions.PM_LOGGER);
         ProcessDataBO pd = (ProcessDataBO) input.get(Functions.PM_LARVAEDENSITY_PROCESSDATA);
         BioticData  biotic = (BioticData) input.get(Functions.PM_LARVAEDENSITY_BIOTICDATA);
         LengthDistMatrix lengthDist = (LengthDistMatrix) input.get(Functions.PM_LARVAEDENSITY_LENGTHDIST);
@@ -145,7 +145,8 @@ public class LarvaeDensity extends AbstractFunction {
             }
             result.getPosSampleSizeMatrix().setRowValue(psu, sampleHasValue ? sampleSize : 0);
         }
-        return result;
+        return result;*/
+        return null;
     }
 
     /**

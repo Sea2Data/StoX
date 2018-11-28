@@ -27,7 +27,8 @@ public class Factory {
     public static final String TEMPLATE_SWEPTAREA = "SweptAreaTemplate";
     public static final String TEMPLATE_LENGTHWEIGHTRELATIONSHIP = "LengthWeightRelationShip";
     public static final String TEMPLATE_SWEPTAREA_TOTAL = "SweptAreaTotalTemplate";
-    public static final String TEMPLATE_LARVAESWEPTAREA = "LarvaeSweptAreaTemplate";
+    public static final String TEMPLATE_SWEPTAREA_TOTAL_SPECCAT = "SweptAreaTotalSpecCatTemplate";
+    //public static final String TEMPLATE_LARVAESWEPTAREA = "LarvaeSweptAreaTemplate";
     public static final String TEMPLATE_SPLITNASC = "SplitNASC";
     public static final String TEMPLATE_ECA = "ECA";
     public static final String TEMPLATE_USERDEFINED = "UserDefined";
@@ -38,11 +39,12 @@ public class Factory {
                 //TEMPLATE_ACOUSTICABUNDANCERECTANGLE,
                 TEMPLATE_SWEPTAREA,
                 TEMPLATE_SWEPTAREA_TOTAL,
+                TEMPLATE_SWEPTAREA_TOTAL_SPECCAT,
                 TEMPLATE_SPLITNASC,
                 TEMPLATE_LENGTHWEIGHTRELATIONSHIP,
                 TEMPLATE_STATIONLENGTHDIST,
                 TEMPLATE_DATRAS,
-                TEMPLATE_LARVAESWEPTAREA,
+                //TEMPLATE_LARVAESWEPTAREA,
                 TEMPLATE_USERDEFINED/*,
                 TEMPLATE_ECA*/ // not finished
         );
@@ -62,8 +64,10 @@ public class Factory {
                 return "Swept area (length dependent)";
             case TEMPLATE_SWEPTAREA_TOTAL:
                 return "Swept area (total catch)";
-            case TEMPLATE_LARVAESWEPTAREA:
-                return "Larvae swept area";
+            case TEMPLATE_SWEPTAREA_TOTAL_SPECCAT:
+                return "Station species category density";
+            /*            case TEMPLATE_LARVAESWEPTAREA:
+                return "Larvae swept area";*/
             case TEMPLATE_SPLITNASC:
                 return "Split NASC";
             case TEMPLATE_ECA:
@@ -97,10 +101,13 @@ public class Factory {
                 createDATRASTemplateProject(p.getBaseline());
                 break;
             case TEMPLATE_SWEPTAREA_TOTAL:
-                createSweptAreaTotalCatchTemplateProject(p.getBaseline());
+                createSweptAreaTotalCatchTemplateProject(p.getBaseline(), template);
                 createSweptAreaTotalCatchReport(p.getBaselineReport());
                 createRWithUncertainty(p.getRModel(), false, Functions.BOOTSTRAPMETHOD_SWEPTAREATOTAL);
                 createRReport(p.getRModelReport(), "bootstrapMethod='SweptAreaTotal'");
+                break;
+            case TEMPLATE_SWEPTAREA_TOTAL_SPECCAT:
+                createSweptAreaTotalCatchTemplateProject(p.getBaseline(), template);
                 break;
             case TEMPLATE_SWEPTAREA:
                 createSweptAreaTemplateProject(p.getBaseline(), template, Functions.LENGTHDISTTYPE_NORMLENGHTDIST, 1.0);
@@ -108,12 +115,12 @@ public class Factory {
                 createRWithUncertainty(p.getRModel(), true, Functions.BOOTSTRAPMETHOD_SWEPTAREALENGTH);
                 createRReport(p.getRModelReport(), null);
                 break;
-            case TEMPLATE_LARVAESWEPTAREA:
+            /*            case TEMPLATE_LARVAESWEPTAREA:
                 createSweptAreaTemplateProject(p.getBaseline(), template, Functions.LENGTHDISTTYPE_LENGHTDIST, 0.1);
                 createAbundanceReport(p.getBaselineReport(), false, 0.1, 1000000, Functions.COL_IND_DEVELOPMENTALSTAGE);
                 createRWithUncertainty(p.getRModel(), false, Functions.BOOTSTRAPMETHOD_SWEPTAREALENGTH);
                 createRReport(p.getRModelReport(), null);
-                break;
+                break;*/
             case TEMPLATE_SPLITNASC:
                 createSplitNASCProject(p.getBaseline());
                 break;
@@ -434,18 +441,17 @@ public class Factory {
                         setParameterProcessValue(Functions.PM_SWEPTAREADENSITY_LENGTHDIST, Functions.FN_TOTALLENGTHDIST).
                         setParameterValue(Functions.PM_SWEPTAREADENSITY_SWEEPWIDTHMETHOD, 25.0);
                 break;
-            case TEMPLATE_LARVAESWEPTAREA:
+            /*            case TEMPLATE_LARVAESWEPTAREA:
                 m.addProcess(Functions.FN_LARVAEDENSITY, Functions.FN_LARVAEDENSITY).
                         setParameterProcessValue(Functions.PM_LARVAEDENSITY_PROCESSDATA, Functions.FN_READPROCESSDATA).
                         setParameterProcessValue(Functions.PM_LARVAEDENSITY_BIOTICDATA, Functions.FN_FILTERBIOTIC).
                         setParameterProcessValue(Functions.PM_LARVAEDENSITY_LENGTHDIST, Functions.FN_TOTALLENGTHDIST).
                         setParameterValue(Functions.PM_LARVAEDENSITY_GEAROPENINGAREA, "2113:0.25,2114:0.5,2124:0.5,2133:0.25,2331:0.02835");
-                break;
+                break;*/
         }
         m.addProcess("MeanDensity_Stratum", Functions.FN_MEANDENSITY).
                 setParameterProcessValue(Functions.PM_MEANDENSITY_PROCESSDATA, Functions.FN_READPROCESSDATA).
-                setParameterProcessValue(Functions.PM_MEANDENSITY_DENSITY,
-                        template.equals(TEMPLATE_SWEPTAREA) ? Functions.FN_SWEPTAREADENSITY : Functions.FN_LARVAEDENSITY).
+                setParameterProcessValue(Functions.PM_MEANDENSITY_DENSITY, Functions.FN_SWEPTAREADENSITY).
                 setParameterValue(Functions.PM_MEANDENSITY_SAMPLEUNITTYPE, Functions.SAMPLEUNIT_STRATUM);
 
         m.addProcess(Functions.FN_ABUNDANCE, Functions.FN_ABUNDANCE).
@@ -459,7 +465,7 @@ public class Factory {
                 setRespondInGUI(Boolean.TRUE);
     }
 
-    private static void createSweptAreaTotalCatchTemplateProject(IModel m) {
+    private static void createSweptAreaTotalCatchTemplateProject(IModel m, String template) {
         m.setDescription("Swept area (total catch)");
 
         // Read process data
@@ -474,37 +480,50 @@ public class Factory {
                 setParameterValue(Functions.PM_FILTERBIOTIC_CATCHEXPR, "noname == 'SILDG03'").
                 setRespondInGUI(true);
 
+        m.addProcess(Functions.FN_DEFINESPECCAT, Functions.FN_DEFINESPECCAT).
+                setParameterProcessValue(Functions.PM_FILTERBIOTIC_BIOTICDATA, Functions.FN_FILTERBIOTIC);
+                
         // Process data related:
         m.addProcess(Functions.FN_DEFINESTRATA, Functions.FN_DEFINESTRATA).
                 setParameterProcessValue(Functions.PM_DEFINESTRATA_PROCESSDATA, Functions.FN_READPROCESSDATA).
                 setParameterValue(Functions.PM_DEFINESTRATA_USEPROCESSDATA, false).
                 setRespondInGUI(true).setBreakInGUI(true);
-        m.addProcess(Functions.FN_STRATUMAREA, Functions.FN_STRATUMAREA).
-                setParameterProcessValue(Functions.PM_DEFINESTRATA_PROCESSDATA, Functions.FN_READPROCESSDATA);
 
         m.addProcess(Functions.FN_DEFINESWEPTAREAPSU, Functions.FN_DEFINESWEPTAREAPSU).
                 setParameterProcessValue(Functions.PM_DEFINESWEPTAREAPSU_PROCESSDATA, Functions.FN_READPROCESSDATA).
-                setParameterProcessValue(Functions.PM_DEFINESWEPTAREAPSU_BIOTICDATA, Functions.FN_FILTERBIOTIC).
+                setParameterProcessValue(Functions.PM_DEFINESWEPTAREAPSU_BIOTICDATA, Functions.FN_DEFINESPECCAT).
                 setParameterValue(Functions.PM_DEFINESWEPTAREAPSU_METHOD, Functions.SWEPTAREAPSUMETHOD_STATION);
 
         Stream.of(Functions.CATCHVARIABLE_COUNT, Functions.CATCHVARIABLE_WEIGHT).forEach(var -> {
             String densProc = "SweptArea" + var + "Density";
             m.addProcess(densProc, Functions.FN_SWEPTAREADENSITY).
                     setParameterProcessValue(Functions.PM_SWEPTAREADENSITY_PROCESSDATA, Functions.FN_READPROCESSDATA).
-                    setParameterProcessValue(Functions.PM_SWEPTAREADENSITY_BIOTICDATA, Functions.FN_FILTERBIOTIC).
+                    setParameterProcessValue(Functions.PM_SWEPTAREADENSITY_BIOTICDATA, Functions.FN_DEFINESPECCAT).
                     setParameterValue(Functions.PM_SWEPTAREADENSITY_SWEPTAREAMETHOD, Functions.SWEPTAREAMETHOD_TOTALCATCH).
                     setParameterValue(Functions.PM_SWEPTAREADENSITY_CATCHVARIABLE, var).
                     setParameterValue(Functions.PM_SWEPTAREADENSITY_SWEEPWIDTHMETHOD, 25.0);
+            switch (template) {
+                case TEMPLATE_SWEPTAREA_TOTAL: {
+                    String meanProc = "Mean" + var + "Density_Stratum";
+                    m.addProcess(meanProc, Functions.FN_MEANDENSITY).
+                            setParameterProcessValue(Functions.PM_MEANDENSITY_PROCESSDATA, Functions.FN_READPROCESSDATA).
+                            setParameterProcessValue(Functions.PM_MEANDENSITY_DENSITY, densProc).
+                            setParameterValue(Functions.PM_MEANDENSITY_SAMPLEUNITTYPE, Functions.SAMPLEUNIT_STRATUM);
 
-            String meanProc = "Mean" + var + "Density_Stratum";
-            m.addProcess(meanProc, Functions.FN_MEANDENSITY).
-                    setParameterProcessValue(Functions.PM_MEANDENSITY_PROCESSDATA, Functions.FN_READPROCESSDATA).
-                    setParameterProcessValue(Functions.PM_MEANDENSITY_DENSITY, densProc).
-                    setParameterValue(Functions.PM_MEANDENSITY_SAMPLEUNITTYPE, Functions.SAMPLEUNIT_STRATUM);
+                    m.addProcess("Abundance" + var + "_Stratum", Functions.FN_ABUNDANCE).
+                            setParameterProcessValue(Functions.PM_ABUNDANCE_DENSITY, meanProc).
+                            setParameterProcessValue(Functions.PM_ABUNDANCE_POLYGONAREA, Functions.FN_STRATUMAREA);
+                    break;
+                }
+                case TEMPLATE_SWEPTAREA_TOTAL_SPECCAT: {
+                    String procName = "StationSpecCatDensity_" + var;
+                    m.addProcess(procName, Functions.FN_STATIONSPECCATDENSITY).
+                            setParameterProcessValue(Functions.PM_STATIONSPECCATDENSITY_PROCESSDATA, Functions.FN_READPROCESSDATA).
+                            setParameterProcessValue(Functions.PM_STATIONSPECCATDENSITY_BIOTICDATA, Functions.FN_DEFINESPECCAT).
+                            setParameterProcessValue(Functions.PM_STATIONSPECCATDENSITY_DENSITY, densProc);
+                }
 
-            m.addProcess("Abundance" + var + "_Stratum", Functions.FN_ABUNDANCE).
-                    setParameterProcessValue(Functions.PM_ABUNDANCE_DENSITY, meanProc).
-                    setParameterProcessValue(Functions.PM_ABUNDANCE_POLYGONAREA, Functions.FN_STRATUMAREA);
+            }
         });
         // Write process data
         m.addProcess(Functions.FN_WRITEPROCESSDATA, Functions.FN_WRITEPROCESSDATA).
@@ -752,7 +771,7 @@ public class Factory {
     public static void createRReport(IModel m, String options) {
         m.addProcess(Functions.FN_GETREPORTS, Functions.FN_GETREPORTS).
                 setParameterValue(Functions.PM_GETREPORTS_OPTIONS, options);
-        
+
         m.addProcess(Functions.FN_GETPLOTS, Functions.FN_GETPLOTS).
                 setParameterValue(Functions.PM_GETPLOTS_OPTIONS, options);
     }

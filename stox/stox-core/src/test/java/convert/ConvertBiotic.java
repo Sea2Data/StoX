@@ -18,28 +18,33 @@ import no.imr.sea2data.biotic.bo.FilterField;
 import no.imr.sea2data.biotic.bo.FishstationBO;
 import no.imr.sea2data.biotic.bo.MissionBO;
 import no.imr.stox.functions.biotic.BioticConverter;
+import org.junit.Ignore;
 import org.junit.Test;
 
 /**
  *
  * @author aasmunds
  */
-//@Igore
+@Ignore
 public class ConvertBiotic {
 
     @Test
     public void convert() {
-        String fName = "C:\\Users\\aasmunds\\workspace\\stox\\project\\Barents Sea Beaked redfish and Sebastes sp in Subareas I and II bottom trawl index in winter_2009\\input\\biotic\\biotic_cruiseNumber_0104_2009_UANA_NANSE_Fridtjof+Nansen.xml";
+        
+        BioticConverter.convertBioticFileToV3("R:\\alle\\aasmund\\S2DEditor\\1-2017-9000-10.xml", "R:\\alle\\aasmund\\S2DEditor\\1-2017-9000-10(v3).xml");
+        BioticConverter.convertBioticFileToV3("R:\\alle\\aasmund\\S2DEditor\\4-2017-4174-2.xml", "R:\\alle\\aasmund\\S2DEditor\\4-2017-4174-2(v3).xml");
+        BioticConverter.convertBioticFileToV3("R:\\alle\\aasmund\\S2DEditor\\5-2017-3206-34.xml", "R:\\alle\\aasmund\\S2DEditor\\5-2017-3206-34(v3).xml");
+/*        String fName = "C:\\Users\\aasmunds\\workspace\\stox\\project\\Barents Sea Beaked redfish and Sebastes sp in Subareas I and II bottom     trawl index in winter_2009\\input\\biotic\\biotic_cruiseNumber_0104_2009_UANA_NANSE_Fridtjof+Nansen.xml";
         BioticConverter.convertBioticFileToV3(fName, "C:\\temp\\test.xml");
         //fName = "C:\\Users\\aasmunds\\workspace\\stox\\project\\ECA_sild_2015\\input\\biotic\\2015_biotic.xml";
         BioticConverter.convertBioticFileToV3(fName, "C:\\temp\\2015_biotic3.xml");
         BioticConverter.convertBioticFileToV3("C:\\temp\\4-2010-1173-4.xml", "C:\\temp\\4-2010-1173-4(v3).xml");
         BioticConverter.convertBioticFileToV3("C:\\temp\\4-2010-1173-4.xml", "C:\\temp\\4-2010-1173-4(v3).xml");
         BioticConverter.convertBioticFileToV1_4("C:\\temp\\4-2010-1173-4(v3).xml", "C:\\temp\\4-2010-1173-4(v1_4-2).xml");
-        BioticConverter.convertBioticFileToV1_4("C:\\temp\\4-2010-1173-4.xml", "C:\\temp\\4-2010-1173-4(v1_4).xml");
+        BioticConverter.convertBioticFileToV1_4("C:\\temp\\4-2010-1173-4.xml", "C:\\temp\\4-2010-1173-4(v1_4).xml");*/
     }
 
-    @Test
+  //  @Test
     public void test() {
         Stream.of(/*MissionBO.class, */FishstationBO.class, CatchSampleBO.class).forEach(objClass -> {
                     try {

@@ -5,29 +5,23 @@
  */
 package no.imr.stox.bo;
 
-import java.util.Arrays;
-import java.util.List;
-import no.imr.sea2data.imrbase.matrix.MatrixBO;
-import no.imr.stox.functions.utils.AbndEstProcessDataUtil;
-import no.imr.stox.functions.utils.Functions;
-
 /**
  *
  * @author aasmunds
  */
-public class StationSweptAreaDensityBO  {
-    SampleUnitBO sampleUnit;
+public class StationSpecCatDensityBO  {
+    ProcessDataBO processData;
     BioticData bioticData;
     DensityMatrix density;
 
-    public StationSweptAreaDensityBO(SampleUnitBO sampleUnit, BioticData bioticData, DensityMatrix density) {
-        this.sampleUnit = sampleUnit;
+    public StationSpecCatDensityBO(ProcessDataBO processData, BioticData bioticData, DensityMatrix density) {
+        this.processData = processData;
         this.bioticData = bioticData;
         this.density = density;
     }
 
-    public SampleUnitBO getSampleUnit() {
-        return sampleUnit;
+    public ProcessDataBO getProcessData() {
+        return processData;
     }
 
     public BioticData getBioticData() {

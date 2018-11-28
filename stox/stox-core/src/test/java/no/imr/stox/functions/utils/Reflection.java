@@ -5,6 +5,7 @@
  */
 package no.imr.stox.functions.utils;
 
+import BioticTypes.v3.CatchsampleType;
 import BioticTypes.v3.FishstationType;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
@@ -24,7 +25,8 @@ public class Reflection {
     public void test() {
         FishstationType fs = new FishstationType();
         fs.setNation("no");
-        List<Field> fields = ReflectionUtil.getFields(FishstationType.class);
+        List<Field> fields = ReflectionUtil.getFields(CatchsampleType.class);
+        fields = ReflectionUtil.getFields(FishstationType.class);
         fields.forEach(f -> {
             Method getter = ReflectionUtil.getGetter(f);
             System.out.println(ReflectionUtil.invoke(getter, fs));

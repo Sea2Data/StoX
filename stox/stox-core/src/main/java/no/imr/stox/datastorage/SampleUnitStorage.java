@@ -6,21 +6,16 @@
 package no.imr.stox.datastorage;
 
 import java.io.Writer;
-import no.imr.sea2data.imrbase.math.Calc;
-import no.imr.sea2data.imrbase.matrix.IMetaMatrix;
-import no.imr.sea2data.imrbase.matrix.MatrixBO;
 import no.imr.sea2data.imrbase.util.ExportUtil;
 import no.imr.sea2data.imrbase.util.ImrIO;
-import no.imr.stox.bo.LengthDistMatrix;
-import no.imr.stox.bo.ProcessDataBO;
 import no.imr.stox.bo.SampleUnitBO;
-import no.imr.stox.functions.utils.AbndEstProcessDataUtil;
 import no.imr.stox.functions.utils.Functions;
 
 /**
  *
  * @author aasmunds
  */
+@Deprecated//needs discussion
 public class SampleUnitStorage extends FileDataStorage {
 
     @Override

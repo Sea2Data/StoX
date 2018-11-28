@@ -9,7 +9,6 @@ import BioticTypes.v3.FishstationType;
 import BioticTypes.v3.MissionType;
 import java.io.Writer;
 import java.lang.reflect.Field;
-import java.lang.reflect.Method;
 import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
@@ -19,26 +18,25 @@ import no.imr.sea2data.imrbase.math.Calc;
 import no.imr.sea2data.imrbase.matrix.MatrixBO;
 import no.imr.sea2data.imrbase.util.ExportUtil;
 import no.imr.sea2data.imrbase.util.ImrIO;
-import no.imr.stox.bo.SampleUnitBO;
-import no.imr.stox.bo.StationSweptAreaDensityBO;
+import no.imr.stox.bo.StationSpecCatDensityBO;
+import no.imr.stox.functions.utils.AbndEstProcessDataUtil;
 import no.imr.stox.functions.utils.BioticUtils;
-import no.imr.stox.functions.utils.Functions;
 import no.imr.stox.functions.utils.ReflectionUtil;
 
 /**
  *
  * @author aasmunds
  */
-public class StationSweptAreaDensityStorage extends FileDataStorage {
+public class StationSpecCatDensityStorage extends FileDataStorage {
 
     @Override
     public <T> void asTable(T data, Integer level, Writer wr, Boolean withUnits) {
-        asTable((StationSweptAreaDensityBO) data, wr);
+        asTable((StationSpecCatDensityBO) data, wr);
     }
 
-    public void asTable(StationSweptAreaDensityBO data, Writer wr) {
+    public void asTable(StationSpecCatDensityBO data, Writer wr) {
         List<String> specHdrs = data.getDensity().getData().getSortedKeys();
-        MatrixBO edsuPsu = data.getSampleUnit().getEDSUPSU();
+        MatrixBO edsuPsu = data.getProcessData().getMatrix(AbndEstProcessDataUtil.TABLE_EDSUPSU);
         List<Field> missionMethods = ReflectionUtil.getFields(MissionType.class);
         List<Field> fsMethods = ReflectionUtil.getFields(FishstationType.class);
         String hdr = ExportUtil.tabbed(
@@ -48,7 +46,7 @@ public class StationSweptAreaDensityStorage extends FileDataStorage {
         );
         ImrIO.write(wr, ExportUtil.carrageReturnLineFeed(hdr));
 
-        data.getSampleUnit().getPSUStratum().getSortedRowKeys().forEach(psu -> {
+        data.getProcessData().getMatrix(AbndEstProcessDataUtil.TABLE_PSUSTRATUM).getSortedRowKeys().forEach(psu -> {
             // For each psu
             // Check that the psu is connected by one edsu
             List<String> edsus = edsuPsu.getRowKeys().stream()
