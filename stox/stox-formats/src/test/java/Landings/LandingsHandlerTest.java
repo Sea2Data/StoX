@@ -34,11 +34,11 @@ public class LandingsHandlerTest {
         assertEquals(landings.getSeddellinje().get(0).getProduksjon().getLandingsdato().getYear(), 2015);
     }
     
-        @Test
-    public void testSaveBiotic() throws Exception {
+    @Test
+    public void testSaveLanding() throws Exception {
         System.out.println("saveLanding");
         InputStream xml = LandingsHandlerTest.class.getClassLoader().getResourceAsStream("landinger_100_lines.xml");
-        boolean acceptBiotic1 = true;
+    
         LandingsHandler instance = new LandingsHandler();
         LandingsdataType result = instance.read(xml);
         assertTrue(result.getSeddellinje().size() > 0);
