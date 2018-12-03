@@ -1,0 +1,140 @@
+<jxb:bindings version="2.1"
+              xmlns:jxb="http://java.sun.com/xml/ns/jaxb"
+              xmlns:xs="http://www.w3.org/2001/XMLSchema"
+              xmlns:annox="http://annox.dev.java.net"
+              xmlns:namespace="http://jaxb2-commons.dev.java.net/namespace-prefix"
+              xmlns:xjc="http://java.sun.com/xml/ns/jaxb/xjc"
+              xmlns:inheritance="http://jaxb2-commons.dev.java.net/basic/inheritance"
+              jxb:extensionBindingPrefixes="xjc annox">
+    <!--
+    This document is referenced from the pom and is used to change the generated classes.
+    The following has been added. -->
+
+    <jxb:bindings schemaLocation="http://www.imr.no/formats/landing/landingdatav2.xsd" node="/xs:schema">
+        <jxb:schemaBindings>
+            <jxb:package name="LandingsTypes.v2" />
+        </jxb:schemaBindings>
+                <jxb:bindings multiple="true" node="//xs:attribute[@type='xs:integer']">
+            <jxb:property>
+                <jxb:baseType>
+                    <xjc:javaType name="java.lang.Integer" adapter="adapters.IntegerAdapter" />
+                </jxb:baseType>
+            </jxb:property>
+        </jxb:bindings>
+        <jxb:bindings multiple="true" node="//xs:element[@type='xs:integer']">
+            <jxb:property>
+                <jxb:baseType>
+                    <xjc:javaType name="java.lang.Integer" adapter="adapters.IntegerAdapter" />
+                </jxb:baseType>
+            </jxb:property>
+        </jxb:bindings>
+        <jxb:bindings multiple="true" node="//xs:element[@type='xs:decimal']">
+            <jxb:property>
+                <jxb:baseType>
+                    <xjc:javaType name="java.lang.Double" adapter="adapters.DoubleAdapter" />
+                </jxb:baseType>
+            </jxb:property>
+        </jxb:bindings>
+ 
+        <!-- Datoer i landings er av forskjellige grunner modellert som strenger. Vi kan legge til mapping funksjoner for spesifikke datofelt her -->
+        <jxb:bindings multiple="false" node="//xs:attribute[@name='SisteFangstdato']">
+            <jxb:property>
+                <jxb:baseType>
+                    <xjc:javaType name="java.time.LocalDate" adapter="adapters.DateStringDMYAdapter" />
+                </jxb:baseType>
+            </jxb:property>
+        </jxb:bindings>
+
+  
+        <jxb:bindings>
+            <namespace:prefix name="" />
+        </jxb:bindings>
+        <jxb:bindings node="//xs:complexType[@name='LandingsdataType']">
+            <inheritance:extends> HierarchicalData.HierarchicalData </inheritance:extends>
+            <annox:annotate>
+                <annox:annotate annox:class="javax.xml.bind.annotation.XmlRootElement" name="Landingsdata"/>
+            </annox:annotate>
+        </jxb:bindings>
+        <jxb:bindings node="//xs:complexType[@name='SeddellinjeType']">
+            <inheritance:extends> HierarchicalData.HierarchicalData </inheritance:extends>
+            <annox:annotate>
+                <annox:annotate annox:class="javax.xml.bind.annotation.XmlRootElement" name="Seddellinje"/>
+            </annox:annotate>
+        </jxb:bindings>
+        <jxb:bindings node="//xs:complexType[@name='MottakerType']">
+            <inheritance:extends> HierarchicalData.HierarchicalData </inheritance:extends>
+            <annox:annotate>
+                <annox:annotate annox:class="javax.xml.bind.annotation.XmlRootElement" name="Mottaker"/>
+            </annox:annotate>
+        </jxb:bindings>                        
+        <jxb:bindings node="//xs:complexType[@name='LandingOgProduksjonType']">
+            <inheritance:extends> HierarchicalData.HierarchicalData </inheritance:extends>
+            <annox:annotate>
+                <annox:annotate annox:class="javax.xml.bind.annotation.XmlRootElement" name="Produksjon"/>
+            </annox:annotate>
+        </jxb:bindings>   
+        <jxb:bindings node="//xs:complexType[@name='FangstdataType']">
+            <inheritance:extends> HierarchicalData.HierarchicalData </inheritance:extends>
+            <annox:annotate>
+                <annox:annotate annox:class="javax.xml.bind.annotation.XmlRootElement" name="Fangstdata"/>
+            </annox:annotate>
+        </jxb:bindings>
+        <jxb:bindings node="//xs:complexType[@name='FiskerType']">
+            <inheritance:extends> HierarchicalData.HierarchicalData </inheritance:extends>
+            <annox:annotate>
+                <annox:annotate annox:class="javax.xml.bind.annotation.XmlRootElement" name="Fisker"/>
+            </annox:annotate>
+        </jxb:bindings> 
+        <jxb:bindings node="//xs:complexType[@name='FartøyType']">
+            <inheritance:extends> HierarchicalData.HierarchicalData </inheritance:extends>
+            <annox:annotate>
+                <annox:annotate annox:class="javax.xml.bind.annotation.XmlRootElement" name="Fartøy"/>
+            </annox:annotate>
+            
+            <jxb:bindings node="//xs:complexType[@name='MottakendeFartøyType']">
+                <inheritance:extends> HierarchicalData.HierarchicalData </inheritance:extends>
+                <annox:annotate>
+                    <annox:annotate annox:class="javax.xml.bind.annotation.XmlRootElement" name="Mottakendefartøy"/>
+                </annox:annotate>
+            </jxb:bindings>
+            <jxb:bindings node="//xs:complexType[@name='KvoteType']">
+                <inheritance:extends> HierarchicalData.HierarchicalData </inheritance:extends>
+                <annox:annotate>
+                    <annox:annotate annox:class="javax.xml.bind.annotation.XmlRootElement" name="Kvote"/>
+                </annox:annotate>
+            </jxb:bindings>
+            <jxb:bindings node="//xs:complexType[@name='RedskapType']">
+                <inheritance:extends> HierarchicalData.HierarchicalData </inheritance:extends>
+                <annox:annotate>
+                    <annox:annotate annox:class="javax.xml.bind.annotation.XmlRootElement" name="Redskap"/>
+                </annox:annotate>
+            </jxb:bindings>
+            <jxb:bindings node="//xs:complexType[@name='DellandingType']">
+                <inheritance:extends> HierarchicalData.HierarchicalData </inheritance:extends>
+                <annox:annotate>
+                    <annox:annotate annox:class="javax.xml.bind.annotation.XmlRootElement" name="Dellanding"/>
+                </annox:annotate>
+            </jxb:bindings>
+            <jxb:bindings node="//xs:complexType[@name='ProduktType']">
+                <inheritance:extends> HierarchicalData.HierarchicalData </inheritance:extends>
+                <annox:annotate>
+                    <annox:annotate annox:class="javax.xml.bind.annotation.XmlRootElement" name="Produkt"/>
+                </annox:annotate>
+            </jxb:bindings>
+            <jxb:bindings node="//xs:complexType[@name='SalgslagdataType']">
+                <inheritance:extends> HierarchicalData.HierarchicalData </inheritance:extends>
+                <annox:annotate>
+                    <annox:annotate annox:class="javax.xml.bind.annotation.XmlRootElement" name="Salgslagdata"/>
+                </annox:annotate>
+            </jxb:bindings>
+            <jxb:bindings node="//xs:complexType[@name='ArtType']">
+                <inheritance:extends> HierarchicalData.HierarchicalData </inheritance:extends>
+                <annox:annotate>
+                    <annox:annotate annox:class="javax.xml.bind.annotation.XmlRootElement" name="Art"/>
+                </annox:annotate>
+            </jxb:bindings>
+
+        </jxb:bindings>
+    </jxb:bindings>
+
+</jxb:bindings>
