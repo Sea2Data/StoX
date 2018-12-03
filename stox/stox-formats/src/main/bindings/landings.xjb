@@ -14,7 +14,7 @@
         <jxb:schemaBindings>
             <jxb:package name="LandingsTypes.v2" />
         </jxb:schemaBindings>
-                <jxb:bindings multiple="true" node="//xs:attribute[@type='xs:integer']">
+        <jxb:bindings multiple="true" node="//xs:attribute[@type='xs:integer']">
             <jxb:property>
                 <jxb:baseType>
                     <xjc:javaType name="java.lang.Integer" adapter="adapters.IntegerAdapter" />
@@ -36,8 +36,18 @@
             </jxb:property>
         </jxb:bindings>
  
-        <!-- Datoer i landings er av forskjellige grunner modellert som strenger. Vi kan legge til mapping funksjoner for spesifikke datofelt her -->
+        <!-- Datoer i landings er av forskjellige grunner modellert som strenger. 
+        For formulardatoene er det noe misforhold mellom dokumentasjon og praksis hos fdir.
+        For landingsdato og siste fangstdato kan vi legge til mapping her
+        Vi kan legge til mapping funksjoner for spesifikke datofelt her -->
         <jxb:bindings multiple="false" node="//xs:attribute[@name='SisteFangstdato']">
+            <jxb:property>
+                <jxb:baseType>
+                    <xjc:javaType name="java.time.LocalDate" adapter="adapters.DateStringDMYAdapter" />
+                </jxb:baseType>
+            </jxb:property>
+        </jxb:bindings>
+        <jxb:bindings multiple="false" node="//xs:element[@name='Landingsdato']">
             <jxb:property>
                 <jxb:baseType>
                     <xjc:javaType name="java.time.LocalDate" adapter="adapters.DateStringDMYAdapter" />

@@ -29,8 +29,9 @@ public class LandingsHandlerTest {
         LandingsHandler h = new LandingsHandler();
         InputStream xml = LandingsHandlerTest.class.getClassLoader().getResourceAsStream("landinger_100_lines.xml");
         LandingsdataType landings = h.read(xml);
-        System.out.println(landings.getSeddellinje().get(0).getArtKode());
+        assertNotNull(landings.getSeddellinje().get(0).getArtKode());
         assertEquals(landings.getSeddellinje().get(0).getSisteFangstdato().getYear(), 2015);
+        assertEquals(landings.getSeddellinje().get(0).getProduksjon().getLandingsdato().getYear(), 2015);
     }
     
         @Test
