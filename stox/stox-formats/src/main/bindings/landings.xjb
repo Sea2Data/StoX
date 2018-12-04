@@ -14,6 +14,13 @@
         <jxb:schemaBindings>
             <jxb:package name="LandingsTypes.v2" />
         </jxb:schemaBindings>
+        <jxb:bindings multiple="true" node="//xs:attribute[@type='xs:dateTime']">
+            <jxb:property>
+                <jxb:baseType>
+                    <xjc:javaType name="java.time.LocalDateTime" adapter="adapters.DateTimeAdapter" />
+                </jxb:baseType>
+            </jxb:property>
+        </jxb:bindings>
         <jxb:bindings multiple="true" node="//xs:attribute[@type='xs:integer']">
             <jxb:property>
                 <jxb:baseType>
