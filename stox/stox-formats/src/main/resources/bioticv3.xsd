@@ -1,7 +1,7 @@
 <?xml version='1.0' encoding='UTF-8' ?> 
 <!-- was: <?xml version="1.0" encoding="ISO-8859-1" standalone="no"?> -->
 <xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns="http://www.imr.no/formats/nmdbiotic/v3" xmlns:imrd="http://www.imr.no/formats/nmddocumentation/v1_0" xmlns:ref="http://www.imr.no/formats/nmdreference/v2.0" elementFormDefault="qualified" targetNamespace="http://www.imr.no/formats/nmdbiotic/v3" version="1.0">
-    <xs:import namespace="http://www.imr.no/formats/nmdreference/v2.0" schemaLocation="https://www.imr.no/formats/nmdreference/v2/referencev2_0.xsd"/>
+    <xs:import namespace="http://www.imr.no/formats/nmdreference/v2.0" schemaLocation="https://www.imr.no/formats/nmdreference/v2.0/nmdreferencev2_0.xsd"/>
 <xs:annotation>
         <xs:documentation>
             <imrd:imrDoc>

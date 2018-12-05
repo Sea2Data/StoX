@@ -38,7 +38,7 @@
                                     <url>https://www.imr.no/formats/nmdbiotic/v1.4/bioticv1_4.xsd</url>
                                 </schema>-->
                                 <schema>
-                                    <url>http://www.imr.no/formats/landing/landingdatav2.xsd</url>
+                                    <url>https://www.imr.no/formats/landinger/v2/landingerv2.xsd</url>
                                 </schema>
                             </schemas>
                             <forceRegenerate>true</forceRegenerate>

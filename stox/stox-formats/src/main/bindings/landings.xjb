@@ -10,7 +10,7 @@
     This document is referenced from the pom and is used to change the generated classes.
     The following has been added. -->
 
-    <jxb:bindings schemaLocation="http://www.imr.no/formats/landing/landingdatav2.xsd" node="/xs:schema">
+    <jxb:bindings schemaLocation="https://www.imr.no/formats/landinger/v2/landingerv2.xsd" node="/xs:schema">
         <jxb:schemaBindings>
             <jxb:package name="LandingsTypes.v2" />
         </jxb:schemaBindings>
