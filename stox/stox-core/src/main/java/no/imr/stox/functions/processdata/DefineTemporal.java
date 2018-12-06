@@ -18,8 +18,10 @@ import no.imr.sea2data.biotic.bo.MissionBO;
 import no.imr.sea2data.imrbase.matrix.MatrixBO;
 import no.imr.sea2data.imrbase.util.Conversion;
 import no.imr.sea2data.imrbase.util.IMRdate;
+import no.imr.stox.bo.LandingData;
 import no.imr.stox.bo.ProcessDataBO;
-import no.imr.stox.bo.landing.SluttSeddel;
+import no.imr.stox.bo.landing.LandingsdataBO;
+import no.imr.stox.bo.landing.SeddellinjeBO;
 import no.imr.stox.functions.AbstractFunction;
 import no.imr.stox.functions.utils.AbndEstProcessDataUtil;
 import no.imr.stox.functions.utils.CovariateUtils;
@@ -50,7 +52,7 @@ public class DefineTemporal extends AbstractFunction {
         String sourceType = (String) input.get(Functions.PM_DEFINETEMPORAL_SOURCETYPE);
         String timeInterval = (String) input.get(Functions.PM_DEFINETEMPORAL_TIMEINTERVAL);
         Boolean seasonal = Conversion.safeObjectToBoolean((Boolean) input.get(Functions.PM_DEFINETEMPORAL_SEASONAL));
-        List<SluttSeddel> landingData = (List) input.get(Functions.PM_DEFINETEMPORAL_LANDINGDATA);
+        LandingData landingData = (LandingData) input.get(Functions.PM_DEFINETEMPORAL_LANDINGDATA);
         List<MissionBO> bioticData = (List) input.get(Functions.PM_DEFINETEMPORAL_BIOTICDATA);
         String covariateType = (String) input.get(Functions.PM_DEFINETEMPORAL_COVARIATETYPE);
 
@@ -107,10 +109,12 @@ public class DefineTemporal extends AbstractFunction {
                 }
             } else if (sourceType.equals(Functions.SOURCETYPE_LANDING)) {
                 if (landingData != null) {
-                    for (SluttSeddel sl : landingData) {
-                        String cov = getCovariateFromDate(IMRdate.getLocalDate(sl.getSisteFangstDato()), timeInterval, seasonal);
-                        if (cov != null) {
-                            covs.add(cov);
+                    for (LandingsdataBO la : landingData) {
+                        for (SeddellinjeBO sl : la.getSeddellinjeBOs()) {
+                            String cov = getCovariateFromDate(sl.bo().getSisteFangstdato(), timeInterval, seasonal);
+                            if (cov != null) {
+                                covs.add(cov);
+                            }
                         }
                     }
                 }

@@ -10,7 +10,7 @@
     This document is referenced from the pom and is used to change the generated classes.
     The following has been added. -->
 
-    <jxb:bindings schemaLocation="http://www.imr.no/formats/landing/landingdatav2.xsd" node="/xs:schema">
+    <jxb:bindings schemaLocation="http://www.imr.no/formats/landinger/v2/landingerv2.xsd" node="/xs:schema">
         <jxb:schemaBindings>
             <jxb:package name="LandingsTypes.v2" />
         </jxb:schemaBindings>
@@ -21,17 +21,24 @@
                 </jxb:baseType>
             </jxb:property>
         </jxb:bindings>
-        <jxb:bindings multiple="true" node="//xs:attribute[@type='xs:integer']">
+        <jxb:bindings multiple="true" node="//xs:attribute[@type='xs:integer' or @type='xs:long']">
             <jxb:property>
                 <jxb:baseType>
                     <xjc:javaType name="java.lang.Integer" adapter="adapters.IntegerAdapter" />
                 </jxb:baseType>
             </jxb:property>
         </jxb:bindings>
-        <jxb:bindings multiple="true" node="//xs:element[@type='xs:integer']">
+        <jxb:bindings multiple="true" node="//xs:element[@type='xs:integer' or @type='xs:long']">
             <jxb:property>
                 <jxb:baseType>
                     <xjc:javaType name="java.lang.Integer" adapter="adapters.IntegerAdapter" />
+                </jxb:baseType>
+            </jxb:property>
+        </jxb:bindings>
+        <jxb:bindings multiple="true" node="//xs:attribute[@type='xs:decimal']">
+            <jxb:property>
+                <jxb:baseType>
+                    <xjc:javaType name="java.lang.Double" adapter="adapters.DoubleAdapter" />
                 </jxb:baseType>
             </jxb:property>
         </jxb:bindings>

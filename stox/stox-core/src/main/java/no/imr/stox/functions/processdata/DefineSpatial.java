@@ -15,8 +15,8 @@ import no.imr.sea2data.biotic.bo.FishstationBO;
 import no.imr.sea2data.biotic.bo.MissionBO;
 import no.imr.sea2data.imrbase.matrix.MatrixBO;
 import no.imr.sea2data.imrbase.util.ImrSort;
+import no.imr.stox.bo.LandingData;
 import no.imr.stox.bo.ProcessDataBO;
-import no.imr.stox.bo.landing.SluttSeddel;
 import no.imr.stox.functions.AbstractFunction;
 import no.imr.stox.functions.utils.AbndEstProcessDataUtil;
 import no.imr.stox.functions.utils.CovariateUtils;
@@ -50,7 +50,7 @@ public class DefineSpatial extends AbstractFunction {
         if (conditionalAutoRegression == null) {
             conditionalAutoRegression = false;
         }
-        List<SluttSeddel> landingData = (List) input.get(Functions.PM_DEFINESPATIAL_LANDINGDATA);
+        LandingData landingData = (LandingData) input.get(Functions.PM_DEFINESPATIAL_LANDINGDATA);
         List<MissionBO> biotic = (List) input.get(Functions.PM_DEFINESPATIAL_BIOTICDATA);
 
         // cov param
@@ -95,9 +95,13 @@ public class DefineSpatial extends AbstractFunction {
                 if (landingData == null) {
                     return pd;
                 }
-                landingData.stream().map((sl) -> CovariateUtils.getSpatialCovValue(sl/*, var1, var2*/)).filter((def) -> (def != null)).forEach((def) -> {
-                    covs.add(def);
-                });
+                landingData.stream()
+                        .flatMap(l->l.getSeddellinjeBOs().stream())
+                        .map((sl) -> CovariateUtils.getSpatialCovValue(sl/*, var1, var2*/))
+                        .filter((def) -> (def != null))
+                        .forEach((def) -> {
+                            covs.add(def);
+                        });
             } else {
                 if (biotic == null) {
                     return pd;

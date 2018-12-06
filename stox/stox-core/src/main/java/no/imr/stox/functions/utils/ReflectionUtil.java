@@ -4,6 +4,9 @@ import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -69,20 +72,69 @@ public final class ReflectionUtil {
     }
 
     public static Object invoke(Field f, Object o) {
-        return invoke(getGetter(f), o);
+        return invoke(getGetter(f), o, false);
+    }
+    
+    public static Object invoke(Field f, Object o, boolean includeCompoundFields) {
+        return invoke(getGetter(f), o, includeCompoundFields);
     }
 
     public static Object invoke(Method getter, Object o) {
+        return invoke(getter, o, false);
+    }
+    public static Object invoke(Method getter, Object o, boolean includeCompoundFields) {
         try {
+            if (o == null || getter == null) {
+                return null;
+            }
+            if (includeCompoundFields && !o.getClass().equals(getter.getDeclaringClass())) {
+                // Transform o to a compound category if possible
+                // by searching the o for a field with same type as the getter.
+                // using that getter to get the o.
+                Field catField = Stream.of(o.getClass().getDeclaredFields())
+                        .filter(f -> f.getType().equals(getter.getDeclaringClass())).findFirst().orElse(null);
+                Object catObj = invoke(catField, o, false);
+                if (catObj != null) {
+                    o = catObj;
+                }
+            }
             return getter.invoke(o);
         } catch (IllegalArgumentException | InvocationTargetException | IllegalAccessException ex) {
             return null;
         }
     }
 
+    public static Boolean isAssignableFromLeafFields(Class cl) {
+        return isAssignableFrom(cl, Integer.class, Double.class, Boolean.class, String.class, LocalDate.class, LocalTime.class, LocalDateTime.class);
+    }
+
+    public static Boolean isAssignableFrom(Class cl, Class... cv) {
+        return Stream.of(cv).filter(c -> cl.isAssignableFrom(c)).count() > 0L;
+    }
+
     public static List<Field> getFields(Class c) {
+        return getFields(c, false);
+    }
+
+    public static List<Field> getFields(Class c, boolean includeCompundFields) {
+        return includeCompundFields ? getCompoundFields(c) : getLeafOrCompoundFields(true, c);
+    }
+
+    public static List<Field> getCompoundFields(Class c) {
+        return Stream.concat(
+                // start with attributes and leaf fields
+                ReflectionUtil.getLeafOrCompoundFields(true, c).stream(),
+                // Combine into the stream non leaf category leaf fields
+                ReflectionUtil.getLeafOrCompoundFields(false, c).stream()
+                        .flatMap(f -> ReflectionUtil.getLeafOrCompoundFields(true, f.getType()).stream()))
+                .collect(Collectors.toList());
+    }
+
+    public static List<Field> getLeafOrCompoundFields(Boolean leaf, Class c) {
         return Stream.of(c.getDeclaredFields())
-                .filter(f -> Modifier.isProtected(f.getModifiers()) && !f.getType().isAssignableFrom(List.class))
+                // filter on leaf fields
+                .filter(f -> Modifier.isProtected(f.getModifiers()) && !f.getType().isAssignableFrom(java.util.List.class)
+                && leaf ^ !isAssignableFromLeafFields(f.getType()))
                 //                .filter(m -> m.getName().startsWith("set") && m.getParameters().length == 1)
                 //               .map(m -> m.getName().substring(3).toLowerCase())
                 .sorted((f1, f2) -> {

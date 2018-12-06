@@ -24,6 +24,10 @@ import no.imr.sea2data.imrbase.util.IMRdate;
  */
 public class PgNapesEchoWriter {
 
+    public static void export2(String cruise, String country, String callSignal, String path, String fileName,
+            List<DistanceBO> distances, String species, Double intDist, Double pchThick) {
+        
+    }
     public static void export(String cruise, String country, String callSignal, String path, String fileName,
             List<DistanceBO> distances, String species, Double intDist, Double pchThick) {
         // Atle: implement!

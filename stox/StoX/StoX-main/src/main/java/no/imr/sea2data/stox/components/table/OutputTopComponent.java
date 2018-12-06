@@ -122,26 +122,28 @@ public final class OutputTopComponent extends TopComponent {
             Workbook wb = new HSSFWorkbook();
             for (int iPage = 0; iPage < jTabbedPane1.getTabCount(); iPage++) {
                 OutputPanel panel = (OutputPanel) jTabbedPane1.getComponentAt(iPage);
-                Sheet sh = wb.createSheet(panel.getTabName());
                 String text = panel.getText();
                 String[] lines = text.split("\n");
-                for (int i = 0; i < lines.length; i++) {
-                    String line = lines[i];
-                    String[] cells = line.split("\t");
-                    for (int j = 0; j < cells.length; j++) {
-                        Cell c = safeCell(sh, i, j);
-                        String cell = cells[j];
-                        Double d = Conversion.safeStringtoDoubleNULL(cell);
-                        if (d != null) {
-                            c.setCellValue(d);
-                        } else {
-                            if (cell.length() > 1000) {
-                                cell = cell.substring(0, 1000);
+                if (lines.length < 60000) {
+                    Sheet sh = wb.createSheet(panel.getTabName());
+                    for (int i = 0; i < lines.length; i++) {
+                        String line = lines[i];
+                        String[] cells = line.split("\t");
+                        for (int j = 0; j < cells.length; j++) {
+                            Cell c = safeCell(sh, i, j);
+                            String cell = cells[j];
+                            Double d = Conversion.safeStringtoDoubleNULL(cell);
+                            if (d != null) {
+                                c.setCellValue(d);
+                            } else {
+                                if (cell.length() > 1000) {
+                                    cell = cell.substring(0, 1000);
+                                }
+                                c.setCellValue(cell);
                             }
-                            c.setCellValue(cell);
-                        }
+                        } // for
                     } // for
-                } // for
+                }
             } // for
             String outFile = System.getProperty("java.io.tmpdir") + "/stox_output_"
                     + IMRdate.formatDate(new Date(), "dd-MM-yyyy HH-mm-ss", false) + ".xls";

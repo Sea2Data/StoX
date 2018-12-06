@@ -56,9 +56,6 @@ public class CatchSampleBO extends BaseBO {
      * @return
      */
     public String getSpecCat() {
-        if (specCat == null) {
-            specCat = getSpeciesKey();
-        }
         return specCat;
     }
 

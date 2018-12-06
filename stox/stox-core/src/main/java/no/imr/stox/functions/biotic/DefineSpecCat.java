@@ -17,6 +17,7 @@ import no.imr.sea2data.biotic.bo.MissionBO;
 import no.imr.stox.functions.utils.BioticUtils;
 import no.imr.stox.functions.utils.ProjectUtils;
 import no.imr.stox.functions.utils.ReflectionUtil;
+import no.imr.stox.log.ILogger;
 import no.imr.stox.model.IProcess;
 
 /**
@@ -59,18 +60,22 @@ public class DefineSpecCat extends AbstractFunction {
      */
     @Override
     public Object perform(Map<String, Object> input) {
+        ILogger logger = (ILogger) input.get(Functions.PM_LOGGER);
         List<MissionBO> mList = (List<MissionBO>) input.get(Functions.PM_DEFINESPECCAT_BIOTICDATA);
         List<MissionBO> missions = BioticUtils.copyBioticData(mList);
         String specCat = (String) input.get(Functions.PM_DEFINESPECCAT_SPECCAT);
         String specCatMethod = (String) input.get(Functions.PM_DEFINESPECCAT_SPECCATMETHOD);
-        String specVarStoX = (String) input.get(Functions.PM_DEFINESPECCAT_SPECVARBIOTIC);
+        String specVarBiotic = (String) input.get(Functions.PM_DEFINESPECCAT_SPECVARBIOTIC);
         String fileName = (String) input.get(Functions.PM_DEFINESPECCAT_FILENAME);
         String specVarRef = (String) input.get(Functions.PM_DEFINESPECCAT_SPECVARREF);
         String specCatRef = (String) input.get(Functions.PM_DEFINESPECCAT_SPECCATREF);
-        if (specVarStoX == null) {
-            specVarStoX = "commonname";
+        if (specVarBiotic == null) {
+            specVarBiotic = "commonname";
         }
-        Method specVarStoXGetter = ReflectionUtil.getGetter(CatchsampleType.class, specVarStoX);
+        Method specVarStoXGetter = ReflectionUtil.getGetter(CatchsampleType.class, specVarBiotic);
+        if(specVarStoXGetter == null) {
+            logger.error("SpecVarBiotic not properly selected", null);
+        }
         Map<String, String> m = new HashMap<>();
         switch (specCatMethod) {
             case Functions.SPECCATMETHOD_EXPRESSION: {
@@ -127,14 +132,20 @@ public class DefineSpecCat extends AbstractFunction {
                     ms.getFishstationBOs().forEach((fs) -> {
                         fs.getCatchSampleBOs().forEach((cs) -> {
                             String spec = null;
-                            if (specCat != null && m.isEmpty()) {
-                                spec = specCat;
+                            Object obj = ReflectionUtil.invoke(specVarStoXGetter, cs.bo());
+                            if (specCatMethod.equals(Functions.SPECCATMETHOD_SELECTVAR)) {
+                                spec = obj == null ? null : obj.toString();
                             } else {
-                                Object obj = ReflectionUtil.invoke(specVarStoXGetter, cs.bo());
-                                if (obj != null) {
-                                    String str = m.get(obj.toString().toLowerCase());
-                                    if (str != null) {
-                                        spec = str;
+                                if (specCat != null && m.isEmpty()) {
+                                    // simple expression as a constant 
+                                    spec = specCat;
+                                } else {
+                                    // compound expression 
+                                    if (obj != null) {
+                                        String str = m.get(obj.toString().toLowerCase());
+                                        if (str != null) {
+                                            spec = str;
+                                        }
                                     }
                                 }
                             }

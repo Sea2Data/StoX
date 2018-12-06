@@ -6,8 +6,8 @@ import java.util.Map;
 import no.imr.stox.functions.utils.Functions;
 import no.imr.stox.functions.AbstractFunction;
 import no.imr.stox.bo.LandingData;
-import no.imr.stox.bo.landing.FiskeLinje;
-import no.imr.stox.bo.landing.SluttSeddel;
+import no.imr.stox.bo.landing.LandingsdataBO;
+import no.imr.stox.bo.landing.SeddellinjeBO;
 import org.apache.commons.jexl2.Expression;
 import org.apache.commons.jexl2.JexlContext;
 import org.apache.commons.jexl2.JexlEngine;
@@ -38,36 +38,30 @@ public class FilterLanding extends AbstractFunction {
      */
     @Override
     public Object perform(Map<String, Object> input) {
-        List<SluttSeddel> allLandings = (List<SluttSeddel>) input.get(Functions.PM_FILTERLANDING_LANDINGDATA);
-        List<SluttSeddel> landings = new LandingData();//FilterUtils.copyBOList((List) allFishstations, null);
-        String landingExpr = (String) input.get(Functions.PM_FILTERLANDING_SLUTTSEDDELEXPR);
-        String fiskeLinjeExpr = (String) input.get(Functions.PM_FILTERLANDING_FISKELINJEEXPR);
+        LandingData allLandings = (LandingData) input.get(Functions.PM_FILTERLANDING_LANDINGDATA);
+        LandingData landings = new LandingData();//FilterUtils.copyBOList((List) allFishstations, null);
+        String landingExpr = (String) input.get(Functions.PM_FILTERLANDING_LANDINGEXPR);
         if (landingExpr == null || "".equals(landingExpr)) {
             landingExpr = EXPR_TRUE;
         }
-        if (fiskeLinjeExpr == null || "".equals(fiskeLinjeExpr)) {
-            fiskeLinjeExpr = EXPR_TRUE;
+        if (landingExpr == null || "".equals(landingExpr)) {
+            landingExpr = EXPR_TRUE;
         }
         JexlEngine engine = new JexlEngine();
         engine.setLenient(false);
         engine.setSilent(false);
         Expression landingExpression = engine.createExpression(landingExpr);
-        Expression fiskelinjeExpression = engine.createExpression(fiskeLinjeExpr);
         JexlContext ctx = new MapContext();
-        for (SluttSeddel sl : allLandings) {
-            FilterUtils.resolveContext(ctx, sl);
-            if (!FilterUtils.evaluate(ctx, landingExpression)) {
-                continue;
-            }
-            SluttSeddel slF = new SluttSeddel(sl);
+        for (LandingsdataBO sl : allLandings) {
+            LandingsdataBO slF = new LandingsdataBO(sl);
             landings.add(slF);
-            for (FiskeLinje fl : sl.getFiskelinjer()) {
-                FilterUtils.resolveContext(ctx, fl);
-                if (!FilterUtils.evaluate(ctx, fiskelinjeExpression)) {
+            for (SeddellinjeBO fl : sl.getSeddellinjeBOs()) {
+                FilterUtils.resolveContext(ctx, sl);
+                if (!FilterUtils.evaluate(ctx, landingExpression)) {
                     continue;
                 }
-                FiskeLinje flF = new FiskeLinje(slF, fl);
-                slF.getFiskelinjer().add(flF);
+                SeddellinjeBO flF = new SeddellinjeBO(slF, fl);
+                slF.addSeddellinje(flF);
             }
         }
         return landings;

@@ -143,9 +143,8 @@ public final class Functions {
 
     public static final String FN_FILTERLANDING = "FilterLanding";
     public static final String PM_FILTERLANDING_LANDINGDATA = "LandingData";
-    public static final String PM_FILTERLANDING_SLUTTSEDDELEXPR = "SluttSeddelExpr";
-    public static final String PM_FILTERLANDING_FISKELINJEEXPR = "FiskeLinjeExpr";
-
+    public static final String PM_FILTERLANDING_LANDINGEXPR = "LandingExpr";
+    
     public static final String FN_APPLYPOSTODATA = "ApplyPosToData";
     public static final String PM_APPLYPOSTODATA_SOURCETYPE = "SourceType";
     public static final String PM_APPLYPOSTODATA_AREACODING = "AreaCoding";
@@ -837,4 +836,5 @@ public final class Functions {
     
     public static final String SPECCATMETHOD_EXPRESSION = "Expression";
     public static final String SPECCATMETHOD_RESOURCEFILE = "ResourceFile";
+    public static final String SPECCATMETHOD_SELECTVAR = "SelectVar";
 }

@@ -1,10 +1,8 @@
 package no.imr.stox.functions.utils;
 
-import java.lang.reflect.Method;
-import java.time.LocalDate;
+import LandingsTypes.v2.SeddellinjeType;
+import java.lang.reflect.Field;
 import java.util.List;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
 import no.imr.sea2data.biotic.bo.FishstationBO;
 import no.imr.sea2data.biotic.bo.IndividualBO;
 import no.imr.sea2data.biotic.bo.CatchSampleBO;
@@ -12,8 +10,7 @@ import no.imr.sea2data.echosounderbo.DistanceBO;
 import no.imr.sea2data.echosounderbo.FrequencyBO;
 import no.imr.sea2data.echosounderbo.SABO;
 import no.imr.sea2data.imrbase.util.IMRdate;
-import no.imr.stox.bo.landing.FiskeLinje;
-import no.imr.stox.bo.landing.SluttSeddel;
+import no.imr.stox.bo.landing.SeddellinjeBO;
 import org.apache.commons.jexl2.Expression;
 import org.apache.commons.jexl2.JexlContext;
 import org.apache.commons.jexl2.MapContext;
@@ -197,67 +194,12 @@ public final class FilterUtils {
             context.set("ch_type", sa.getCh_type());
             context.set("ch", sa.getCh());
             context.set("sa", sa.getSa());
-        } else if (o instanceof SluttSeddel) {
-            SluttSeddel sl = (SluttSeddel) o;
-            context.set("fangstaar", sl.getFangstAar());
-            context.set("doktype", sl.getDokType());
-            context.set("sltsnr", sl.getSltsNr());
-            context.set("formulardato", sl.getFormularDato());
-            context.set("salgslag", sl.getSalgslag());
-            context.set("salgslagorgnr", sl.getSalgslagOrgnr());
-            context.set("kjoporgnr", sl.getKjopOrgnr());
-            context.set("kjopkundenr", sl.getKjopOrgnr());
-            context.set("kjopland", sl.getKjopLand());
-            context.set("fiskerkomm", sl.getFiskerKomm());
-            context.set("fiskerland", sl.getFiskerLand());
-            context.set("fiskermantall", sl.getFiskerManntall());
-            context.set("fartregm", sl.getFartRegm());
-            context.set("fartland", sl.getFartLand());
-            context.set("farttype", sl.getFartType());
-            context.set("antmann", sl.getAntMann());
-            context.set("kvotetype", sl.getKvoteType());
-            context.set("sistefangstdato", sl.getSisteFangstDato());
-            context.set("fangstregion", sl.getFangstRegion());
-            context.set("fangstkysthav", sl.getFangstKystHav());
-            context.set("fangsthomr", sl.getFangstHomr());
-            context.set("fangstlok", sl.getFangstLok());
-            context.set("fangstsone", sl.getFangstSone());
-            context.set("redskap", sl.getRedskap());
-            context.set("kvoteland", sl.getKvoteLand());
-            context.set("fiskedager", sl.getFiskedager());
-            context.set("landingsdato", sl.getLandingsDato());
-            // Helpers
-            context.set("landingskvartal", IMRdate.getQuarter(sl.getLandingsDato()));
-            context.set("landingsmnd", IMRdate.getMonth(sl.getLandingsDato(), true));
-            context.set("landingsuke", IMRdate.getWeek(sl.getLandingsDato()));
-            context.set("sistefangstkvartal", IMRdate.getQuarter(sl.getSisteFangstDato()));
-            context.set("sistefangstmnd", IMRdate.getMonth(sl.getSisteFangstDato(), true));
-            context.set("sistefangstuke", IMRdate.getWeek(sl.getSisteFangstDato()));
-
-            context.set("landingsmottak", sl.getLandingsMottak());
-            context.set("landingskomm", sl.getLandingsKomm());
-            context.set("landingsland", sl.getLandingsLand());
-        } else if (o instanceof FiskeLinje) {
-            FiskeLinje fl = (FiskeLinje) o;
-            context.set("id", fl.getFisk());
-            context.set("fisk", fl.getFisk());
-            /*
-            0611 SILD    
-            061101 NVG sild
-            061104 Northsee sild
-            615 BRISLING   
-            1022 TORSK
-            1027 HYSE
-            1032 SEI    
-            1038 KOLMULE
-            2013 MAKRELL
-             */
-            context.set("konservering", fl.getKonservering());
-            context.set("tilstand", fl.getTilstand());
-            context.set("kvalitet", fl.getKvalitet());
-            context.set("anvendelse", fl.getAnvendelse());
-            context.set("prodvekt", fl.getProdVekt());
-            context.set("rundvekt", fl.getRundVekt());
+        } else if (o instanceof SeddellinjeBO) {
+            SeddellinjeBO sl = (SeddellinjeBO) o;
+            List<Field> fields = ReflectionUtil.getCompoundFields(SeddellinjeType.class);
+            fields.forEach(f -> {
+                context.set(f.getName(), ReflectionUtil.invoke(f, sl.bo(), true));
+            });
         }
     }
 
@@ -300,6 +242,7 @@ public final class FilterUtils {
         if (cs == null) {
             return;
         }
+        context.set("speccat", cs.getSpecCat());
         context.set("species", cs.bo().getCatchcategory() != null ? cs.bo().getCatchcategory().toLowerCase() : null);
         context.set("noname", cs.bo().getCommonname() != null ? cs.bo().getCommonname().toLowerCase() : null);
         context.set("aphia", cs.bo().getAphia());

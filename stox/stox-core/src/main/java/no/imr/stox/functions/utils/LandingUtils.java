@@ -7,12 +7,9 @@ package no.imr.stox.functions.utils;
 
 import java.util.ArrayList;
 import java.util.List;
-import no.imr.sea2data.biotic.bo.AgeDeterminationBO;
-import no.imr.sea2data.biotic.bo.CatchSampleBO;
-import no.imr.sea2data.biotic.bo.FishstationBO;
-import no.imr.sea2data.biotic.bo.IndividualBO;
-import no.imr.stox.bo.landing.FiskeLinje;
-import no.imr.stox.bo.landing.SluttSeddel;
+import no.imr.stox.bo.LandingData;
+import no.imr.stox.bo.landing.LandingsdataBO;
+import no.imr.stox.bo.landing.SeddellinjeBO;
 
 /**
  *
@@ -20,16 +17,15 @@ import no.imr.stox.bo.landing.SluttSeddel;
  */
 public class LandingUtils {
 
-    public static List<SluttSeddel> copyLandingData(List<SluttSeddel> sList) {
-        List<SluttSeddel> fiskelinjer = new ArrayList<>();
-        sList.forEach((sl) -> {
-            SluttSeddel sl2 = new SluttSeddel(sl);
-            fiskelinjer.add(sl2);
-            sl.getFiskelinjer().forEach((fl) -> {
-                sl2.addFiskeLinje(new FiskeLinje(sl2, fl));
+    public static LandingData copyLandingData(LandingData ldList) {
+        LandingData landingsdata = new LandingData();
+        ldList.forEach((ld) -> {
+            LandingsdataBO ld2 = new LandingsdataBO(ld);
+            landingsdata.add(ld2);
+            ld.getSeddellinjeBOs().forEach((sl) -> {
+                ld2.addSeddellinje(new SeddellinjeBO(ld2, sl));
             });
         });
-        return fiskelinjer;
+        return landingsdata;
     }
-
 }

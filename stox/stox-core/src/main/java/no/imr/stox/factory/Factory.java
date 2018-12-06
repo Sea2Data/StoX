@@ -657,8 +657,7 @@ public class Factory {
                 setFileOutput(false);
         m.addProcess(Functions.FN_FILTERLANDING, Functions.FN_FILTERLANDING).
                 setParameterProcessValue(Functions.PM_FILTERLANDING_LANDINGDATA, Functions.FN_READLANDINGXML).
-                setParameterValue(Functions.PM_FILTERLANDING_SLUTTSEDDELEXPR, "LandingsKvartal =~ [1,2]").
-                setParameterValue(Functions.PM_FILTERLANDING_FISKELINJEEXPR, "Fisk =~ ['1022','2524']").
+                setParameterValue(Functions.PM_FILTERLANDING_LANDINGEXPR, "Art_kode =~ ['102202']").
                 setRespondInGUI(true);
 
         m.addProcess(Functions.FN_APPLYPOSTODATA, Functions.FN_APPLYPOSTODATA).

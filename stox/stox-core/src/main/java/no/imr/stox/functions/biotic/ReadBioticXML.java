@@ -90,7 +90,8 @@ public class ReadBioticXML extends AbstractFunction {
                         i.setLength(Calc.roundTo(StoXMath.mToCM(i.getLength()), 8));
                         i.setIndividualweight(Calc.roundTo(StoXMath.kgToGrams(i.getIndividualweight()), 8));
                     }
-
+                    // Initially set the speccat
+                    sbo.setSpecCat(sbo.getSpeciesKey());
                 }
                 // catchplatform=platform if null
                 if (fbo.bo().getCatchplatform() == null) {

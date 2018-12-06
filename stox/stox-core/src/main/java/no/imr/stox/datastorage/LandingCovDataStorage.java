@@ -5,19 +5,34 @@
  */
 package no.imr.stox.datastorage;
 
+import LandingsTypes.v2.ArtType;
+import LandingsTypes.v2.DellandingType;
+import LandingsTypes.v2.FangstdataType;
+import LandingsTypes.v2.FartøyType;
+import LandingsTypes.v2.FiskerType;
+import LandingsTypes.v2.KvoteType;
+import LandingsTypes.v2.LandingOgProduksjonType;
+import LandingsTypes.v2.LandingsdataType;
+import LandingsTypes.v2.MottakendeFartøyType;
+import LandingsTypes.v2.MottakerType;
+import LandingsTypes.v2.ProduktType;
+import LandingsTypes.v2.RedskapType;
+import LandingsTypes.v2.SalgslagdataType;
+import LandingsTypes.v2.SeddellinjeType;
 import java.io.Writer;
+import java.lang.reflect.Field;
 import java.util.List;
-import no.imr.sea2data.imrbase.matrix.MatrixBO;
-import no.imr.sea2data.imrbase.util.Conversion;
+import java.util.Objects;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
+import no.imr.sea2data.biotic.bo.BaseBO;
 import no.imr.sea2data.imrbase.util.ExportUtil;
 import no.imr.sea2data.imrbase.util.IMRdate;
 import no.imr.sea2data.imrbase.util.ImrIO;
 import no.imr.stox.bo.LandingCovDataMatrix;
-import no.imr.stox.bo.landing.FiskeLinje;
-import no.imr.stox.bo.landing.SluttSeddel;
-import no.imr.stox.functions.utils.AbndEstProcessDataUtil;
-import no.imr.stox.functions.utils.CovariateUtils;
-import no.imr.stox.functions.utils.Functions;
+import no.imr.stox.bo.landing.LandingsdataBO;
+import no.imr.stox.bo.landing.SeddellinjeBO;
+import no.imr.stox.functions.utils.ReflectionUtil;
 
 /**
  *
@@ -29,26 +44,16 @@ public class LandingCovDataStorage extends FileDataStorage {
     public <T> void asTable(T data, Integer level, Writer wr, Boolean withUnits) {
         LandingCovDataMatrix flData = (LandingCovDataMatrix) data;
         String temporalHdr = ExportUtil.tabbed("Temporal");//seasonal ? ExportUtil.tabbed("Year", "Season") : ExportUtil.tabbed("Temporal");
-        ImrIO.write(wr, ExportUtil.carrageReturnLineFeed(ExportUtil.tabbed(temporalHdr, "GearFactor", "Spatial", /*"PlatformFactor", */"fangstaar", "doktype", "sltsnr", "formulardato", "salgslag", "salgslagorgnr", "kjoporgnr",
-                "kjopkundenr", "kjopland", "fiskerkomm", "fiskerland", "fiskermantall", "fartregm", "fartland", "farttype", "antmann", "kvotetype", "sistefangstdato", "fangstregion",
-                "fangstkysthav", "fangsthomr", "fangstlok", "fangstsone", "redskap", "kvoteland", "fiskedager", "landingsdato", "landingsmottak", "landingskomm", "landingsland",
-                "fisk", "konservering", "tilstand", "kvalitet", "anvendelse", "prodvekt", "rundvekt")));
+        ImrIO.write(wr, ExportUtil.carrageReturnLineFeed(ExportUtil.tabbed(temporalHdr, BaseBO.csvHdr(SeddellinjeType.class, true))));
         for (String cov : flData.getData().getSortedRowKeys()) {
             String[] keys = cov.split("/");
             String context = ExportUtil.tabbed(keys[0], keys[1], keys[2]/*, keys[3]*/);
-            List<FiskeLinje> flList = (List<FiskeLinje>) flData.getData().getRowValue(cov);
+            List<SeddellinjeBO> flList = (List<SeddellinjeBO>) flData.getData().getRowValue(cov);
             if (flList == null) {
                 ImrIO.write(wr, ExportUtil.carrageReturnLineFeed(context));
             } else {
-                for (FiskeLinje fl : flList) {
-                    SluttSeddel sl = fl.getSluttSeddel();
-                    ImrIO.write(wr, ExportUtil.carrageReturnLineFeed(ExportUtil.tabbed(context, sl.getFangstAar(), sl.getDokType(), sl.getSltsNr(), IMRdate.formatDate(sl.getFormularDato()), sl.getSalgslag(), sl.getSalgslagOrgnr(),
-                            sl.getKjopOrgnr(), sl.getKjopOrgnr(), sl.getKjopLand(), sl.getFiskerKomm(), sl.getFiskerLand(), sl.getFiskerManntall(),
-                            sl.getFartRegm(), sl.getFartLand(), sl.getFartType(), sl.getAntMann(), sl.getKvoteType(), IMRdate.formatDate(sl.getSisteFangstDato()),
-                            sl.getFangstRegion(), sl.getFangstKystHav(), sl.getFangstHomr(), sl.getFangstLok(), sl.getFangstSone(), sl.getRedskap(), sl.getKvoteLand(), sl.getFiskedager(),
-                            IMRdate.formatDate(sl.getLandingsDato()), sl.getLandingsMottak(), sl.getLandingsKomm(), sl.getLandingsLand(),
-                            // Fiskelinje:
-                            fl.getFisk(), fl.getKonservering(), fl.getTilstand(), fl.getKvalitet(), fl.getAnvendelse(), fl.getProdVekt(), fl.getRundVekt())));
+                for (SeddellinjeBO sl : flList) {
+                    ImrIO.write(wr, ExportUtil.carrageReturnLineFeed(ExportUtil.tabbed(context, sl.csv(true))));
                 }
             }
         }

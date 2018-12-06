@@ -52,6 +52,7 @@ public class IndividualDataTest {
         f.bo().setSerialnumber(1000);
         CatchSampleBO s = f.addCatchSample();
         s.bo().setCatchcategory("havsil");
+        s.setSpecCat(s.bo().getCatchcategory());
         s.bo().setCatchweight(100.0);
         s.bo().setLengthsampleweight(50.0);
         s.bo().setCatchpartnumber(Integer.SIZE);

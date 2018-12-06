@@ -5,21 +5,22 @@
  */
 package no.imr.stox.functions.data;
 
+import LandingsTypes.v2.LandingsdataType;
+import LandingsTypes.v2.SeddellinjeType;
 import java.awt.geom.Point2D;
 import java.util.List;
 import java.util.Map;
 import no.imr.sea2data.biotic.bo.FishstationBO;
 import no.imr.sea2data.biotic.bo.MissionBO;
 import no.imr.sea2data.imrbase.matrix.MatrixBO;
-import no.imr.sea2data.imrbase.util.Conversion;
-import no.imr.stox.bo.landing.SluttSeddel;
+import no.imr.stox.bo.LandingData;
+import no.imr.stox.bo.landing.LandingsdataBO;
+import no.imr.stox.bo.landing.SeddellinjeBO;
 import no.imr.stox.datastorage.BioticDataStorage;
 import no.imr.stox.datastorage.IDataStorage;
 import no.imr.stox.datastorage.LandingDataStorage;
 import no.imr.stox.functions.AbstractFunction;
-import no.imr.stox.functions.utils.BioticUtils;
 import no.imr.stox.functions.utils.Functions;
-import no.imr.stox.functions.utils.LandingUtils;
 import no.imr.stox.functions.utils.ProjectUtils;
 import no.imr.stox.functions.utils.StratumUtils;
 
@@ -47,22 +48,24 @@ public class ApplyPosToData extends AbstractFunction {
         if (dataSource == null) {
             return null;
         }
-        List<SluttSeddel> landing = (List<SluttSeddel>) input.get(Functions.PM_APPLYPOSTODATA_LANDINGDATA);
+        LandingData landing = (LandingData) input.get(Functions.PM_APPLYPOSTODATA_LANDINGDATA);
         List<MissionBO> biotic = (List) input.get(Functions.PM_APPLYPOSTODATA_BIOTICDATA);
         switch (dataSource) {
             case Functions.SOURCETYPE_LANDING:
-                List<SluttSeddel> landing2 = landing;//LandingUtils.copyLandingData(landing);
-                for (SluttSeddel sl : landing2) {
-                    if (sl.getLongitude() != null && sl.getLatitude() != null) {
-                        continue;
+                LandingData landing2 = landing;//LandingUtils.copyLandingData(landing);
+                for (LandingsdataBO l : landing2) {
+                    for (SeddellinjeBO sl : l.getSeddellinjeBOs()) {
+                        if (sl.getLongitude() != null && sl.getLatitude() != null) {
+                            continue;
+                        }
+                        String stratum = StratumUtils.getStratumName(areaCoding, sl.bo().getHovedområdeKode(), sl.bo().getLokasjonKode());
+                        Point2D.Double pt = (Point2D.Double) posMap.getRowValue(stratum);
+                        if (pt == null) {
+                            continue;
+                        }
+                        sl.setLongitude(pt.x);
+                        sl.setLatitude(pt.y);
                     }
-                    String stratum = StratumUtils.getStratumName(areaCoding, sl.getFangstHomr(), sl.getFangstLok());
-                    Point2D.Double pt = (Point2D.Double) posMap.getRowValue(stratum);
-                    if (pt == null) {
-                        continue;
-                    }
-                    sl.setLongitude(pt.x);
-                    sl.setLatitude(pt.y);
                 }
                 return landing2;
             case Functions.SOURCETYPE_BIOTIC:

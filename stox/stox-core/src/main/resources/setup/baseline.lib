@@ -133,8 +133,7 @@ Description: <I>FilterLanding</I> filters an input dataset of data type <U>Landi
 Class: no.imr.stox.functions.landing.FilterLanding
 Respondable:true
 Parameter: Name=LandingData, Required=true, DataType=LandingData, Description=The <I>LandingData</I> parameter is used to specify which previous process has generated the <U>LandingData</U> input data.
-Parameter: Name=SluttSeddelExpr, Required=false, DataType=String, Description=The <I>SluttseddelExpr</I> filtering parameter is used to extract landing data at the sluttseddel level (ref landing XML file format) in the hierarchic <U>LandingData</U> dataset.<BR><BR> Java JEXL syntax is used. All variables at these levels can be used in the filter expression. Data on lower levels will be effected by filtering at a higher level in the hierarchy.
-Parameter: Name=FiskeLinjeExpr, Required=false, DataType=String, Description=The <I>FiskeLinjeExpr</I> filtering parameter is used to extract landing data at the Fiskelinje level (ref landing XML file format) in the hierarchic <U>LandingData</U> dataset.<BR><BR> Java JEXL syntax is used. ONLY variable &#60;species&#62; at this level and all variables on levels above can be used in the filter expression.
+Parameter: Name=LandingExpr, Required=false, DataType=String, Description=The <I>SluttseddelExpr</I> filtering parameter is used to extract landing data at the sluttseddel level (ref landing XML file format) in the hierarchic <U>LandingData</U> dataset.<BR><BR> Java JEXL syntax is used. All variables at these levels can be used in the filter expression. Data on lower levels will be effected by filtering at a higher level in the hierarchy.
 DataStorage:no.imr.stox.datastorage.LandingDataStorage
 Output: LandingData
 

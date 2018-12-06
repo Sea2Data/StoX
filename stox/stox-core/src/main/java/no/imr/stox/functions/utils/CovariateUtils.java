@@ -6,12 +6,11 @@
 package no.imr.stox.functions.utils;
 
 import java.time.LocalDate;
-import java.util.Date;
 import no.imr.sea2data.biotic.bo.FishstationBO;
 import no.imr.sea2data.imrbase.matrix.MatrixBO;
 import no.imr.sea2data.imrbase.util.Conversion;
 import no.imr.sea2data.imrbase.util.IMRdate;
-import no.imr.stox.bo.landing.SluttSeddel;
+import no.imr.stox.bo.landing.SeddellinjeBO;
 import org.apache.commons.lang.StringUtils;
 
 /**
@@ -221,7 +220,7 @@ public class CovariateUtils {
         return null;
     }*/
 
-    public static String getSpatialCovValue(SluttSeddel sl/*, String dim*/) {
+    public static String getSpatialCovValue(SeddellinjeBO sl/*, String dim*/) {
                 return sl.getStratum();
         /*if (dim == null) {
             return null;

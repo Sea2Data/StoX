@@ -5,6 +5,10 @@
  */
 package no.imr.sea2data.biotic.bo;
 
+import java.util.Objects;
+import java.util.stream.Collectors;
+import no.imr.stox.functions.utils.ReflectionUtil;
+
 /**
  *
  * @author aasmunds
@@ -44,4 +48,13 @@ public class BaseBO {
         return null;
     }
 
+    public static String csvHdr(Class clz, boolean includeCompoundFields) {
+        return ReflectionUtil.getFields(clz, includeCompoundFields).stream().map(f -> f.getName()).collect(Collectors.joining("\t"));
+    }
+
+    public String csv(boolean includeCompoundFields) {
+        return ReflectionUtil.getCompoundFields(this.getClass()).stream()
+                .map(f -> ReflectionUtil.invoke(f, bo, includeCompoundFields))
+                .map(o -> Objects.toString(o)).collect(Collectors.joining("\t"));
+    }
 }

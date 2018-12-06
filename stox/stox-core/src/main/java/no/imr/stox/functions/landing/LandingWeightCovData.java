@@ -9,7 +9,7 @@ import java.util.List;
 import java.util.Map;
 import no.imr.stox.bo.LandingCovDataMatrix;
 import no.imr.stox.bo.LandingWeightCovDataMatrix;
-import no.imr.stox.bo.landing.FiskeLinje;
+import no.imr.stox.bo.landing.SeddellinjeBO;
 import no.imr.stox.functions.AbstractFunction;
 import no.imr.stox.functions.utils.Functions;
 
@@ -31,9 +31,12 @@ public class LandingWeightCovData extends AbstractFunction {
         LandingWeightCovDataMatrix landWeight = new LandingWeightCovDataMatrix();
         // Default handling (Define by given time interval:
         for (String covKey : landCovData.getData().getRowKeys()) {
-            List<FiskeLinje> fls = (List) landCovData.getData().getRowValue(covKey);
-            for (FiskeLinje fl : fls) {
-                Double rw = fl.getRundVekt();
+            List<SeddellinjeBO> fls = (List) landCovData.getData().getRowValue(covKey);
+            for (SeddellinjeBO fl : fls) {
+                if(fl.bo().getProdukt() == null) {
+                    continue;
+                }
+                Double rw = fl.bo().getProdukt().getRundvekt();
                 if (rw == null) {
                     continue;
                 }

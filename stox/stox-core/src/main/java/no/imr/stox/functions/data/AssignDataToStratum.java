@@ -5,6 +5,7 @@
  */
 package no.imr.stox.functions.data;
 
+import LandingsTypes.v2.LandingsdataType;
 import com.vividsolutions.jts.geom.Coordinate;
 import com.vividsolutions.jts.geom.MultiPolygon;
 import java.util.List;
@@ -13,8 +14,10 @@ import no.imr.sea2data.biotic.bo.FishstationBO;
 import no.imr.sea2data.biotic.bo.MissionBO;
 import no.imr.sea2data.imrbase.matrix.MatrixBO;
 import no.imr.sea2data.imrmap.utils.JTSUtils;
+import no.imr.stox.bo.LandingData;
 import no.imr.stox.bo.ProcessDataBO;
-import no.imr.stox.bo.landing.SluttSeddel;
+import no.imr.stox.bo.landing.LandingsdataBO;
+import no.imr.stox.bo.landing.SeddellinjeBO;
 import no.imr.stox.datastorage.BioticDataStorage;
 import no.imr.stox.datastorage.IDataStorage;
 import no.imr.stox.datastorage.LandingDataStorage;
@@ -40,15 +43,17 @@ public class AssignDataToStratum extends AbstractFunction {
         if (dataSource == null) {
             return null;
         }
-        List<SluttSeddel> landing = (List<SluttSeddel>) input.get(Functions.PM_ASSIGNDATATOSTRATUM_LANDINGDATA);
+        LandingData landing = (LandingData) input.get(Functions.PM_ASSIGNDATATOSTRATUM_LANDINGDATA);
         List<MissionBO> biotic = (List) input.get(Functions.PM_ASSIGNDATATOSTRATUM_BIOTICDATA);
         switch (dataSource) {
             case Functions.SOURCETYPE_LANDING:
-                for (SluttSeddel sl : landing) {
-                    if (sl.getLongitude() == null || sl.getLatitude() == null) {
-                        continue;
+                for (LandingsdataBO l : landing) {
+                    for (SeddellinjeBO sl : l.getSeddellinjeBOs()) {
+                        if (sl.getLongitude() == null || sl.getLatitude() == null) {
+                            continue;
+                        }
+                        sl.setStratum(getStratumFromPosition(pd, sl.getLongitude(), sl.getLatitude()));
                     }
-                    sl.setStratum(getStratumFromPosition(pd, sl.getLongitude(), sl.getLatitude()));
                 }
                 return landing;
             case Functions.SOURCETYPE_BIOTIC:
