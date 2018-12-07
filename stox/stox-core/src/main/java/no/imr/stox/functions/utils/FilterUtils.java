@@ -198,7 +198,8 @@ public final class FilterUtils {
             SeddellinjeBO sl = (SeddellinjeBO) o;
             List<Field> fields = ReflectionUtil.getCompoundFields(SeddellinjeType.class);
             fields.forEach(f -> {
-                context.set(f.getName(), ReflectionUtil.invoke(f, sl.bo(), true));
+                String varName = f.getName().toLowerCase().replace("æ", "ae").replace("ø", "oe").replace("å", "aa").replace("Æ", "AE").replace("Ø", "OE").replace("Å", "AA");
+                context.set(varName, ReflectionUtil.invoke(f, sl.bo(), true));
             });
         }
     }

@@ -72,16 +72,10 @@ public class ApplyPosToData extends AbstractFunction {
                 List<MissionBO> biotic2 = biotic;//BioticUtils.copyBioticData(biotic); cannot copy data 
                 for (MissionBO ms : biotic2) {
                     for (FishstationBO fs : ms.getFishstationBOs()) {
-                        if (fs.bo().getLatitudestart() != null && fs.bo().getLongitudestart() != null) {
-                            continue;
-                        }
                         String stratum = StratumUtils.getStratumName(areaCoding, fs.bo().getArea(), fs.bo().getLocation());
                         Point2D.Double pt = (Point2D.Double) posMap.getRowValue(stratum);
-                        if (pt == null) {
-                            continue;
-                        }
-                        fs.bo().setLatitudestart(pt.y);
-                        fs.bo().setLongitudestart(pt.x);
+                        fs.bo().setLatitudestart(pt == null ? null : pt.y);
+                        fs.bo().setLongitudestart(pt == null ? null : pt.x);
                     }
                 }
                 return biotic2;
@@ -95,12 +89,12 @@ public class ApplyPosToData extends AbstractFunction {
         if (dataSource == null) {
             return null;
         }
-        switch (dataSource) {
+        /*switch (dataSource) {
             case Functions.SOURCETYPE_LANDING:
                 return new LandingDataStorage();
             case Functions.SOURCETYPE_BIOTIC:
                 return new BioticDataStorage();
-        }
+        }*/
 
         return null;
     }

@@ -39,6 +39,10 @@ public class LandingsdataBO extends BaseBO {
         return seddellinjeBOs;
     }
 
+    public void setSeddellinjeBOs(List<SeddellinjeBO> seddellinjeBOs) {
+        this.seddellinjeBOs = seddellinjeBOs;
+    }
+
     public SeddellinjeBO addSeddellinje() {
         return addSeddellinje((SeddellinjeType) null);
     }

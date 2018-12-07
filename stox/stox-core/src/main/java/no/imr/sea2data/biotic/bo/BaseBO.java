@@ -53,8 +53,8 @@ public class BaseBO {
     }
 
     public String csv(boolean includeCompoundFields) {
-        return ReflectionUtil.getCompoundFields(this.getClass()).stream()
+        return ReflectionUtil.getCompoundFields(bo.getClass()).stream()
                 .map(f -> ReflectionUtil.invoke(f, bo, includeCompoundFields))
-                .map(o -> Objects.toString(o)).collect(Collectors.joining("\t"));
+                .map(o -> o == null ? "" : Objects.toString(o)).collect(Collectors.joining("\t"));
     }
 }

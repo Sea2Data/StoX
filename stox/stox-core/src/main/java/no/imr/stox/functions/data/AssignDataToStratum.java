@@ -59,7 +59,7 @@ public class AssignDataToStratum extends AbstractFunction {
             case Functions.SOURCETYPE_BIOTIC:
                 for (MissionBO ms : biotic) {
                     for (FishstationBO fs : ms.getFishstationBOs()) {
-                        if (fs.bo().getLatitudestart() == null && fs.bo().getLongitudestart() == null) {
+                        if (fs.bo().getLatitudestart() == null || fs.bo().getLongitudestart() == null) {
                             continue;
                         }
                         fs.setStratum(getStratumFromPosition(pd, fs.bo().getLongitudestart(), fs.bo().getLatitudestart()));
@@ -75,12 +75,12 @@ public class AssignDataToStratum extends AbstractFunction {
         if (dataSource == null) {
             return null;
         }
-        switch (dataSource) {
+        /*switch (dataSource) {
             case Functions.SOURCETYPE_LANDING:
                 return new LandingDataStorage();
             case Functions.SOURCETYPE_BIOTIC:
                 return new BioticDataStorage();
-        }
+        }*/
 
         return null;
     }

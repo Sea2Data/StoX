@@ -35,9 +35,8 @@ public class DefineGearFactor extends AbstractFunction {
     public Object perform(Map<String, Object> input) {
         ProcessDataBO pd = (ProcessDataBO) input.get(Functions.PM_DEFINEGEARFACTOR_PROCESSDATA);
         String defMethod = (String) input.get(Functions.PM_DEFINEGEARFACTOR_DEFINITIONMETHOD);
-        String covariateSourceType = (String) input.get(Functions.PM_DEFINEGEARFACTOR_SOURCETYPE);
         String covariateType = (String) input.get(Functions.PM_DEFINETEMPORAL_COVARIATETYPE);
-        String sourceType = Functions.SOURCETYPE_BIOTIC; // get as parameter
+        String sourceType = (String) input.get(Functions.PM_DEFINEGEARFACTOR_SOURCETYPE);
         // cov param
         MatrixBO covParam = AbndEstProcessDataUtil.getCovParam(pd);
         MatrixBO m = covParam.getRowValueAsMatrix(AbndEstProcessDataUtil.TABLE_GEARFACTOR);
@@ -54,7 +53,7 @@ public class DefineGearFactor extends AbstractFunction {
             // Use existing, do not read from file.
             return pd;
         }
-        m = covM.getRowValueAsMatrix(covariateSourceType);
+        m = covM.getRowValueAsMatrix(sourceType);
         if (m != null) {
             m.clear(); // Clear covariates for covariate type and source
         }
@@ -80,7 +79,7 @@ public class DefineGearFactor extends AbstractFunction {
                     if (elements.length == 3) {
                         String id = elements[0].trim();
                         String source = elements[1].trim();
-                        if (!source.equalsIgnoreCase(covariateSourceType)) {
+                        if (!source.equalsIgnoreCase(sourceType)) {
                             continue;
                         }
                         String def = elements[2].replace(" ", "");

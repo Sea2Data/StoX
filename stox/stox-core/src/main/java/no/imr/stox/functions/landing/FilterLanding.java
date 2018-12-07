@@ -3,6 +3,7 @@ package no.imr.stox.functions.landing;
 import no.imr.stox.functions.utils.FilterUtils;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 import no.imr.stox.functions.utils.Functions;
 import no.imr.stox.functions.AbstractFunction;
 import no.imr.stox.bo.LandingData;
@@ -51,18 +52,19 @@ public class FilterLanding extends AbstractFunction {
         engine.setLenient(false);
         engine.setSilent(false);
         Expression landingExpression = engine.createExpression(landingExpr);
-        JexlContext ctx = new MapContext();
-        for (LandingsdataBO sl : allLandings) {
-            LandingsdataBO slF = new LandingsdataBO(sl);
-            landings.add(slF);
-            for (SeddellinjeBO fl : sl.getSeddellinjeBOs()) {
-                FilterUtils.resolveContext(ctx, sl);
-                if (!FilterUtils.evaluate(ctx, landingExpression)) {
-                    continue;
-                }
-                SeddellinjeBO flF = new SeddellinjeBO(slF, fl);
-                slF.addSeddellinje(flF);
-            }
+        for (LandingsdataBO la : allLandings) {
+            LandingsdataBO laF = new LandingsdataBO(la);
+            landings.add(laF);
+            List<SeddellinjeBO> sll // fork join - filtering
+                    = la.getSeddellinjeBOs().parallelStream()// fork to cpu's
+                            .filter(fl -> {
+                                JexlContext ctx = new MapContext();
+                                FilterUtils.resolveContext(ctx, fl);
+                                return FilterUtils.evaluate(ctx, landingExpression);
+                            })
+                            .map(fl -> new SeddellinjeBO(laF, fl))
+                            .collect(Collectors.toList()); // join from cpu's
+            laF.setSeddellinjeBOs(sll);
         }
         return landings;
     }
