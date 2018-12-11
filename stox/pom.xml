@@ -229,13 +229,6 @@
     </modules>-->
     <profiles>
         <profile>
-            <id>core</id>
-            <modules>
-                <module>stox-core</module>
-                <module>stox-base</module>
-            </modules>
-        </profile>
-        <profile>
             <id>core-app</id>
             <modules>
                 <module>stox-core</module>

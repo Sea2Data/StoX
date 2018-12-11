@@ -62,7 +62,7 @@ public class ReadBioticXML extends AbstractFunction {
             MissionsType result = instance.read(xml);
             connectBioticV3ToBO(result.getMission(), stations, model);
         } catch (Exception e) {
-
+            logger.error("Error reading Biotic XML", e);
         }
         // Read by StaX into FishStationBO
         /*try (InputStream stream = new FileInputStream(fileName)) {

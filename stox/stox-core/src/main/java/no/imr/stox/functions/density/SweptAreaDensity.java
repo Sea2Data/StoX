@@ -251,40 +251,33 @@ public class SweptAreaDensity extends AbstractFunction {
                             logger.error("Biotic Data is not set in parameter.", null);
                             return null;
                         }
-                        if (fs == null) {
-                            logger.error("Station " + station + " not available in Biotic Data.", null);
-                            return null;
-                        }
                         for (CatchSampleBO s : fs.getCatchSampleBOs()) {
                             String specCat = s.getSpecCat(); // Using taxa as group
                             Double variable = null;
                             switch (catchVariable) {
                                 case Functions.CATCHVARIABLE_WEIGHT:
                                     variable = s.bo().getCatchweight();
-                                    if (variable == null) {
+                                    /*if (variable == null) {
                                         logger.error("Missing weight at " + s.getKey() + " for psu " + psu, null);
-                                    }
+                                    }*/
                                     break;
                                 case Functions.CATCHVARIABLE_COUNT:
                                     variable = Conversion.safeIntegerToDouble(s.bo().getCatchcount());
                                     break;
                             }
-                            switch (catchVariable) {
+                            /*switch (catchVariable) {
                                 case Functions.CATCHVARIABLE_WEIGHT:
                                 case Functions.CATCHVARIABLE_COUNT:
                                     if (variable == null) {
                                         logger.error("Missing " + catchVariable + " at " + s.getKey() + " for psu " + psu, null);
                                     }
-                            }
+                            }*/
                             Double sweptArea = StoXMath.getSweptArea(sweptDistance, sweepWidthInM);
                             Double density = getDensity(variable, sweptArea, numEDSUs);
-                            if (density == null) {
-                                logger.error("Swept area not calculated for " + psu, null);
-                            }
-                            if (density > 0d) {
+                            if (density != null) {
                                 posSampleSize.setRowColValue(specCat, station, stationWeight);
+                                result.getData().addGroupRowColCellValue(specCat, psu, estLayer, null, density);
                             }
-                            result.getData().addGroupRowColCellValue(specCat, psu, estLayer, null, density);
                         }
                         break;
                     }

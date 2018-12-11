@@ -173,9 +173,9 @@ Description: <I>FilterBiotic</I> filters an input dataset of data type <U>Biotic
 Class: no.imr.stox.functions.biotic.DefineSpecCat
 Parameter: Name=BioticData, Alias=FishStations, Required=true, DataType=BioticData, Description=The <I>BioticData</I> parameter is used to specify which previous process has generated the <U>BioticData</U> input data.
 Parameter: Name=SpecCatMethod, DataType=String, DefaultValue=Expression, Values=Expression;SelectVar;ResourceFile, Description=The <I>SpecCatType</I> The type of method to define specat. This can be an expression entered as a parameter, or a mapping to a column in a csv file
-Parameter: Name=SpecVarBiotic, Required=false, DataType=String, DefaultValue=commonname, Description=The name of the column in BioticData defining species. To be linked with SpecVarRef
 Parameter: Name=SpecCat, Required=false, DataType=String, ParentTag=SpecCatMethod.Expression, Description=The species category to append to catches. 
 Parameter: Name=FileName, Required=false, DataType=String, ParentTag=SpecCatMethod.ResourceFile, Description=The reference file with the one column giving the species and one giving the species categories to use.
+Parameter: Name=SpecVarBiotic, Required=false, DataType=String, DefaultValue=noname, Values=species;noname;aphia, Description=The name of the column in BioticData defining species. To be linked with SpecVarRef
 Parameter: Name=SpecVarRef, Required=false, DataType=String, ParentTag=SpecCatMethod.ResourceFile, Description=The name of the column in the reference file defining species. To be linked with SpecVarStoX.
 Parameter: Name=SpecCatRef, Required=false, DataType=String, ParentTag=SpecCatMethod.ResourceFile, Description= The name of the column in the reference file defining (new) species category. Will be renamed to SpecCat in StoX.
 DataStorage:no.imr.stox.datastorage.BioticDataStorage

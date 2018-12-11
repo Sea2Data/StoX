@@ -301,8 +301,8 @@ public class ProcessNode extends AbstractNode {
                 return new ListPropertyEditor(getBackwardCompatibleProcesses(process, mp));
             } else if (process.getMetaFunction().getName().equals(Functions.FN_DEFINESPECCAT)) {
                 switch (mp.getName()) {
-                    case Functions.PM_DEFINESPECCAT_SPECVARBIOTIC:
-                        return new ListPropertyEditor(ReflectionUtil.getFieldNames(CatchsampleType.class));
+                    /*case Functions.PM_DEFINESPECCAT_SPECVARBIOTIC:
+                        return new ListPropertyEditor(ReflectionUtil.getFieldNames(CatchsampleType.class));*/
                     case Functions.PM_DEFINESPECCAT_SPECVARREF:
                     case Functions.PM_DEFINESPECCAT_SPECCATREF: {
                         List<String> ls = DefineSpecCat.getHeader(process);

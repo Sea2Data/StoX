@@ -1,17 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <actions>
         <action>
-            <actionName>CUSTOM-Build Core</actionName>
-            <displayName>Build Core</displayName>
-            <goals>
-                <goal>clean</goal>
-                <goal>install -P core</goal>
-            </goals>
-            <properties>
-                <skipTests>true</skipTests>
-            </properties>
-        </action>
-        <action>
             <actionName>CUSTOM-Build Core-App</actionName>
             <displayName>Build Core-App</displayName>
             <goals>

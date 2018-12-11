@@ -48,7 +48,7 @@ public class IO {
         JAXBContext jc = JAXBContext.newInstance(targetClass);
 
         Unmarshaller unmarshaller = jc.createUnmarshaller();
-        T toplevel = targetClass.cast(unmarshaller.unmarshal(xmler));
+        T toplevel = targetClass.cast(wrap(unmarshaller.unmarshal(xmler)));
         return toplevel;
     }
 
@@ -92,13 +92,22 @@ public class IO {
     private static Object wrap(Object result) {
         if (result instanceof BioticTypes.v1_4.MissionType) {
             // Add Missions to 1_4 xml file with top node mission
-            return new MissionsType() {
+            return new BioticTypes.v1_4.MissionsType() {
                 @Override
-                public List<MissionType> getMission() {
+                public List<BioticTypes.v1_4.MissionType> getMission() {
                     return Arrays.asList((BioticTypes.v1_4.MissionType) result);
                 }
             };
+        } else if (result instanceof BioticTypes.v3.MissionType) {
+            // Add Missions to 1_4 xml file with top node mission
+            return new BioticTypes.v3.MissionsType() {
+                @Override
+                public List<BioticTypes.v3.MissionType> getMission() {
+                    return Arrays.asList((BioticTypes.v3.MissionType) result);
+                }
+            };
         }
+
         return result;
     }
 

@@ -72,17 +72,26 @@ public class StationSpecCatDensityStorage extends FileDataStorage {
                                 .collect(Collectors.joining("\t")),
                         specHdrs.stream()
                                 .map(spec -> {
+                                    // The density is marked na if the underlying info is not fulfilled (catch vs count)
+                                    boolean isna = fs.getCatchSampleBOs().stream().filter(c -> c.getSpecCat() != null && c.getSpecCat().equals(spec)
+                                            && ((c.bo().getCatchweight() != null && c.bo().getCatchcount() == null)
+                                            || (c.bo().getCatchweight() == null && c.bo().getCatchcount() != null))).count() > 0;
+                                    if (isna) {
+                                        return "NA";
+                                    }
                                     List<String> layers = data.getDensity().getData().getGroupRowColKeys(spec, psu);
-                                    if (layers.size() != 1) {
-                                        return null;
+                                    if (layers.isEmpty()) {
+                                        return 0;
+                                    } else if (layers.size() > 1) {
+                                        return "ERROR-LAYER>1"; // not supported.
                                     }
                                     MatrixBO densitiesOverLength = data.getDensity().getData().getGroupRowColValueAsMatrix(spec, psu, layers.get(0));
                                     if (densitiesOverLength == null) {
-                                        return null;
+                                        return 0;
                                     }
                                     Double sum = densitiesOverLength.getSum();
                                     if (sum == null) {
-                                        return null;
+                                        return 0;
                                     }
                                     return Calc.roundTo(sum, 1);
                                 })

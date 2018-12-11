@@ -50,7 +50,7 @@ public class LandingDataStorage extends FileDataStorage {
 
     @Override
     public Integer getNumDataStorageFiles() {
-        return 2;
+        return 1;
     }
 
     @Override

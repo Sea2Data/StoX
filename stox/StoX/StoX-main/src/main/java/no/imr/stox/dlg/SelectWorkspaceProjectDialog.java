@@ -1,6 +1,9 @@
 package no.imr.stox.dlg;
 
 import java.io.File;
+import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 import javax.swing.DefaultListModel;
 import javax.swing.JFileChooser;
 import no.imr.stox.functions.utils.ProjectUtils;
@@ -28,7 +31,8 @@ public class SelectWorkspaceProjectDialog extends javax.swing.JDialog {
     private void updateProjectList() {
         File fStox = new File(getProjectRoot());
         if (fStox.exists()) {
-            String names[] = fStox.list();
+            String namesF[] = fStox.list();
+            List<String> names = Stream.of(namesF).sorted().collect(Collectors.toList());
             DefaultListModel lm = new DefaultListModel();
             if (names != null) {
                 for (String name : names) {

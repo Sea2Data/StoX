@@ -70,10 +70,10 @@ public class DefineSpecCat extends AbstractFunction {
         String specVarRef = (String) input.get(Functions.PM_DEFINESPECCAT_SPECVARREF);
         String specCatRef = (String) input.get(Functions.PM_DEFINESPECCAT_SPECCATREF);
         if (specVarBiotic == null) {
-            specVarBiotic = "commonname";
+            specVarBiotic = "noname";
         }
-        Method specVarStoXGetter = ReflectionUtil.getGetter(CatchsampleType.class, specVarBiotic);
-        if(specVarStoXGetter == null) {
+        Method specVarStoXGetter = ReflectionUtil.getGetter(CatchsampleType.class, translateFromv1_4Tov3(specVarBiotic));
+        if (specVarStoXGetter == null) {
             logger.error("SpecVarBiotic not properly selected", null);
         }
         Map<String, String> m = new HashMap<>();
@@ -155,6 +155,21 @@ public class DefineSpecCat extends AbstractFunction {
                 }
         );
         return missions;
+    }
+
+    private String translateFromv1_4Tov3(String specVarBiotic) {
+        if (specVarBiotic == null) {
+            return null;
+        }
+        switch (specVarBiotic) {
+            case "species":
+                return "catchcategory";
+            case "noname":
+                return "commonname";
+            case "aphia":
+                return "aphia";
+        }
+        return null;
     }
 
 }
