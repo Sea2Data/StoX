@@ -43,7 +43,7 @@ public class LandingCovDataStorage extends FileDataStorage {
     @Override
     public <T> void asTable(T data, Integer level, Writer wr, Boolean withUnits) {
         LandingCovDataMatrix flData = (LandingCovDataMatrix) data;
-        String temporalHdr = ExportUtil.tabbed("Temporal");//seasonal ? ExportUtil.tabbed("Year", "Season") : ExportUtil.tabbed("Temporal");
+        String temporalHdr = ExportUtil.tabbed("Temporal", "GearFactor", "Spatial");//seasonal ? ExportUtil.tabbed("Year", "Season") : ExportUtil.tabbed("Temporal");
         ImrIO.write(wr, ExportUtil.carrageReturnLineFeed(ExportUtil.tabbed(temporalHdr, BaseBO.csvHdr(SeddellinjeType.class, true))));
         for (String cov : flData.getData().getSortedRowKeys()) {
             String[] keys = cov.split("/");

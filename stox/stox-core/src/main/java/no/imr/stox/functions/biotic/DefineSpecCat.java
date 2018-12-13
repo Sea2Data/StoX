@@ -144,7 +144,13 @@ public class DefineSpecCat extends AbstractFunction {
                                     if (obj != null) {
                                         String str = m.get(obj.toString().toLowerCase());
                                         if (str != null) {
-                                            spec = str;
+                                            if (str.trim().isEmpty()) {
+                                                spec = "NoSpecCat";
+                                            } else {
+                                                spec = str;
+                                            }
+                                        } else {
+                                            spec = "NotInRef";
                                         }
                                     }
                                 }
