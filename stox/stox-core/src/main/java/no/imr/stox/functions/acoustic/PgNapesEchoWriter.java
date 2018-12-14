@@ -9,14 +9,32 @@ import java.io.BufferedWriter;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.UncheckedIOException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
+import java.nio.file.StandardOpenOption;
+import java.time.LocalDateTime;
+import java.time.ZoneOffset;
+import java.util.Comparator;
 import java.util.Date;
+import java.util.EnumSet;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
+import java.util.Map;
+import java.util.Set;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
+import java.util.stream.Stream;
 import no.imr.sea2data.echosounderbo.DistanceBO;
 import no.imr.sea2data.echosounderbo.FrequencyBO;
 import no.imr.sea2data.echosounderbo.SABO;
+import no.imr.sea2data.imrbase.math.ImrMath;
 import no.imr.sea2data.imrbase.util.Conversion;
 import no.imr.sea2data.imrbase.util.IMRdate;
+import no.imr.stox.functions.utils.StoXMath;
+import org.apache.commons.lang.StringUtils;
 
 /**
  *
@@ -25,9 +43,152 @@ import no.imr.sea2data.imrbase.util.IMRdate;
 public class PgNapesEchoWriter {
 
     public static void export2(String cruise, String country, String callSignal, String path, String fileName,
-            List<DistanceBO> distances, String species, Double intDist, Double pchThick) {
-        
+            List<DistanceBO> distances, String species, Double intDist, Double groupThickness, Integer freqFilter, String specFilter, boolean withZeros) {
+        Set<Integer> freqs = distances.stream()
+                .flatMap(dist -> dist.getFrequencies().stream())
+                .map(FrequencyBO::getFreq)
+                .collect(Collectors.toSet());
+        if (freqFilter == null && freqs.size() == 1) {
+            freqFilter = freqs.iterator().next();
+        }
+
+        if (freqFilter == null) {
+            System.out.println("Multiple frequencies, specify frequency filter as parameter");
+            return;
+        }
+        Integer freqFilterF = freqFilter; // ef.final
+        List<String> acList = distances.parallelStream()
+                .flatMap(dist -> dist.getFrequencies().stream())
+                .filter(fr -> freqFilterF.equals(fr.getFreq()))
+                .map(f -> {
+                    DistanceBO d = f.getDistanceBO();
+                    LocalDateTime sdt = LocalDateTime.ofInstant(d.getStart_time().toInstant(), ZoneOffset.UTC);
+                    Double intDistMax = Math.max(intDist, d.getIntegrator_dist());
+                    String month = StringUtils.leftPad(sdt.getMonthValue() + "", 2, "0");
+                    String day = StringUtils.leftPad(sdt.getDayOfMonth() + "", 2, "0");
+                    String hour = StringUtils.leftPad(sdt.getHour() + "", 2, "0");
+                    String minute = StringUtils.leftPad(sdt.getMinute() + "", 2, "0");
+                    String log = Conversion.formatDoubletoDecimalString(d.getLog_start(), "0.0");
+                    String acLat = Conversion.formatDoubletoDecimalString(d.getLat_start(), "0.000");
+                    String acLon = Conversion.formatDoubletoDecimalString(d.getLon_start(), "0.000");
+                    return Stream.of(d.getNation(), d.getPlatform(), d.getCruise(), log, sdt.getYear(), month, day, hour, minute, acLat, acLon,
+                            intDistMax, f.getFreq(), f.getThreshold())
+                            .map(o -> o == null ? "" : o.toString())
+                            .collect(Collectors.joining("\t")) + "\t";
+                }).collect(Collectors.toList());
+        String fil1 = path + "/" + fileName + "_Acoustic.txt";
+        acList.add(0, Stream.of("Country", "Vessel", "Cruise", "Log", "Year", "Month", "Day", "Hour",
+                "Min", "AcLat", "AcLon", "Logint", "Frequency", "Sv_threshold").collect(Collectors.joining("\t")));
+        try {
+            Files.write(Paths.get(fil1), acList, StandardOpenOption.CREATE, StandardOpenOption.TRUNCATE_EXISTING);
+        } catch (IOException ex) {
+            Logger.getLogger(PgNapesEchoWriter.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        acList.clear();
+        // Acoustic values
+        distances.parallelStream()
+                .flatMap(dist -> dist.getFrequencies().stream())
+                .filter(fr -> freqFilterF.equals(fr.getFreq()))
+                .forEachOrdered(f -> {
+                    Double groupThicknessF = Math.max(f.getDistanceBO().getPel_ch_thickness(), groupThickness);
+                    Map<String, Map<Integer, Double>> pivot = f.getSa().stream()
+                            .filter(s -> s.getCh_type().equals("P"))
+                            .map(s -> new SAGroup(s, groupThicknessF))
+                            .filter(s -> s.getSpecies() != null && (specFilter == null || specFilter.equals(s.getSpecies())))
+                            // create pivot table: species (dim1) -> depth interval index (dim2) -> sum sa (group aggregator)
+                            .collect(Collectors.groupingBy(SAGroup::getSpecies,
+                                    Collectors.groupingBy(SAGroup::getDepthGroupIdx, Collectors.summingDouble(SAGroup::sa)))
+                            );
+                    if (pivot.isEmpty() && specFilter != null && withZeros) {
+                        pivot.put(specFilter, new HashMap<>());
+                    }
+                    Integer numPelCh = f.getNum_pel_ch();
+                    if (numPelCh == null) {
+                        return; // the number of pelagic channels is not properly set.
+                    }
+                    Integer numGroupIntervals = SAGroup.getNumDepthGroupIntervals(groupThicknessF, numPelCh, groupThicknessF);
+                    acList.addAll(pivot.entrySet().stream()
+                            .sorted(Comparator.comparing(Map.Entry::getKey)).flatMap(e -> {
+                        return IntStream.range(0, numGroupIntervals).boxed().map(groupIdx -> {
+                            Double chUpDepth = groupIdx * groupThickness;
+                            Double chLowDepth = (groupIdx + 1) * groupThickness;
+                            Double sa = e.getValue().get(groupIdx);
+                            if (sa == null) {
+                                sa = 0d;
+                            }
+                            String res = null;
+                            if (withZeros || sa > 0d) {
+                                DistanceBO d = f.getDistanceBO();
+                                String log = Conversion.formatDoubletoDecimalString(d.getLog_start(), "0.0");
+                                LocalDateTime sdt = LocalDateTime.ofInstant(d.getStart_time().toInstant(), ZoneOffset.UTC);
+                                String month = StringUtils.leftPad(sdt.getMonthValue() + "", 2, "0");
+                                String day = StringUtils.leftPad(sdt.getDayOfMonth() + "", 2, "0");
+                                //String sas = String.format(Locale.UK, "%11.5f", sa);
+                                res = Stream.of(d.getNation(), d.getPlatform(), d.getCruise(), log, sdt.getYear(), month, day, e.getKey(), chUpDepth, chLowDepth, sa)
+                                        .map(o -> o == null ? "" : o.toString())
+                                        .collect(Collectors.joining("\t"));
+                            }
+                            return res;
+                        }).filter(s -> s != null);
+                    }).collect(Collectors.toList()));
+                });
+
+        String fil2 = path + "/" + fileName + "_AcousticValues.txt";
+        acList.add(0, Stream.of("Country", "Vessel", "Cruise", "Log", "Year", "Month", "Day", "Species", "ChUppDepth", "ChLowDepth", "SA").collect(Collectors.joining("\t")));
+        try {
+            Files.write(Paths.get(fil2), acList, StandardOpenOption.CREATE, StandardOpenOption.TRUNCATE_EXISTING);
+        } catch (IOException ex) {
+            Logger.getLogger(PgNapesEchoWriter.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
+
+    static class SAGroup {
+
+        SABO s;
+        Double groupThickness;
+
+        public SAGroup(SABO s, Double groupThickness) {
+            this.s = s;
+            this.groupThickness = groupThickness;
+        }
+
+        public String getSpecies() {
+            return PgNapesEchoConvert.getPgNapesSpeciesFromAcoCat(Conversion.safeStringtoIntegerNULL(s.getAcoustic_category()));
+        }
+
+        public Double getDepth() {
+            return getDepth(s.getFrequencyBO().getDistanceBO().getPel_ch_thickness(), s.getCh());
+        }
+
+        public Integer getDepthGroupIdx() {
+            return getDepthGroupIdx(getDepth(), groupThickness);
+        }
+
+        public static Double getDepth(Double pelThickness, Integer ch) {
+            return StoXMath.depthFromChannel(pelThickness, ch);
+        }
+
+        public static Double getDepthGroupInterval(Double pelThickness, Integer ch, Double groupThickness) {
+            return ImrMath.trunc(getDepth(pelThickness, ch), groupThickness);
+        }
+
+        public static Integer getDepthGroupIdx(Double pelThickness, Integer ch, Double groupThickness) {
+            return getDepthGroupIdx(getDepth(pelThickness, ch), groupThickness);
+        }
+
+        public static Integer getDepthGroupIdx(Double depth, Double groupThickness) {
+            return ImrMath.safeRound(ImrMath.safeTrunc(ImrMath.safeDivide(depth, groupThickness)));
+        }
+
+        public static Integer getNumDepthGroupIntervals(Double pelThickness, Integer numChannels, Double groupThickness) {
+            return getDepthGroupIdx(getDepth(pelThickness, numChannels), groupThickness) + 1;
+        }
+
+        public Double sa() {
+            return s.getSa();
+        }
+    }
+
     public static void export(String cruise, String country, String callSignal, String path, String fileName,
             List<DistanceBO> distances, String species, Double intDist, Double pchThick) {
         // Atle: implement!
