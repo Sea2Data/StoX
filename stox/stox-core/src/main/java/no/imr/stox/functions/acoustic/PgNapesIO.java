@@ -6,14 +6,19 @@
 package no.imr.stox.functions.acoustic;
 
 import java.io.BufferedWriter;
+import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.UncheckedIOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.nio.file.StandardOpenOption;
+import java.time.Instant;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.time.ZoneOffset;
+import java.time.format.DateTimeFormatter;
 import java.util.Comparator;
 import java.util.Date;
 import java.util.EnumSet;
@@ -22,6 +27,7 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
+import java.util.function.Function;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.stream.Collectors;
@@ -40,10 +46,24 @@ import org.apache.commons.lang.StringUtils;
  *
  * @author aasmunds
  */
-public class PgNapesEchoWriter {
+public class PgNapesIO {
+
+    public static void convertLuf20ToPgNapes(String luf20FileName, String outFilePrefix) {
+        File f = new File(luf20FileName);
+        List<DistanceBO> dList = ReadAcousticXML.perform(luf20FileName);
+        if (dList.isEmpty()) {
+            return;
+        }
+        DistanceBO d = dList.get(0);
+        String cruise = d.getCruise();
+        String nation = d.getNation();
+        String pl = d.getPlatform();
+        PgNapesIO.export2(cruise, nation, pl, f.getParent(), outFilePrefix, dList, 10d, null, null, false);
+
+    }
 
     public static void export2(String cruise, String country, String callSignal, String path, String fileName,
-            List<DistanceBO> distances, String species, Double intDist, Double groupThickness, Integer freqFilter, String specFilter, boolean withZeros) {
+            List<DistanceBO> distances, Double groupThickness, Integer freqFilter, String specFilter, boolean withZeros) {
         Set<Integer> freqs = distances.stream()
                 .flatMap(dist -> dist.getFrequencies().stream())
                 .map(FrequencyBO::getFreq)
@@ -63,7 +83,7 @@ public class PgNapesEchoWriter {
                 .map(f -> {
                     DistanceBO d = f.getDistanceBO();
                     LocalDateTime sdt = LocalDateTime.ofInstant(d.getStart_time().toInstant(), ZoneOffset.UTC);
-                    Double intDistMax = Math.max(intDist, d.getIntegrator_dist());
+                    Double intDist = d.getIntegrator_dist();
                     String month = StringUtils.leftPad(sdt.getMonthValue() + "", 2, "0");
                     String day = StringUtils.leftPad(sdt.getDayOfMonth() + "", 2, "0");
                     String hour = StringUtils.leftPad(sdt.getHour() + "", 2, "0");
@@ -72,17 +92,17 @@ public class PgNapesEchoWriter {
                     String acLat = Conversion.formatDoubletoDecimalString(d.getLat_start(), "0.000");
                     String acLon = Conversion.formatDoubletoDecimalString(d.getLon_start(), "0.000");
                     return Stream.of(d.getNation(), d.getPlatform(), d.getCruise(), log, sdt.getYear(), month, day, hour, minute, acLat, acLon,
-                            intDistMax, f.getFreq(), f.getThreshold())
+                            intDist, f.getFreq(), f.getThreshold())
                             .map(o -> o == null ? "" : o.toString())
                             .collect(Collectors.joining("\t")) + "\t";
                 }).collect(Collectors.toList());
-        String fil1 = path + "/" + fileName + "_Acoustic.txt";
+        String fil1 = path + "/" + fileName + ".txt";
         acList.add(0, Stream.of("Country", "Vessel", "Cruise", "Log", "Year", "Month", "Day", "Hour",
                 "Min", "AcLat", "AcLon", "Logint", "Frequency", "Sv_threshold").collect(Collectors.joining("\t")));
         try {
             Files.write(Paths.get(fil1), acList, StandardOpenOption.CREATE, StandardOpenOption.TRUNCATE_EXISTING);
         } catch (IOException ex) {
-            Logger.getLogger(PgNapesEchoWriter.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(PgNapesIO.class.getName()).log(Level.SEVERE, null, ex);
         }
         acList.clear();
         // Acoustic values
@@ -133,12 +153,12 @@ public class PgNapesEchoWriter {
                     }).collect(Collectors.toList()));
                 });
 
-        String fil2 = path + "/" + fileName + "_AcousticValues.txt";
+        String fil2 = path + "/" + fileName + "Values.txt";
         acList.add(0, Stream.of("Country", "Vessel", "Cruise", "Log", "Year", "Month", "Day", "Species", "ChUppDepth", "ChLowDepth", "SA").collect(Collectors.joining("\t")));
         try {
             Files.write(Paths.get(fil2), acList, StandardOpenOption.CREATE, StandardOpenOption.TRUNCATE_EXISTING);
         } catch (IOException ex) {
-            Logger.getLogger(PgNapesEchoWriter.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(PgNapesIO.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 
@@ -186,6 +206,104 @@ public class PgNapesEchoWriter {
 
         public Double sa() {
             return s.getSa();
+        }
+    }
+
+    public static void convertPgNapesToLuf20(String path, String fileName, String outFileName) {
+        try {
+            List<String> acList = Files.readAllLines(Paths.get(path + "/" + fileName + ".txt"));
+            List<String> acVList = Files.readAllLines(Paths.get(path + "/" + fileName + "Values.txt"));
+            if (acList.isEmpty() || acVList.isEmpty()) {
+                return;
+            }
+            acList.remove(0);
+            acVList.remove(0);
+            List<DistanceBO> dList = acList.stream().map(s -> {
+                DistanceBO d = new DistanceBO();
+                String[] str = s.split("\t");
+                d.setNation(str[0]);
+                d.setPlatform(str[1]);
+                d.setCruise(str[2]);
+                d.setLog_start(Conversion.safeStringtoDoubleNULL(str[3]));
+                d.setStart_time(Date.from(LocalDateTime.of(Conversion.safeStringtoIntegerNULL(str[4]),
+                        Conversion.safeStringtoIntegerNULL(str[5]), Conversion.safeStringtoIntegerNULL(str[6]), Conversion.safeStringtoIntegerNULL(str[7]),
+                        Conversion.safeStringtoIntegerNULL(str[8]), 0).toInstant(ZoneOffset.UTC)));
+                d.setLat_start(Conversion.safeStringtoDoubleNULL(str[9]));
+                d.setLon_start(Conversion.safeStringtoDoubleNULL(str[10]));
+                d.setIntegrator_dist(Conversion.safeStringtoDoubleNULL(str[11]));
+                FrequencyBO freq = new FrequencyBO();
+                d.getFrequencies().add(freq);
+                freq.setTranceiver(1); // implicit in pgnapes
+                freq.setUpper_interpret_depth(0d);
+                freq.setUpper_integrator_depth(0d);
+                freq.setDistance(d);
+                freq.setFreq(Conversion.safeStringtoIntegerNULL(str[12]));
+                freq.setThreshold(Conversion.safeStringtoDoubleNULL(str[13]));
+                return d;
+            }).collect(Collectors.toList());
+            // Fill in sa values
+            acVList.forEach(s -> {
+                String[] str = s.split("\t");
+                String cruise = str[2];
+                Double log = Conversion.safeStringtoDoubleNULL(str[3]);
+                Integer year = Conversion.safeStringtoIntegerNULL(str[4]);
+                Integer month = Conversion.safeStringtoIntegerNULL(str[5]);
+                Integer day = Conversion.safeStringtoIntegerNULL(str[6]);
+                if (log == null || year == null || month == null || day == null) {
+                    return;
+                }
+                DistanceBO d = dList.parallelStream().filter(di -> {
+                    if (di.getCruise() == null || di.getLog_start() == null || di.getStart_time() == null) {
+                        return false;
+                    }
+                    LocalDate ld = di.getStart_time().toInstant().atZone(ZoneOffset.UTC).toLocalDate();
+                    return cruise.equals(di.getCruise()) && log.equals(di.getLog_start()) && year.equals(ld.getYear())
+                            && month.equals(ld.getMonthValue()) && day.equals(ld.getDayOfMonth());
+                }).findFirst().orElse(null);
+                if (d == null) {
+                    return;
+                }
+                FrequencyBO freq = d.getFrequencies().get(0);
+
+                String species = str[7];
+                Integer acocat = PgNapesEchoConvert.getAcoCatFromPgNapesSpecies(species);
+                Double chUppDepth = Conversion.safeStringtoDoubleNULL(str[8]);
+                Double chLowDepth = Conversion.safeStringtoDoubleNULL(str[9]);
+                Double sa = Conversion.safeStringtoDoubleNULL(str[10]);
+                if (acocat == null || sa == null || sa == 0d || chLowDepth == null || chUppDepth == null) {
+                    return;
+                }
+                if (d.getPel_ch_thickness() == null) {
+                    d.setPel_ch_thickness(chLowDepth - chUppDepth);
+                }
+                Integer ch = (int) (chLowDepth / d.getPel_ch_thickness() + 0.5);
+                SABO sabo = new SABO();
+                sabo.setFrequency(freq);
+                freq.getSa().add(sabo);
+                sabo.setAcoustic_category(acocat + "");
+                sabo.setCh_type("P");
+                sabo.setCh(ch);
+                sabo.setSa(sa);
+            });
+            // Calculate number of pelagic channels
+            dList.parallelStream().forEach(d -> {
+                FrequencyBO f = d.getFrequencies().get(0);
+                Integer minCh = f.getSa().stream().map(SABO::getCh).min(Integer::compare).orElse(null);
+                Integer maxCh = f.getSa().stream().map(SABO::getCh).max(Integer::compare).orElse(null);
+                f.setNum_pel_ch(maxCh - minCh + 1);
+            });
+            
+            if (dList.isEmpty()) {
+                return;
+            }
+            DistanceBO d = dList.get(0);
+            String cruise = d.getCruise();
+            String nation = d.getNation();
+            String pl = d.getPlatform();
+            ListUser20Writer.export(cruise, pl, nation, path + "/" + cruise + outFileName + ".xml", dList);
+
+        } catch (IOException ex) {
+            Logger.getLogger(PgNapesIO.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 

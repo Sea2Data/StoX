@@ -12,7 +12,7 @@ import org.openide.modules.ModuleInstall;
  */
 public class Installer extends ModuleInstall {
 
-    public static final String APPVERSION = "2.6.13";
+    public static final String APPVERSION = "2.6.14";
 
     @Override
     public void restored() {

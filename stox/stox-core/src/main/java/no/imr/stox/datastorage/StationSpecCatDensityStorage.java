@@ -21,6 +21,7 @@ import no.imr.sea2data.imrbase.util.ImrIO;
 import no.imr.stox.bo.StationSpecCatDensityBO;
 import no.imr.stox.functions.utils.AbndEstProcessDataUtil;
 import no.imr.stox.functions.utils.BioticUtils;
+import no.imr.stox.functions.utils.Functions;
 import no.imr.stox.functions.utils.ReflectionUtil;
 
 /**
@@ -35,7 +36,16 @@ public class StationSpecCatDensityStorage extends FileDataStorage {
     }
 
     public void asTable(StationSpecCatDensityBO data, Writer wr) {
-        List<String> specHdrs = data.getDensity().getData().getSortedKeys();
+        List<String> specHdrs = data.getDensity().getData().getKeys().stream()
+                .sorted((s1, s2) -> {
+                    Boolean s1FirstGroup = s1.equals(Functions.SPECCAT_NOSPECCAT) || s1.equals(Functions.SPECCAT_NOTINREF);
+                    Boolean s2FirstGroup = s2.equals(Functions.SPECCAT_NOSPECCAT) || s2.equals(Functions.SPECCAT_NOTINREF);
+                    int res = s2FirstGroup.compareTo(s1FirstGroup);
+                    if (res == 0) {
+                        res = s1.compareTo(s2);
+                    }
+                    return res;
+                }).collect(Collectors.toList());
         MatrixBO edsuPsu = data.getProcessData().getMatrix(AbndEstProcessDataUtil.TABLE_EDSUPSU);
         List<Field> missionMethods = ReflectionUtil.getFields(MissionType.class);
         List<Field> fsMethods = ReflectionUtil.getFields(FishstationType.class);

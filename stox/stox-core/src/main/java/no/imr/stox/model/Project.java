@@ -47,6 +47,7 @@ public class Project implements IProject {
     private String stoxVersion = "";
     private String template = "";
     int precisionLevel = 1; // Precision level for back compability. Can be used to go back to earlier precision levels.
+    String tempRScriptFileName = null;
 
     private static final String[] modelNames = new String[]{
         ProjectUtils.BASELINE,
@@ -141,7 +142,7 @@ public class Project implements IProject {
             }
         }
         // Initialize R folder from temp RFolder file
-        if(rFolder == null || rFolder != null && rFolder.isEmpty()) {
+        if (rFolder == null || rFolder != null && rFolder.isEmpty()) {
             rFolder = RFolder.getRFolderFromFile();
         }
     }
@@ -348,4 +349,13 @@ public class Project implements IProject {
         this.precisionLevel = precisionLevel;
     }
 
+    @Override
+    public String getTempRScriptFileName() {
+        return tempRScriptFileName;
+    }
+
+    @Override
+    public void setTempRScriptFileName(String tempRScriptFileName) {
+        this.tempRScriptFileName = tempRScriptFileName;
+    }
 }

@@ -19,14 +19,11 @@ public class PgNapesTest {
     @Test
     public void test() {
         String path = "E:\\SigbjørnMehl\\2004212\\luf5";
-        String fileName = "E:\\SigbjørnMehl\\2004212\\luf5\\2004212.xml";
-        List<DistanceBO> dist = ReadAcousticXML.perform(fileName);
-        
-//        PgNapesEchoWriter.export("2004212", "58", "12", path, fileNameOut, dist, "HER", 1d, 50d);
-
-        Stream.of("HER"/*, "HAD"*/).forEach(species -> {
-            //PgNapesEchoWriter.export1("2004212", "58", "12", path, species, dist, species, 1d, 10d);
-            PgNapesEchoWriter.export2("2004212", "58", "12", path, "Table", dist, species, 1d, 10d, null, null, false);
-        });
+        //String fileName = path + "2004212.xml";
+        //PgNapesIO.convertLuf20ToPgNapes(fileName);
+        PgNapesIO.convertPgNapesToLuf20(path, "Acoustic", "-Luf20");
+        /*String fileName = path + "/" + "2004212-Luf20.xml";
+        PgNapesIO.convertLuf20ToPgNapes(fileName, "Acoustic2");
+        PgNapesIO.convertPgNapesToLuf20(path, "Acoustic2", "-Luf20(2)");*/
     }
 }

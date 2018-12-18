@@ -327,9 +327,12 @@ public class RUtils {
      * @param polygons
      * @return
      */
-    static public PolygonAreaMatrix getAccuratePolygons(String rFolder, MatrixBO polygons) {
+    static public PolygonAreaMatrix getAccuratePolygons(String rFolder, MatrixBO polygons, String tempRScriptFileName) {
         PolygonAreaMatrix res = new PolygonAreaMatrix();
-        String fileName = getTmpDir() + "area.txt";
+        if(tempRScriptFileName == null) {
+            tempRScriptFileName = "area.txt";
+        }
+        String fileName = getTmpDir() + tempRScriptFileName;
         try (PrintWriter pw = new PrintWriter(fileName)) {
             pw.println("Sys.setenv(JAVA_HOME = \"\")");
             pw.println("library(Rstox)");

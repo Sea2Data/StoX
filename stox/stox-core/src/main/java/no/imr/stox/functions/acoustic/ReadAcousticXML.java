@@ -52,6 +52,7 @@ public class ReadAcousticXML extends AbstractFunction {
             EchoXMLReader reader = new EchoXMLReader(distances);
             reader.readXML(stream);
         } catch (XMLReaderException | IOException ex) {
+            ex.printStackTrace();
             logger.error("XML not properly read", ex);
         }
     }

@@ -13,6 +13,7 @@ import no.imr.stox.functions.utils.AbndEstProcessDataUtil;
 import no.imr.stox.functions.utils.Functions;
 import no.imr.stox.functions.utils.RUtils;
 import no.imr.stox.log.ILogger;
+import no.imr.stox.model.IModel;
 
 /**
  * TODO: what does this class do?
@@ -35,6 +36,7 @@ public class StratumArea extends AbstractFunction {
         MatrixBO polygons = AbndEstProcessDataUtil.getStratumPolygons(pd);
         String areaMethod = (String) input.get(Functions.PM_STRATUMAREA_AREAMETHOD);
         Boolean accurate = areaMethod != null && areaMethod.equals(Functions.AREAMETHOD_ACCURATE);
+        String tempRScriptFileName = ((IModel)input.get(Functions.PM_MODEL)).getProject().getTempRScriptFileName();
         //REngineProvider rEnginePr = (REngineProvider) input.get(Functions.PM_RENGINEPROVIDER);
         //File rBin = null;
         /*if (accurate) {
@@ -48,7 +50,7 @@ public class StratumArea extends AbstractFunction {
         if (accurate/* && rBin != null*/) {
             // Azimutal equal area projections
             try {
-                return RUtils.getAccuratePolygons(rFolder, polygons);
+                return RUtils.getAccuratePolygons(rFolder, polygons, tempRScriptFileName);
             } catch (Exception ex) {
                 logger.error("Accurate method failed with the message " + ex.getMessage()
                         + ". Accurate area method requires R properly installed and the R folder given in options. The simple area method will be used.", null);

@@ -83,4 +83,7 @@ public interface IProject {
 
     void setPrecisionLevel(int precisionLevel);
 
+    String getTempRScriptFileName();
+
+    void setTempRScriptFileName(String value);
 }
