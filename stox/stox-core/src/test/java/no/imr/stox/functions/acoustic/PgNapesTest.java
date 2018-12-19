@@ -5,6 +5,7 @@
  */
 package no.imr.stox.functions.acoustic;
 
+import no.imr.sea2data.imrbase.util.Conversion;
 import org.junit.Test;
 
 /**
@@ -15,12 +16,13 @@ public class PgNapesTest {
 
     @Test
     public void test() {
-        String path = "E:\\SigbjørnMehl\\2004212\\luf5";
-        String fileName = path + "/" + "2004212.xml";
+        String path = "E:\\SigbjørnMehl\\2008623";
+        String fileName = path + "/" + "echo-2008623-append.xml";
         //PgNapesIO.convertLuf20ToPgNapes(fileName, "Acoustic");
-        //PgNapesIO.convertPgNapesToLuf20(path, "Acoustic", "-Luf20");
-        fileName = path + "/" + "2004212-Luf20.xml";
-        //PgNapesIO.convertLuf20ToPgNapes(fileName, "Acoustic2");
+        PgNapesIO.convertPgNapesToLuf20(path, "Acoustic", "-Luf20");
+        /*fileName = path + "/" + "2007203-Luf20.xml";
+        PgNapesIO.convertLuf20ToPgNapes(fileName, "Acoustic2");
         PgNapesIO.convertPgNapesToLuf20(path, "Acoustic2", "-Luf20(2)");
+*/
     }
 }

@@ -126,8 +126,8 @@ public class PgNapesIO {
                         acList.addAll(pivot.entrySet().stream()
                                 .sorted(Comparator.comparing(Map.Entry::getKey)).flatMap(e -> {
                             return IntStream.range(0, maxGroupIdx + 1).boxed().map(groupIdx -> {
-                                Double chUpDepth = groupIdx * groupThickness;
-                                Double chLowDepth = (groupIdx + 1) * groupThickness;
+                                Double chUpDepth = groupIdx * groupThicknessF;
+                                Double chLowDepth = (groupIdx + 1) * groupThicknessF;
                                 Double sa = e.getValue().get(groupIdx);
                                 if (sa == null) {
                                     sa = 0d;
@@ -219,7 +219,7 @@ public class PgNapesIO {
             acVList.remove(0);
             List<DistanceBO> dList = acList.stream().map(s -> {
                 DistanceBO d = new DistanceBO();
-                String[] str = s.split("\t");
+                String[] str = s.split("\t", 14);
                 d.setNation(str[0]);
                 d.setPlatform(str[1]);
                 d.setCruise(str[2]);
@@ -242,7 +242,7 @@ public class PgNapesIO {
             }).collect(Collectors.toList());
             // Fill in sa values
             acVList.forEach(s -> {
-                String[] str = s.split("\t");
+                String[] str = s.split("\t", 11);
                 String cruise = str[2];
                 Double log = Conversion.safeStringtoDoubleNULL(str[3]);
                 Integer year = Conversion.safeStringtoIntegerNULL(str[4]);

@@ -14,6 +14,7 @@ import no.imr.sea2data.echosounderbo.DistanceBO;
 import no.imr.sea2data.echosounderbo.FrequencyBO;
 import no.imr.sea2data.echosounderbo.SABO;
 import no.imr.sea2data.imrbase.math.Calc;
+import no.imr.sea2data.imrbase.math.ImrMath;
 import no.imr.sea2data.imrbase.util.Conversion;
 import no.imr.sea2data.imrbase.util.IMRdate;
 import no.imr.sea2data.imrbase.util.ImrSort;
@@ -172,10 +173,10 @@ public final class ListUser20Writer {
             attr.put("ch", ch);
 
             Double value = sabo.getSa();
-            if (value == 0d || value < 0.00000001) {
+            if (value == 0d || value < ImrMath.RND_ERR) {
                 continue;
             }
-            value = Calc.roundTo(value, 7);
+            value = Calc.roundTo(value, 13);
             /*if (value.length() > MAX_SA_VALUE_LENGTH) {
                 value = String.format("%e", sabo.getSa());
             }*/
