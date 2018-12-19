@@ -13,21 +13,16 @@ import java.io.UncheckedIOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.nio.file.StandardOpenOption;
-import java.time.Instant;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.time.LocalTime;
 import java.time.ZoneOffset;
-import java.time.format.DateTimeFormatter;
 import java.util.Comparator;
 import java.util.Date;
-import java.util.EnumSet;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
-import java.util.function.Function;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.stream.Collectors;
@@ -106,51 +101,55 @@ public class PgNapesIO {
         }
         acList.clear();
         // Acoustic values
-        distances.parallelStream()
+        distances.stream()
+                .filter(d->d.getPel_ch_thickness() != null)
                 .flatMap(dist -> dist.getFrequencies().stream())
                 .filter(fr -> freqFilterF.equals(fr.getFreq()))
                 .forEachOrdered(f -> {
-                    Double groupThicknessF = Math.max(f.getDistanceBO().getPel_ch_thickness(), groupThickness);
-                    Map<String, Map<Integer, Double>> pivot = f.getSa().stream()
-                            .filter(s -> s.getCh_type().equals("P"))
-                            .map(s -> new SAGroup(s, groupThicknessF))
-                            .filter(s -> s.getSpecies() != null && (specFilter == null || specFilter.equals(s.getSpecies())))
-                            // create pivot table: species (dim1) -> depth interval index (dim2) -> sum sa (group aggregator)
-                            .collect(Collectors.groupingBy(SAGroup::getSpecies,
-                                    Collectors.groupingBy(SAGroup::getDepthGroupIdx, Collectors.summingDouble(SAGroup::sa)))
-                            );
-                    if (pivot.isEmpty() && specFilter != null && withZeros) {
-                        pivot.put(specFilter, new HashMap<>());
+                    try {
+                        Double groupThicknessF = Math.max(f.getDistanceBO().getPel_ch_thickness(), groupThickness);
+                        Map<String, Map<Integer, Double>> pivot = f.getSa().stream()
+                                .filter(s -> s.getCh_type().equals("P"))
+                                .map(s -> new SAGroup(s, groupThicknessF))
+                                .filter(s -> s.getSpecies() != null && (specFilter == null || specFilter.equals(s.getSpecies())))
+                                // create pivot table: species (dim1) -> depth interval index (dim2) -> sum sa (group aggregator)
+                                .collect(Collectors.groupingBy(SAGroup::getSpecies,
+                                        Collectors.groupingBy(SAGroup::getDepthGroupIdx, Collectors.summingDouble(SAGroup::sa)))
+                                );
+                        if (pivot.isEmpty() && specFilter != null && withZeros) {
+                            pivot.put(specFilter, new HashMap<>());
+                        }
+                        Integer maxGroupIdx = pivot.entrySet().stream().flatMap(e->e.getValue().keySet().stream()).max(Integer::compare).orElse(null);
+                        if(maxGroupIdx == null) {
+                            return;
+                        }
+                        acList.addAll(pivot.entrySet().stream()
+                                .sorted(Comparator.comparing(Map.Entry::getKey)).flatMap(e -> {
+                            return IntStream.range(0, maxGroupIdx + 1).boxed().map(groupIdx -> {
+                                Double chUpDepth = groupIdx * groupThickness;
+                                Double chLowDepth = (groupIdx + 1) * groupThickness;
+                                Double sa = e.getValue().get(groupIdx);
+                                if (sa == null) {
+                                    sa = 0d;
+                                }
+                                String res = null;
+                                if (withZeros || sa > 0d) {
+                                    DistanceBO d = f.getDistanceBO();
+                                    String log = Conversion.formatDoubletoDecimalString(d.getLog_start(), "0.0");
+                                    LocalDateTime sdt = LocalDateTime.ofInstant(d.getStart_time().toInstant(), ZoneOffset.UTC);
+                                    String month = StringUtils.leftPad(sdt.getMonthValue() + "", 2, "0");
+                                    String day = StringUtils.leftPad(sdt.getDayOfMonth() + "", 2, "0");
+                                    //String sas = String.format(Locale.UK, "%11.5f", sa);
+                                    res = Stream.of(d.getNation(), d.getPlatform(), d.getCruise(), log, sdt.getYear(), month, day, e.getKey(), chUpDepth, chLowDepth, sa)
+                                            .map(o -> o == null ? "" : o.toString())
+                                            .collect(Collectors.joining("\t"));
+                                }
+                                return res;
+                            }).filter(s -> s != null);
+                        }).collect(Collectors.toList()));
+                    } catch (Exception e) {
+                        e.printStackTrace();
                     }
-                    Integer numPelCh = f.getNum_pel_ch();
-                    if (numPelCh == null) {
-                        return; // the number of pelagic channels is not properly set.
-                    }
-                    Integer numGroupIntervals = SAGroup.getNumDepthGroupIntervals(groupThicknessF, numPelCh, groupThicknessF);
-                    acList.addAll(pivot.entrySet().stream()
-                            .sorted(Comparator.comparing(Map.Entry::getKey)).flatMap(e -> {
-                        return IntStream.range(0, numGroupIntervals).boxed().map(groupIdx -> {
-                            Double chUpDepth = groupIdx * groupThickness;
-                            Double chLowDepth = (groupIdx + 1) * groupThickness;
-                            Double sa = e.getValue().get(groupIdx);
-                            if (sa == null) {
-                                sa = 0d;
-                            }
-                            String res = null;
-                            if (withZeros || sa > 0d) {
-                                DistanceBO d = f.getDistanceBO();
-                                String log = Conversion.formatDoubletoDecimalString(d.getLog_start(), "0.0");
-                                LocalDateTime sdt = LocalDateTime.ofInstant(d.getStart_time().toInstant(), ZoneOffset.UTC);
-                                String month = StringUtils.leftPad(sdt.getMonthValue() + "", 2, "0");
-                                String day = StringUtils.leftPad(sdt.getDayOfMonth() + "", 2, "0");
-                                //String sas = String.format(Locale.UK, "%11.5f", sa);
-                                res = Stream.of(d.getNation(), d.getPlatform(), d.getCruise(), log, sdt.getYear(), month, day, e.getKey(), chUpDepth, chLowDepth, sa)
-                                        .map(o -> o == null ? "" : o.toString())
-                                        .collect(Collectors.joining("\t"));
-                            }
-                            return res;
-                        }).filter(s -> s != null);
-                    }).collect(Collectors.toList()));
                 });
 
         String fil2 = path + "/" + fileName + "Values.txt";
@@ -286,13 +285,16 @@ public class PgNapesIO {
                 sabo.setSa(sa);
             });
             // Calculate number of pelagic channels
-            dList.parallelStream().forEach(d -> {
+
+            /*dList.stream().forEach(d -> {
                 FrequencyBO f = d.getFrequencies().get(0);
                 Integer minCh = f.getSa().stream().map(SABO::getCh).min(Integer::compare).orElse(null);
                 Integer maxCh = f.getSa().stream().map(SABO::getCh).max(Integer::compare).orElse(null);
-                f.setNum_pel_ch(maxCh - minCh + 1);
-            });
-            
+                if (maxCh != null && minCh != null) {
+                    f.setNum_pel_ch(maxCh - minCh + 1);
+                }
+            });*/
+
             if (dList.isEmpty()) {
                 return;
             }
@@ -300,7 +302,7 @@ public class PgNapesIO {
             String cruise = d.getCruise();
             String nation = d.getNation();
             String pl = d.getPlatform();
-            ListUser20Writer.export(cruise, pl, nation, path + "/" + cruise + outFileName + ".xml", dList);
+            ListUser20Writer.export(cruise, nation, pl, path + "/" + cruise + outFileName + ".xml", dList);
 
         } catch (IOException ex) {
             Logger.getLogger(PgNapesIO.class.getName()).log(Level.SEVERE, null, ex);

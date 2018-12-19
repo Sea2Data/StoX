@@ -55,7 +55,7 @@ Parameter: Name=nSamples, Required=false, DataType=Integer, DefaultValue=1000, D
 Parameter: Name=thin, Required=false, DataType=Integer, DefaultValue=1, Description=Number of MCMC samples run before each sample that is saved. E.g. thin 1 saves every sample. Thin 10 saves every 10th sample.
 Parameter: Name=fitfile, DataType=String, DefaultValue=fit, Description=Name of the output files from estimating the model. The files are given the extensions .mcmc1and .mcmc2 for the age and length-given-age model and for the weight-given-length model respectively.
 Parameter: Name=predfile, DataType=String, DefaultValue=pred, Description=Name of the output file from prediction. The file is given the extension .pred.
-Parameter: Name=lgamodel, DataType=String, DefaultValue=log-linear;non-linear, Values=log-linear, Description=The length-given-age model will be log-linear unless specified as "non-linear" in which case the Schnute-Richards model will be used.
+Parameter: Name=lgamodel, DataType=String, DefaultValue=log-linear, Values=log-linear;non-linear, Description=The length-given-age model will be log-linear unless specified as "non-linear" in which case the Schnute-Richards model will be used.
 Parameter: Name=CC, Required=false, DataType=Boolean, DefaultValue=false, Description=Whether stock splitting on otolith type (coastal cod) should be included in the model.
 Parameter: Name=CCError, Required=false, DataType=Boolean, DefaultValue=false, Description=Whether classification error is included in coastal cod model (uncertain classification codes).
 Parameter: Name=seed, Required=false, DataType=Integer, Description=Random seed value.
