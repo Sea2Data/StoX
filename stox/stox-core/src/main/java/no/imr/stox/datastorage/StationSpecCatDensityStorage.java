@@ -38,8 +38,8 @@ public class StationSpecCatDensityStorage extends FileDataStorage {
     public void asTable(StationSpecCatDensityBO data, Writer wr) {
         List<String> specHdrs = data.getDensity().getData().getKeys().stream()
                 .sorted((s1, s2) -> {
-                    Boolean s1FirstGroup = s1.equals(Functions.SPECCAT_NOSPECCAT) || s1.equals(Functions.SPECCAT_NOTINREF);
-                    Boolean s2FirstGroup = s2.equals(Functions.SPECCAT_NOSPECCAT) || s2.equals(Functions.SPECCAT_NOTINREF);
+                    Boolean s1FirstGroup = s1.equals(Functions.SPECCAT_EMPTYSPECCATREF) || s1.equals(Functions.SPECCAT_NOTINSPECVARREF);
+                    Boolean s2FirstGroup = s2.equals(Functions.SPECCAT_EMPTYSPECCATREF) || s2.equals(Functions.SPECCAT_NOTINSPECVARREF);
                     int res = s2FirstGroup.compareTo(s1FirstGroup);
                     if (res == 0) {
                         res = s1.compareTo(s2);

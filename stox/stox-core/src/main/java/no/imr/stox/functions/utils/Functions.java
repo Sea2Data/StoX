@@ -839,6 +839,6 @@ public final class Functions {
     public static final String SPECCATMETHOD_SELECTVAR = "SelectVar";
     
     // Special SpecCat group identifiers
-    public static final String SPECCAT_NOSPECCAT = "NoSpecCat";
-    public static final String SPECCAT_NOTINREF = "NotInRef";
+    public static final String SPECCAT_EMPTYSPECCATREF = "EmptySpecCatRef";
+    public static final String SPECCAT_NOTINSPECVARREF = "NotInSpecVarRef";
 }
