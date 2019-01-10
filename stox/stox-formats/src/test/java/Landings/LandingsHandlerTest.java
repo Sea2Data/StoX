@@ -26,7 +26,7 @@ public class LandingsHandlerTest {
     public LandingsHandlerTest() {
     }
 
-    @Test
+//    @Test
     public void testRead() throws Exception {
         System.out.println("readLanding");
         if (false) {
