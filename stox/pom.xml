@@ -87,7 +87,7 @@
             <name>Nexus third party repository for IMR</name>
             <url>https://build.imr.no/nexus/content/repositories/thirdparty/</url>
         </repository>     
-        <!--<repository>
+        <!-- <repository>
             <id>geomatys</id>
             <name>Geomatys releases</name>
             <url>http://maven.geomatys.com</url>
@@ -99,7 +99,7 @@
             <snapshots>
                 <enabled>true</enabled>
             </snapshots>
-        </repository>-->
+        </repository> -->
      
                               
     </repositories>
