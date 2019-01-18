@@ -260,7 +260,7 @@ public class DATRASDataStorage extends FileDataStorage {
                                 1,
                                 // DataType
                                 "R",
-                                fs.bo().getVerticaltrawlopening(),
+                                unkD(fs.bo().getVerticaltrawlopening(), "0.0"),
                                 // Rigging
                                 -9,
                                 // Tickler
