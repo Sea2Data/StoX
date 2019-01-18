@@ -290,7 +290,7 @@ public class DATRASDataStorage extends FileDataStorage {
                                 // Tow dir
                                 unkO(fs.bo().getDirection() != null ? Math.round(fs.bo().getDirection()) : null),
                                 // Ground speed (speed of trawl over ground)
-                                unkD(fs.bo().getVesselspeed(), "0.0"),
+                                unkD((fs.bo().getVesselspeed() == null ? fs.bo().getGearflow() : fs.bo().getVesselspeed()), "0.0"),
                                 //Speed water
                                 -9,
                                 //SurCurDir
