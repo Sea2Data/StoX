@@ -62,6 +62,10 @@ Parameter: Name=seed, Required=false, DataType=Integer, Description=Random seed 
 Parameter: Name=age.error, Required=false, DataType=Boolean, DefaultValue=false, Description=Whether to include uncertainty in ageing is included in the model.
 
 [Function]
+Name: prepDatras
+Description: Prepare DATRAS submission output
+
+[Function]
 Name: loadEnv
 Deprecated: true
 Description: Load R Image into R environment 
