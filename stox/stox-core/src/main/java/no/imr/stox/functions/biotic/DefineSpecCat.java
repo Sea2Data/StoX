@@ -111,6 +111,7 @@ public class DefineSpecCat extends AbstractFunction {
                     if (idxVarRef < 0 || idxCatRef < 0 || idxCatRef.equals(idxVarRef)) {
                         break;
                     }
+                    lines.remove(0); // remove header
                     lines.forEach(l -> {
                         List<String> str = Arrays.asList(l.split("[;,\\t]"));
                         if (idxVarRef >= str.size() || idxCatRef >= str.size()) {
@@ -118,7 +119,7 @@ public class DefineSpecCat extends AbstractFunction {
                         }
                         String varRef = str.get(idxVarRef);
                         String catRef = str.get(idxCatRef);
-                        m.put(varRef, catRef);
+                        m.put(varRef.toLowerCase(), catRef); // key is lower
                     });
                 } catch (IOException ex) {
                     Logger.getLogger(DefineSpecCat.class.getName()).log(Level.SEVERE, null, ex);
