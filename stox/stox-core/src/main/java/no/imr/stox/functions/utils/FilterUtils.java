@@ -69,7 +69,7 @@ public final class FilterUtils {
             context.set("fishstationtype", fs.bo().getStationtype());
             context.set("equipmentnumber", fs.bo().getGearno());
             context.set("directiongps", fs.bo().getDirection());
-            context.set("gearspeed", fs.bo().getVesselspeed());
+            context.set("gearspeed", fs.bo().getGearflow());
             context.set("starttime", fs.bo().getStationstarttime());
             context.set("startlog", fs.bo().getLogstart());
             context.set("stoptime", fs.bo().getStationstoptime());
