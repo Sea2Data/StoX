@@ -33,8 +33,12 @@ public class URLUtil {
      * @param outPath
      */
     public static void copyFiles(String urlDir, String outPath) {
+        copyFiles(urlDir, outPath, false);
+    }
+
+    public static void copyFiles(String urlDir, String outPath, boolean force) {
         getLinesLastElement(urlDir + "/").forEach(f -> {
-            copyFile(urlDir + "/" + f, outPath + "/" + f);
+            copyFile(urlDir + "/" + f, outPath + "/" + f, force);
         });
     }
 
@@ -48,7 +52,11 @@ public class URLUtil {
     }
 
     public static Boolean copyFile(String urlPath, String outFile) {
-        if (new File(outFile).exists()) {
+        return copyFile(urlPath, urlPath, false);
+    }
+
+    public static Boolean copyFile(String urlPath, String outFile, boolean force) {
+        if (!force && new File(outFile).exists()) {
             return false;
         }
         try {

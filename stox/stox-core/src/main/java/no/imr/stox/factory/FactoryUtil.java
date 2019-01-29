@@ -185,13 +185,13 @@ public final class FactoryUtil {
                 }
             }
         }
-        if (prj.getResourceVersion() < 1.82) {
-            replaceParameter(prj.getBaseline(), Functions.FN_FILTERBIOTIC, Functions.PM_FILTERBIOTIC_FISHSTATIONEXPR, "sildG0", "sild\\'G0");
-            replaceParameter(prj.getBaseline(), Functions.FN_FILTERBIOTIC, Functions.PM_FILTERBIOTIC_FISHSTATIONEXPR, "SILDG0", "SILD\\'G0");
-            replaceParameter(prj.getBaseline(), Functions.FN_FILTERBIOTIC, Functions.PM_FILTERBIOTIC_CATCHEXPR, "sildG0", "sild\\'G0");
-            replaceParameter(prj.getBaseline(), Functions.FN_FILTERBIOTIC, Functions.PM_FILTERBIOTIC_CATCHEXPR, "SILDG0", "SILD\\'G0");
-            replaceParameter(prj.getBaseline(), Functions.FN_SPLITNASC, Functions.PM_SPLITNASC_SPECIESTS, "sildG0", "sild\\'G0");
-            replaceParameter(prj.getBaseline(), Functions.FN_FILTERBIOTIC, Functions.PM_SPLITNASC_SPECIESTS, "SILDG0", "SILD\\'G0");
+        if (prj.getResourceVersion() < 1.87) {
+            replaceParameter(prj.getBaseline(), Functions.FN_FILTERBIOTIC, Functions.PM_FILTERBIOTIC_FISHSTATIONEXPR, "sild\\'G0", "sildG0");
+            replaceParameter(prj.getBaseline(), Functions.FN_FILTERBIOTIC, Functions.PM_FILTERBIOTIC_FISHSTATIONEXPR, "SILD\\'G0", "SILDG0");
+            replaceParameter(prj.getBaseline(), Functions.FN_FILTERBIOTIC, Functions.PM_FILTERBIOTIC_CATCHEXPR, "sild\\'G0", "sildG0");
+            replaceParameter(prj.getBaseline(), Functions.FN_FILTERBIOTIC, Functions.PM_FILTERBIOTIC_CATCHEXPR, "SILD\\'G0", "SILDG0");
+            replaceParameter(prj.getBaseline(), Functions.FN_SPLITNASC, Functions.PM_SPLITNASC_SPECIESTS, "sild\\'G0", "sildG0");
+            replaceParameter(prj.getBaseline(), Functions.FN_FILTERBIOTIC, Functions.PM_SPLITNASC_SPECIESTS, "SILD\\'G0", "SILDG0");
         }
 
         // Remove processes not pointing to functions

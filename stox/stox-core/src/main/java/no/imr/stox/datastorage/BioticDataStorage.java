@@ -94,11 +94,9 @@ public class BioticDataStorage extends FileDataStorage {
                 for (MissionBO ms : (List<MissionBO>) (List) list) {
                     for (FishstationBO fs : ms.getFishstationBOs()) {
                         for (CatchSampleBO s : fs.getCatchSampleBOs()) {
-                            String commonName = s.bo().getCommonname();
-                            commonName = commonName == null ? null : commonName.replace("'", "");
                             ImrIO.write(wr, ExportUtil.carrageReturnLineFeed(ExportUtil.tabbed(
                                     /*IMRdate.getYear(fs.bo().getStationstartdate(), true)*/fs.getMission().bo().getCruise(), fs.bo().getSerialnumber(), fs.bo().getCatchplatform(),
-                                    s.getSpecCat(), s.bo().getCatchcategory(), commonName, s.bo().getAphia(), s.bo().getCatchpartnumber(), s.bo().getSampletype(), s.bo().getGroup(), s.bo().getConservation(), s.bo().getCatchproducttype(),
+                                    s.getSpecCat(), s.bo().getCatchcategory(), s.bo().getCommonname(), s.bo().getAphia(), s.bo().getCatchpartnumber(), s.bo().getSampletype(), s.bo().getGroup(), s.bo().getConservation(), s.bo().getCatchproducttype(),
                                     s.bo().getCatchweight(), s.bo().getCatchcount(), s.bo().getSampleproducttype(), s.bo().getLengthmeasurement(), s.bo().getLengthsampleweight(),
                                     s.bo().getLengthsamplecount(), s.bo().getSpecimensamplecount(), s.bo().getParasite(), s.bo().getStomach(), s.bo().getTissuesample(), s.bo().getCatchcomment())));
                         }

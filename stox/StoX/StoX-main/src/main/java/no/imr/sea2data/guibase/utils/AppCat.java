@@ -166,6 +166,6 @@ public class AppCat {
     }
 
     public void downloadTools() {
-        URLUtil.copyFiles(TOOLSURL, getWSToolsDir());
+        URLUtil.copyFiles(TOOLSURL, getWSToolsDir(), true);
     }
 }

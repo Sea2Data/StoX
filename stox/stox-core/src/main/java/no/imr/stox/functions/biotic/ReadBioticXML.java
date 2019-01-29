@@ -90,6 +90,11 @@ public class ReadBioticXML extends AbstractFunction {
                         i.setLength(Calc.roundTo(StoXMath.mToCM(i.getLength()), 8));
                         i.setIndividualweight(Calc.roundTo(StoXMath.kgToGrams(i.getIndividualweight()), 8));
                     }
+                    // Backward compability - Apostrope removal in common name Sild'g03
+                    String commonName = sbo.bo().getCommonname();
+                    commonName = commonName == null ? null : commonName.replace("'", "");
+                    sbo.bo().setCommonname(commonName);
+
                     // Initially set the speccat
                     sbo.setSpecCat(sbo.getSpeciesKey());
                 }
