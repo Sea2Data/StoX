@@ -52,7 +52,7 @@ public class URLUtil {
     }
 
     public static Boolean copyFile(String urlPath, String outFile) {
-        return copyFile(urlPath, urlPath, false);
+        return copyFile(urlPath, outFile, false);
     }
 
     public static Boolean copyFile(String urlPath, String outFile, boolean force) {
