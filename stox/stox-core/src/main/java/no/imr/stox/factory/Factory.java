@@ -99,7 +99,7 @@ public class Factory {
                 break;
             case TEMPLATE_DATRAS:
                 createDATRASTemplateProject(p.getBaseline());
-                p.getRModel().addProcess("exportDatras", "exportDatras");
+                p.getRModel().addProcess("prepareDATRAS", "prepareDATRAS");
                 break;
             case TEMPLATE_SWEPTAREA_TOTAL:
                 createSweptAreaTotalCatchTemplateProject(p.getBaseline(), template);

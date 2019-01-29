@@ -62,8 +62,9 @@ Parameter: Name=seed, Required=false, DataType=Integer, Description=Random seed 
 Parameter: Name=age.error, Required=false, DataType=Boolean, DefaultValue=false, Description=Whether to include uncertainty in ageing is included in the model.
 
 [Function]
-Name: exportDatras
-Description: Export DATRAS submission output
+Name: prepareDATRAS
+Description: Prepare project for ICES DATRAS submission
+Output: RObject
 
 [Function]
 Name: loadEnv
