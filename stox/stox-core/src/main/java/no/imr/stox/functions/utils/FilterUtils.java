@@ -243,7 +243,9 @@ public final class FilterUtils {
         if (cs == null) {
             return;
         }
-        context.set("speccat", cs.getSpecCat());
+        if (cs.getSpecCat() != null) {
+            context.set("speccat", cs.getSpecCat().toLowerCase());
+        }
         context.set("species", cs.bo().getCatchcategory() != null ? cs.bo().getCatchcategory().toLowerCase() : null);
         context.set("noname", cs.bo().getCommonname() != null ? cs.bo().getCommonname().toLowerCase() : null);
         context.set("aphia", cs.bo().getAphia());
