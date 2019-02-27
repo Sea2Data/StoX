@@ -47,9 +47,10 @@ public class StationSpecCatDensityStorage extends FileDataStorage {
                     return res;
                 }).collect(Collectors.toList());
         MatrixBO edsuPsu = data.getProcessData().getMatrix(AbndEstProcessDataUtil.TABLE_EDSUPSU);
+        MatrixBO psuStratum = data.getProcessData().getMatrix(AbndEstProcessDataUtil.TABLE_PSUSTRATUM);
         List<Field> missionMethods = ReflectionUtil.getFields(MissionType.class);
         List<Field> fsMethods = ReflectionUtil.getFields(FishstationType.class);
-        String hdr = ExportUtil.tabbed(
+        String hdr = ExportUtil.tabbed(Functions.SAMPLEUNIT_STRATUM,
                 missionMethods.stream().map(Field::getName).collect(Collectors.joining("\t")),
                 fsMethods.stream().map(Field::getName).collect(Collectors.joining("\t")),
                 specHdrs.stream().collect(Collectors.joining("\t"))
@@ -70,8 +71,10 @@ public class StationSpecCatDensityStorage extends FileDataStorage {
                 if (fs == null) {
                     return;
                 }
+                String stratum = (String) psuStratum.getRowValue(psu);
+
                 MissionBO m = fs.getMission();
-                String s = ExportUtil.tabbed(
+                String s = ExportUtil.tabbed(stratum,
                         missionMethods.stream()
                                 .map(f -> ReflectionUtil.invoke(f, m.bo()))
                                 .map(o -> o != null ? o.toString() : "")
