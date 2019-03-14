@@ -5,15 +5,22 @@
  */
 package no.imr.stox.datastorage;
 
+import BioticTypes.v3.AgedeterminationType;
+import BioticTypes.v3.CatchsampleType;
+import BioticTypes.v3.CopepodedevstageType;
+import BioticTypes.v3.FishstationType;
+import BioticTypes.v3.IndividualType;
+import BioticTypes.v3.MissionType;
+import BioticTypes.v3.PreyType;
+import BioticTypes.v3.PreylengthType;
+import BioticTypes.v3.TagType;
 import java.io.Writer;
 import java.util.ArrayList;
 import java.util.List;
-import no.imr.sea2data.biotic.bo.FishstationBO;
+import java.util.stream.Collectors;
+import no.imr.sea2data.biotic.bo.BaseBO;
 import no.imr.sea2data.biotic.bo.IndividualBO;
-import no.imr.sea2data.biotic.bo.CatchSampleBO;
 import no.imr.sea2data.biotic.bo.MissionBO;
-import no.imr.sea2data.imrbase.util.Conversion;
-import no.imr.sea2data.imrbase.util.IMRdate;
 import no.imr.stox.functions.utils.BioticUtils;
 import no.imr.sea2data.imrbase.util.ExportUtil;
 import no.imr.sea2data.imrbase.util.ImrIO;
@@ -36,84 +43,242 @@ public class BioticDataStorage extends FileDataStorage {
 
     @Override
     public Integer getNumDataStorageFiles() {
-        return 3;
+        return 9;
     }
 
     @Override
     public String getStorageFileNamePostFix(Integer idxFile) {
-        switch (idxFile) {
-            case 1:
-                return "FishStation";
-            case 2:
-                return "CatchSample";
-            case 3:
-                return "Individual";
-        }
-        return "";
+        Class cls = getClass(idxFile);
+        String str = cls.getSimpleName();
+        return str.substring(0, str.length() - 4); // remove Type
     }
 
-    public static String getElmLevel(Integer idxFile) {
-        switch (idxFile) {
+    private static Class getClass(Integer idx) {
+        switch (idx) {
             case 1:
-                return "fishstation";
+                return MissionType.class;
             case 2:
-                return "catchsample";
+                return FishstationType.class;
             case 3:
-                return "individual";
+                return CatchsampleType.class;
+            case 4:
+                return IndividualType.class;
+            case 5:
+                return AgedeterminationType.class;
+            case 6:
+                return TagType.class;
+            case 7:
+                return PreyType.class;
+            case 8:
+                return PreylengthType.class;
+            case 9:
+                return CopepodedevstageType.class;
         }
-        return "";
+        return null;
     }
 
     public static void asTable(List<Object> list, Integer level, Writer wr) {
         // Old code
+        List<MissionType> ml = ((List<MissionBO>) (List) list).stream().map(m -> m.bo()).collect(Collectors.toList()); // box missionbo to missiontype
         switch (level) {
             case 1:
-                ImrIO.write(wr, ExportUtil.carrageReturnLineFeed(ExportUtil.tabbed("missiontype", "cruise", "serialno", "platform", "startdate", "station", "fishstationtype",
-                        "latitudestart", "longitudestart", "system", "area", "location", "stratum", "bottomdepthstart", "bottomdepthstop", "gear", "gearcount",
-                        "gearspeed", "starttime", "logstart", "stoptime", "distance", "gearcondition", "trawlquality", "fishingdepthmax",
-                        "fishingdepthmin", "fishingdepthcount", "trawlopening", "trawldoorspread", "latitudeend", "longitudeend", "wirelength", "stopdate", "logstop", "flowcount",
-                        "flowconst", "comment")));
-                for (MissionBO ms : (List<MissionBO>) (List) list) {
-                    for (FishstationBO fs : ms.getFishstationBOs()) {
-                        ImrIO.write(wr, ExportUtil.carrageReturnLineFeed(ExportUtil.tabbed(fs.getMission().bo().getMissiontype(), fs.getMission().bo().getCruise(), fs.bo().getSerialnumber(), fs.bo().getCatchplatform(), IMRdate.formatDate(fs.bo().getStationstartdate()),
-                                fs.bo().getStation(), fs.bo().getStationtype(), Conversion.formatDoubletoDecimalString(fs.bo().getLatitudestart(), 4),
-                                Conversion.formatDoubletoDecimalString(fs.bo().getLongitudestart(), 4), fs.bo().getSystem(), fs.bo().getArea(),
-                                fs.bo().getLocation(), fs.getStratum(), fs.bo().getBottomdepthstart(), fs.bo().getBottomdepthstop(), fs.bo().getGear(), fs.bo().getGearcount(), fs.bo().getGearflow(),
-                                IMRdate.formatTime(fs.bo().getStationstarttime()), fs.bo().getLogstart(), IMRdate.formatTime(fs.bo().getStationstoptime()),
-                                fs.bo().getDistance(), fs.bo().getGearcondition(), fs.bo().getSamplequality(), fs.bo().getFishingdepthmax(), fs.bo().getFishingdepthmin(), fs.bo().getFishingdepthcount(),
-                                fs.bo().getVerticaltrawlopening(), fs.bo().getTrawldoorspread(), fs.bo().getLatitudeend(), fs.bo().getLongitudeend(), fs.bo().getWirelength(),
-                                IMRdate.formatDate(fs.bo().getStationstopdate()), fs.bo().getLogstop(), null, null, fs.bo().getStationcomment())));
-                    }
+                ImrIO.write(wr, ExportUtil.carrageReturnLineFeed(ExportUtil.tabbed(
+                        BaseBO.csvHdr(MissionType.class, null, null))));
+                for (MissionType ms : ml) {
+                    ImrIO.write(wr, ExportUtil.carrageReturnLineFeed(ExportUtil.tabbed(
+                            BaseBO.csv(ms, null, null))));
                 }
                 break;
-
             case 2:
-                ImrIO.write(wr, ExportUtil.carrageReturnLineFeed(ExportUtil.tabbed("cruise", "serialno", "platform", Functions.COL_IND_SPECCAT, "species", "noname", "aphia", "samplenumber", "sampletype", "group",
-                        "conservation", "measurement", "weight", "count", "samplemeasurement", "lengthmeasurement", "lengthsampleweight",
-                        "lengthsamplecount", "individualsamplecount", "parasite", "stomach", "genetics", "comment")));
-                for (MissionBO ms : (List<MissionBO>) (List) list) {
-                    for (FishstationBO fs : ms.getFishstationBOs()) {
-                        for (CatchSampleBO s : fs.getCatchSampleBOs()) {
-                            ImrIO.write(wr, ExportUtil.carrageReturnLineFeed(ExportUtil.tabbed(
-                                    /*IMRdate.getYear(fs.bo().getStationstartdate(), true)*/fs.getMission().bo().getCruise(), fs.bo().getSerialnumber(), fs.bo().getCatchplatform(),
-                                    s.getSpecCat(), s.bo().getCatchcategory(), s.bo().getCommonname(), s.bo().getAphia(), s.bo().getCatchpartnumber(), s.bo().getSampletype(), s.bo().getGroup(), s.bo().getConservation(), s.bo().getCatchproducttype(),
-                                    s.bo().getCatchweight(), s.bo().getCatchcount(), s.bo().getSampleproducttype(), s.bo().getLengthmeasurement(), s.bo().getLengthsampleweight(),
-                                    s.bo().getLengthsamplecount(), s.bo().getSpecimensamplecount(), s.bo().getParasite(), s.bo().getStomach(), s.bo().getTissuesample(), s.bo().getCatchcomment())));
-                        }
+                ImrIO.write(wr, ExportUtil.carrageReturnLineFeed(ExportUtil.tabbed(
+                        BaseBO.csvHdr(MissionType.class, null, true),
+                        BaseBO.csvHdr(FishstationType.class, null, null))));
+                for (MissionType ms : ml) {
+                    for (FishstationType fs : ms.getFishstation()) {
+                        ImrIO.write(wr, ExportUtil.carrageReturnLineFeed(ExportUtil.tabbed(
+                                BaseBO.csv(ms, null, true),
+                                BaseBO.csv(fs, null, null))));
                     }
                 }
                 break;
             case 3:
-                ImrIO.write(wr, ExportUtil.carrageReturnLineFeed(ExportUtil.tabbed(ExportUtil.tabbed(Functions.INDIVIDUALS))));
-                for (MissionBO ms : (List<MissionBO>) (List) list) {
-                    for (FishstationBO fs : ms.getFishstationBOs()) {
-                        for (CatchSampleBO s : fs.getCatchSampleBOs()) {
-                            asTable(null, s.getIndividualBOs(), wr);
+                ImrIO.write(wr, ExportUtil.carrageReturnLineFeed(ExportUtil.tabbed(
+                        BaseBO.csvHdr(MissionType.class, null, true),
+                        BaseBO.csvHdr(FishstationType.class, null, true),
+                        BaseBO.csvHdr(CatchsampleType.class, null, null)
+                )));
+                for (MissionType ms : ml) {
+                    for (FishstationType fs : ms.getFishstation()) {
+                        for (CatchsampleType cs : fs.getCatchsample()) {
+                            ImrIO.write(wr, ExportUtil.carrageReturnLineFeed(ExportUtil.tabbed(
+                                    BaseBO.csv(ms, null, true),
+                                    BaseBO.csv(fs, null, true),
+                                    BaseBO.csv(cs, null, null)
+                            )));
                         }
                     }
                 }
                 break;
-
+            case 4:
+                ImrIO.write(wr, ExportUtil.carrageReturnLineFeed(ExportUtil.tabbed(
+                        BaseBO.csvHdr(MissionType.class, null, true),
+                        BaseBO.csvHdr(FishstationType.class, null, true),
+                        BaseBO.csvHdr(CatchsampleType.class, null, true),
+                        BaseBO.csvHdr(IndividualType.class, null, null)
+                )));
+                for (MissionType ms : ml) {
+                    for (FishstationType fs : ms.getFishstation()) {
+                        for (CatchsampleType cs : fs.getCatchsample()) {
+                            for (IndividualType ii : cs.getIndividual()) {
+                                ImrIO.write(wr, ExportUtil.carrageReturnLineFeed(ExportUtil.tabbed(
+                                        BaseBO.csv(ms, null, true),
+                                        BaseBO.csv(fs, null, true),
+                                        BaseBO.csv(cs, null, true),
+                                        BaseBO.csv(ii, null, null)
+                                )));
+                            }
+                        }
+                    }
+                }
+                break;
+            case 5:
+                ImrIO.write(wr, ExportUtil.carrageReturnLineFeed(ExportUtil.tabbed(
+                        BaseBO.csvHdr(MissionType.class, null, true),
+                        BaseBO.csvHdr(FishstationType.class, null, true),
+                        BaseBO.csvHdr(CatchsampleType.class, null, true),
+                        BaseBO.csvHdr(IndividualType.class, null, true),
+                        BaseBO.csvHdr(AgedeterminationType.class, null, null)
+                )));
+                for (MissionType ms : ml) {
+                    for (FishstationType fs : ms.getFishstation()) {
+                        for (CatchsampleType cs : fs.getCatchsample()) {
+                            for (IndividualType ii : cs.getIndividual()) {
+                                for (AgedeterminationType a : ii.getAgedetermination()) {
+                                    ImrIO.write(wr, ExportUtil.carrageReturnLineFeed(ExportUtil.tabbed(
+                                            BaseBO.csv(ms, null, true),
+                                            BaseBO.csv(fs, null, true),
+                                            BaseBO.csv(cs, null, true),
+                                            BaseBO.csv(ii, null, true),
+                                            BaseBO.csv(a, null, null)
+                                    )));
+                                }
+                            }
+                        }
+                    }
+                }
+                break;
+            case 6:
+                ImrIO.write(wr, ExportUtil.carrageReturnLineFeed(ExportUtil.tabbed(
+                        BaseBO.csvHdr(MissionType.class, null, true),
+                        BaseBO.csvHdr(FishstationType.class, null, true),
+                        BaseBO.csvHdr(CatchsampleType.class, null, true),
+                        BaseBO.csvHdr(IndividualType.class, null, true),
+                        BaseBO.csvHdr(TagType.class, null, null)
+                )));
+                for (MissionType ms : ml) {
+                    for (FishstationType fs : ms.getFishstation()) {
+                        for (CatchsampleType cs : fs.getCatchsample()) {
+                            for (IndividualType ii : cs.getIndividual()) {
+                                for (TagType t : ii.getTag()) {
+                                    ImrIO.write(wr, ExportUtil.carrageReturnLineFeed(ExportUtil.tabbed(
+                                            BaseBO.csv(ms, null, true),
+                                            BaseBO.csv(fs, null, true),
+                                            BaseBO.csv(cs, null, true),
+                                            BaseBO.csv(ii, null, true),
+                                            BaseBO.csv(t, null, null)
+                                    )));
+                                }
+                            }
+                        }
+                    }
+                }
+                break;
+            case 7:
+                ImrIO.write(wr, ExportUtil.carrageReturnLineFeed(ExportUtil.tabbed(
+                        BaseBO.csvHdr(MissionType.class, null, true),
+                        BaseBO.csvHdr(FishstationType.class, null, true),
+                        BaseBO.csvHdr(CatchsampleType.class, null, true),
+                        BaseBO.csvHdr(IndividualType.class, null, true),
+                        BaseBO.csvHdr(PreyType.class, null, null)
+                )));
+                for (MissionType ms : ml) {
+                    for (FishstationType fs : ms.getFishstation()) {
+                        for (CatchsampleType cs : fs.getCatchsample()) {
+                            for (IndividualType ii : cs.getIndividual()) {
+                                for (PreyType p : ii.getPrey()) {
+                                    ImrIO.write(wr, ExportUtil.carrageReturnLineFeed(ExportUtil.tabbed(
+                                            BaseBO.csv(ms, null, true),
+                                            BaseBO.csv(fs, null, true),
+                                            BaseBO.csv(cs, null, true),
+                                            BaseBO.csv(ii, null, true),
+                                            BaseBO.csv(p, null, null)
+                                    )));
+                                }
+                            }
+                        }
+                    }
+                }
+                break;
+            case 8:
+                ImrIO.write(wr, ExportUtil.carrageReturnLineFeed(ExportUtil.tabbed(
+                        BaseBO.csvHdr(MissionType.class, null, true),
+                        BaseBO.csvHdr(FishstationType.class, null, true),
+                        BaseBO.csvHdr(CatchsampleType.class, null, true),
+                        BaseBO.csvHdr(IndividualType.class, null, true),
+                        BaseBO.csvHdr(PreyType.class, null, true),
+                        BaseBO.csvHdr(PreylengthType.class, null, null)
+                )));
+                for (MissionType ms : ml) {
+                    for (FishstationType fs : ms.getFishstation()) {
+                        for (CatchsampleType cs : fs.getCatchsample()) {
+                            for (IndividualType ii : cs.getIndividual()) {
+                                for (PreyType p : ii.getPrey()) {
+                                    for (PreylengthType pl : p.getPreylengthfrequencytable()) {
+                                        ImrIO.write(wr, ExportUtil.carrageReturnLineFeed(ExportUtil.tabbed(
+                                                BaseBO.csv(ms, null, true),
+                                                BaseBO.csv(fs, null, true),
+                                                BaseBO.csv(cs, null, true),
+                                                BaseBO.csv(ii, null, true),
+                                                BaseBO.csv(p, null, true),
+                                                BaseBO.csv(pl, null, null)
+                                        )));
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+                break;
+            case 9:
+                ImrIO.write(wr, ExportUtil.carrageReturnLineFeed(ExportUtil.tabbed(
+                        BaseBO.csvHdr(MissionType.class, null, true),
+                        BaseBO.csvHdr(FishstationType.class, null, true),
+                        BaseBO.csvHdr(CatchsampleType.class, null, true),
+                        BaseBO.csvHdr(IndividualType.class, null, true),
+                        BaseBO.csvHdr(PreyType.class, null, true),
+                        BaseBO.csvHdr(CopepodedevstageType.class, null, null)
+                )));
+                for (MissionType ms : ml) {
+                    for (FishstationType fs : ms.getFishstation()) {
+                        for (CatchsampleType cs : fs.getCatchsample()) {
+                            for (IndividualType ii : cs.getIndividual()) {
+                                for (PreyType p : ii.getPrey()) {
+                                    for (CopepodedevstageType cd : p.getCopepodedevstagefrequencytable()) {
+                                        ImrIO.write(wr, ExportUtil.carrageReturnLineFeed(ExportUtil.tabbed(
+                                                BaseBO.csv(ms, null, true),
+                                                BaseBO.csv(fs, null, true),
+                                                BaseBO.csv(cs, null, true),
+                                                BaseBO.csv(ii, null, true),
+                                                BaseBO.csv(p, null, true),
+                                                BaseBO.csv(cd, null, null)
+                                        )));
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+                break;
         }
     }
 

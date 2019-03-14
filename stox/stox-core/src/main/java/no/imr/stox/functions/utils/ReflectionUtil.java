@@ -74,20 +74,21 @@ public final class ReflectionUtil {
     public static Object invoke(Field f, Object o) {
         return invoke(getGetter(f), o, false);
     }
-    
-    public static Object invoke(Field f, Object o, boolean includeCompoundFields) {
+
+    public static Object invoke(Field f, Object o, Boolean includeCompoundFields) {
         return invoke(getGetter(f), o, includeCompoundFields);
     }
 
     public static Object invoke(Method getter, Object o) {
         return invoke(getter, o, false);
     }
-    public static Object invoke(Method getter, Object o, boolean includeCompoundFields) {
+
+    public static Object invoke(Method getter, Object o, Boolean includeCompoundFields) {
         try {
             if (o == null || getter == null) {
                 return null;
             }
-            if (includeCompoundFields && !o.getClass().equals(getter.getDeclaringClass())) {
+            if ((includeCompoundFields != null && includeCompoundFields) && !o.getClass().equals(getter.getDeclaringClass())) {
                 // Transform o to a compound category if possible
                 // by searching the o for a field with same type as the getter.
                 // using that getter to get the o.
@@ -113,28 +114,32 @@ public final class ReflectionUtil {
     }
 
     public static List<Field> getFields(Class c) {
-        return getFields(c, false);
+        return getFields(c, false, null);
     }
 
-    public static List<Field> getFields(Class c, boolean includeCompundFields) {
-        return includeCompundFields ? getCompoundFields(c) : getLeafOrCompoundFields(true, c);
+    public static List<Field> getFields(Class c, Boolean includeCompundFields, Boolean includeAttributes) {
+        return (includeCompundFields != null && includeCompundFields) ? getCompoundFields(c, includeAttributes) : getLeafOrCompoundFields(true, includeAttributes, c);
     }
 
-    public static List<Field> getCompoundFields(Class c) {
+    public static List<Field> getCompoundFields(Class c, Boolean includeAttributes) {
         return Stream.concat(
                 // start with attributes and leaf fields
-                ReflectionUtil.getLeafOrCompoundFields(true, c).stream(),
+                ReflectionUtil.getLeafOrCompoundFields(true, includeAttributes, c).stream(),
                 // Combine into the stream non leaf category leaf fields
-                ReflectionUtil.getLeafOrCompoundFields(false, c).stream()
-                        .flatMap(f -> ReflectionUtil.getLeafOrCompoundFields(true, f.getType()).stream()))
+                ReflectionUtil.getLeafOrCompoundFields(false, includeAttributes, c).stream()
+                        .flatMap(f -> ReflectionUtil.getLeafOrCompoundFields(true, includeAttributes, f.getType()).stream()))
                 .collect(Collectors.toList());
     }
 
-    public static List<Field> getLeafOrCompoundFields(Boolean leaf, Class c) {
+    public static List<Field> getLeafOrCompoundFields(Boolean leaf, Boolean attribute, Class c) {
         return Stream.of(c.getDeclaredFields())
                 // filter on leaf fields
-                .filter(f -> Modifier.isProtected(f.getModifiers()) && !f.getType().isAssignableFrom(java.util.List.class)
-                && leaf ^ !isAssignableFromLeafFields(f.getType()))
+                .filter(f
+                        -> Modifier.isProtected(f.getModifiers()) // modifier protected
+                && !f.getType().isAssignableFrom(java.util.List.class) // not a list
+                && (leaf == null || leaf ^ !isAssignableFromLeafFields(f.getType()))  // leaf relevant ? leaf or not leaf 
+                && (attribute == null || attribute ^ f.getAnnotation(XmlAttribute.class) == null)  // attribute relevant ? attribute or not attribute
+                )
                 //                .filter(m -> m.getName().startsWith("set") && m.getParameters().length == 1)
                 //               .map(m -> m.getName().substring(3).toLowerCase())
                 .sorted((f1, f2) -> {

@@ -31,14 +31,14 @@ public class BaseBO {
     public String getKey() {
         if (key == null) {
             String parentprefix = "";
-            if(parent != null) {
+            if (parent != null) {
                 parentprefix = parent.getKey() + "/";
             }
             key = parentprefix + getInternalKey();
         }
         return key;
     }
-    
+
     @Override
     public String toString() {
         return getKey();
@@ -48,12 +48,16 @@ public class BaseBO {
         return null;
     }
 
-    public static String csvHdr(Class clz, boolean includeCompoundFields) {
-        return ReflectionUtil.getFields(clz, includeCompoundFields).stream().map(f -> f.getName()).collect(Collectors.joining("\t"));
+    public static String csvHdr(Class clz, Boolean includeCompoundFields, Boolean includeAttributes) {
+        return ReflectionUtil.getFields(clz, includeCompoundFields, includeAttributes).stream().map(f -> f.getName()).collect(Collectors.joining("\t"));
     }
 
-    public String csv(boolean includeCompoundFields) {
-        return ReflectionUtil.getCompoundFields(bo.getClass()).stream()
+    public String csv(Boolean includeCompoundFields, Boolean includeAttributes) {
+        return csv(bo, includeCompoundFields, includeAttributes);
+    }
+
+    public static String csv(Object bo, Boolean includeCompoundFields, Boolean includeAttributes) {
+        return ReflectionUtil.getCompoundFields(bo.getClass(), includeAttributes).stream()
                 .map(f -> ReflectionUtil.invoke(f, bo, includeCompoundFields))
                 .map(o -> o == null ? "" : Objects.toString(o)).collect(Collectors.joining("\t"));
     }

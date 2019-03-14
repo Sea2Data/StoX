@@ -38,7 +38,7 @@ public class Reflection {
 
     @Test
     public void test() {
-        List<Field> fields = ReflectionUtil.getCompoundFields(SeddellinjeType.class);
+        List<Field> fields = ReflectionUtil.getCompoundFields(SeddellinjeType.class, null);
 
         SeddellinjeType sl = new SeddellinjeType();
         sl.setArtKode("a");

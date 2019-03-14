@@ -84,7 +84,9 @@ public final class AbndEstProcessDataUtil {
                             Object value = m.getRowColValue(rowKey, colKey);
                             XMLWriter.writeXMLElementStartWithoutNewline(level, xmlsw, m.getMetaMatrix().getVariable().toLowerCase(), attr);
                             if (value != null) {
-                                xmlsw.writeCharacters(value.toString());
+                                String s = value.toString();
+                                s = s.replace('−', '-'); // wkt writer creates wrong minus sign on java 11?
+                                xmlsw.writeCharacters(s);
                             }
                             xmlsw.writeEndElement();
                             xmlsw.writeCharacters("\n");

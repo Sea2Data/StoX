@@ -226,6 +226,7 @@ public class ProjectXMLReader extends XMLReader {
                             switch (polygonVariable) {
                                 case "polygon": {
                                     String wkt = valueS;
+                                    wkt = wkt.replace('−', '-'); // wkt writer creates wrong minus sign on java 11?
                                     MultiPolygon mp = null;
                                     if (wkt.startsWith("POLYGON")) {
                                         Polygon p = (Polygon) wktReader.read(wkt);

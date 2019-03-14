@@ -65,10 +65,10 @@ public class LandingDataStorage extends FileDataStorage {
     public static void asTable(LandingData list, Integer level, Writer wr) {
         switch (level) {
             case 1:
-                ImrIO.write(wr, ExportUtil.carrageReturnLineFeed(ExportUtil.tabbed(BaseBO.csvHdr(SeddellinjeType.class, true))));
+                ImrIO.write(wr, ExportUtil.carrageReturnLineFeed(ExportUtil.tabbed(BaseBO.csvHdr(SeddellinjeType.class, true, null))));
                 for (LandingsdataBO fl : list) {
                     for (SeddellinjeBO sl : fl.getSeddellinjeBOs()) {
-                        ImrIO.write(wr, ExportUtil.carrageReturnLineFeed(ExportUtil.tabbed(sl.csv(true))));
+                        ImrIO.write(wr, ExportUtil.carrageReturnLineFeed(ExportUtil.tabbed(sl.csv(true, null))));
                     }
                 }
                 break;
