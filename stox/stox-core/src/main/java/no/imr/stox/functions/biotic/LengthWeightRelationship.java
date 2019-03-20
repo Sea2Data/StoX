@@ -40,8 +40,8 @@ public class LengthWeightRelationship extends AbstractFunction {
     @Override
     public Object perform(Map<String, Object> input) {
         ILogger logger = (ILogger) input.get(Functions.PM_LOGGER);
-        ProcessDataBO pd = (ProcessDataBO) input.get(Functions.PM_SWEPTAREADENSITY_PROCESSDATA);
-        BioticData bioticData = (BioticData) input.get(Functions.PM_SWEPTAREADENSITY_BIOTICDATA);
+        ProcessDataBO pd = (ProcessDataBO) input.get(Functions.PM_LENGTHWEIGHTRELATIONSHIP_PROCESSDATA);
+        BioticData bioticData = (BioticData) input.get(Functions.PM_LENGTHWEIGHTRELATIONSHIP_BIOTICDATA);
         //logger.error("Length interval " + lenInterval + " must be a multiple integer factor of " + prevLenInterval + ".", null);
 
         LengthWeightRelationshipMatrix result = new LengthWeightRelationshipMatrix();

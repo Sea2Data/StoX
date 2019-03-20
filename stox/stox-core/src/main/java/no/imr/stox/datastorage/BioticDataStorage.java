@@ -18,7 +18,10 @@ import java.io.Writer;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
+import no.imr.sea2data.biotic.bo.AgeDeterminationBO;
 import no.imr.sea2data.biotic.bo.BaseBO;
+import no.imr.sea2data.biotic.bo.CatchSampleBO;
+import no.imr.sea2data.biotic.bo.FishstationBO;
 import no.imr.sea2data.biotic.bo.IndividualBO;
 import no.imr.sea2data.biotic.bo.MissionBO;
 import no.imr.stox.functions.utils.BioticUtils;
@@ -79,25 +82,25 @@ public class BioticDataStorage extends FileDataStorage {
 
     public static void asTable(List<Object> list, Integer level, Writer wr) {
         // Old code
-        List<MissionType> ml = ((List<MissionBO>) (List) list).stream().map(m -> m.bo()).collect(Collectors.toList()); // box missionbo to missiontype
+        List<MissionBO> ml = ((List<MissionBO>) (List) list);
         switch (level) {
             case 1:
                 ImrIO.write(wr, ExportUtil.carrageReturnLineFeed(ExportUtil.tabbed(
                         BaseBO.csvHdr(MissionType.class, null, null))));
-                for (MissionType ms : ml) {
+                for (MissionBO ms : ml) {
                     ImrIO.write(wr, ExportUtil.carrageReturnLineFeed(ExportUtil.tabbed(
-                            BaseBO.csv(ms, null, null))));
+                            ms.csv(null, null))));
                 }
                 break;
             case 2:
                 ImrIO.write(wr, ExportUtil.carrageReturnLineFeed(ExportUtil.tabbed(
                         BaseBO.csvHdr(MissionType.class, null, true),
                         BaseBO.csvHdr(FishstationType.class, null, null))));
-                for (MissionType ms : ml) {
-                    for (FishstationType fs : ms.getFishstation()) {
+                for (MissionBO ms : ml) {
+                    for (FishstationBO fs : ms.getFishstationBOs()) {
                         ImrIO.write(wr, ExportUtil.carrageReturnLineFeed(ExportUtil.tabbed(
-                                BaseBO.csv(ms, null, true),
-                                BaseBO.csv(fs, null, null))));
+                                ms.csv(null, true),
+                                fs.csv(null, null))));
                     }
                 }
                 break;
@@ -107,13 +110,13 @@ public class BioticDataStorage extends FileDataStorage {
                         BaseBO.csvHdr(FishstationType.class, null, true),
                         BaseBO.csvHdr(CatchsampleType.class, null, null)
                 )));
-                for (MissionType ms : ml) {
-                    for (FishstationType fs : ms.getFishstation()) {
-                        for (CatchsampleType cs : fs.getCatchsample()) {
+                for (MissionBO ms : ml) {
+                    for (FishstationBO fs : ms.getFishstationBOs()) {
+                        for (CatchSampleBO cs : fs.getCatchSampleBOs()) {
                             ImrIO.write(wr, ExportUtil.carrageReturnLineFeed(ExportUtil.tabbed(
-                                    BaseBO.csv(ms, null, true),
-                                    BaseBO.csv(fs, null, true),
-                                    BaseBO.csv(cs, null, null)
+                                    ms.csv(null, true),
+                                    fs.csv(null, true),
+                                    cs.csv(null, null)
                             )));
                         }
                     }
@@ -126,15 +129,15 @@ public class BioticDataStorage extends FileDataStorage {
                         BaseBO.csvHdr(CatchsampleType.class, null, true),
                         BaseBO.csvHdr(IndividualType.class, null, null)
                 )));
-                for (MissionType ms : ml) {
-                    for (FishstationType fs : ms.getFishstation()) {
-                        for (CatchsampleType cs : fs.getCatchsample()) {
-                            for (IndividualType ii : cs.getIndividual()) {
+                for (MissionBO ms : ml) {
+                    for (FishstationBO fs : ms.getFishstationBOs()) {
+                        for (CatchSampleBO cs : fs.getCatchSampleBOs()) {
+                            for (IndividualBO ii : cs.getIndividualBOs()) {
                                 ImrIO.write(wr, ExportUtil.carrageReturnLineFeed(ExportUtil.tabbed(
-                                        BaseBO.csv(ms, null, true),
-                                        BaseBO.csv(fs, null, true),
-                                        BaseBO.csv(cs, null, true),
-                                        BaseBO.csv(ii, null, null)
+                                        ms.csv(null, true),
+                                        fs.csv(null, true),
+                                        cs.csv(null, true),
+                                        ii.csv(null, null)
                                 )));
                             }
                         }
@@ -149,17 +152,17 @@ public class BioticDataStorage extends FileDataStorage {
                         BaseBO.csvHdr(IndividualType.class, null, true),
                         BaseBO.csvHdr(AgedeterminationType.class, null, null)
                 )));
-                for (MissionType ms : ml) {
-                    for (FishstationType fs : ms.getFishstation()) {
-                        for (CatchsampleType cs : fs.getCatchsample()) {
-                            for (IndividualType ii : cs.getIndividual()) {
-                                for (AgedeterminationType a : ii.getAgedetermination()) {
+                for (MissionBO ms : ml) {
+                    for (FishstationBO fs : ms.getFishstationBOs()) {
+                        for (CatchSampleBO cs : fs.getCatchSampleBOs()) {
+                            for (IndividualBO ii : cs.getIndividualBOs()) {
+                                for (AgeDeterminationBO a : ii.getAgeDeterminationBOs()) {
                                     ImrIO.write(wr, ExportUtil.carrageReturnLineFeed(ExportUtil.tabbed(
-                                            BaseBO.csv(ms, null, true),
-                                            BaseBO.csv(fs, null, true),
-                                            BaseBO.csv(cs, null, true),
-                                            BaseBO.csv(ii, null, true),
-                                            BaseBO.csv(a, null, null)
+                                            ms.csv(null, true),
+                                            fs.csv(null, true),
+                                            cs.csv(null, true),
+                                            ii.csv(null, true),
+                                            a.csv(null, null)
                                     )));
                                 }
                             }
@@ -175,16 +178,16 @@ public class BioticDataStorage extends FileDataStorage {
                         BaseBO.csvHdr(IndividualType.class, null, true),
                         BaseBO.csvHdr(TagType.class, null, null)
                 )));
-                for (MissionType ms : ml) {
-                    for (FishstationType fs : ms.getFishstation()) {
-                        for (CatchsampleType cs : fs.getCatchsample()) {
-                            for (IndividualType ii : cs.getIndividual()) {
-                                for (TagType t : ii.getTag()) {
+                for (MissionBO ms : ml) {
+                    for (FishstationBO fs : ms.getFishstationBOs()) {
+                        for (CatchSampleBO cs : fs.getCatchSampleBOs()) {
+                            for (IndividualBO ii : cs.getIndividualBOs()) {
+                                for (TagType t : ii.bo().getTag()) { // If tag should support filter, create a TagBO
                                     ImrIO.write(wr, ExportUtil.carrageReturnLineFeed(ExportUtil.tabbed(
-                                            BaseBO.csv(ms, null, true),
-                                            BaseBO.csv(fs, null, true),
-                                            BaseBO.csv(cs, null, true),
-                                            BaseBO.csv(ii, null, true),
+                                            ms.csv(null, true),
+                                            fs.csv(null, true),
+                                            cs.csv(null, true),
+                                            ii.csv(null, true),
                                             BaseBO.csv(t, null, null)
                                     )));
                                 }
@@ -201,16 +204,16 @@ public class BioticDataStorage extends FileDataStorage {
                         BaseBO.csvHdr(IndividualType.class, null, true),
                         BaseBO.csvHdr(PreyType.class, null, null)
                 )));
-                for (MissionType ms : ml) {
-                    for (FishstationType fs : ms.getFishstation()) {
-                        for (CatchsampleType cs : fs.getCatchsample()) {
-                            for (IndividualType ii : cs.getIndividual()) {
-                                for (PreyType p : ii.getPrey()) {
+                for (MissionBO ms : ml) {
+                    for (FishstationBO fs : ms.getFishstationBOs()) {
+                        for (CatchSampleBO cs : fs.getCatchSampleBOs()) {
+                            for (IndividualBO ii : cs.getIndividualBOs()) {
+                                for (PreyType p : ii.bo().getPrey()) {
                                     ImrIO.write(wr, ExportUtil.carrageReturnLineFeed(ExportUtil.tabbed(
-                                            BaseBO.csv(ms, null, true),
-                                            BaseBO.csv(fs, null, true),
-                                            BaseBO.csv(cs, null, true),
-                                            BaseBO.csv(ii, null, true),
+                                            ms.csv(null, true),
+                                            fs.csv(null, true),
+                                            cs.csv(null, true),
+                                            ii.csv(null, true),
                                             BaseBO.csv(p, null, null)
                                     )));
                                 }
@@ -228,17 +231,17 @@ public class BioticDataStorage extends FileDataStorage {
                         BaseBO.csvHdr(PreyType.class, null, true),
                         BaseBO.csvHdr(PreylengthType.class, null, null)
                 )));
-                for (MissionType ms : ml) {
-                    for (FishstationType fs : ms.getFishstation()) {
-                        for (CatchsampleType cs : fs.getCatchsample()) {
-                            for (IndividualType ii : cs.getIndividual()) {
-                                for (PreyType p : ii.getPrey()) {
+                for (MissionBO ms : ml) {
+                    for (FishstationBO fs : ms.getFishstationBOs()) {
+                        for (CatchSampleBO cs : fs.getCatchSampleBOs()) {
+                            for (IndividualBO ii : cs.getIndividualBOs()) {
+                                for (PreyType p : ii.bo().getPrey()) {
                                     for (PreylengthType pl : p.getPreylengthfrequencytable()) {
                                         ImrIO.write(wr, ExportUtil.carrageReturnLineFeed(ExportUtil.tabbed(
-                                                BaseBO.csv(ms, null, true),
-                                                BaseBO.csv(fs, null, true),
-                                                BaseBO.csv(cs, null, true),
-                                                BaseBO.csv(ii, null, true),
+                                                ms.csv(null, true),
+                                                fs.csv(null, true),
+                                                cs.csv(null, true),
+                                                ii.csv(null, true),
                                                 BaseBO.csv(p, null, true),
                                                 BaseBO.csv(pl, null, null)
                                         )));
@@ -258,17 +261,17 @@ public class BioticDataStorage extends FileDataStorage {
                         BaseBO.csvHdr(PreyType.class, null, true),
                         BaseBO.csvHdr(CopepodedevstageType.class, null, null)
                 )));
-                for (MissionType ms : ml) {
-                    for (FishstationType fs : ms.getFishstation()) {
-                        for (CatchsampleType cs : fs.getCatchsample()) {
-                            for (IndividualType ii : cs.getIndividual()) {
-                                for (PreyType p : ii.getPrey()) {
+                for (MissionBO ms : ml) {
+                    for (FishstationBO fs : ms.getFishstationBOs()) {
+                        for (CatchSampleBO cs : fs.getCatchSampleBOs()) {
+                            for (IndividualBO ii : cs.getIndividualBOs()) {
+                                for (PreyType p : ii.bo().getPrey()) {
                                     for (CopepodedevstageType cd : p.getCopepodedevstagefrequencytable()) {
                                         ImrIO.write(wr, ExportUtil.carrageReturnLineFeed(ExportUtil.tabbed(
-                                                BaseBO.csv(ms, null, true),
-                                                BaseBO.csv(fs, null, true),
-                                                BaseBO.csv(cs, null, true),
-                                                BaseBO.csv(ii, null, true),
+                                                ms.csv(null, true),
+                                                fs.csv(null, true),
+                                                cs.csv(null, true),
+                                                ii.csv(null, true),
                                                 BaseBO.csv(p, null, true),
                                                 BaseBO.csv(cd, null, null)
                                         )));

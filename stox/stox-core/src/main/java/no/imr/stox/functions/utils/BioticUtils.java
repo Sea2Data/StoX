@@ -26,6 +26,9 @@ import no.imr.stox.bo.LengthDistMatrix;
 public final class BioticUtils {
 
     public static Double getLengthInterval(Integer i) {
+        if(i == null) {
+            return 1d; // cm
+        }
         switch (i) {
             case 6:
                 return 0.05;

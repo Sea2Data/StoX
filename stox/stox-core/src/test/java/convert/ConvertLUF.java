@@ -12,6 +12,8 @@ import java.nio.file.Paths;
 import java.util.List;
 import java.util.stream.Collectors;
 import no.imr.sea2data.echosounderbo.DistanceBO;
+import no.imr.sea2data.echosounderbo.FrequencyBO;
+import no.imr.sea2data.echosounderbo.SABO;
 import no.imr.stox.functions.acoustic.ListUser20Writer;
 import no.imr.stox.functions.acoustic.ReadAcousticXML;
 import org.junit.Ignore;
@@ -21,7 +23,7 @@ import org.junit.Test;
  *
  * @author aasmunds
  */
-@Ignore
+//@Ignore
 public class ConvertLUF {
 
     class LogPos {
@@ -72,7 +74,7 @@ public class ConvertLUF {
                 .orElse(null);
     }
 
-    @Test
+    //@Test
     public void convert() {
         String fileName = "E:\\SigbjørnMehl\\2008202\\ListUserFile20__L1660.0-5539.0.txt";
         List<DistanceBO> dist = ReadAcousticXML.perform(fileName);
@@ -84,5 +86,40 @@ public class ConvertLUF {
             d.setLon_stop(lp.getLon());
         });
         ListUser20Writer.export("2008202", "58", "1019", "E:\\SigbjørnMehl\\2008202\\echosounder_cruiseNumber_2008202_Johan+Hjort-2.xml", dist);
+    }
+
+    @Test
+    public void convertBubble() {
+        convertBubble("E:\\Are\\acoustic\\echosounder_cruiseNumber_2019840_Kings+Bay", "2019840", "58", "3223");
+        convertBubble("E:\\Are\\acoustic\\echosounder_cruiseNumber_2019841_Eros", "2019841", "58", "3317");
+        convertBubble("E:\\Are\\acoustic\\echosounder_cruiseNumber_2019842_Vendla", "2019842", "58", "3206");
+    }
+
+    public void convertBubble(String fileName, String cruise, String nation, String platform) {
+        List<DistanceBO> dist = ReadAcousticXML.perform(fileName + ".xml");
+        boolean found = false;
+        for (DistanceBO d : dist) {
+            for (FrequencyBO f : d.getFrequencies()) {
+                if (f.getBubble_corr() != null && f.getBubble_corr() != 1.0d) {
+                    found = true;
+                    System.out.println("distance " + d.toString());
+                }
+                for (SABO s : f.getSa()) {
+                    if (s.getSa() != null && f.getBubble_corr() != null && f.getBubble_corr() != 1.0d) {
+                        s.setSa(s.getSa() / f.getBubble_corr());
+                    }
+                }
+            }
+        }
+        /*getCorrection().stream().forEach(lp -> {
+            DistanceBO d = getDistance(dist, lp.getLog());
+            d.setLat_start(lp.getLat());
+            d.setLat_stop(lp.getLat());
+            d.setLon_start(lp.getLon());
+            d.setLon_stop(lp.getLon());
+        });*/
+        if (found) {
+            ListUser20Writer.export(cruise, nation, platform, fileName + "-corr" + ".xml", dist);
+        }
     }
 }
