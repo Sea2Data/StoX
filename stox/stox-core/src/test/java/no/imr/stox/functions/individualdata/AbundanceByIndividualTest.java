@@ -87,8 +87,8 @@ public class AbundanceByIndividualTest {
         s.bo().setCatchpartnumber(Integer.SIZE);
         IndividualBO i = s.addIndividual();
         i.bo().setSpecimenid(1);
-        i.bo().setLength(10d);
-        i.bo().setIndividualweight(50d);
+        i.setLengthCM(10d);
+        i.setIndividualWeightG(50d);
         inds.add(i);
         return inds;
     }

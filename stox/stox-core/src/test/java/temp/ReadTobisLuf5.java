@@ -31,11 +31,11 @@ public class ReadTobisLuf5 {
         /*Map<String, Object> input = new HashMap<>();
         input.put(Functions.PM_READACOUSTICLUF5_FILENAME, "C:\\Data\\Øyvind\\2006AA\\LUF5");
         List<DistanceBO> distances = (List<DistanceBO>) (new ReadAcousticLUF5()).perform(input);
-        ListUser20Writer.export("luf5", "58", "1", "C:\\Data\\Øyvind\\2006AA\\LUF5.xml", distances);*/
+        ListUser20Writer.export("luf5", "58", "1", "C:\\Data\\Øyvind\\2006AA\\LUF5.xml", distances);
         Map<String, Object> input = new HashMap<>();
         input.put(Functions.PM_READACOUSTICLUF5_FILENAME, "C:\\Users\\aasmunds\\workspace\\stox\\project\\IESNS2013\\input\\acoustic\\ListUserFile05__F038000_T2_L3183.0-8359.0_HERR.txt");
         List<DistanceBO> distances = (List<DistanceBO>) (new ReadAcousticLUF5()).perform(input);
-        ListUser20Writer.export("luf5", "58", "1", "C:\\Users\\aasmunds\\workspace\\stox\\project\\IESNS2013\\input\\acoustic\\LUF5.xml", distances);
+        ListUser20Writer.export("luf5", "58", "1", "C:\\Users\\aasmunds\\workspace\\stox\\project\\IESNS2013\\input\\acoustic\\LUF5.xml", distances);*/
 
     }
 }

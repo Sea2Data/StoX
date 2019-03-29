@@ -16,17 +16,17 @@ import no.imr.stox.functions.utils.Functions;
  *
  * @author aasmunds
  */
-public class RectangleArea extends AbstractFunction {
+public class RectangleArea {//extends AbstractFunction {
 
     /**
      *
      * @param input contains Polygon file name
      * @return Matrix object of type POLYGONAREA_MATRIX - see
      * DataTypeDescription.txt
-     */
+     *//*
     @Override
     public Object perform(Map<String, Object> input) {
         ProcessDataBO pd = (ProcessDataBO) input.get(Functions.PM_RECTANGLEAREA_PROCESSDATA);
         return AbndEstProcessDataUtil.getPolygonArea(AbndEstProcessDataUtil.getRectanglePolygons(pd));
-    }
+    }*/
 }

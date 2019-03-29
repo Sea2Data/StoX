@@ -24,6 +24,13 @@ public final class ExportUtil {
         return tabbed + "\r\n";
     }
 
+    public static class HiddenObj {
+    }
+
+    public static Object getObj(Object o, boolean hidden) {
+        return hidden ? new HiddenObj() : o;
+    }
+
     public static String separatedMissingStr(char sep, String missingStr, Object... params) {
         if (params.length == 1 && params[0] instanceof List) {
             List l = (List) params[0];
@@ -35,6 +42,9 @@ public final class ExportUtil {
         String res = "";
         for (int i = 0; i < params.length; i++) {
             Object p = params[i];
+            if (p != null && p instanceof HiddenObj) {
+                continue;
+            }
             if (i > 0) {
                 res += sep;
             }

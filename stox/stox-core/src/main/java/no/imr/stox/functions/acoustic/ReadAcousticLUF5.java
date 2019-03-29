@@ -27,9 +27,9 @@ import no.imr.stox.functions.utils.Functions;
  *
  * @author Åsmund
  */
-public class ReadAcousticLUF5 extends AbstractFunction {
+public class ReadAcousticLUF5 {
 
-    @Override
+    /*@Override
     public Object perform(Map<String, Object> input) {
         String fileName = (String) input.get(Functions.PM_READACOUSTICLUF5_FILENAME);
         List<DistanceBO> distances = (List<DistanceBO>) input.get(Functions.PM_READACOUSTICLUF5_ACOUSTICDATA);
@@ -38,7 +38,7 @@ public class ReadAcousticLUF5 extends AbstractFunction {
             fileName = (String) input.get(Functions.PM_PROJECTFOLDER) + "/" + fileName;
         }
         return perform(fileName, distances);
-    }
+    }*/
 
     public static List<DistanceBO> perform(String fileName, List<DistanceBO> distances) {
         if (distances == null) {

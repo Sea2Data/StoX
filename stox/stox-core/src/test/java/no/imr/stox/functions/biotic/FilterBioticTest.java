@@ -63,9 +63,9 @@ public class FilterBioticTest {
         IndividualBO individ11 = sample11.addIndividual();
         IndividualBO individ12 = sample11.addIndividual();
         IndividualBO individ13 = sample11.addIndividual();
-        individ11.bo().setLength(2d);
-        individ12.bo().setLength(3d);
-        individ13.bo().setLength(5d);
+        individ11.setLengthCM(2d);
+        individ12.setLengthCM(3d);
+        individ13.setLengthCM(5d);
 
         FishstationBO st2 = ms.addFishstation();
         st2.bo().setGearcondition("4");
@@ -79,9 +79,9 @@ public class FilterBioticTest {
         IndividualBO individ21 = sample12.addIndividual();
         IndividualBO individ22 = sample12.addIndividual();
         IndividualBO individ23 = sample12.addIndividual();
-        individ21.bo().setLength(1d);
-        individ22.bo().setLength(3d);
-        individ23.bo().setLength(6d);
+        individ21.setLengthCM(1d);
+        individ22.setLengthCM(3d);
+        individ23.setLengthCM(6d);
 
         List<MissionBO> missions = Arrays.asList(ms);
 

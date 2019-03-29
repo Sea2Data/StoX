@@ -5,6 +5,7 @@
  */
 package no.imr.stox.api;
 
+import java.util.List;
 import javax.swing.JTabbedPane;
 import no.imr.stox.model.IProcess;
 
@@ -14,7 +15,8 @@ import no.imr.stox.model.IProcess;
  */
 public interface IProcessViewer {
 
-    public void openProcess(IProcess p, boolean activate);
+    public void openProcess(IProcess p, boolean activate, int index);
+    public List<String> getOutputList(IProcess p);
     public void closeTab(int tab);
     public void setTabbedPane(JTabbedPane jTabbedPane1);
     public void clear();

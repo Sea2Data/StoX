@@ -54,8 +54,8 @@ public class Factory {
         switch (template) {
             case TEMPLATE_ACOUSTICABUNDANCETRANSECT:
                 return "Acoustic abundance by transect and r-model with uncertainty";
-            case TEMPLATE_ACOUSTICABUNDANCERECTANGLE:
-                return "Acoustic abundance by rectangles";
+            /*case TEMPLATE_ACOUSTICABUNDANCERECTANGLE:
+                return "Acoustic abundance by rectangles";*/
             case TEMPLATE_STATIONLENGTHDIST:
                 return "Station length distribution";
             case TEMPLATE_DATRAS:
@@ -90,10 +90,10 @@ public class Factory {
                 createRWithUncertainty(p.getRModel(), true, Functions.BOOTSTRAPMETHOD_ACOUSTICTRAWL);
                 createRReport(p.getRModelReport(), null);
                 break;
-            case TEMPLATE_ACOUSTICABUNDANCERECTANGLE:
+/*            case TEMPLATE_ACOUSTICABUNDANCERECTANGLE:
                 createAcousticAbundanceRectangleProject(p.getBaseline());
                 createAbundanceReport(p.getBaselineReport(), true, 1.0, 1000, Functions.COL_IND_AGE);
-                break;
+                break;*/
             case TEMPLATE_STATIONLENGTHDIST:
                 createStationLengthDistTemplateProject(p.getBaseline());
                 break;
@@ -234,7 +234,7 @@ public class Factory {
      *
      * @param m
      */
-    public static void createAcousticAbundanceRectangleProject(IModel m) {
+    /*public static void createAcousticAbundanceRectangleProject(IModel m) {
         m.setDescription("Abundance estimation by rectangles");
 
         // Read process data
@@ -295,7 +295,7 @@ public class Factory {
         // Write process data
         m.addProcess(Functions.FN_WRITEPROCESSDATA, Functions.FN_WRITEPROCESSDATA).
                 setRespondInGUI(Boolean.TRUE);
-    }
+    }*/
 
     /**
      * Create Abundance acoustic related functions

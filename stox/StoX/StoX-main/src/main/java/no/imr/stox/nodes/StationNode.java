@@ -121,7 +121,7 @@ public class StationNode extends AbstractNode {
         propSet.setDisplayName("Catch weight");
         Map<String, Double> m = new HashMap<>();
         for (CatchSampleBO s : fs.getCatchSampleBOs()) {
-            String sKey = s.getSpeciesKey();
+            String sKey = s.getSpecCat();
             Double w = s.bo().getCatchweight();
             if (w == null || w == 0) {
                 continue;

@@ -79,9 +79,9 @@ public class StationLengthDistTest {
         s.bo().setLengthsampleweight(50.0);
         s.bo().setCatchpartnumber(1);
         IndividualBO i = s.addIndividual();
-        i.bo().setLength(10d);
+        i.setLengthCM(10d);
         i = s.addIndividual();
-        i.bo().setLength(11d);
+        i.setLengthCM(11d);
         return Arrays.asList(m);
     }
 
@@ -96,9 +96,9 @@ public class StationLengthDistTest {
         s.bo().setCatchweight(100.0);
         s.bo().setCatchpartnumber(1);
         IndividualBO i = s.addIndividual();
-        i.bo().setLength(10d);
+        i.setLengthCM(10d);
         i = s.addIndividual();
-        i.bo().setLength(11d);
+        i.setLengthCM(11d);
         return Arrays.asList(ms);
     }
 
@@ -116,9 +116,9 @@ public class StationLengthDistTest {
         s.bo().setLengthsampleweight(50.0);
         s.bo().setCatchpartnumber(Integer.SIZE);
         IndividualBO i = s.addIndividual();
-        i.bo().setLength(10d);
+        i.setLengthCM(10d);
         i = s.addIndividual();
-        i.bo().setLength(11d);
+        i.setLengthCM(11d);
         
         f = ms.addFishstation();
         f.bo().setSerialnumber(1001);
@@ -129,9 +129,9 @@ public class StationLengthDistTest {
         s.bo().setLengthsampleweight(50.0);
         s.bo().setCatchpartnumber(Integer.SIZE);
         i = s.addIndividual();
-        i.bo().setLength(10d);
+        i.setLengthCM(10d);
         i = s.addIndividual();
-        i.bo().setLength(11d);
+        i.setLengthCM(11d);
         return Arrays.asList(ms);
     }
 }

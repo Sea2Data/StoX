@@ -57,7 +57,7 @@ public class ConvertLengthAndWeight extends AbstractFunction {
                         switch (i.bo().getIndividualproducttype()) {
                             case "3":
                                 // Gutted without head - correct length
-                                Double le = i.bo().getLength();
+                                Double le = i.getLengthCM();
                                 Integer lu = Conversion.safeStringtoIntegerNULL(i.bo().getLengthresolution());
                                 if (le != null && lu != null && hCutFacA != null && hCutFacB != null) {
                                     Double lucm = BioticUtils.getLengthInterval(lu);
@@ -66,17 +66,17 @@ public class ConvertLengthAndWeight extends AbstractFunction {
                             // Drop - to correct weight
                             case "4":
                                 // Gutted with head - correct weight
-                                w = i.bo().getIndividualweight();
+                                w = i.getIndividualWeightG();
                                 Double wFac = i.bo().getIndividualproducttype().equals("3") ? wGutHeadOff : wGutHeadOn;
                                 if (w != null && wFac != null) {
                                     w = w * wFac;
                                 }
                         }
                         if (w != null) {
-                            i.bo().setIndividualweight(w); // Set weight in g
+                            i.setIndividualWeightG(w); // Set weight in g
                         }
                         if (l != null) {
-                            i.bo().setLength(l); // set length in cm
+                            i.setLengthCM(l); // set length in cm
                         }
                         if (w != null || l != null) {
                             i.bo().setIndividualproducttype(1 + "");

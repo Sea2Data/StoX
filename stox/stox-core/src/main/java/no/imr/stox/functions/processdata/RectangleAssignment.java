@@ -24,14 +24,14 @@ import no.imr.stox.functions.utils.RectangleUtil;
  *
  * @author Åsmund
  */
-public class RectangleAssignment extends AbstractFunction {
+public class RectangleAssignment {//extends AbstractFunction {
 
     /**
      *
      * @param input
      * @return
      */
-    @Override
+    /*@Override
     public Object perform(Map<String, Object> input) {
         ProcessDataBO pd = (ProcessDataBO) input.get(Functions.PM_RECTANGLEASSIGNMENT_PROCESSDATA);
         List<MissionBO> missions = (List<MissionBO>) input.get(Functions.PM_RECTANGLEASSIGNMENT_BIOTICDATA);
@@ -82,5 +82,5 @@ public class RectangleAssignment extends AbstractFunction {
             }
         }
         return pd;
-    }
+    }*/
 }

@@ -8,6 +8,7 @@ import no.imr.stox.bo.SpeciesTSMix;
 import no.imr.stox.functions.utils.Functions;
 import no.imr.stox.functions.utils.ProjectUtils;
 import no.imr.stox.library.IMetaFunction;
+import no.imr.stox.library.IMetaParameter;
 import no.imr.stox.model.IModel;
 import no.imr.stox.model.IProcess;
 import no.imr.stox.model.IProject;
@@ -105,7 +106,7 @@ public final class FactoryUtil {
         }
 
         if (prj.getResourceVersion() < 1.65) {
-            for (String fn : new String[]{Functions.FN_BIOSTATIONASSIGNMENT, Functions.FN_RECTANGLEASSIGNMENT}) {
+            for (String fn : new String[]{Functions.FN_BIOSTATIONASSIGNMENT/*, Functions.FN_RECTANGLEASSIGNMENT*/}) {
                 IProcess prw = prj.getBaseline().findProcessByFunction(fn);
                 if (prw != null) {
                     prw.setParameterValue("EstLayers", "1" + "~" + Functions.WATERCOLUMN_PELBOT);
@@ -194,6 +195,40 @@ public final class FactoryUtil {
             replaceParameter(prj.getBaseline(), Functions.FN_FILTERBIOTIC, Functions.PM_SPLITNASC_SPECIESTS, "SILD\\'G0", "SILDG0");
         }
 
+        if (prj.getResourceVersion() < 1.89) {
+            replaceParameter(prj.getBaseline(), Functions.FN_FILTERBIOTIC, Functions.PM_FILTERBIOTIC_INDEXPR, "lengthunit", "tinuhtgnel"); // avoid replacinging length in lengthunit by trick
+            replaceParameter(prj.getBaseline(), Functions.FN_FILTERBIOTIC, Functions.PM_FILTERBIOTIC_INDEXPR, "length", "lengthcm"); // use lengthcm instead of length
+            replaceParameter(prj.getBaseline(), Functions.FN_FILTERBIOTIC, Functions.PM_FILTERBIOTIC_INDEXPR, "tinuhtgnel", "lengthunit"); // restore lengthunit by trick
+            IProcess readB = prj.getBaseline().findProcessByFunction(Functions.FN_READBIOTICXML);
+            if (readB != null) {
+                int idxReadB = prj.getBaseline().getProcessList().indexOf(readB);
+                IProcess defInd = prj.getBaseline().insertProcess(Functions.FN_DEFINEINDMEASUREUNIT, Functions.FN_DEFINEINDMEASUREUNIT, idxReadB + 1)
+                        .setParameterProcessValue(Functions.PM_DEFINEINDMEASUREUNIT_BIOTICDATA, readB.getName())
+                        .setParameterValue(Functions.PM_DEFINEINDMEASUREUNIT_LENGTHCM, true)
+                        .setParameterValue(Functions.PM_DEFINEINDMEASUREUNIT_INDIVIDUALWEIGHTG, true);
+                defInd.setFileOutput(false);
+                IProcess defAge = prj.getBaseline().insertProcess(Functions.FN_DEFINEINDAGE, Functions.FN_DEFINEINDAGE, idxReadB + 2)
+                        .setParameterProcessValue(Functions.PM_DEFINEINDAGE_BIOTICDATA, defInd.getName())
+                        .setParameterValue(Functions.PM_DEFINEINDAGE_AGE, true);
+                defAge.setFileOutput(false);
+                IProcess defSpecCat = prj.getBaseline().insertProcess(Functions.FN_DEFINESPECCAT, Functions.FN_DEFINESPECCAT, idxReadB + 3)
+                        .setParameterProcessValue(Functions.PM_DEFINESPECCAT_BIOTICDATA, defAge.getName())
+                        .setParameterValue(Functions.PM_DEFINESPECCAT_SPECCATMETHOD, Functions.SPECCATMETHOD_SELECTVAR)
+                        .setParameterValue(Functions.PM_DEFINESPECCAT_SPECVARBIOTIC, "commonname");
+                defSpecCat.setFileOutput(false);
+                for (int i = idxReadB + 4; i < prj.getBaseline().getProcessList().size(); i++) {
+                    IProcess pr = prj.getBaseline().getProcessList().get(i);
+                    if (pr.getMetaFunction() != null && pr.getMetaFunction().getName().equals(Functions.FN_READBIOTICXML)) {
+                        continue;
+                    }
+                    IMetaParameter mep = pr.getMetaFunction().getMetaParameters().stream()
+                            .filter(mp -> mp.getMetaDataType().getName().equals(Functions.DT_BIOTICDATA)).findFirst().orElse(null);
+                    if (pr.getProcessNameFromParameter(mep) != null && pr.getProcessNameFromParameter(mep).equals(readB.getName())) {
+                        pr.setParameterProcessValue(mep.getName(), defSpecCat.getName());
+                    }
+                }
+            }
+        }
         // Remove processes not pointing to functions
         for (IModel m : prj.getModels().values()) {
             for (int i = m.getProcessList().size() - 1; i >= 0; i--) {
@@ -221,7 +256,6 @@ public final class FactoryUtil {
         }*/
 
     }
-
 
     /*    private static void checkRDataVariable(IProject prj, String functionName, String variableParam, String functionRef) {
         IProcess prw = prj.getRModelReport().findProcessByFunction(functionName);
@@ -251,6 +285,10 @@ public final class FactoryUtil {
 
     private static void replaceParameter(IModel model, String func, String param, String text, String newText) {
         IProcess prw = model.findProcessByFunction(func);
+        replaceParameter(prw, param, text, newText);
+    }
+
+    private static void replaceParameter(IProcess prw, String param, String text, String newText) {
         if (prw != null) {
             String pval = (String) prw.getParameterValue(param);
             if (pval != null) {

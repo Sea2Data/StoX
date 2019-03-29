@@ -20,7 +20,7 @@ import no.imr.stox.log.ILogger;
  *
  * @author aasmunds
  */
-public class DefineRectangle extends AbstractFunction {
+public class DefineRectangle {//extends AbstractFunction {
 
     /**
      *
@@ -28,7 +28,7 @@ public class DefineRectangle extends AbstractFunction {
      * @return
      * @throws no.imr.stox.exception.UserErrorException
      */
-    @Override
+    /*@Override
     public Object perform(Map<String, Object> input) {
         List<DistanceBO> distances = (List<DistanceBO>) input.get(Functions.PM_DEFINERECTANGLE_ACOUSTICDATA);
         ProcessDataBO pd = (ProcessDataBO) input.get(Functions.PM_DEFINERECTANGLE_PROCESSDATA);
@@ -85,5 +85,5 @@ public class DefineRectangle extends AbstractFunction {
             }
         }
         return null;
-    }
+    }*/
 }

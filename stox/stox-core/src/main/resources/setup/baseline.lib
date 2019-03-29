@@ -29,14 +29,14 @@ Parameter: Name=FileName20, Required=false, DataType=String, Description=Path to
 DataStorage: no.imr.stox.datastorage.EchoDataStorage
 Output: AcousticData
 
-[Function]
-Name: ReadAcousticLUF5
-Description: <I>ReadAcousticLUF5</I> reads scrutinized acoustic data (NASC by species and frequency) from files of format ListUser5.<BR><BR>Output data is of format <U>AcousticData</U>. 
-Class: no.imr.stox.functions.acoustic.ReadAcousticLUF5
-Parameter: Name=AcousticData, Required=false, DataType=AcousticData, Description=Path to acoustic data
-Parameter: Name=FileName, DataType=String, Description=Path to acoustic ListUser5 file
-DataStorage: no.imr.stox.datastorage.EchoDataStorage
-Output: AcousticData
+#[Function]
+#Name: ReadAcousticLUF5
+#Description: <I>ReadAcousticLUF5</I> reads scrutinized acoustic data (NASC by species and frequency) from files of format ListUser5.<BR><BR>Output data is of format <U>AcousticData</U>. 
+#Class: no.imr.stox.functions.acoustic.ReadAcousticLUF5
+#Parameter: Name=AcousticData, Required=false, DataType=AcousticData, Description=Path to acoustic data
+#Parameter: Name=FileName, DataType=String, Description=Path to acoustic ListUser5 file
+#DataStorage: no.imr.stox.datastorage.EchoDataStorage
+#Output: AcousticData
 
 [Function]
 Name: FilterAcoustic
@@ -105,6 +105,27 @@ DataStorage:no.imr.stox.datastorage.BioticDataStorage
 Output: BioticData
 
 [Function]
+Name: DefineIndMeasureUnit
+Description: <I>DefineIndMeasureUnit</I> defines and converts existing fields to new units 
+Class: no.imr.stox.functions.biotic.DefineIndMeasureUnit
+Respondable:true
+Parameter: Name=BioticData, Alias=FishStations, Required=true, DataType=BioticData, Description=The <I>BioticData</I> parameter is used to specify which previous process has generated the <U>BioticData</U> input data.
+Parameter: Name=LengthCM, Required=true, DefaultValue=false, DataType=Boolean, Description=The <I>LengthCM</I> parameter is a boolean which determine whether or not to include length in cm
+Parameter: Name=IndividualWeightG, Required=true, DefaultValue=false, DataType=Boolean, Description=The <I>IndividualWeightG</I> parameter is a boolean which determine whether or not to include individual weight in grams.
+DataStorage:no.imr.stox.datastorage.BioticDataStorage
+Output: BioticData
+
+[Function]
+Name: DefineIndAge
+Description: <I>DefineIndAge</I> defines age from agereading to individual
+Class: no.imr.stox.functions.biotic.DefineIndAge
+Respondable:true
+Parameter: Name=BioticData, Alias=FishStations, Required=true, DataType=BioticData, Description=The <I>BioticData</I> parameter is used to specify which previous process has generated the <U>BioticData</U> input data.
+Parameter: Name=Age, Required=true, DefaultValue=false, DataType=Boolean, Description=The <I>Age</I> parameter is a boolean which determine whether or not to include age from agedetermination
+DataStorage:no.imr.stox.datastorage.BioticDataStorage
+Output: BioticData
+
+[Function]
 Name: ConvertLengthAndWeight
 Description: Estimates full length L&#61a*Lgut+b from gutted length, and full weight W&#61f*W from gutted weight. f is the factor for gutted weight (head on or off). The individual product type is used to determine the gut type.
 Class: no.imr.stox.functions.biotic.ConvertLengthAndWeight
@@ -157,14 +178,6 @@ Parameter: Name=SourceType, DataType=String, Values=Landing;Biotic, Description=
 Parameter: Name=LandingData, Required=false, DataType=LandingData, ParentTag=SourceType.Landing, Description=Landing data
 Parameter: Name=BioticData, Required=false, DataType=BioticData, ParentTag=SourceType.Biotic, Description=The <I>BioticData</I> parameter is used to specify which previous process has generated the <U>BioticData</U> input data.
 
-[Function]
-Name: ApplyStratumToBiotic
-Description: <I>ApplyStratumToBiotic</I> applies stratum to biotic based on process data strata
-Class: no.imr.stox.functions.landing.ApplyStratumToBiotic
-Parameter: Name=ProcessData, DataType=ProcessData, Description=The <I>ProcessData</I> parameter is used to specify which previous process has generated the <U>ProcessData</U> input data.<BR><BR>Process data contains information which cannot necessarily be created programmatically&#44; but may be a result of subjective user choices. These data makes it possible to reuse previous manual&#44; subjective data in a new execution. Normally&#44; the function ReadProcessData is the owner of data type <U>ProcessData</U>&#44; but other functions may have modified the content of this memory object during the model execution
-Parameter: Name=BioticData, Alias=FishStations, Required=true, DataType=BioticData, Description=The <I>BioticData</I> parameter is used to specify which previous process has generated the <U>BioticData</U> input data.
-DataStorage:no.imr.stox.datastorage.BioticDataStorage
-Output: BioticData
 
 [Function]
 Name: DefineSpecCat
@@ -370,37 +383,37 @@ Parameter: Name=a, Alias=B, Required=false, DataType=Double, ParentTag=Weighting
 Parameter: Name=MaxNumLengthSamples, Required=false, DataType=Integer, DefaultValue=100, ParentTag=WeightingMethod.NumberOfLengthSamples, Description=The <I>MaxNumLengthSamples</I> parameter is used to set an upper limit for number of samples that can be used as a weighting variable for an assigned biotic station. This parameter is linked to parameter WeightingMethod &#61; NumberOfLengthSamples.
 Output: ProcessData
 
-[Function]
-Name: DefineRectangle
-Class: no.imr.stox.functions.processdata.DefineRectangle
-Respondable:true
-Description: Define rectangles
-Parameter: Name=ProcessData, DataType=ProcessData, Description=Process data
-Parameter: Name=AcousticData, DataType=AcousticData, Description=Acoustic data
-Parameter: Name=Width, DataType=Double, Description=Width of rectangle
-Parameter: Name=Height, DataType=Double, Description=Height of rectangle
-Output: ProcessData
+#[Function]
+#Name: DefineRectangle
+#Class: no.imr.stox.functions.processdata.DefineRectangle
+#Respondable:true
+#Description: Define rectangles
+#Parameter: Name=ProcessData, DataType=ProcessData, Description=Process data
+#Parameter: Name=AcousticData, DataType=AcousticData, Description=Acoustic data
+#Parameter: Name=Width, DataType=Double, Description=Width of rectangle
+#Parameter: Name=Height, DataType=Double, Description=Height of rectangle
+#Output: ProcessData
 
 
-[Function]
-Name: RectangleArea
-Description: Calculate area of psu rectangles clipped against strata area in process data
-Class: no.imr.stox.functions.processdata.RectangleArea
-Parameter: Name=ProcessData, DataType=ProcessData, Description=Process data
-DataStorage: no.imr.stox.datastorage.MatricesStorage
-Output:  PolygonArea
+#[Function]
+#Name: RectangleArea
+#Description: Calculate area of psu rectangles clipped against strata area in process data
+#Class: no.imr.stox.functions.processdata.RectangleArea
+#Parameter: Name=ProcessData, DataType=ProcessData, Description=Process data
+#DataStorage: no.imr.stox.datastorage.MatricesStorage
+#Output:  PolygonArea
 
-[Function]
-Name: RectangleAssignment
-Class: no.imr.stox.functions.processdata.RectangleAssignment
-Respondable:true
-Description: Auto assign all trawl stations within rectangles to all acoustic distances in the rectangle, no weighting.
-Parameter: Name=ProcessData, DataType=ProcessData, Description=Process data
-Parameter: Name=BioticData, Alias=FishStations, DataType=BioticData, Description=Fish stations
-Parameter: Name=NASC, Alias=SA, DataType=NASC, Description=NASC Matrix, Description=NASC matrix
-Parameter: Name=UseProcessData, Required=false, DefaultValue=false, DataType=Boolean, Description=if true use existing assignments
-Parameter: Name=EstLayers, DataType=String, Description=Estimation layer definition. Example '1~(1-16) 2~(17-32)' or '1~PEL 2~BOT or 1~PELBOT'.   
-Output: ProcessData
+#[Function]
+#Name: RectangleAssignment
+#Class: no.imr.stox.functions.processdata.RectangleAssignment
+#Respondable:true
+#Description: Auto assign all trawl stations within rectangles to all acoustic distances in the rectangle, no weighting.
+#Parameter: Name=ProcessData, DataType=ProcessData, Description=Process data
+#Parameter: Name=BioticData, Alias=FishStations, DataType=BioticData, Description=Fish stations
+#Parameter: Name=NASC, Alias=SA, DataType=NASC, Description=NASC Matrix, Description=NASC matrix
+#Parameter: Name=UseProcessData, Required=false, DefaultValue=false, DataType=Boolean, Description=if true use existing assignments
+#Parameter: Name=EstLayers, DataType=String, Description=Estimation layer definition. Example '1~(1-16) 2~(17-32)' or '1~PEL 2~BOT or 1~PELBOT'.   
+#Output: ProcessData
 
 
 [Function]
@@ -471,16 +484,16 @@ Parameter: Name=BioticData, Required=false, DataType=BioticData, Description=Fis
 DataStorage: no.imr.stox.datastorage.LengthWeightRelationshipDataStorage
 Output: LengthWeightRelationship
 
-[Function]
-Name: LarvaeDensity
-Description: The <I>LarvaeDensity</I> function calculates length distributed area densities as number of larvae per cubic meter per meter in the water column. 
-Class: no.imr.stox.functions.density.LarvaeDensity
-Parameter: Name=ProcessData, DataType=ProcessData, Description=The <I>ProcessData</I> parameter is used to identify which previously executed function has generated the input <U>ProcessData</U> object.<BR><BR> Definitions of EDSUs&#44; PSUs and Strata are contained in the <U>ProcessData</U> input object. Generic mechanisms in StoX are used whenever densities are to be calculated.  The relationship between EDSU&#44; PSU and Stratum is key information when densities are to be calculated.
-Parameter: Name=LengthDist, DataType=LengthDist, Description=The <I>LengthDist</I> parameter is used to identify which previous process in the model has generated the dataset of data type <U>LengthDist</U> to be used.<BR><BR> The length distribution &#40;length based number of fish per nautical mile&#41; is used together with the sweep width of the trawl to calculate length based area densities as number of fish per square nautical mile.<BR><BR><B>WARNING&#33;</B><BR>In this function it is a requirement that the input <U>LengthDist</U> data object is of length distribution type <B>NormLengthDist</B>.
-Parameter: Name=BioticData, Alias=FishStations, DataType=BioticData, Description=Fish stations
-Parameter: Name=GearOpeningArea, DataType=String,  Description=The <I>GearOpeningArea</I> (comma spearated list of gear:area in sq.m) specifies the opening area per gear type.
-DataStorage: no.imr.stox.datastorage.DensityStorage
-Output: Density
+#[Function]
+#Name: LarvaeDensity
+#Description: The <I>LarvaeDensity</I> function calculates length distributed area densities as number of larvae per cubic meter per meter in the water column. 
+#Class: no.imr.stox.functions.density.LarvaeDensity
+#Parameter: Name=ProcessData, DataType=ProcessData, Description=The <I>ProcessData</I> parameter is used to identify which previously executed function has generated the input <U>ProcessData</U> object.<BR><BR> Definitions of EDSUs&#44; PSUs and Strata are contained in the <U>ProcessData</U> input object. Generic mechanisms in StoX are used whenever densities are to be calculated.  The relationship between EDSU&#44; PSU and Stratum is key information when densities are to be calculated.
+#Parameter: Name=LengthDist, DataType=LengthDist, Description=The <I>LengthDist</I> parameter is used to identify which previous process in the model has generated the dataset of data type <U>LengthDist</U> to be used.<BR><BR> The length distribution &#40;length based number of fish per nautical mile&#41; is used together with the sweep width of the trawl to calculate length based area densities as number of fish per square nautical mile.<BR><BR><B>WARNING&#33;</B><BR>In this function it is a requirement that the input <U>LengthDist</U> data object is of length distribution type <B>NormLengthDist</B>.
+#Parameter: Name=BioticData, Alias=FishStations, DataType=BioticData, Description=Fish stations
+#Parameter: Name=GearOpeningArea, DataType=String,  Description=The <I>GearOpeningArea</I> (comma spearated list of gear:area in sq.m) specifies the opening area per gear type.
+#DataStorage: no.imr.stox.datastorage.DensityStorage
+#Output: Density
 
 [Function]
 Name: MeanDensity
@@ -556,14 +569,14 @@ Parameter: Name=IndividualDataStations, Alias=IndividualDataSelection, DataType=
 DataStorage:no.imr.stox.datastorage.IndividualDataStorage
 Output:  IndividualData
 
-[Function]
-Name: CorrectForInnsufficientSampling
-Description: Correct for insufficient sampling by using individuals from other strata at estlayer/lengroup
-Class: no.imr.stox.functions.individualdata.CorrectForInnsufficientSampling
-Parameter: Name=Abundance, Alias=AbundanceByLength, DataType=Abundance, Description=Abundance
-Parameter: Name=IndividualData, DataType=IndividualData, Description=Individual data
-DataStorage:no.imr.stox.datastorage.IndividualDataStorage
-Output: IndividualData
+#[Function]
+#Name: CorrectForInnsufficientSampling
+#Description: Correct for insufficient sampling by using individuals from other strata at estlayer/lengroup
+#Class: no.imr.stox.functions.individualdata.CorrectForInnsufficientSampling
+#Parameter: Name=Abundance, Alias=AbundanceByLength, DataType=Abundance, Description=Abundance
+#Parameter: Name=IndividualData, DataType=IndividualData, Description=Individual data
+#DataStorage:no.imr.stox.datastorage.IndividualDataStorage
+#Output: IndividualData
 
 [Function]
 Name: SuperIndAbundance
@@ -686,13 +699,6 @@ Parameter: Name=LandingCovData, Required=true, DataType=LandingCovData, Descript
 DataStorage: no.imr.stox.datastorage.LandingWeightCovDataStorage
 Output: LandingWeightCovData
 
-#[Function]
-#Name: SampleUnit
-#Description: EDSU, PSU and Stratum merged
-#Class: no.imr.stox.functions.processdata.SampleUnit
-#Parameter: Name=ProcessData, DataType=ProcessData, Description=The <I>ProcessData</I> parameter is used to identify the sampleunits for EDSU, PSU and Stratum.
-#DataStorage: no.imr.stox.datastorage.SampleUnitStorage
-#Output: SampleUnit
 
 [Function]
 Name: StationSpecCatDensity

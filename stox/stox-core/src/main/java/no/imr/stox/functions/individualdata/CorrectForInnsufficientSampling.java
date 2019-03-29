@@ -21,8 +21,8 @@ import no.imr.stox.functions.utils.StoXMath;
  *
  * @author aasmunds
  */
-public class CorrectForInnsufficientSampling extends AbstractFunction {
-
+public class CorrectForInnsufficientSampling /*extends AbstractFunction*/ {
+/*
     @Override
     public Object perform(Map<String, Object> input) {
         // result = Matrix[GROUP~Species / ROW~Stratum / COL~EstLayer / CELL~LengthGroup / VAR~IndividualList]
@@ -57,21 +57,13 @@ public class CorrectForInnsufficientSampling extends AbstractFunction {
                             }
                         }
                         // If no other strata contains individual, estimate it by le-we regression:
-                        /*if (indList.isEmpty()) {
-                            IndividualBO i = new IndividualBO();
-                            Double length = StoXMath.getLength(Conversion.safeStringtoDoubleNULL(lenGrp), lenInterval);
-                            i.setLength(ImrMath.safeMult(0.01, length));
-                            // We need to estimate the biomass for this representation with linear regression from all length groups within estimation layer:
-                            i.setIndividualweight(ImrMath.safeMult(0.001, getEstimatedWeight(indData.getData(), species, estLayer, length)));
-                            indList.add(i);
-                        }*/
                         result.getData().setGroupRowColCellValue(species, stratum, estLayer, lenGrp, indList);
                     }
                 }
             }
         }
         return result;
-    }
+    }*/
 
     /**
      * Estimate
@@ -83,7 +75,7 @@ public class CorrectForInnsufficientSampling extends AbstractFunction {
      * @param length
      * @return estimated weight by L/W relationship
      */
-    private Double getEstimatedWeight(MatrixBO indData, String species, String estLayer, Double length) {
+    /*private Double getEstimatedWeight(MatrixBO indData, String species, String estLayer, Double length) {
         List<IndividualBO> indList = new ArrayList<>();
         MatrixBO group = (MatrixBO) indData.getValue(species);
         for (String stratum : group.getKeys()) {
@@ -109,5 +101,5 @@ public class CorrectForInnsufficientSampling extends AbstractFunction {
         }
         return null;
 
-    }
+    }*/
 }

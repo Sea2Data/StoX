@@ -5,7 +5,9 @@
  */
 package no.imr.sea2data.stox.components.table;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import javax.swing.JOptionPane;
 import javax.swing.JTabbedPane;
@@ -22,7 +24,7 @@ import org.openide.util.lookup.ServiceProvider;
 public class ProcessViewerImpl implements IProcessViewer {
 
     JTabbedPane tabbedPane;
-    Map<String, Integer[]> views = new HashMap<>();
+    Map<String, Integer> views = new HashMap<>();
 
     @Override
     public void setTabbedPane(JTabbedPane tabbedPane) {
@@ -30,7 +32,29 @@ public class ProcessViewerImpl implements IProcessViewer {
     }
 
     @Override
-    public void openProcess(IProcess p, boolean activate) {
+    public List<String> getOutputList(IProcess p) {
+        List<String> res = new ArrayList<>();
+        IDataStorage ds = OutputPanel.getDataStorage(p);
+        if (ds == null) {
+            return null;
+        }
+        int n = ds.getNumDataStorageFiles();
+        if (n == 0) {
+            return null;
+        }
+        if (n == 1) {
+            res.add(p.getProcessName());
+        } else {
+            for (int i = 0; i < n; i++) {
+                String postfix = n > 1 ? ds.getStorageFileNamePostFix(i + 1) : "";
+                res.add(postfix);
+            }
+        }
+        return res;
+    }
+
+    @Override
+    public void openProcess(IProcess p, boolean activate, int index) {
         if (p == null || tabbedPane == null) {
             return;
         }
@@ -49,14 +73,14 @@ public class ProcessViewerImpl implements IProcessViewer {
             return;
         }
         //Map<Integer, OutputPanel> map = new HashMap<>();
-        Integer[] idx = views.get(p.getProcessName());
-        if (idx == null) {
-            if (!activate) {
-                return;
-            }
-            idx = new Integer[n];
-            for (int i = 0; i < n; i++) {
-                idx[i] = tabbedPane.getTabCount();
+        int first = index == -1 ? 0 : index;
+        int last = index == -1 ? n - 1 : index;
+        for (int i = first; i <= last; i++) {
+            String outputPanelKey = p.getProcessName() + "-" + i;
+            Integer idx = views.get(outputPanelKey);
+            if (idx == null) {
+                views.put(outputPanelKey, idx);
+                idx = tabbedPane.getTabCount();
                 OutputPanel panel = new OutputPanel(p, i);
                 //map.put(idx[i], panel);
                 //panel.gtadd(panel, BorderLayout.CENTER);
@@ -64,23 +88,15 @@ public class ProcessViewerImpl implements IProcessViewer {
                 String name = p.getProcessName() + (n > 1 ? "(" + postfix + ")" : "");
                 tabbedPane.addTab(name, panel);
                 panel.setTabName(name);
-                tabbedPane.setToolTipTextAt(idx[i], ds.getStorageFileName(i + 1));
-            }
-            views.put(p.getProcessName(), idx);
-        }
-        if (idx != null) {
-            for (int i = 0; i < idx.length; i++) {
-                int iTab = idx[i];
-                OutputPanel panel = (OutputPanel) tabbedPane.getComponentAt(iTab);
+                tabbedPane.setToolTipTextAt(idx, ds.getStorageFileName(i + 1));
                 String res = ds.asTable(p.getOutput(), i + 1, true);
                 panel.setText(res);
                 res = FormattedOutput.formatTable(res);
                 panel.getTextArea().setText(res);
                 panel.getTextArea().setCaretPosition(0);
-
             }
             if (activate) {
-                tabbedPane.setSelectedIndex(idx[0]);
+                tabbedPane.setSelectedIndex(idx);
                 tabbedPane.requestFocus();
             }
         }
@@ -94,7 +110,7 @@ public class ProcessViewerImpl implements IProcessViewer {
         for (int tab = tabbedPane.getTabCount() - 1; tab >= 0; tab--) {
             closeTab(tab);
         }
-/*            tabbedPane.removeAll();
+        /*            tabbedPane.removeAll();
             views.clear();*/
     }
 

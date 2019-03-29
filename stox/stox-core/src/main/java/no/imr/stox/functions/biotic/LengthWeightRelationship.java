@@ -78,9 +78,9 @@ public class LengthWeightRelationship extends AbstractFunction {
             for (int i = 0; i < indList.size(); i++) {
                 IndividualBO row = indList.get(i);
                 Double lengthInterval = BioticUtils.getLengthInterval(Conversion.safeStringtoIntegerNULL(row.bo().getLengthresolution()));
-                Double length = StoXMath.getLength(row.bo().getLength(), lengthInterval);
+                Double length = StoXMath.getLength(row.getLengthCM(), lengthInterval);
                 lenInCM[i] = length;
-                wInGrams[i] = row.bo().getIndividualweight();
+                wInGrams[i] = row.getIndividualWeightG();
             }
             LWRelationship lwr = LWRelationship.getLWRelationship(lenInCM, wInGrams);
             //lwr.get
@@ -97,7 +97,7 @@ public class LengthWeightRelationship extends AbstractFunction {
                 .flatMap(b -> b.getCatchSampleBOs().stream())
                 .filter(c -> c.bo().getAphia() != null)
                 .flatMap(b -> b.getIndividualBOs().stream())
-                .filter(i -> i.bo().getIndividualweight() != null && i.bo().getIndividualweight() > 0d && i.bo().getLength() != null && i.bo().getLength() > 0d)
+                .filter(i -> i.getIndividualWeightG() != null && i.getIndividualWeightG() > 0d && i.getLengthCM() != null && i.getLengthCM() > 0d)
                 .collect(Collectors.groupingBy(i -> i.getCatchSample().bo().getAphia(), Collectors.toList()));
 
     }

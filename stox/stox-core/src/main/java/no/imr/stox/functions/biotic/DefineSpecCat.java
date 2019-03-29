@@ -14,6 +14,7 @@ import java.util.logging.Logger;
 import no.imr.stox.functions.utils.Functions;
 import no.imr.stox.functions.AbstractFunction;
 import no.imr.sea2data.biotic.bo.MissionBO;
+import no.imr.stox.bo.BioticData;
 import no.imr.stox.functions.utils.BioticUtils;
 import no.imr.stox.functions.utils.ProjectUtils;
 import no.imr.stox.functions.utils.ReflectionUtil;
@@ -61,8 +62,9 @@ public class DefineSpecCat extends AbstractFunction {
     @Override
     public Object perform(Map<String, Object> input) {
         ILogger logger = (ILogger) input.get(Functions.PM_LOGGER);
-        List<MissionBO> mList = (List<MissionBO>) input.get(Functions.PM_DEFINESPECCAT_BIOTICDATA);
-        List<MissionBO> missions = BioticUtils.copyBioticData(mList);
+        BioticData mList = (BioticData) input.get(Functions.PM_DEFINESPECCAT_BIOTICDATA);
+        BioticData missions = BioticUtils.copyBioticData(mList);
+        missions.setSpecCatAdded(true);
         String specCat = (String) input.get(Functions.PM_DEFINESPECCAT_SPECCAT);
         String specCatMethod = (String) input.get(Functions.PM_DEFINESPECCAT_SPECCATMETHOD);
         String specVarBiotic = (String) input.get(Functions.PM_DEFINESPECCAT_SPECVARBIOTIC);

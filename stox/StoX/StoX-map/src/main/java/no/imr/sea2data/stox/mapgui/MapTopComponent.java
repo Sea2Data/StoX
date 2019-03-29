@@ -230,8 +230,8 @@ public final class MapTopComponent extends TopComponent implements LookupListene
                 case Functions.FN_FILTERACOUSTIC:
                     stoxBar.getAcousticAbsenceAction().setEnabled(true);
                     break;
-                case Functions.FN_DEFINERECTANGLE:
-                    checkRectangleLayer();
+/*                case Functions.FN_DEFINERECTANGLE:
+                    checkRectangleLayer();*/
                 // Drop to set handler
                 case Functions.FN_DEFINEACOUSTICPSU:
                     checkAcousticLayer();
@@ -239,8 +239,8 @@ public final class MapTopComponent extends TopComponent implements LookupListene
                     stoxBar.getStationSelectAction().setEnabled(false);
                     stoxBar.getTransectAction().setEnabled(true);
                     break;
-                case Functions.FN_RECTANGLEASSIGNMENT:
-                    checkRectangleLayer();
+                /*case Functions.FN_RECTANGLEASSIGNMENT:
+                    checkRectangleLayer();*/
                 // Drop to set handler
                 case Functions.FN_BIOSTATIONASSIGNMENT:
                     checkAcousticLayer();
@@ -358,7 +358,7 @@ public final class MapTopComponent extends TopComponent implements LookupListene
                 case Functions.FN_FILTERBIOTIC:
                     stoxBar.getStationSelectAction().setEnabled(false);
                     break;
-                case Functions.FN_DEFINERECTANGLE:
+//                case Functions.FN_DEFINERECTANGLE:
                 // Drop to set handler
                 case Functions.FN_DEFINEACOUSTICPSU:
                     stoxBar.getTransectAction().setEnabled(false);
@@ -366,7 +366,7 @@ public final class MapTopComponent extends TopComponent implements LookupListene
                     // Clear selection in acoustic layer
                     FeatureUtil.clearLayerSelection(setup.getAcousticFeatures(), setup.getAcousticLayer());
                     break;
-                case Functions.FN_RECTANGLEASSIGNMENT:
+  //              case Functions.FN_RECTANGLEASSIGNMENT:
                 // Drop to set handler
                 case Functions.FN_BIOSTATIONASSIGNMENT:
                     stoxBar.getStationSelectAction().setEnabled(false);
@@ -395,12 +395,12 @@ public final class MapTopComponent extends TopComponent implements LookupListene
         }
     }
 
-    private void checkRectangleLayer() {
+    /*private void checkRectangleLayer() {
         if (setup.getRectangleLayer() == null) {
             setup.addRectangleLayer(AbndEstProcessDataUtil.getPSUStrata(
                     Lookup.getDefault().lookup(ProcessDataProvider.class).getPd()).getRowKeys());
         }
-    }
+    }*/
 
     List<DistanceBO> searchDistances(List<DistanceBO> dist, boolean absence, String grp) {
         return dist.stream().parallel().filter(d -> {

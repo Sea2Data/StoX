@@ -45,7 +45,7 @@ public class CatchSampleBO extends BaseBO {
 
     @Override
     public String getInternalKey() {
-        return getSpeciesKey() + "/" + bo().getCatchpartnumber();
+        return bo().getCatchsampleid() != null ? bo().getCatchsampleid() + "" : "";
     }
 
     /**

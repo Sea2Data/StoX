@@ -279,7 +279,7 @@ public final class MapUtils {
     }
 
     public static void onAssignmentEdited() {
-        onFunctionEditedUseProcessData(Functions.FN_RECTANGLEASSIGNMENT, Functions.PM_RECTANGLEASSIGNMENT_USEPROCESSDATA);
+        //onFunctionEditedUseProcessData(Functions.FN_RECTANGLEASSIGNMENT, Functions.PM_RECTANGLEASSIGNMENT_USEPROCESSDATA);
 
         IModel model = Lookup.getDefault().lookup(ProcessDataProvider.class).getModel();
         if (model == null) {

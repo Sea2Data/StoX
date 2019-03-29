@@ -134,6 +134,9 @@ public final class FilterUtils {
             // grams and cm filter
             context.set("weight", ii.bo().getIndividualweight());
             context.set("length", ii.bo().getLength());
+            // with units
+            context.set("individualweightg", ii.getIndividualWeightG());
+            context.set("lengthcm", ii.getLengthCM());
 
             // old field names support
             context.set("no", ii.bo().getSpecimenid());

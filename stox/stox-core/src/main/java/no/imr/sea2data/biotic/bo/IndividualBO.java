@@ -9,7 +9,9 @@ import java.util.List;
 public class IndividualBO extends BaseBO implements Serializable {
 
     private List<AgeDeterminationBO> ageDeterminationBOs = new ArrayList<>();
-
+    Double lengthCM;
+    Double individualWeightG;
+    
     public IndividualBO(CatchSampleBO sampleF, IndividualType i) {
         super(sampleF, i);
     }
@@ -24,6 +26,22 @@ public class IndividualBO extends BaseBO implements Serializable {
 
     public CatchSampleBO getCatchSample() {
         return (CatchSampleBO) getParent();
+    }
+
+    public Double getLengthCM() {
+        return lengthCM;
+    }
+
+    public void setLengthCM(Double lengthCM) {
+        this.lengthCM = lengthCM;
+    }
+
+    public Double getIndividualWeightG() {
+        return individualWeightG;
+    }
+
+    public void setIndividualWeightG(Double individualWeightG) {
+        this.individualWeightG = individualWeightG;
     }
 
     public Integer getAge() {

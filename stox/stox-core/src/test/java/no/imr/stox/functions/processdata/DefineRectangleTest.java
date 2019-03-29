@@ -28,7 +28,7 @@ import org.junit.Test;
  */
 public class DefineRectangleTest {
 
-    @Test
+/*    @Test
     public void test() {
         Map<String, Object> input = getInput();
         ProcessDataBO pd = (ProcessDataBO) input.get(Functions.PM_DEFINERECTANGLE_PROCESSDATA);
@@ -74,5 +74,5 @@ public class DefineRectangleTest {
         d.setLon_start(0.25);
         distances.add(d);
         return distances;
-    }
+    }*/
 }

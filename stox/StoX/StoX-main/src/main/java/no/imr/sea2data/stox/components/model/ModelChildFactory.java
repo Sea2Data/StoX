@@ -37,7 +37,7 @@ public class ModelChildFactory extends ChildFactory<IProcess> {
 //    ActionUI runThisAction;
     ActionUI triggerRAction;
     ActionUI addProcessAction;
-    ActionUI viewOutputAction;
+//    ActionUI viewOutputAction;
     ActionUI breakInGUIAction;
     JComponent anc;
     private IProcess activeProcess = null;
@@ -190,13 +190,13 @@ public class ModelChildFactory extends ChildFactory<IProcess> {
                 }, () -> {
                     return isRunnable();
                 });
-        viewOutputAction = ActionUI.get("viewoutput", "View output", "images/nb-debugging.png", null, null, null,
+        /*viewOutputAction = ActionUI.get("viewoutput", "View output", "images/nb-debugging.png", null, null, null,
                 KeyEvent.VK_A, "View output",
                 ae -> {
                     viewAction(ae);
                 }, () -> {
                     return isRunnable() && getActiveProcess() != null && getActiveProcess().getOutput() != null;
-                });
+                });*/
     }
 
     private void runAction(Integer iStart, Integer iStop, Boolean breakable) {
@@ -243,7 +243,7 @@ public class ModelChildFactory extends ChildFactory<IProcess> {
         }
     }
 
-    public void viewAction(ActionEvent e) {
+/*    public void viewAction(ActionEvent e) {
         if (getActiveProcess() == null) {
             return;
         }
@@ -251,7 +251,7 @@ public class ModelChildFactory extends ChildFactory<IProcess> {
         if (viewer != null) {
             viewer.openProcess(getActiveProcess(), true);
         }
-    }
+    }*/
 
     public ActionUI getRunAction() {
         return runAction;
@@ -284,9 +284,9 @@ public class ModelChildFactory extends ChildFactory<IProcess> {
         return addProcessAction;
     }
 
-    public ActionUI getViewOutputAction() {
+  /*  public ActionUI getViewOutputAction() {
         return viewOutputAction;
-    }
+    }*/
 
     public ActionUI getBreakInGUIAction() {
         return breakInGUIAction;
@@ -304,7 +304,7 @@ public class ModelChildFactory extends ChildFactory<IProcess> {
         getModel().reset();
     }
 
-    private boolean isRunnable() {
+    public boolean isRunnable() {
         return getModel() != null && getModel().getRunState() == IModel.RUNSTATE_STOPPED;
     }
 

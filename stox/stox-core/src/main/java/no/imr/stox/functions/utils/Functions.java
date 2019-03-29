@@ -136,6 +136,15 @@ public final class Functions {
     public static final String PM_FILTERBIOTIC_SAMPLEEXPR = "SampleExpr";
     public static final String PM_FILTERBIOTIC_INDEXPR = "IndExpr";
 
+    public static final String FN_DEFINEINDMEASUREUNIT = "DefineIndMeasureUnit";
+    public static final String PM_DEFINEINDMEASUREUNIT_BIOTICDATA = "BioticData";
+    public static final String PM_DEFINEINDMEASUREUNIT_LENGTHCM = "LengthCM";
+    public static final String PM_DEFINEINDMEASUREUNIT_INDIVIDUALWEIGHTG = "IndividualWeightG";
+    
+    public static final String FN_DEFINEINDAGE = "DefineIndAge";
+    public static final String PM_DEFINEINDAGE_BIOTICDATA = "BioticData";
+    public static final String PM_DEFINEINDAGE_AGE = "Age";
+
     public static final String FN_READLANDINGXML = "ReadLandingXML";
     public static final String PM_READLANDINGXML_FILENAME1 = "FileName1";
     public static final String PM_READLANDINGXML_FILENAME2 = "FileName2";
@@ -160,10 +169,6 @@ public final class Functions {
 
     public static final String FN_READACOUSTICXML = "ReadAcousticXML";
     public static final String PM_READACOUSTICXML_FILENAME = "FileName";
-
-    public static final String FN_READACOUSTICLUF5 = "ReadAcousticLUF5";
-    public static final String PM_READACOUSTICLUF5_ACOUSTICDATA = "AcousticData";
-    public static final String PM_READACOUSTICLUF5_FILENAME = "FileName";
 
     public static final String FN_DEFINESPECCAT = "DefineSpecCat";
     public static final String PM_DEFINESPECCAT_BIOTICDATA = "BioticData";
@@ -246,11 +251,11 @@ public final class Functions {
     public static final String PM_DEFINESWEPTAREAPSU_BIOTICDATA = "BioticData";
     public static final String PM_DEFINESWEPTAREAPSU_METHOD = "Method";
 
-    public static final String FN_DEFINERECTANGLE = "DefineRectangle";
+    /*public static final String FN_DEFINERECTANGLE = "DefineRectangle";
     public static final String PM_DEFINERECTANGLE_PROCESSDATA = "ProcessData";
     public static final String PM_DEFINERECTANGLE_ACOUSTICDATA = "AcousticData";
     public static final String PM_DEFINERECTANGLE_WIDTH = "Width";
-    public static final String PM_DEFINERECTANGLE_HEIGHT = "Height";
+    public static final String PM_DEFINERECTANGLE_HEIGHT = "Height";*/
 
     public static final String FN_BIOSTATIONASSIGNMENT = "BioStationAssignment";
     public static final String PM_BIOSTATIONASSIGNMENT_PROCESSDATA = "ProcessData";
@@ -284,13 +289,13 @@ public final class Functions {
     public static final String PM_BIOSTATIONWEIGHTING_A = "a";
     public static final String PM_BIOSTATIONWEIGHTING_MAXNUMLENGTHSAMPLES = "MaxNumLengthSamples";
 
-    public static final String FN_RECTANGLEASSIGNMENT = "RectangleAssignment";
+    /*public static final String FN_RECTANGLEASSIGNMENT = "RectangleAssignment";
     public static final String PM_RECTANGLEASSIGNMENT_PROCESSDATA = "ProcessData";
     public static final String PM_RECTANGLEASSIGNMENT_BIOTICDATA = "BioticData";
     public static final String PM_RECTANGLEASSIGNMENT_NASC = "NASC";
     public static final String PM_RECTANGLEASSIGNMENT_USEPROCESSDATA = "UseProcessData";
     public static final String PM_RECTANGLEASSIGNMENT_ESTLAYERS = "EstLayers";
-
+*/
     public static final String FN_TOTALLENGTHDIST = "TotalLengthDist";
     public static final String PM_TOTALLENGTHDIST_LENGTHDIST = "LengthDist";
     public static final String PM_TOTALLENGTHDIST_PROCESSDATA = "ProcessData";
@@ -352,8 +357,8 @@ public final class Functions {
     public static final String AREAMETHOD_SIMPLE = "Simple";
     public static final String AREAMETHOD_ACCURATE = "Accurate";
 
-    public static final String FN_RECTANGLEAREA = "RectangleArea";
-    public static final String PM_RECTANGLEAREA_PROCESSDATA = "ProcessData";
+    //public static final String FN_RECTANGLEAREA = "RectangleArea";
+    //public static final String PM_RECTANGLEAREA_PROCESSDATA = "ProcessData";
 
     public static final String FN_ABUNDANCE = "Abundance";
     public static final String PM_ABUNDANCE_DENSITY = "Density";
@@ -371,10 +376,10 @@ public final class Functions {
     public static final String PM_INDIVIDUALDATA_BIOTICDATA = "BioticData";
     public static final String PM_INDIVIDUALDATA_INDIVIDUALDATASTATIONS = "IndividualDataStations";
 
-    public static final String FN_CORRECTFORINNSUFFICIENTSAMPLING = "CorrectForInnsufficientSampling";
+    /*public static final String FN_CORRECTFORINNSUFFICIENTSAMPLING = "CorrectForInnsufficientSampling";
     public static final String PM_CORRECTFORINNSUFFICIENTSAMPLING_INDIVIDUALDATA = "IndividualData";
     public static final String PM_CORRECTFORINNSUFFICIENTSAMPLING_ABUNDANCE = "Abundance";
-
+*/
     public static final String FN_SUPERINDABUNDANCE = "SuperIndAbundance";
     public static final String PM_SUPERINDABUNDANCE_PROCESSDATA = "ProcessData";
     public static final String PM_SUPERINDABUNDANCE_INDIVIDUALDATA = "IndividualData";

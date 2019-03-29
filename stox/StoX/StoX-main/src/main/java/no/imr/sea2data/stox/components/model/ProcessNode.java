@@ -2,11 +2,13 @@ package no.imr.sea2data.stox.components.model;
 
 import BioticTypes.v3.CatchsampleType;
 import java.awt.Image;
+import java.awt.event.ActionEvent;
 import java.beans.BeanInfo;
 import java.beans.IntrospectionException;
 import java.beans.PropertyEditor;
 import java.util.ArrayList;
 import java.util.List;
+import javax.swing.AbstractAction;
 import javax.swing.Action;
 import javax.swing.GrayFilter;
 import no.imr.sea2data.guibase.utils.IMRtooltip;
@@ -17,6 +19,7 @@ import no.imr.sea2data.stox.editor.ProjectFileNameEditor;
 import no.imr.sea2data.stox.editor.ListPropertyEditor;
 import no.imr.sea2data.stox.editor.SpeciesTSPropertyEditor;
 import no.imr.sea2data.stox.editor.TextPropertyEditor;
+import no.imr.stox.api.IProcessViewer;
 import no.imr.stox.exception.UserErrorException;
 import no.imr.stox.functions.biotic.DefineSpecCat;
 import no.imr.stox.functions.utils.Functions;
@@ -37,6 +40,7 @@ import org.openide.nodes.PropertySupport;
 import org.openide.nodes.Sheet;
 import org.openide.util.Exceptions;
 import org.openide.util.ImageUtilities;
+import org.openide.util.Lookup;
 import org.openide.util.lookup.Lookups;
 
 /**
@@ -110,17 +114,49 @@ public class ProcessNode extends AbstractNode {
         return img;
     }
 
+    private List<Action> createViewOutputActions() {
+        IProcessViewer viewer = (IProcessViewer) Lookup.getDefault().lookup(IProcessViewer.class);
+        List<Action> res = new ArrayList<>();
+        if (viewer != null) {
+            List<String> p = viewer.getOutputList(modelChildFactory.getActiveProcess());
+            if (p != null) {
+                for (int i = 0; i < p.size(); i++) {
+                    String s = p.get(i);
+                    final int ifin = i;
+                    res.add(new AbstractAction(s) {
+                        @Override
+                        public void actionPerformed(ActionEvent e) {
+                            viewer.openProcess(modelChildFactory.getActiveProcess(), true, ifin);
+                        }
+                    });
+                }
+                if (p.size() > 1) {
+                    res.add(new AbstractAction("All files") {
+                        @Override
+                        public void actionPerformed(ActionEvent e) {
+                            viewer.openProcess(modelChildFactory.getActiveProcess(), true, -1);
+                        }
+                    });
+                }
+            }
+        }
+        return res;
+    }
+
     @Override
     public Action[] getActions(boolean context) {
         List<Action> actions = new ArrayList<>();
         for (Action a : new Action[]{modelChildFactory.getRunFromHereAction(), modelChildFactory.getRunToHereAction(),
-            /*modelChildFactory.getRunThisAction(), */ modelChildFactory.getViewOutputAction(),
+            /*modelChildFactory.getViewOutputAction(),*/
             modelChildFactory.getBreakInGUIAction()}) {
             if (a.isEnabled()) {
                 actions.add(new ActionPopup(a));
             }
         }
 
+        if (modelChildFactory.isRunnable() && modelChildFactory.getActiveProcess() != null && modelChildFactory.getActiveProcess().getOutput() != null) {
+            actions.add(new ActionPopup("View output", createViewOutputActions()));
+        }
         actions.add(DeleteAction.get(DeleteAction.class));
         actions.add(MoveUpAction.get(MoveUpAction.class));
         actions.add(MoveDownAction.get(MoveDownAction.class));
@@ -209,11 +245,11 @@ public class ProcessNode extends AbstractNode {
             if (value == null) {
                 continue;
             }
-            if (!value.equals(token[1])) {
-                return false;
+            if (value.equals(token[1])) {
+                return true;
             }
         }
-        return true;
+        return false;
     }
 
     class ParamPropertySupport extends PropertySupport {

@@ -86,9 +86,6 @@ public class ReadBioticXML extends AbstractFunction {
                         for (AgedeterminationType a : i.getAgedetermination()) {
                             ibo.addAgeDetermination(a);
                         }
-                        // Conversion - length to cm / individualweight to gram
-                        i.setLength(Calc.roundTo(StoXMath.mToCM(i.getLength()), 8));
-                        i.setIndividualweight(Calc.roundTo(StoXMath.kgToGrams(i.getIndividualweight()), 8));
                     }
                     // Backward compability - Apostrope removal in common name Sild'g03
                     String commonName = sbo.bo().getCommonname();

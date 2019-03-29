@@ -58,8 +58,8 @@ public class IndividualDataTest {
         s.bo().setCatchpartnumber(Integer.SIZE);
         IndividualBO i = s.addIndividual();
         i.bo().setSpecimenid(1);
-        i.bo().setLength(10d);
-        i.bo().setIndividualweight(0.5d);
+        i.setLengthCM(10d);
+        i.setIndividualWeightG(0.5d);
         return Arrays.asList(mt);
     }
 

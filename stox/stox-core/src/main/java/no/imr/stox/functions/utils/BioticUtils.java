@@ -26,7 +26,7 @@ import no.imr.stox.bo.LengthDistMatrix;
 public final class BioticUtils {
 
     public static Double getLengthInterval(Integer i) {
-        if(i == null) {
+        if (i == null) {
             return 1d; // cm
         }
         switch (i) {
@@ -109,9 +109,9 @@ public final class BioticUtils {
             case Functions.COL_IND_NO:
                 return i.bo().getSpecimenid();
             case Functions.COL_IND_WEIGHT:
-                return i.bo().getIndividualweight();
+                return i.getIndividualWeightG();
             case Functions.COL_IND_LENGTH:
-                return i.bo().getLength();
+                return i.getLengthCM();
             case Functions.COL_IND_AGE:
                 return i.getAge();
             case Functions.COL_IND_SEX:
@@ -294,8 +294,8 @@ public final class BioticUtils {
         return 1d;
     }
 
-    public static List<MissionBO> copyBioticData(List<MissionBO> mList) {
-        List<MissionBO> missions = new BioticData();
+    public static BioticData copyBioticData(BioticData mList) {
+        BioticData missions = new BioticData();
         mList.forEach((ms) -> {
             MissionBO ms2 = new MissionBO(ms);
             missions.add(ms2);
@@ -312,6 +312,10 @@ public final class BioticUtils {
                 });
             });
         });
+        missions.setSpecCatAdded(mList.isSpecCatAdded());
+        missions.setLengthCMAdded(mList.isLengthCMAdded());
+        missions.setIndividualWeightGAdded(mList.isIndividualWeightGAdded());
+        missions.setAgeAdded(mList.isAgeAdded());
         return missions;
     }
 }
