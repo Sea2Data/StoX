@@ -26,9 +26,9 @@ public final class ExportUtil {
 
     public static class HiddenObj {
     }
-
-    public static Object getObj(Object o, boolean hidden) {
-        return hidden ? new HiddenObj() : o;
+    
+    public static Object getObj(Object includedObject, boolean included, HiddenObj notIncludedObject) {
+        return included ? includedObject : notIncludedObject;
     }
 
     public static String separatedMissingStr(char sep, String missingStr, Object... params) {

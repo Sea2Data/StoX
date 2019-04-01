@@ -11,8 +11,10 @@ import no.imr.sea2data.biotic.bo.MissionBO;
 import no.imr.stox.bo.IndividualDataMatrix;
 import no.imr.stox.bo.IndividualDataStationsMatrix;
 import no.imr.sea2data.imrbase.matrix.MatrixBO;
+import no.imr.stox.bo.BioticData;
 import no.imr.stox.functions.utils.BioticUtils;
 import no.imr.stox.functions.utils.Functions;
+import no.imr.stox.log.ILogger;
 
 /**
  * This function class is used to link individual data spatially, get a list of
@@ -32,7 +34,11 @@ public class IndividualData extends AbstractFunction {
     public Object perform(Map<String, Object> input) {
         // result = Matrix[GROUP~Species / ROW~Stratum / COL~EstLayer / CELL~LengthGroup / VAR~IndividualList]
         // Fish stations
-        List<MissionBO> missions = (List<MissionBO>) input.get(Functions.PM_INDIVIDUALDATA_BIOTICDATA);
+        ILogger logger = (ILogger) input.get(Functions.PM_LOGGER);
+        BioticData missions = (BioticData) input.get(Functions.PM_INDIVIDUALDATA_BIOTICDATA);
+        if (logger != null && missions != null && !(missions.isLengthCMAdded() || missions.isIndividualWeightGAdded() || missions.isAgeAdded())) {
+            logger.error("LengthCM/IndividualWeightG/Age not defined. Add DefineIndMeasurement and DefineIndAge to model.", null);
+        }
         // indDataSel = Matrix[ROW~Stratum / COL~EstLayer / CELL~Station / VAR~Included]
         IndividualDataStationsMatrix indDataSel = (IndividualDataStationsMatrix) input.get(Functions.PM_INDIVIDUALDATA_INDIVIDUALDATASTATIONS);
         IndividualDataMatrix result = new IndividualDataMatrix();
@@ -60,9 +66,6 @@ public class IndividualData extends AbstractFunction {
                             String specCatKey = s.getSpecCat();
                             // To do: check species against SpeciesDef in resolution if available. Otherwise this relies on filterbiotic.
                             for (IndividualBO i : s.getIndividualBOs()) {
-                                /*if (i.getIndividualweight() == null) {
-                                    continue;
-                                }*/
                                 String lenGrpKey = BioticUtils.getLenGrp(i.getLengthCM(), lenInterval);
                                 List<IndividualBO> indList = (List<IndividualBO>) result.getData().getGroupRowColCellValue(specCatKey, stratumKey, estLayerKey, lenGrpKey);
                                 if (indList == null) {

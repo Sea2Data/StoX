@@ -39,7 +39,7 @@ public class DefineIndMeasureUnit extends AbstractFunction {
                             i.setLengthCM(Calc.roundTo(StoXMath.mToCM(i.bo().getLength()), 8));
                         }
                         if (includeIndividualWeight) {
-                            i.setIndividualWeightG(Calc.roundTo(StoXMath.kgToGrams(i.getIndividualWeightG()), 8));
+                            i.setIndividualWeightG(Calc.roundTo(StoXMath.kgToGrams(i.bo().getIndividualweight()), 8));
                         }
 
                     }

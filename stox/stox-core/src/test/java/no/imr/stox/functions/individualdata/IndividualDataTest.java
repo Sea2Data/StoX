@@ -15,6 +15,7 @@ import no.imr.sea2data.biotic.bo.FishstationBO;
 import no.imr.sea2data.biotic.bo.IndividualBO;
 import no.imr.sea2data.biotic.bo.CatchSampleBO;
 import no.imr.sea2data.biotic.bo.MissionBO;
+import no.imr.stox.bo.BioticData;
 import no.imr.stox.bo.IndividualDataMatrix;
 import no.imr.stox.bo.IndividualDataStationsMatrix;
 import no.imr.stox.functions.utils.Functions;
@@ -60,7 +61,9 @@ public class IndividualDataTest {
         i.bo().setSpecimenid(1);
         i.setLengthCM(10d);
         i.setIndividualWeightG(0.5d);
-        return Arrays.asList(mt);
+        List<MissionBO> missions = new BioticData();
+        missions.add(mt);
+        return missions;
     }
 
 }

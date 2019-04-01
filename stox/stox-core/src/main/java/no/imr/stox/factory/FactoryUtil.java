@@ -223,7 +223,7 @@ public final class FactoryUtil {
                     }
                     IMetaParameter mep = pr.getMetaFunction().getMetaParameters().stream()
                             .filter(mp -> mp.getMetaDataType().getName().equals(Functions.DT_BIOTICDATA)).findFirst().orElse(null);
-                    if (pr.getProcessNameFromParameter(mep) != null && pr.getProcessNameFromParameter(mep).equals(readB.getName())) {
+                    if (mep != null && pr.getProcessNameFromParameter(mep) != null && pr.getProcessNameFromParameter(mep).equals(readB.getName())) {
                         pr.setParameterProcessValue(mep.getName(), defSpecCat.getName());
                     }
                 }

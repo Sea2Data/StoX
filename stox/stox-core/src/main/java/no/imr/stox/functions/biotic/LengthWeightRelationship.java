@@ -42,6 +42,9 @@ public class LengthWeightRelationship extends AbstractFunction {
         ILogger logger = (ILogger) input.get(Functions.PM_LOGGER);
         ProcessDataBO pd = (ProcessDataBO) input.get(Functions.PM_LENGTHWEIGHTRELATIONSHIP_PROCESSDATA);
         BioticData bioticData = (BioticData) input.get(Functions.PM_LENGTHWEIGHTRELATIONSHIP_BIOTICDATA);
+        if (bioticData != null && !(bioticData.isLengthCMAdded() || bioticData.isIndividualWeightGAdded())) {
+            logger.error("LengthCM and IndividualWeight is not defined. Add DefineIndMeasurement to model.", null);
+        }
         //logger.error("Length interval " + lenInterval + " must be a multiple integer factor of " + prevLenInterval + ".", null);
 
         LengthWeightRelationshipMatrix result = new LengthWeightRelationshipMatrix();

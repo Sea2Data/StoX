@@ -16,6 +16,7 @@ import no.imr.sea2data.biotic.bo.FishstationBO;
 import no.imr.sea2data.biotic.bo.IndividualBO;
 import no.imr.sea2data.biotic.bo.CatchSampleBO;
 import no.imr.sea2data.biotic.bo.MissionBO;
+import no.imr.stox.bo.BioticData;
 import no.imr.stox.bo.LengthDistMatrix;
 import no.imr.stox.functions.utils.Functions;
 import static org.junit.Assert.assertEquals;
@@ -82,7 +83,9 @@ public class StationLengthDistTest {
         i.setLengthCM(10d);
         i = s.addIndividual();
         i.setLengthCM(11d);
-        return Arrays.asList(m);
+        List<MissionBO> missions = new BioticData();
+        missions.add(m);
+        return missions;
     }
 
     List<MissionBO> getMissionsMissingSampledWeight() {

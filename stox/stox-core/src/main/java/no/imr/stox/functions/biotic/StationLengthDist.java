@@ -16,6 +16,7 @@ import no.imr.sea2data.biotic.bo.MissionBO;
 import no.imr.sea2data.imrbase.math.Calc;
 import no.imr.sea2data.imrbase.math.ImrMath;
 import no.imr.sea2data.imrbase.util.Conversion;
+import no.imr.stox.bo.BioticData;
 import no.imr.stox.bo.LengthDistMatrix;
 import no.imr.stox.functions.utils.BioticUtils;
 import no.imr.stox.functions.utils.StoXMath;
@@ -39,7 +40,10 @@ public class StationLengthDist extends AbstractFunction {
     @Override
     public Object perform(Map<String, Object> input) {
         ILogger logger = (ILogger) input.get(Functions.PM_LOGGER);
-        List<MissionBO> missions = (List<MissionBO>) input.get(Functions.PM_STATIONLENGTHDIST_BIOTICDATA);
+        BioticData missions = (BioticData) input.get(Functions.PM_STATIONLENGTHDIST_BIOTICDATA);
+        if (logger != null && missions != null && !(missions.isLengthCMAdded())) {
+            logger.error("LengthCM and IndividualWeight is not defined. Add DefineIndMeasurement to model.", null);
+        }
         LengthDistMatrix result = new LengthDistMatrix();
         // Set the resolution matrix as Observation type and length interval
         String lengthDistType = (String) input.get(Functions.PM_STATIONLENGTHDIST_LENGTHDISTTYPE);

@@ -79,8 +79,8 @@ public class ProcessViewerImpl implements IProcessViewer {
             String outputPanelKey = p.getProcessName() + "-" + i;
             Integer idx = views.get(outputPanelKey);
             if (idx == null) {
-                views.put(outputPanelKey, idx);
                 idx = tabbedPane.getTabCount();
+                views.put(outputPanelKey, idx);
                 OutputPanel panel = new OutputPanel(p, i);
                 //map.put(idx[i], panel);
                 //panel.gtadd(panel, BorderLayout.CENTER);

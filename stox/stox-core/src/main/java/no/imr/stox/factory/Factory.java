@@ -150,9 +150,7 @@ public class Factory {
      * @param m
      */
     public static void createStationLengthDistTemplateProject(IModel m) {
-        m.addProcess(Functions.FN_READBIOTICXML, Functions.FN_READBIOTICXML);
-        m.addProcess(Functions.FN_FILTERBIOTIC, Functions.FN_FILTERBIOTIC).
-                setParameterProcessValue(Functions.PM_FILTERBIOTIC_BIOTICDATA, Functions.FN_READBIOTICXML);
+        createBioticXML(m);
         m.addProcess(Functions.FN_STATIONLENGTHDIST, Functions.FN_STATIONLENGTHDIST).
                 setParameterProcessValue(Functions.PM_STATIONLENGTHDIST_BIOTICDATA, Functions.FN_FILTERBIOTIC).
                 setParameterValue(Functions.PM_STATIONLENGTHDIST_LENGTHDISTTYPE, Functions.LENGTHDISTTYPE_PERCENTLENGHTDIST);
@@ -318,19 +316,35 @@ public class Factory {
 
     }
 
+    public static void createBioticXML(IModel m) {
+        m.addProcess(Functions.FN_READBIOTICXML, Functions.FN_READBIOTICXML).
+                setFileOutput(false);
+
+        m.addProcess(Functions.FN_DEFINEINDMEASUREUNIT, Functions.FN_DEFINEINDMEASUREUNIT).
+                setParameterProcessValue(Functions.PM_DEFINEINDMEASUREUNIT_BIOTICDATA, Functions.FN_READBIOTICXML).
+                setFileOutput(false);
+        
+        m.addProcess(Functions.FN_DEFINEINDAGE, Functions.FN_DEFINEINDAGE).
+                setParameterProcessValue(Functions.PM_DEFINEINDAGE_BIOTICDATA, Functions.FN_DEFINEINDMEASUREUNIT).
+                setFileOutput(false);
+
+        m.addProcess(Functions.FN_DEFINESPECCAT, Functions.FN_DEFINESPECCAT).
+                setParameterProcessValue(Functions.PM_DEFINESPECCAT_BIOTICDATA, Functions.FN_DEFINEINDAGE).
+                setParameterValue(Functions.PM_DEFINESPECCAT_SPECCATMETHOD, Functions.SPECCATMETHOD_SELECTVAR).
+                setParameterValue(Functions.PM_DEFINESPECCAT_SPECVARBIOTIC, "commonname").
+                setFileOutput(false);
+
+        m.addProcess(Functions.FN_FILTERBIOTIC, Functions.FN_FILTERBIOTIC).
+                setParameterProcessValue(Functions.PM_FILTERBIOTIC_BIOTICDATA, Functions.FN_DEFINESPECCAT).
+                setRespondInGUI(true);
+    }
     /**
      * Create sub model Abundance biotic related functions
      *
      * @param m
      */
     public static void createAbndBiotic(IModel m, String lengthDistType, Double lenInterval) {
-        m.addProcess(Functions.FN_READBIOTICXML, Functions.FN_READBIOTICXML).
-                setFileOutput(false);
-
-        m.addProcess(Functions.FN_FILTERBIOTIC, Functions.FN_FILTERBIOTIC).
-                setParameterProcessValue(Functions.PM_FILTERBIOTIC_BIOTICDATA, Functions.FN_READBIOTICXML).
-                setParameterValue(Functions.PM_FILTERBIOTIC_CATCHEXPR, "noname == 'SILDG03'").
-                setRespondInGUI(true);
+        createBioticXML(m);
 
         m.addProcess(Functions.FN_STATIONLENGTHDIST, Functions.FN_STATIONLENGTHDIST).
                 setParameterProcessValue(Functions.PM_STATIONLENGTHDIST_BIOTICDATA, Functions.FN_FILTERBIOTIC).
@@ -400,9 +414,7 @@ public class Factory {
     }
 
     private static void createDATRASTemplateProject(IModel m) {
-        m.addProcess(Functions.FN_READBIOTICXML, Functions.FN_READBIOTICXML);
-        m.addProcess(Functions.FN_FILTERBIOTIC, Functions.FN_FILTERBIOTIC).
-                setParameterProcessValue(Functions.PM_FILTERBIOTIC_BIOTICDATA, Functions.FN_READBIOTICXML);
+        createBioticXML(m);
         m.addProcess(Functions.FN_DATRAS, Functions.FN_DATRAS).
                 setParameterProcessValue(Functions.PM_DATRAS_BIOTICDATA, Functions.FN_FILTERBIOTIC);
 
@@ -473,17 +485,8 @@ public class Factory {
         m.addProcess(Functions.FN_READPROCESSDATA, Functions.FN_READPROCESSDATA);
 
         // Biotic related:
-        m.addProcess(Functions.FN_READBIOTICXML, Functions.FN_READBIOTICXML).
-                setFileOutput(false);
+        createBioticXML(m);
 
-        m.addProcess(Functions.FN_FILTERBIOTIC, Functions.FN_FILTERBIOTIC).
-                setParameterProcessValue(Functions.PM_FILTERBIOTIC_BIOTICDATA, Functions.FN_READBIOTICXML).
-                setParameterValue(Functions.PM_FILTERBIOTIC_CATCHEXPR, "noname == 'SILDG03'").
-                setRespondInGUI(true);
-
-        m.addProcess(Functions.FN_DEFINESPECCAT, Functions.FN_DEFINESPECCAT).
-                setParameterProcessValue(Functions.PM_FILTERBIOTIC_BIOTICDATA, Functions.FN_FILTERBIOTIC);
-                
         // Process data related:
         m.addProcess(Functions.FN_DEFINESTRATA, Functions.FN_DEFINESTRATA).
                 setParameterProcessValue(Functions.PM_DEFINESTRATA_PROCESSDATA, Functions.FN_READPROCESSDATA).
@@ -492,14 +495,14 @@ public class Factory {
 
         m.addProcess(Functions.FN_DEFINESWEPTAREAPSU, Functions.FN_DEFINESWEPTAREAPSU).
                 setParameterProcessValue(Functions.PM_DEFINESWEPTAREAPSU_PROCESSDATA, Functions.FN_READPROCESSDATA).
-                setParameterProcessValue(Functions.PM_DEFINESWEPTAREAPSU_BIOTICDATA, Functions.FN_DEFINESPECCAT).
+                setParameterProcessValue(Functions.PM_DEFINESWEPTAREAPSU_BIOTICDATA, Functions.FN_FILTERBIOTIC).
                 setParameterValue(Functions.PM_DEFINESWEPTAREAPSU_METHOD, Functions.SWEPTAREAPSUMETHOD_STATION);
 
         Stream.of(Functions.CATCHVARIABLE_COUNT, Functions.CATCHVARIABLE_WEIGHT).forEach(var -> {
             String densProc = "SweptArea" + var + "Density";
             m.addProcess(densProc, Functions.FN_SWEPTAREADENSITY).
                     setParameterProcessValue(Functions.PM_SWEPTAREADENSITY_PROCESSDATA, Functions.FN_READPROCESSDATA).
-                    setParameterProcessValue(Functions.PM_SWEPTAREADENSITY_BIOTICDATA, Functions.FN_DEFINESPECCAT).
+                    setParameterProcessValue(Functions.PM_SWEPTAREADENSITY_BIOTICDATA, Functions.FN_FILTERBIOTIC).
                     setParameterValue(Functions.PM_SWEPTAREADENSITY_SWEPTAREAMETHOD, Functions.SWEPTAREAMETHOD_TOTALCATCH).
                     setParameterValue(Functions.PM_SWEPTAREADENSITY_CATCHVARIABLE, var).
                     setParameterValue(Functions.PM_SWEPTAREADENSITY_SWEEPWIDTHMETHOD, 25.0);
@@ -520,7 +523,7 @@ public class Factory {
                     String procName = "StationSpecCatDensity_" + var;
                     m.addProcess(procName, Functions.FN_STATIONSPECCATDENSITY).
                             setParameterProcessValue(Functions.PM_STATIONSPECCATDENSITY_PROCESSDATA, Functions.FN_READPROCESSDATA).
-                            setParameterProcessValue(Functions.PM_STATIONSPECCATDENSITY_BIOTICDATA, Functions.FN_DEFINESPECCAT).
+                            setParameterProcessValue(Functions.PM_STATIONSPECCATDENSITY_BIOTICDATA, Functions.FN_FILTERBIOTIC).
                             setParameterProcessValue(Functions.PM_STATIONSPECCATDENSITY_DENSITY, densProc);
                 }
 
@@ -538,13 +541,7 @@ public class Factory {
         m.addProcess(Functions.FN_READPROCESSDATA, Functions.FN_READPROCESSDATA);
 
         // Biotic related:
-        m.addProcess(Functions.FN_READBIOTICXML, Functions.FN_READBIOTICXML).
-                setFileOutput(false);
-
-        m.addProcess(Functions.FN_FILTERBIOTIC, Functions.FN_FILTERBIOTIC).
-                setParameterProcessValue(Functions.PM_FILTERBIOTIC_BIOTICDATA, Functions.FN_READBIOTICXML).
-                setParameterValue(Functions.PM_FILTERBIOTIC_CATCHEXPR, "noname == 'SILDG03'").
-                setRespondInGUI(true);
+        createBioticXML(m);
 
         // Process data related:
         m.addProcess(Functions.FN_DEFINESTRATA, Functions.FN_DEFINESTRATA).
@@ -586,13 +583,7 @@ public class Factory {
                 setParameterProcessValue(Functions.PM_NASC_ACOUSTICDATA, Functions.FN_FILTERACOUSTIC).
                 setParameterValue(Functions.PM_NASC_LAYERTYPE, Functions.LAYERTYPE_PCHANNEL);
 
-        m.addProcess(Functions.FN_READBIOTICXML, Functions.FN_READBIOTICXML).
-                setFileOutput(false);
-
-        m.addProcess(Functions.FN_FILTERBIOTIC, Functions.FN_FILTERBIOTIC).
-                setParameterProcessValue(Functions.PM_FILTERBIOTIC_BIOTICDATA, Functions.FN_READBIOTICXML).
-                setParameterValue(Functions.PM_FILTERBIOTIC_CATCHEXPR, "noname =~ ['SEI','HVITTING','TORSK','HYSE','ØYEPÅL']").
-                setRespondInGUI(true);
+        createBioticXML(m);
 
         m.addProcess(Functions.FN_STATIONLENGTHDIST, Functions.FN_STATIONLENGTHDIST).
                 setParameterProcessValue(Functions.PM_STATIONLENGTHDIST_BIOTICDATA, Functions.FN_FILTERBIOTIC).
@@ -673,13 +664,7 @@ public class Factory {
         m.addProcess(Functions.FN_ASSIGNDATATOSTRATUM, Functions.FN_ASSIGNDATATOSTRATUM).
                 setParameterValue(Functions.PM_ASSIGNDATATOSTRATUM_SOURCETYPE, Functions.SOURCETYPE_BIOTIC).
                 setParameterProcessValue(Functions.PM_ASSIGNDATATOSTRATUM_LANDINGDATA, Functions.FN_FILTERBIOTIC);
-        m.addProcess(Functions.FN_READBIOTICXML, Functions.FN_READBIOTICXML).
-                setFileOutput(false);
-
-        m.addProcess(Functions.FN_FILTERBIOTIC, Functions.FN_FILTERBIOTIC).
-                setParameterProcessValue(Functions.PM_FILTERBIOTIC_BIOTICDATA, Functions.FN_READBIOTICXML).
-                setParameterValue(Functions.PM_FILTERBIOTIC_CATCHEXPR, "species == '161722'").
-                setRespondInGUI(true);
+        createBioticXML(m);
 
         // Process data related:
         m.addProcess(Functions.FN_DEFINESTRATA, Functions.FN_DEFINESTRATA).

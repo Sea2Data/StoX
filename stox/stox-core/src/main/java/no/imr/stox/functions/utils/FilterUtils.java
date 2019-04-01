@@ -43,6 +43,7 @@ public final class FilterUtils {
             context.set("fs", fs);
 
             context.set("nation", fs.bo().getNation());
+            context.set("catchplatform", fs.bo().getCatchplatform());
             context.set("station", fs.bo().getStation());
             context.set("latitudestart", fs.bo().getLatitudestart());
             context.set("longitudestart", fs.bo().getLongitudestart());
@@ -62,6 +63,7 @@ public final class FilterUtils {
             context.set("wirelength", fs.bo().getWirelength());
             context.set("soaktime", fs.bo().getSoaktime());
             context.set("stationtype", fs.bo().getStationtype());
+            context.set("tripno", fs.bo().getStationtype());
             // old 
             context.set("platform", fs.bo().getCatchplatform());
             context.set("startdate", fs.bo().getStationstartdate());
@@ -97,7 +99,7 @@ public final class FilterUtils {
             context.set("lengthsamplecount", cs.bo().getLengthsamplecount());
             context.set("parasite", cs.bo().getParasite());
             context.set("stomach", cs.bo().getStomach());
-
+            context.set("catchproducttype", cs.bo().getCatchproducttype());
             context.set("samplenumber", cs.bo().getCatchpartnumber());
             context.set("measurement", cs.bo().getCatchproducttype());
             context.set("weight", cs.bo().getCatchweight());
@@ -131,12 +133,9 @@ public final class FilterUtils {
             context.set("liverweight", ii.bo().getLiverweight());
             context.set("stomachweight", ii.bo().getStomachweight());
 
-            // grams and cm filter
+            // kg and m filter
             context.set("weight", ii.bo().getIndividualweight());
             context.set("length", ii.bo().getLength());
-            // with units
-            context.set("individualweightg", ii.getIndividualWeightG());
-            context.set("lengthcm", ii.getLengthCM());
 
             // old field names support
             context.set("no", ii.bo().getSpecimenid());
@@ -148,7 +147,6 @@ public final class FilterUtils {
             context.set("comment", ii.bo().getIndividualcomment());
 
             // age determination filter on individual
-            context.set("age", ii.getAge());
             context.set("spawningage", ii.getSpawningage());
             context.set("spawningzones", ii.getSpawningzones());
             context.set("readability", ii.getReadability());
@@ -249,8 +247,11 @@ public final class FilterUtils {
         if (cs.getSpecCat() != null) {
             context.set("speccat", cs.getSpecCat().toLowerCase());
         }
+        context.set("scientificname", cs.bo().getScientificname() != null ? cs.bo().getScientificname().toLowerCase() : null);
         context.set("species", cs.bo().getCatchcategory() != null ? cs.bo().getCatchcategory().toLowerCase() : null);
+        context.set("catchcategory", cs.bo().getCatchcategory() != null ? cs.bo().getCatchcategory().toLowerCase() : null);
         context.set("noname", cs.bo().getCommonname() != null ? cs.bo().getCommonname().toLowerCase() : null);
+        context.set("commonname", cs.bo().getCommonname() != null ? cs.bo().getCommonname().toLowerCase() : null);
         context.set("aphia", cs.bo().getAphia());
     }
 }

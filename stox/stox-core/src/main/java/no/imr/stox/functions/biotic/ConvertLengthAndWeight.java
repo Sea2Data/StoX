@@ -10,7 +10,9 @@ import no.imr.sea2data.biotic.bo.CatchSampleBO;
 import no.imr.sea2data.biotic.bo.MissionBO;
 import no.imr.sea2data.imrbase.math.ImrMath;
 import no.imr.sea2data.imrbase.util.Conversion;
+import no.imr.stox.bo.BioticData;
 import no.imr.stox.functions.utils.BioticUtils;
+import no.imr.stox.log.ILogger;
 
 /**
  * This class is used to filter data with special attributes among all biotic
@@ -37,7 +39,11 @@ public class ConvertLengthAndWeight extends AbstractFunction {
      */
     @Override
     public Object perform(Map<String, Object> input) {
-        List<MissionBO> bioticData = (List<MissionBO>) input.get(Functions.PM_CONVERTLENGTHANDWEIGHT_BIOTICDATA);
+        BioticData bioticData = (BioticData) input.get(Functions.PM_CONVERTLENGTHANDWEIGHT_BIOTICDATA);
+        ILogger logger = (ILogger) input.get(Functions.PM_LOGGER);
+        if (bioticData != null && !(bioticData.isLengthCMAdded() || bioticData.isIndividualWeightGAdded())) {
+            logger.error("LengthCM not defined. Add DefineIndMeasurement to model.", null);
+        }
         // product type 3 = Gutted without head
         // product type 4 = Gutted with head
         Double hCutFacA = (Double) input.get(Functions.PM_CONVERTLENGTHANDWEIGHT_HEADCUTFACA); // product type 3

@@ -201,6 +201,18 @@ public final class OutputTopComponent extends TopComponent {
                             pv.closeTab(jTabbedPane1.getSelectedIndex());
                         }
                     });
+                    addMenuItem(popup, "Close all", (ActionEvent ev) -> {
+                        for (int j = jTabbedPane1.getTabCount() - 1; j >= 0; j--) {
+                            pv.closeTab(j);
+                        }
+                    });
+                    addMenuItem(popup, "Close other", (ActionEvent ev) -> {
+                        for (int j = jTabbedPane1.getTabCount() - 1; j >= 0; j--) {
+                            if (j != jTabbedPane1.getSelectedIndex()) {
+                                pv.closeTab(j);
+                            }
+                        }
+                    });
                     popup.show(jTabbedPane1, e.getX(), e.getY());
                 }
             }

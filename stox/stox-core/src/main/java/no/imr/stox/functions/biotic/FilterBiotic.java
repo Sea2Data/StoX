@@ -12,6 +12,7 @@ import no.imr.sea2data.biotic.bo.IndividualBO;
 import no.imr.sea2data.biotic.bo.CatchSampleBO;
 import no.imr.sea2data.biotic.bo.MissionBO;
 import no.imr.stox.bo.BioticData;
+import no.imr.stox.functions.utils.BioticUtils;
 import org.apache.commons.jexl2.Expression;
 import org.apache.commons.jexl2.JexlContext;
 import org.apache.commons.jexl2.JexlEngine;
@@ -67,9 +68,9 @@ public class FilterBiotic extends AbstractFunction {
         Expression individualExpression = engine.createExpression(individualExpr.toLowerCase());
         JexlContext ctx = new MapContext();
         // Old structures:
-        List<MissionBO> origMissions = (List<MissionBO>) input.get(Functions.PM_FILTERBIOTIC_BIOTICDATA);
-        List<MissionBO> missions = new BioticData();
-        for (MissionBO ms : origMissions) {
+        BioticData bdata = (BioticData) input.get(Functions.PM_FILTERBIOTIC_BIOTICDATA);
+        BioticData missions = BioticUtils.copyBioticData(bdata, false);
+        for (MissionBO ms : bdata) {
             MissionBO msF = new MissionBO(ms);
             missions.add(msF);
             for (FishstationBO fs : ms.getFishstationBOs()) {
@@ -85,12 +86,25 @@ public class FilterBiotic extends AbstractFunction {
                         continue;
                     }
                     CatchSampleBO sampleF = fsF.addCatchSample(new CatchSampleBO(fsF, cb));
+                    sampleF.setSpecCat(cb.getSpecCat());
                     for (IndividualBO in : cb.getIndividualBOs()) {
                         FilterUtils.resolveContext(ctx, in);
+                        // Individual fields.
+                        if (bdata.isLengthCMAdded()) {
+                            ctx.set("lengthcm", in.getLengthCM());
+                        }
+                        if (bdata.isIndividualWeightGAdded()) {
+                            ctx.set("individualweightg", in.getIndividualWeightG());
+                        }
+                        if (bdata.isAgeAdded()) {
+                            ctx.set("age", in.getAge());
+                        }
                         if (!FilterUtils.evaluate(ctx, individualExpression)) {
                             continue;
                         }
                         IndividualBO inF = sampleF.addIndividual(new IndividualBO(sampleF, in));
+                        inF.setIndividualWeightG(in.getIndividualWeightG());
+                        inF.setLengthCM(in.getLengthCM());
                         for (AgeDeterminationBO aBO : in.getAgeDeterminationBOs()) {
                             inF.addAgeDetermination(new AgeDeterminationBO(inF, aBO));
                         }

@@ -295,6 +295,10 @@ public final class BioticUtils {
     }
 
     public static BioticData copyBioticData(BioticData mList) {
+        return copyBioticData(mList, true);
+    }
+
+    public static BioticData copyBioticData(BioticData mList, boolean withMissions) {
         BioticData missions = new BioticData();
         mList.forEach((ms) -> {
             MissionBO ms2 = new MissionBO(ms);

@@ -29,14 +29,6 @@ Parameter: Name=FileName20, Required=false, DataType=String, Description=Path to
 DataStorage: no.imr.stox.datastorage.EchoDataStorage
 Output: AcousticData
 
-#[Function]
-#Name: ReadAcousticLUF5
-#Description: <I>ReadAcousticLUF5</I> reads scrutinized acoustic data (NASC by species and frequency) from files of format ListUser5.<BR><BR>Output data is of format <U>AcousticData</U>. 
-#Class: no.imr.stox.functions.acoustic.ReadAcousticLUF5
-#Parameter: Name=AcousticData, Required=false, DataType=AcousticData, Description=Path to acoustic data
-#Parameter: Name=FileName, DataType=String, Description=Path to acoustic ListUser5 file
-#DataStorage: no.imr.stox.datastorage.EchoDataStorage
-#Output: AcousticData
 
 [Function]
 Name: FilterAcoustic
@@ -188,7 +180,7 @@ Parameter: Name=BioticData, Alias=FishStations, Required=true, DataType=BioticDa
 Parameter: Name=SpecCatMethod, DataType=String, DefaultValue=Expression, Values=Expression;SelectVar;ResourceFile, Description=The <I>SpecCatType</I> The type of method to define specat. This can be an expression entered as a parameter, or a mapping to a column in a csv file
 Parameter: Name=SpecCat, Required=false, DataType=String, ParentTag=SpecCatMethod.Expression, Description=The species category to append to catches. 
 Parameter: Name=FileName, Required=false, DataType=String, ParentTag=SpecCatMethod.ResourceFile, Description=The reference file with the one column giving the species and one giving the species categories to use.
-Parameter: Name=SpecVarBiotic, Required=false, DataType=String, DefaultValue=noname, Values=species;noname;aphia, Description=The name of the column in BioticData defining species. To be linked with SpecVarRef
+Parameter: Name=SpecVarBiotic, Required=false, DataType=String, DefaultValue=commonname, Values=catchcategory~species;commonname~noname;aphia, Description=The name of the column in BioticData defining species. To be linked with SpecVarRef
 Parameter: Name=SpecVarRef, Required=false, DataType=String, ParentTag=SpecCatMethod.ResourceFile, Description=The name of the column in the reference file defining species. To be linked with SpecVarStoX.
 Parameter: Name=SpecCatRef, Required=false, DataType=String, ParentTag=SpecCatMethod.ResourceFile, Description= The name of the column in the reference file defining (new) species category. Will be renamed to SpecCat in StoX.
 DataStorage:no.imr.stox.datastorage.BioticDataStorage
@@ -383,38 +375,6 @@ Parameter: Name=a, Alias=B, Required=false, DataType=Double, ParentTag=Weighting
 Parameter: Name=MaxNumLengthSamples, Required=false, DataType=Integer, DefaultValue=100, ParentTag=WeightingMethod.NumberOfLengthSamples, Description=The <I>MaxNumLengthSamples</I> parameter is used to set an upper limit for number of samples that can be used as a weighting variable for an assigned biotic station. This parameter is linked to parameter WeightingMethod &#61; NumberOfLengthSamples.
 Output: ProcessData
 
-#[Function]
-#Name: DefineRectangle
-#Class: no.imr.stox.functions.processdata.DefineRectangle
-#Respondable:true
-#Description: Define rectangles
-#Parameter: Name=ProcessData, DataType=ProcessData, Description=Process data
-#Parameter: Name=AcousticData, DataType=AcousticData, Description=Acoustic data
-#Parameter: Name=Width, DataType=Double, Description=Width of rectangle
-#Parameter: Name=Height, DataType=Double, Description=Height of rectangle
-#Output: ProcessData
-
-
-#[Function]
-#Name: RectangleArea
-#Description: Calculate area of psu rectangles clipped against strata area in process data
-#Class: no.imr.stox.functions.processdata.RectangleArea
-#Parameter: Name=ProcessData, DataType=ProcessData, Description=Process data
-#DataStorage: no.imr.stox.datastorage.MatricesStorage
-#Output:  PolygonArea
-
-#[Function]
-#Name: RectangleAssignment
-#Class: no.imr.stox.functions.processdata.RectangleAssignment
-#Respondable:true
-#Description: Auto assign all trawl stations within rectangles to all acoustic distances in the rectangle, no weighting.
-#Parameter: Name=ProcessData, DataType=ProcessData, Description=Process data
-#Parameter: Name=BioticData, Alias=FishStations, DataType=BioticData, Description=Fish stations
-#Parameter: Name=NASC, Alias=SA, DataType=NASC, Description=NASC Matrix, Description=NASC matrix
-#Parameter: Name=UseProcessData, Required=false, DefaultValue=false, DataType=Boolean, Description=if true use existing assignments
-#Parameter: Name=EstLayers, DataType=String, Description=Estimation layer definition. Example '1~(1-16) 2~(17-32)' or '1~PEL 2~BOT or 1~PELBOT'.   
-#Output: ProcessData
-
 
 [Function]
 Name: TotalLengthDist
@@ -568,15 +528,6 @@ Parameter: Name=BioticData, Alias=FishStations, DataType=BioticData, Description
 Parameter: Name=IndividualDataStations, Alias=IndividualDataSelection, DataType=IndividualDataStations, Description=The <I>IndividualDataStation</I> parameter is used to identify which previous process in the model has generated the input dataset object <U>IndividualDataStation</U>.<BR><BR>The <U>IndividualDataStation</U> object contains a list of which biotic stations should be used to extract individual data by sample unit &#40;e.g. Stratum&#41; and layer type &#40;e.g. estimation layer &#40;EstLayer&#41;&#41;.
 DataStorage:no.imr.stox.datastorage.IndividualDataStorage
 Output:  IndividualData
-
-#[Function]
-#Name: CorrectForInnsufficientSampling
-#Description: Correct for insufficient sampling by using individuals from other strata at estlayer/lengroup
-#Class: no.imr.stox.functions.individualdata.CorrectForInnsufficientSampling
-#Parameter: Name=Abundance, Alias=AbundanceByLength, DataType=Abundance, Description=Abundance
-#Parameter: Name=IndividualData, DataType=IndividualData, Description=Individual data
-#DataStorage:no.imr.stox.datastorage.IndividualDataStorage
-#Output: IndividualData
 
 [Function]
 Name: SuperIndAbundance

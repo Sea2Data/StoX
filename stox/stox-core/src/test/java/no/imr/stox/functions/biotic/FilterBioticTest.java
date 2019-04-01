@@ -12,6 +12,7 @@ import no.imr.sea2data.biotic.bo.FishstationBO;
 import no.imr.sea2data.biotic.bo.IndividualBO;
 import no.imr.sea2data.biotic.bo.CatchSampleBO;
 import no.imr.sea2data.biotic.bo.MissionBO;
+import no.imr.stox.bo.BioticData;
 import static org.junit.Assert.*;
 import org.junit.Test;
 
@@ -83,8 +84,8 @@ public class FilterBioticTest {
         individ22.setLengthCM(3d);
         individ23.setLengthCM(6d);
 
-        List<MissionBO> missions = Arrays.asList(ms);
-
+        List<MissionBO> missions = new BioticData();
+        missions.add(ms);
         String stationExpr = "gearcondition eq 1 and trawlquality eq 1";
         String catchExpr = "species eq 'SILD'";
         String sampleExpr = "group eq '1' and sampletype eq 5";

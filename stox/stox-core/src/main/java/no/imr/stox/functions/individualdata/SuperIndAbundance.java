@@ -153,18 +153,9 @@ public class SuperIndAbundance extends AbstractFunction {
                             Double abundance = totAbundance * p;
                             String indKey = (++idx).toString();
                             addSuperindividual(resData, indKey, specCatKey, stratumKey, estLayerKey, lenGrp, lenIntv, abundance, precisionLevel);
-                            /*if (indBO.getIndividualweight() != null) {
-                             resData.setRowColValue(indKey, Functions.COL_ABNDBYIND_BIOMASS, Calc.roundTo(StoXMath.safeMult(abundance, StoXMath.gramsToKg(indBO.getIndividualweight())), 4));
-                             }*/
                             if (indBO.getCatchSample() == null) {
                                 System.out.println("Error in individual " + indBO);
                             }
-                            // Add Individual weighting factor
-                            /*Double indWFac = 1.0d;//getIndividualWeightingFactor(species, stratum, estLayer, lenGrp, lengthDist,
-                             //totalLFQ, indBO, indList.size());
-                             if (indWFac != null) {
-                             resData.setRowColValue(indKey, Functions.COL_ABNDBYIND_INDWFAC, Calc.roundTo(indWFac, 8));
-                             }*/
 
                             for (String code : Functions.INDIVIDUALS) {
                                 // Add biological individual pop categories here

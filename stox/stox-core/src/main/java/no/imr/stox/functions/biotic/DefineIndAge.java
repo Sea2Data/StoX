@@ -15,7 +15,7 @@ import no.imr.stox.functions.utils.Functions;
  *
  * @author aasmunds
  */
-public class DefineAge extends AbstractFunction {
+public class DefineIndAge extends AbstractFunction {
 
     @Override
     public Object perform(Map<String, Object> input) {

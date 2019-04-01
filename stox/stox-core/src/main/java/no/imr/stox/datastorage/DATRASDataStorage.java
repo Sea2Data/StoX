@@ -360,10 +360,6 @@ public class DATRASDataStorage extends FileDataStorage {
                             MatrixBO hlNoAtLngth = new MatrixBO();
                             MatrixBO lsCountTot = new MatrixBO();
 
-                            //Double sampleFac = s.getCatchcount().doubleValue() / s.getLengthsamplecount();
-                            //if (s.getIndividualweight() == null || s.getCatchcount() == null) {
-                            //    continue;
-                            //}
                             Integer specVal = haulVal.equals("I") ? 0
                                     : s.bo().getCatchcount() != null && s.bo().getLengthsamplecount() != null && s.bo().getCatchweight() != null ? 1
                                     : s.bo().getCatchcount() != null && s.bo().getLengthsamplecount() == null && s.bo().getCatchweight() == null ? 4
