@@ -56,8 +56,16 @@ public class MissionBO extends BaseBO {
 
     @Override
     public String getInternalKey() {
+        return getCruiseOrYearKey();
+    }
+
+    private String getCruiseOrYearKey() {
         String cruise = bo().getCruise();
         return cruise != null ? cruise : (bo().getStartyear() != null ? bo().getStartyear() + "" : "");
+    }
+    
+    private String getMissionKey() { // Not in use
+        return bo().getMissiontype() + "/" + bo().getStartyear() + "/" + bo().getPlatform() + "/" + bo().getMissionnumber();
     }
 
 }

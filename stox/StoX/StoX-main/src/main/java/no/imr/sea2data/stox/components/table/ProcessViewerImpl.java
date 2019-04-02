@@ -5,6 +5,7 @@
  */
 package no.imr.sea2data.stox.components.table;
 
+import java.awt.Cursor;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -24,7 +25,7 @@ import org.openide.util.lookup.ServiceProvider;
 public class ProcessViewerImpl implements IProcessViewer {
 
     JTabbedPane tabbedPane;
-    Map<String, Integer> views = new HashMap<>();
+    //Map<String, Integer> views = new HashMap<>();
 
     @Override
     public void setTabbedPane(JTabbedPane tabbedPane) {
@@ -75,31 +76,45 @@ public class ProcessViewerImpl implements IProcessViewer {
         //Map<Integer, OutputPanel> map = new HashMap<>();
         int first = index == -1 ? 0 : index;
         int last = index == -1 ? n - 1 : index;
-        for (int i = first; i <= last; i++) {
-            String outputPanelKey = p.getProcessName() + "-" + i;
-            Integer idx = views.get(outputPanelKey);
-            if (idx == null) {
-                idx = tabbedPane.getTabCount();
-                views.put(outputPanelKey, idx);
-                OutputPanel panel = new OutputPanel(p, i);
-                //map.put(idx[i], panel);
-                //panel.gtadd(panel, BorderLayout.CENTER);
-                String postfix = n > 1 ? ds.getStorageFileNamePostFix(i + 1) : "";
-                String name = p.getProcessName() + (n > 1 ? "(" + postfix + ")" : "");
-                tabbedPane.addTab(name, panel);
-                panel.setTabName(name);
-                tabbedPane.setToolTipTextAt(idx, ds.getStorageFileName(i + 1));
-                String res = ds.asTable(p.getOutput(), i + 1, true);
-                panel.setText(res);
-                res = FormattedOutput.formatTable(res);
-                panel.getTextArea().setText(res);
-                panel.getTextArea().setCaretPosition(0);
+        // Setting cursor for any Component:
+        try {
+            tabbedPane.setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
+            for (int i = first; i <= last; i++) {
+                Integer idx = getViewIdx(p, i);
+                if (idx == null) {
+                    idx = tabbedPane.getTabCount();
+                    OutputPanel panel = new OutputPanel(p, i);
+                    //map.put(idx[i], panel);
+                    //panel.gtadd(panel, BorderLayout.CENTER);
+                    String postfix = n > 1 ? ds.getStorageFileNamePostFix(i + 1) : "";
+                    String name = p.getProcessName() + (n > 1 ? "(" + postfix + ")" : "");
+                    tabbedPane.addTab(name, panel);
+                    panel.setTabName(name);
+                    tabbedPane.setToolTipTextAt(idx, ds.getStorageFileName(i + 1));
+                    String res = ds.asTable(p.getOutput(), i + 1, true);
+                    panel.setText(res);
+                    res = FormattedOutput.formatTable(res);
+                    panel.getTextArea().setText(res);
+                    panel.getTextArea().setCaretPosition(0);
+                }
+                if (activate) {
+                    tabbedPane.setSelectedIndex(idx);
+                    tabbedPane.requestFocus();
+                }
             }
-            if (activate) {
-                tabbedPane.setSelectedIndex(idx);
-                tabbedPane.requestFocus();
+        } finally {
+            tabbedPane.setCursor(Cursor.getDefaultCursor());
+        }
+    }
+
+    Integer getViewIdx(IProcess p, Integer idx) {
+        for (int i = 0; i < tabbedPane.getTabCount(); i++) {
+            OutputPanel panel = (OutputPanel) tabbedPane.getComponentAt(i);
+            if (panel.getProcessName().equals(p.getProcessName()) && panel.getIdx().equals(idx)) {
+                return i;
             }
         }
+        return null;
     }
 
     @Override
@@ -123,9 +138,9 @@ public class ProcessViewerImpl implements IProcessViewer {
             OutputPanel panel = (OutputPanel) tabbedPane.getComponentAt(tab);
             panel.onClose();
             IProcess p = panel.getProcess();
-            if (p != null) {
-                views.remove(p.getProcessName());
-            }
+            /*            if (p != null) {
+                views.remove(p.getProcessName() + "-" + tab);
+            }*/
             tabbedPane.removeTabAt(tab);
         }
     }

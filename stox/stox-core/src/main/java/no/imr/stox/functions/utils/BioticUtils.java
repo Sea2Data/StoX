@@ -300,22 +300,27 @@ public final class BioticUtils {
 
     public static BioticData copyBioticData(BioticData mList, boolean withMissions) {
         BioticData missions = new BioticData();
-        mList.forEach((ms) -> {
-            MissionBO ms2 = new MissionBO(ms);
-            missions.add(ms2);
-            ms.getFishstationBOs().forEach((f) -> {
-                FishstationBO fs = ms2.addFishstation(new FishstationBO(ms2, f));
-                f.getCatchSampleBOs().forEach((c) -> {
-                    CatchSampleBO cs = fs.addCatchSample(new CatchSampleBO(fs, c));
-                    c.getIndividualBOs().forEach((i) -> {
-                        IndividualBO ii = cs.addIndividual(new IndividualBO(cs, i));
-                        i.getAgeDeterminationBOs().forEach((aBO) -> {
-                            ii.addAgeDetermination(new AgeDeterminationBO(ii, aBO));
+        if (withMissions) {
+            mList.forEach((ms) -> {
+                MissionBO ms2 = new MissionBO(ms);
+                missions.add(ms2);
+                ms.getFishstationBOs().forEach((f) -> {
+                    FishstationBO fs = ms2.addFishstation(new FishstationBO(ms2, f));
+                    f.getCatchSampleBOs().forEach((c) -> {
+                        CatchSampleBO cs = fs.addCatchSample(new CatchSampleBO(fs, c));
+                        cs.setSpecCat(c.getSpecCat());
+                        c.getIndividualBOs().forEach((i) -> {
+                            IndividualBO ii = cs.addIndividual(new IndividualBO(cs, i));
+                            ii.setIndividualWeightG(i.getIndividualWeightG());
+                            ii.setLengthCM(i.getLengthCM());
+                            i.getAgeDeterminationBOs().forEach((aBO) -> {
+                                ii.addAgeDetermination(new AgeDeterminationBO(ii, aBO));
+                            });
                         });
                     });
                 });
             });
-        });
+        }
         missions.setSpecCatAdded(mList.isSpecCatAdded());
         missions.setLengthCMAdded(mList.isLengthCMAdded());
         missions.setIndividualWeightGAdded(mList.isIndividualWeightGAdded());

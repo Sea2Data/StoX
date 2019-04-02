@@ -45,35 +45,35 @@ public class IndividualBO extends BaseBO implements Serializable {
     }
 
     public Integer getAge() {
-        return acquireAgeDet().bo().getAge();
+        return getAgeDet() != null ? getAgeDet().bo().getAge() : null;
     }
 
     public Object getSpawningage() {
-        return acquireAgeDet().bo().getSpawningage();
+        return getAgeDet() != null ? getAgeDet().bo().getSpawningage() : null;
     }
 
     public Object getSpawningzones() {
-        return acquireAgeDet().bo().getSpawningzones();
+        return getAgeDet() != null ? getAgeDet().bo().getSpawningzones() : null;
     }
 
     public Object getReadability() {
-        return acquireAgeDet().bo().getReadability();
+        return getAgeDet() != null ? getAgeDet().bo().getReadability() : null;
     }
 
     public Object getOtolithtype() {
-        return acquireAgeDet().bo().getOtolithtype();
+        return getAgeDet() != null ? getAgeDet().bo().getOtolithtype() : null;
     }
 
     public Object getOtolithedge() {
-        return acquireAgeDet().bo().getOtolithedge();
+        return getAgeDet() != null ? getAgeDet().bo().getOtolithedge() : null;
     }
 
     public Object getOtolithcentre() {
-        return acquireAgeDet().bo().getOtolithcentre();
+        return getAgeDet() != null ? getAgeDet().bo().getOtolithcentre() : null;
     }
 
     public Object getCalibration() {
-        return acquireAgeDet().bo().getCalibration();
+        return getAgeDet() != null ? getAgeDet().bo().getCalibration() : null;
     }
 
     public List<AgeDeterminationBO> getAgeDeterminationBOs() {
@@ -96,11 +96,8 @@ public class IndividualBO extends BaseBO implements Serializable {
         return agedet;
     }
 
-    public AgeDeterminationBO acquireAgeDet() {
-        if (ageDeterminationBOs.isEmpty()) {
-            return addAgeDetermination();
-        }
-        return ageDeterminationBOs.get(0);
+    public AgeDeterminationBO getAgeDet() {
+        return ageDeterminationBOs.size() == 1 ? ageDeterminationBOs.get(0) : null;
     }
 
     @Override

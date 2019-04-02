@@ -182,5 +182,8 @@ public class FishstationBO extends BaseBO implements ILatLonEvent {
         getCatchSampleBOs().add(cbo);
         return cbo;
     }
-
+    
+/*    public String getCruiseOrYearKey() {
+        return ((MissionBO)getParent()).getCruiseOrYearKey() + "/" + getInternalKey();
+    }*/
 }

@@ -88,6 +88,15 @@ public class OutputPanel extends javax.swing.JPanel {
         return model.getProcessFromName(processName);
     }
 
+    public String getProcessName() {
+        return processName;
+    }
+
+    public Integer getIdx() {
+        return idx;
+    }
+    
+
     public JTextArea getTextArea() {
         return jTextArea2;
     }
