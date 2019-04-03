@@ -47,14 +47,14 @@ public class StationLengthDist extends AbstractFunction {
         LengthDistMatrix result = new LengthDistMatrix();
         // Set the resolution matrix as Observation type and length interval
         String lengthDistType = (String) input.get(Functions.PM_STATIONLENGTHDIST_LENGTHDISTTYPE);
-        Double lengthInterval = BioticUtils.getLengthInterval(missions);
+        Double lengthInterval = BioticUtils.getLengthInterval(missions.getMissions());
         result.getResolutionMatrix().setRowValue(Functions.RES_OBSERVATIONTYPE, Functions.OBSERVATIONTYPE_STATION);
         result.getResolutionMatrix().setRowValue(Functions.RES_LENGTHINTERVAL, lengthInterval);
         result.getResolutionMatrix().setRowValue(Functions.RES_LENGTHDISTTYPE, lengthDistType);
         Boolean normToDist = lengthDistType.equals(Functions.LENGTHDISTTYPE_NORMLENGHTDIST);
         Boolean inPercent = lengthDistType.equals(Functions.LENGTHDISTTYPE_PERCENTLENGHTDIST);
         Double firstLenGrp = Double.MAX_VALUE, lastLenGrp = -Double.MAX_VALUE;
-        for (MissionBO ms : missions) {
+        for (MissionBO ms : missions.getMissions()) {
             for (FishstationBO fs : ms.getFishstationBOs()) {
                 // Standardize LFQ to number of trawl depths.
                 Double distanceWFac = 1.0;

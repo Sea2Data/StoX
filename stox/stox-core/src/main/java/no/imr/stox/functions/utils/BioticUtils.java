@@ -172,7 +172,7 @@ public final class BioticUtils {
         if (mList == null) {
             return null;
         }
-        for (MissionBO ms : mList) {
+        for (MissionBO ms : mList.getMissions()) {
             for (FishstationBO fs : ms.getFishstationBOs()) {
                 if (fs.getKey().equals(key)) {
                     return fs;
@@ -294,16 +294,16 @@ public final class BioticUtils {
         return 1d;
     }
 
-    public static BioticData copyBioticData(BioticData mList) {
-        return copyBioticData(mList, true);
-    }
+    static public final int BIOTICDATA_COPY_FLAGS_COPYDATA = 0;
+    static public final int BIOTICDATA_COPY_FLAGS_RESETDATA = 1;
+    static public final int BIOTICDATA_COPY_FLAGS_USEEXISTINGDATA = 2;
 
-    public static BioticData copyBioticData(BioticData mList, boolean withMissions) {
-        BioticData missions = new BioticData();
-        if (withMissions) {
-            mList.forEach((ms) -> {
+    public static BioticData copyBioticData(BioticData data, int copyMode) {
+        BioticData missions = copyMode == BIOTICDATA_COPY_FLAGS_USEEXISTINGDATA ? new BioticData(data.getMissions()) : new BioticData();
+        if (copyMode == BIOTICDATA_COPY_FLAGS_COPYDATA) {
+            data.getMissions().forEach((ms) -> {
                 MissionBO ms2 = new MissionBO(ms);
-                missions.add(ms2);
+                missions.getMissions().add(ms2);
                 ms.getFishstationBOs().forEach((f) -> {
                     FishstationBO fs = ms2.addFishstation(new FishstationBO(ms2, f));
                     f.getCatchSampleBOs().forEach((c) -> {
@@ -321,10 +321,10 @@ public final class BioticUtils {
                 });
             });
         }
-        missions.setSpecCatAdded(mList.isSpecCatAdded());
-        missions.setLengthCMAdded(mList.isLengthCMAdded());
-        missions.setIndividualWeightGAdded(mList.isIndividualWeightGAdded());
-        missions.setAgeAdded(mList.isAgeAdded());
+        missions.setSpecCatAdded(data.isSpecCatAdded());
+        missions.setLengthCMAdded(data.isLengthCMAdded());
+        missions.setIndividualWeightGAdded(data.isIndividualWeightGAdded());
+        missions.setAgeMerged(data.isAgeMerged());
         return missions;
     }
 }

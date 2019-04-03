@@ -45,7 +45,7 @@ public class IndividualDataTest {
         return input;
     }
 
-    List<MissionBO> getMissions() {
+    BioticData getMissions() {
         MissionBO mt = new MissionBO();
         mt.bo().setCruise("2013");
         FishstationBO f = mt.addFishstation();
@@ -61,8 +61,8 @@ public class IndividualDataTest {
         i.bo().setSpecimenid(1);
         i.setLengthCM(10d);
         i.setIndividualWeightG(0.5d);
-        List<MissionBO> missions = new BioticData();
-        missions.add(mt);
+        BioticData missions = new BioticData();
+        missions.getMissions().add(mt);
         return missions;
     }
 

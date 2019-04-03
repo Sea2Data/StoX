@@ -39,7 +39,7 @@ public class ReadBioticXML extends AbstractFunction {
      */
     @Override
     public Object perform(Map<String, Object> input) {
-        List<MissionBO> stations = new BioticData();
+        BioticData stations = new BioticData();
         for (int i = 1; i <= 20; i++) {
             String fileName = (String) input.get("FileName" + i);
             if (fileName == null) {
@@ -50,7 +50,7 @@ public class ReadBioticXML extends AbstractFunction {
         return stations;
     }
 
-    public void readStations(Map<String, Object> input, List<MissionBO> stations, String fileName) {
+    public void readStations(Map<String, Object> input, BioticData stations, String fileName) {
         IModel model = (IModel) input.get(Functions.PM_MODEL);
         ILogger logger = (ILogger) input.get(Functions.PM_LOGGER);
         if (!(new File(fileName)).exists()) {
@@ -73,10 +73,10 @@ public class ReadBioticXML extends AbstractFunction {
         }*/
     }
 
-    private void connectBioticV3ToBO(List<MissionType> mission, List<MissionBO> stations, IModel model) {
+    private void connectBioticV3ToBO(List<MissionType> mission, BioticData stations, IModel model) {
         for (MissionType mt : mission) {
             MissionBO mbo = new MissionBO(mt);
-            stations.add(mbo);
+            stations.getMissions().add(mbo);
             for (FishstationType fs : mt.getFishstation()) {
                 FishstationBO fbo = mbo.addFishstation(fs);
                 for (CatchsampleType cs : fs.getCatchsample()) {
@@ -93,7 +93,7 @@ public class ReadBioticXML extends AbstractFunction {
                     sbo.bo().setCommonname(commonName);
 
                     // Initially set the speccat
-                    sbo.setSpecCat(sbo.getSpeciesKey());
+                    //sbo.setSpecCat(sbo.getSpeciesKey());
                 }
                 // catchplatform=platform if null
                 if (fbo.bo().getCatchplatform() == null) {

@@ -51,7 +51,7 @@ public class ConvertLengthAndWeight extends AbstractFunction {
         Double wGutHeadOff = (Double) input.get(Functions.PM_CONVERTLENGTHANDWEIGHT_WGUTHEADOFF); // product type 3,4
         Double wGutHeadOn = (Double) input.get(Functions.PM_CONVERTLENGTHANDWEIGHT_WGUTHEADON); // product type 3,4
         // if 
-        for (MissionBO ms : bioticData) {
+        for (MissionBO ms : bioticData.getMissions()) {
             for (FishstationBO f : ms.getFishstationBOs()) {
                 for (CatchSampleBO c : f.getCatchSampleBOs()) {
                     for (IndividualBO i : c.getIndividualBOs()) {

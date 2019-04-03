@@ -58,7 +58,7 @@ public class StationLengthDistTest {
         return (LengthDistMatrix) (new StationLengthDist()).perform(getInput(inPercent, normToDist, getMissions()));
     }
 
-    private Map<String, Object> getInput(Boolean inPercent, Boolean normToDist, List<MissionBO> missions) {
+    private Map<String, Object> getInput(Boolean inPercent, Boolean normToDist, BioticData missions) {
         Map<String, Object> input = new HashMap<>();
         input.put(Functions.PM_STATIONLENGTHDIST_BIOTICDATA, missions);
         //input.put(Functions.PM_STATIONLENGTHDIST_LENGTHINTERVAL, lenInterval);
@@ -67,7 +67,7 @@ public class StationLengthDistTest {
         return input;
     }
 
-    List<MissionBO> getMissions() {
+    BioticData getMissions() {
         MissionBO m = new MissionBO();
         m.bo().setCruise("2013");
         FishstationBO f = m.addFishstation();
@@ -83,8 +83,8 @@ public class StationLengthDistTest {
         i.setLengthCM(10d);
         i = s.addIndividual();
         i.setLengthCM(11d);
-        List<MissionBO> missions = new BioticData();
-        missions.add(m);
+        BioticData missions = new BioticData();
+        missions.getMissions().add(m);
         return missions;
     }
 

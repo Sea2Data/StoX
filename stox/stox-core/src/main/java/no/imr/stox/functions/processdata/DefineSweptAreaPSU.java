@@ -13,6 +13,7 @@ import no.imr.sea2data.biotic.bo.FishstationBO;
 import no.imr.sea2data.biotic.bo.MissionBO;
 import no.imr.sea2data.imrmap.utils.JTSUtils;
 import no.imr.sea2data.imrbase.matrix.MatrixBO;
+import no.imr.stox.bo.BioticData;
 import no.imr.stox.bo.ProcessDataBO;
 import no.imr.stox.functions.AbstractFunction;
 import no.imr.stox.functions.utils.AbndEstProcessDataUtil;
@@ -37,7 +38,7 @@ public class DefineSweptAreaPSU extends AbstractFunction {
         ILogger logger = (ILogger) input.get(Functions.PM_LOGGER);
         ProcessDataBO pd = (ProcessDataBO) input.get(Functions.PM_DEFINESWEPTAREAPSU_PROCESSDATA);
         String method = (String) input.get(Functions.PM_DEFINESWEPTAREAPSU_METHOD);
-        List<MissionBO> bioticData = (List<MissionBO>) input.get(Functions.PM_DEFINESWEPTAREAPSU_BIOTICDATA);
+        BioticData bioticData = (BioticData) input.get(Functions.PM_DEFINESWEPTAREAPSU_BIOTICDATA);
         if (method == null) {
             return pd;
         }
@@ -57,12 +58,12 @@ public class DefineSweptAreaPSU extends AbstractFunction {
         return pd;
     }
 
-    private void definePSUAndAssignmentsByBioticData(ProcessDataBO pd, List<MissionBO> bioticData) {
+    private void definePSUAndAssignmentsByBioticData(ProcessDataBO pd, BioticData bioticData) {
         // Define station as a PSU with an assignment to itself.
         String estLayer = "1"; // Estimation layer 1 hardcoded when depth doesnt play a role.
         AbndEstProcessDataUtil.setAssignmentResolution(pd, Functions.SAMPLEUNIT_PSU);
         Integer i = 1;
-        for (MissionBO ms : bioticData) {
+        for (MissionBO ms : bioticData.getMissions()) {
             for (FishstationBO fs : ms.getFishstationBOs()) {
                 String station = fs.getKey();
                 String edsu = station;

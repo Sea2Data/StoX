@@ -19,6 +19,7 @@ import no.imr.sea2data.echosounderbo.FrequencyBO;
 import no.imr.sea2data.imrbase.math.ImrMath;
 import no.imr.sea2data.imrbase.util.IMRdate;
 import no.imr.sea2data.imrmap.utils.JTSUtils;
+import no.imr.stox.bo.BioticData;
 import no.imr.stox.functions.utils.AbndEstParamUtil;
 import no.imr.stox.functions.utils.EchosounderUtils;
 import no.imr.stox.functions.utils.Functions;
@@ -42,7 +43,7 @@ public class BioStationAssignment extends AbstractFunction {
     public Object perform(Map<String, Object> input) {
         ILogger logger = (ILogger) input.get(Functions.PM_LOGGER);
         ProcessDataBO pd = (ProcessDataBO) input.get(Functions.PM_BIOSTATIONASSIGNMENT_PROCESSDATA);
-        List<MissionBO> missions = (List<MissionBO>) input.get(Functions.PM_BIOSTATIONASSIGNMENT_BIOTICDATA);
+        BioticData missions = (BioticData) input.get(Functions.PM_BIOSTATIONASSIGNMENT_BIOTICDATA);
 
         List<DistanceBO> distances = (List<DistanceBO>) input.get(Functions.PM_BIOSTATIONASSIGNMENT_ACOUSTICDATA);
         String assignmentMethod = (String) input.get(Functions.PM_BIOSTATIONASSIGNMENT_ASSIGNMENTMETHOD);
@@ -120,7 +121,7 @@ public class BioStationAssignment extends AbstractFunction {
 
                         try {
                             for (DistanceBO d : distsBOPerPSU) {
-                                List<WeightedFishStation> wfsList = missions.parallelStream().flatMap(m -> m.getFishstationBOs().parallelStream())
+                                List<WeightedFishStation> wfsList = missions.getMissions().parallelStream().flatMap(m -> m.getFishstationBOs().parallelStream())
                                         .map(fs -> new WeightedFishStation(getScalarProduct(d, fs, refLatitude, refLongitude, refGCDistance, refTime, refBotDepth), fs))
                                         .filter(wfs -> wfs.getScalar() != null)
                                         .collect(Collectors.toList());
@@ -151,7 +152,7 @@ public class BioStationAssignment extends AbstractFunction {
                             e.printStackTrace();
                         }
                     } else {
-                        for (MissionBO ms : missions) {
+                        for (MissionBO ms : missions.getMissions()) {
                             for (FishstationBO fs : ms.getFishstationBOs()) {
                                 if (fs.bo().getLatitudestart() == null || fs.bo().getLongitudestart() == null) {
                                     logger.error("Missing position at " + fs.getKey(), null);

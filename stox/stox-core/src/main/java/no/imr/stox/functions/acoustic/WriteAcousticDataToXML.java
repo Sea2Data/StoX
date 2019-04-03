@@ -11,6 +11,7 @@ import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
 import no.imr.sea2data.echosounderbo.DistanceBO;
+import no.imr.sea2data.imrbase.util.Workspace;
 import no.imr.stox.functions.AbstractFunction;
 import no.imr.stox.functions.utils.Functions;
 
@@ -27,8 +28,9 @@ public class WriteAcousticDataToXML extends AbstractFunction {
                 .collect(Collectors.groupingBy(DistanceBO::getCruise));
         cruises.entrySet().parallelStream()
                 .forEach(e -> {
-                    String fileName = e.getKey() + "_" + (String) input.get(Functions.PM_WRITEACOUSTICDATATOXML_FILENAME);
-                    fileName = (String) input.get(Functions.PM_PROJECTFOLDER) + "/" + fileName; // Make relative to project folder
+                    String dir = Workspace.getDir((String) input.get(Functions.PM_PROJECTFOLDER), (String) input.get(Functions.PM_WRITEACOUSTICDATATOXML_DIRECTORY));
+                    String fileName = e.getKey() + "_Acoustic.xml";
+                    fileName = dir + "/" + fileName;
                     ListUser20Writer.export(e.getKey(), null, null, fileName, e.getValue(), true);
                 });
         return null;

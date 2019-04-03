@@ -23,6 +23,7 @@ import no.imr.sea2data.stox.providers.LFQProvider;
 import no.imr.sea2data.stox.providers.ProcessDataProvider;
 import no.imr.stox.api.IProjectProvider;
 import no.imr.sea2data.imrbase.matrix.MatrixBO;
+import no.imr.stox.bo.BioticData;
 import no.imr.stox.functions.utils.AbndEstProcessDataUtil;
 import no.imr.stox.functions.utils.Functions;
 import no.imr.stoxmap.strataedit.StrataEditBar;
@@ -290,7 +291,7 @@ public final class MapTopComponent extends TopComponent implements LookupListene
                     }
                     break;
                 case Functions.FN_FILTERBIOTIC:
-                    bioticData = ds != null ? ((List<MissionBO>) ds).stream().flatMap(m -> m.getFishstationBOs().stream()).collect(Collectors.toList()) : null;
+                    bioticData = ds != null ? ((BioticData) ds).getMissions().stream().flatMap(m -> m.getFishstationBOs().stream()).collect(Collectors.toList()) : null;
                     findBioticAbsenceData();
                     if (process.isRespondInGUI()) {
                         checkAcousticLayer();

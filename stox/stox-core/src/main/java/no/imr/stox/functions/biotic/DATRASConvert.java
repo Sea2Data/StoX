@@ -27,7 +27,7 @@ public class DATRASConvert extends AbstractFunction {
     public Object perform(Map<String, Object> input) {
         BioticData data = (BioticData)input.get(Functions.PM_DATRAS_BIOTICDATA);;
         ILogger logger = (ILogger) input.get(Functions.PM_LOGGER);
-        if (data != null && !(data.isLengthCMAdded() || data.isIndividualWeightGAdded() || data.isAgeAdded())) {
+        if (data != null && !(data.isLengthCMAdded() || data.isIndividualWeightGAdded() || data.isAgeMerged())) {
             logger.error("LengthCM/IndividualWeightG/Age not defined. Add DefineIndMeasurement and DefineIndAge to model.", null);
         }
         return data;

@@ -4,6 +4,7 @@ import BioticTypes.v3.AgedeterminationType;
 import BioticTypes.v3.IndividualType;
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 
 public class IndividualBO extends BaseBO implements Serializable {
@@ -11,7 +12,7 @@ public class IndividualBO extends BaseBO implements Serializable {
     private List<AgeDeterminationBO> ageDeterminationBOs = new ArrayList<>();
     Double lengthCM;
     Double individualWeightG;
-    
+
     public IndividualBO(CatchSampleBO sampleF, IndividualType i) {
         super(sampleF, i);
     }
@@ -44,6 +45,10 @@ public class IndividualBO extends BaseBO implements Serializable {
         this.individualWeightG = individualWeightG;
     }
 
+    public Integer getAgeDeterminationId() {
+        return getAgeDet() != null ? getAgeDet().bo().getAgedeterminationid() : null;
+    }
+    
     public Integer getAge() {
         return getAgeDet() != null ? getAgeDet().bo().getAge() : null;
     }
@@ -97,7 +102,24 @@ public class IndividualBO extends BaseBO implements Serializable {
     }
 
     public AgeDeterminationBO getAgeDet() {
-        return ageDeterminationBOs.size() == 1 ? ageDeterminationBOs.get(0) : null;
+        if (ageDeterminationBOs.isEmpty()) {
+            return null;
+        }
+        if (ageDeterminationBOs.size() == 1) {
+            return ageDeterminationBOs.get(0);
+        } else {
+            if (getParent() != null) {
+                IndividualBO i = ((IndividualBO) getParent());
+                Integer pref = i.bo().getPreferredagereading();
+                if (pref == null) {
+                    pref = ageDeterminationBOs.stream().mapToInt(a -> a.bo().getAgedeterminationid()).min().orElse(1);
+                }
+                Integer preff = pref;
+                return ageDeterminationBOs.stream().filter(a -> a.bo().getAgedeterminationid() != null
+                        && a.bo().getAgedeterminationid().equals(preff)).findFirst().orElse(null);
+            }
+        }
+        return null;
     }
 
     @Override

@@ -69,10 +69,10 @@ public class FilterBiotic extends AbstractFunction {
         JexlContext ctx = new MapContext();
         // Old structures:
         BioticData bdata = (BioticData) input.get(Functions.PM_FILTERBIOTIC_BIOTICDATA);
-        BioticData missions = BioticUtils.copyBioticData(bdata, false);
-        for (MissionBO ms : bdata) {
+        BioticData missions = BioticUtils.copyBioticData(bdata, BioticUtils.BIOTICDATA_COPY_FLAGS_RESETDATA);
+        for (MissionBO ms : bdata.getMissions()) {
             MissionBO msF = new MissionBO(ms);
-            missions.add(msF);
+            missions.getMissions().add(msF);
             for (FishstationBO fs : ms.getFishstationBOs()) {
                 FilterUtils.resolveContext(ctx, fs);
                 if (!FilterUtils.evaluate(ctx, stationExpression)) {
@@ -96,7 +96,7 @@ public class FilterBiotic extends AbstractFunction {
                         if (bdata.isIndividualWeightGAdded()) {
                             ctx.set("individualweightg", in.getIndividualWeightG());
                         }
-                        if (bdata.isAgeAdded()) {
+                        if (bdata.isAgeMerged()) {
                             ctx.set("age", in.getAge());
                         }
                         if (!FilterUtils.evaluate(ctx, individualExpression)) {

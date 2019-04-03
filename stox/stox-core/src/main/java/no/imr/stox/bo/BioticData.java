@@ -13,12 +13,26 @@ import no.imr.sea2data.biotic.bo.MissionBO;
  *
  * @author aasmunds
  */
-public class BioticData extends ArrayList<MissionBO> {
+public class BioticData {
+
+    List<MissionBO> missions;
+
+    public BioticData() {
+        missions = new ArrayList<>();
+    }
+
+    public BioticData(List<MissionBO> missions) {
+        this.missions = missions;
+    }
+
+    public List<MissionBO> getMissions() {
+        return missions;
+    }
 
     boolean specCatAdded = false;
     boolean lengthCMAdded = false;
     boolean individualWeightGAdded = false;
-    boolean ageAdded = false;
+    boolean ageMerged = false;
 
     public boolean isSpecCatAdded() {
         return specCatAdded;
@@ -44,11 +58,11 @@ public class BioticData extends ArrayList<MissionBO> {
         this.individualWeightGAdded = individualWeightGAdded;
     }
 
-    public boolean isAgeAdded() {
-        return ageAdded;
+    public boolean isAgeMerged() {
+        return ageMerged;
     }
 
-    public void setAgeAdded(boolean ageAdded) {
-        this.ageAdded = ageAdded;
+    public void setAgeMerged(boolean ageAdded) {
+        this.ageMerged = ageAdded;
     }
 }

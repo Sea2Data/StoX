@@ -36,7 +36,7 @@ public class IndividualData extends AbstractFunction {
         // Fish stations
         ILogger logger = (ILogger) input.get(Functions.PM_LOGGER);
         BioticData missions = (BioticData) input.get(Functions.PM_INDIVIDUALDATA_BIOTICDATA);
-        if (logger != null && missions != null && !(missions.isLengthCMAdded() || missions.isIndividualWeightGAdded() || missions.isAgeAdded())) {
+        if (logger != null && missions != null && !(missions.isLengthCMAdded() || missions.isIndividualWeightGAdded() || missions.isAgeMerged())) {
             logger.error("LengthCM/IndividualWeightG/Age not defined. Add DefineIndMeasurement and DefineIndAge to model.", null);
         }
         // indDataSel = Matrix[ROW~Stratum / COL~EstLayer / CELL~Station / VAR~Included]
@@ -57,7 +57,7 @@ public class IndividualData extends AbstractFunction {
             for (String estLayerKey : stratum.getKeys()) {
                 MatrixBO estLayer = (MatrixBO) stratum.getValue(estLayerKey);
                 List<String> stations = estLayer.getKeys();
-                for (MissionBO ms : missions) {
+                for (MissionBO ms : missions.getMissions()) {
                     for (FishstationBO fs : ms.getFishstationBOs()) {
                         if (!stations.contains(fs.getKey())) {
                             continue;

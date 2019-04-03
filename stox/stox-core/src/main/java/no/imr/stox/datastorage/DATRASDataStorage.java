@@ -20,6 +20,7 @@ import no.imr.sea2data.imrmap.layer.AreaUnits;
 import no.imr.sea2data.imrbase.matrix.MatrixBO;
 import no.imr.sea2data.imrbase.util.ExportUtil;
 import no.imr.sea2data.imrbase.util.ImrIO;
+import no.imr.stox.bo.BioticData;
 import org.apache.commons.lang.StringUtils;
 
 /**
@@ -61,7 +62,7 @@ public class DATRASDataStorage extends FileDataStorage {
 //HLNoAtLength = # ind in Length class * (Fangst ant / LPrøve ant.) * 60/(StopTime - StartTime)
     @Override
     public <T> void asTable(T data, Integer level, Writer wr, Boolean withUnits) {
-        asTable((List<MissionBO>) data, level, wr);
+        asTable((BioticData) data, level, wr);
     }
 
     @Override
@@ -169,7 +170,7 @@ public class DATRASDataStorage extends FileDataStorage {
     
     
      */
-    public static void asTable(List<MissionBO> list, Integer level, Writer wr) {
+    public static void asTable(BioticData list, Integer level, Writer wr) {
         switch (level) {
             case 1:
                 ImrIO.write(wr, ExportUtil.carrageReturnLineFeed(ExportUtil.csv("RecordType", "Quarter", "Country", "Ship", "Gear",
@@ -180,7 +181,7 @@ public class DATRASDataStorage extends FileDataStorage {
                         "DoorSpread", "WingSpread", "Buoyancy", "KiteDim", "WgtGroundRope", "TowDir", "GroundSpeed",
                         "SpeedWater", "SurCurDir", "SurCurSpeed", "BotCurDir", "BotCurSpeed", "WindDir", "WindSpeed",
                         "SwellDir", "SwellHeight", "SurTemp", "BotTemp", "SurSal", "BotSal", "ThermoCline", "ThClineDepth")));
-                for (MissionBO ms : list) {
+                for (MissionBO ms : list.getMissions()) {
                     for (FishstationBO fs : ms.getFishstationBOs()) {
                         Integer sweep = getGOVSweepByEquipment(fs.bo().getGear());
                         if (sweep == null) { // Sweep filter
@@ -329,7 +330,7 @@ public class DATRASDataStorage extends FileDataStorage {
                 ImrIO.write(wr, ExportUtil.carrageReturnLineFeed(ExportUtil.csv("RecordType", "Quarter", "Country", "Ship", "Gear",
                         "SweepLngt", "GearExp", "DoorType", "StNo", "HaulNo", "Year", "SpecCodeType", "SpecCode", "SpecVal", "Sex", "TotalNo",
                         "CatIdentifier", "NoMeas", "SubFactor", "SubWgt", "CatCatchWgt", "LngtCode", "LngtClass", "HLNoAtLngt")));
-                for (MissionBO ms : list) {
+                for (MissionBO ms : list.getMissions()) {
                     for (FishstationBO fs : ms.getFishstationBOs()) {
                         Integer sweep = getGOVSweepByEquipment(fs.bo().getGear());
                         if (sweep == null) { // Sweep filter
@@ -470,7 +471,7 @@ public class DATRASDataStorage extends FileDataStorage {
                 ImrIO.write(wr, ExportUtil.carrageReturnLineFeed(ExportUtil.csv("RecordType", "Quarter", "Country", "Ship", "Gear",
                         "SweepLngt", "GearExp", "DoorType", "StNo", "HaulNo", "Year", "SpecCodeType", "SpecCode", "AreaType", "AreaCode", "LngtCode",
                         "LngtClass", "Sex", "Maturity", "PlusGr", "AgeRings", "CANoAtLngt", "IndWgt")));
-                for (MissionBO ms : list) {
+                for (MissionBO ms : list.getMissions()) {
                     for (FishstationBO fs : ms.getFishstationBOs()) {
                         Integer sweep = getGOVSweepByEquipment(fs.bo().getGear());
                         if (sweep == null) { // Sweep filter

@@ -40,7 +40,7 @@ public class BioticDataStorage extends FileDataStorage {
 
     @Override
     public <T> void asTable(T data, Integer level, Writer wr, Boolean withUnits) {
-        asTable((List<Object>) data, level, wr);
+        asTable((BioticData) data, level, wr);
     }
 
     @Override
@@ -79,16 +79,15 @@ public class BioticDataStorage extends FileDataStorage {
         return null;
     }
 
-    public static void asTable(List<Object> list, Integer level, Writer wr) {
+    public static void asTable(BioticData ml, Integer level, Writer wr) {
         // Old code
-        BioticData ml = ((BioticData) (List) list);
         ExportUtil.HiddenObj notIncluded = new ExportUtil.HiddenObj();
 
         switch (level) {
             case 1:
                 ImrIO.write(wr, ExportUtil.carrageReturnLineFeed(ExportUtil.tabbed("missiontype", "startyear", "platform", "missionnumber",
                         "missiontypename", "callsignal", "platformname", "cruise", "missionstartdate", "missionstopdate", "purpose")));
-                for (MissionBO ms : ml) {
+                for (MissionBO ms : ml.getMissions()) {
                     MissionType m = ms.bo();
                     ImrIO.write(wr, ExportUtil.carrageReturnLineFeed(ExportUtil.tabbed(
                             m.getMissiontype(), m.getStartyear(), m.getPlatform(), m.getMissionnumber(), m.getMissiontypename(),
@@ -110,7 +109,7 @@ public class BioticDataStorage extends FileDataStorage {
                         "wirediameter", "wiredensity", "soaktime", "tripno", "fishabundance", "fishdistribution", "landingsite", "fishingground",
                         "vesselcount", "dataquality", "haulvalidity", "flora", "vegetationcover", "visibility", "waterlevel", "winddirection",
                         "windspeed", "clouds", "sea", "weather", "stationcomment")));
-                for (MissionBO ms : ml) {
+                for (MissionBO ms : ml.getMissions()) {
                     MissionType m = ms.bo();
                     for (FishstationBO fs : ms.getFishstationBOs()) {
                         FishstationType f = fs.bo();
@@ -144,7 +143,7 @@ public class BioticDataStorage extends FileDataStorage {
                         "lengthsamplecount", "specimensamplecount", "agesamplecount", "agingstructure", "parasite", "stomach", "intestine",
                         "tissuesample", "samplerecipient", "catchcomment"
                 )));
-                for (MissionBO ms : ml) {
+                for (MissionBO ms : ml.getMissions()) {
                     MissionType m = ms.bo();
                     for (FishstationBO fs : ms.getFishstationBOs()) {
                         FishstationType f = fs.bo();
@@ -177,14 +176,15 @@ public class BioticDataStorage extends FileDataStorage {
                         "individualvolume", "lengthresolution",
                         "length",
                         ExportUtil.getObj("LengthCM", ml.isLengthCMAdded(), notIncluded),
-                        ExportUtil.getObj("Age", ml.isAgeAdded(), notIncluded),
-                        ExportUtil.getObj("SpawningAge", ml.isAgeAdded(), notIncluded),
-                        ExportUtil.getObj("SpawningZones", ml.isAgeAdded(), notIncluded),
-                        ExportUtil.getObj("Readability", ml.isAgeAdded(), notIncluded),
-                        ExportUtil.getObj("OtolithType", ml.isAgeAdded(), notIncluded),
-                        ExportUtil.getObj("OtolithEdge", ml.isAgeAdded(), notIncluded),
-                        ExportUtil.getObj("OtolithCentre", ml.isAgeAdded(), notIncluded),
-                        ExportUtil.getObj("Calibration", ml.isAgeAdded(), notIncluded),
+                        ExportUtil.getObj("AgeDeterminationId", ml.isAgeMerged(), notIncluded),
+                        ExportUtil.getObj("Age", ml.isAgeMerged(), notIncluded),
+                        ExportUtil.getObj("SpawningAge", ml.isAgeMerged(), notIncluded),
+                        ExportUtil.getObj("SpawningZones", ml.isAgeMerged(), notIncluded),
+                        ExportUtil.getObj("Readability", ml.isAgeMerged(), notIncluded),
+                        ExportUtil.getObj("OtolithType", ml.isAgeMerged(), notIncluded),
+                        ExportUtil.getObj("OtolithEdge", ml.isAgeMerged(), notIncluded),
+                        ExportUtil.getObj("OtolithCentre", ml.isAgeMerged(), notIncluded),
+                        ExportUtil.getObj("Calibration", ml.isAgeMerged(), notIncluded),
                         "fat",
                         "fatpercent", "sex", "maturationstage", "specialstage", "eggstage", "moultingstage", "spawningfrequency",
                         "stomachfillfield", "stomachfilllab", "digestion", "liver", "liverparasite", "gillworms", "swollengills",
@@ -194,7 +194,7 @@ public class BioticDataStorage extends FileDataStorage {
                         "rightclawlength", "meroswidth", "meroslength", "japanesecut", "abdomenwidth", "tissuesamplenumber", "individualcomment",
                         "preferredagereading"
                 )));
-                for (MissionBO ms : ml) {
+                for (MissionBO ms : ml.getMissions()) {
                     MissionType m = ms.bo();
                     for (FishstationBO fs : ms.getFishstationBOs()) {
                         FishstationType f = fs.bo();
@@ -213,14 +213,15 @@ public class BioticDataStorage extends FileDataStorage {
                                         i.getIndividualvolume(), i.getLengthresolution(),
                                         i.getLength(),
                                         ExportUtil.getObj(ii.getLengthCM(), ml.isLengthCMAdded(), notIncluded),
-                                        ExportUtil.getObj(ii.getAge(), ml.isAgeAdded(), notIncluded),
-                                        ExportUtil.getObj(ii.getSpawningage(), ml.isAgeAdded(), notIncluded),
-                                        ExportUtil.getObj(ii.getSpawningzones(), ml.isAgeAdded(), notIncluded),
-                                        ExportUtil.getObj(ii.getReadability(), ml.isAgeAdded(), notIncluded),
-                                        ExportUtil.getObj(ii.getOtolithtype(), ml.isAgeAdded(), notIncluded),
-                                        ExportUtil.getObj(ii.getOtolithedge(), ml.isAgeAdded(), notIncluded),
-                                        ExportUtil.getObj(ii.getOtolithcentre(), ml.isAgeAdded(), notIncluded),
-                                        ExportUtil.getObj(ii.getCalibration(), ml.isAgeAdded(), notIncluded),
+                                        ExportUtil.getObj(ii.getAgeDeterminationId(), ml.isAgeMerged(), notIncluded),
+                                        ExportUtil.getObj(ii.getAge(), ml.isAgeMerged(), notIncluded),
+                                        ExportUtil.getObj(ii.getSpawningage(), ml.isAgeMerged(), notIncluded),
+                                        ExportUtil.getObj(ii.getSpawningzones(), ml.isAgeMerged(), notIncluded),
+                                        ExportUtil.getObj(ii.getReadability(), ml.isAgeMerged(), notIncluded),
+                                        ExportUtil.getObj(ii.getOtolithtype(), ml.isAgeMerged(), notIncluded),
+                                        ExportUtil.getObj(ii.getOtolithedge(), ml.isAgeMerged(), notIncluded),
+                                        ExportUtil.getObj(ii.getOtolithcentre(), ml.isAgeMerged(), notIncluded),
+                                        ExportUtil.getObj(ii.getCalibration(), ml.isAgeMerged(), notIncluded),
                                         i.getFat(),
                                         i.getFatpercent(), i.getSex(), i.getMaturationstage(), i.getSpecialstage(), i.getEggstage(), i.getMoultingstage(), i.getSpawningfrequency(),
                                         i.getStomachfillfield(), i.getStomachfilllab(), i.getDigestion(), i.getLiver(), i.getLiverparasite(), i.getGillworms(), i.getSwollengills(),
@@ -247,7 +248,7 @@ public class BioticDataStorage extends FileDataStorage {
                         "calibration", "growthzone1", "growthzone2", "growthzone3", "growthzone4", "growthzone5", "growthzone6", "growthzone7", "growthzone8",
                         "growthzone9", "growthzonestotal", "coastalannuli", "oceanicannuli", "blindreading", "readingdate", "agereader"
                 )));
-                for (MissionBO ms : ml) {
+                for (MissionBO ms : ml.getMissions()) {
                     MissionType m = ms.bo();
                     for (FishstationBO fs : ms.getFishstationBOs()) {
                         FishstationType f = fs.bo();
@@ -283,7 +284,7 @@ public class BioticDataStorage extends FileDataStorage {
                         "tagid",
                         "tagtype"
                 )));
-                for (MissionBO ms : ml) {
+                for (MissionBO ms : ml.getMissions()) {
                     MissionType m = ms.bo();
                     for (FishstationBO fs : ms.getFishstationBOs()) {
                         FishstationType f = fs.bo();
@@ -316,7 +317,7 @@ public class BioticDataStorage extends FileDataStorage {
                         "preypartnumber", "preycategory", "source", "preydigestion", "totalcount", "weightresolution", "totalweight",
                         "interval", "devstage", "preylengthmeasurement"
                 )));
-                for (MissionBO ms : ml) {
+                for (MissionBO ms : ml.getMissions()) {
                     MissionType m = ms.bo();
                     for (FishstationBO fs : ms.getFishstationBOs()) {
                         FishstationType f = fs.bo();
@@ -350,7 +351,7 @@ public class BioticDataStorage extends FileDataStorage {
                         "preylengthid",
                         "lengthintervalstart", "lengthintervalcount"
                 )));
-                for (MissionBO ms : ml) {
+                for (MissionBO ms : ml.getMissions()) {
                     MissionType m = ms.bo();
                     for (FishstationBO fs : ms.getFishstationBOs()) {
                         FishstationType f = fs.bo();
@@ -385,7 +386,7 @@ public class BioticDataStorage extends FileDataStorage {
                         "preylengthid",
                         "copepodedevstage", "devstagecount"
                 )));
-                for (MissionBO ms : ml) {
+                for (MissionBO ms : ml.getMissions()) {
                     MissionType m = ms.bo();
                     for (FishstationBO fs : ms.getFishstationBOs()) {
                         FishstationType f = fs.bo();

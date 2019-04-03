@@ -21,27 +21,18 @@ import no.imr.stox.functions.utils.StoXMath;
  *
  * @author aasmunds
  */
-public class DefineIndMeasureUnit extends AbstractFunction {
+public class DefineLengthCentimeter extends AbstractFunction {
 
     @Override
     public Object perform(Map<String, Object> input) {
-        BioticData origMissions = (BioticData) input.get(Functions.PM_DEFINEINDMEASUREUNIT_BIOTICDATA);
-        Boolean includeLength = (Boolean) input.get(Functions.PM_DEFINEINDMEASUREUNIT_LENGTHCM);
-        Boolean includeIndividualWeight = (Boolean) input.get(Functions.PM_DEFINEINDMEASUREUNIT_INDIVIDUALWEIGHTG);
-        BioticData missions = BioticUtils.copyBioticData(origMissions);
-        missions.setLengthCMAdded(includeLength);
-        missions.setIndividualWeightGAdded(includeIndividualWeight);
-        for (MissionBO ms : missions) {
+        BioticData origMissions = (BioticData) input.get(Functions.PM_DEFINELENGTHCENTIMETER_BIOTICDATA);
+        BioticData missions = BioticUtils.copyBioticData(origMissions, BioticUtils.BIOTICDATA_COPY_FLAGS_USEEXISTINGDATA);
+        missions.setLengthCMAdded(true);
+        for (MissionBO ms : missions.getMissions()) {
             for (FishstationBO fs : ms.getFishstationBOs()) {
                 for (CatchSampleBO cb : fs.getCatchSampleBOs()) {
                     for (IndividualBO i : cb.getIndividualBOs()) {
-                        if (includeLength) {
-                            i.setLengthCM(Calc.roundTo(StoXMath.mToCM(i.bo().getLength()), 8));
-                        }
-                        if (includeIndividualWeight) {
-                            i.setIndividualWeightG(Calc.roundTo(StoXMath.kgToGrams(i.bo().getIndividualweight()), 8));
-                        }
-
+                        i.setLengthCM(Calc.roundTo(StoXMath.mToCM(i.bo().getLength()), 8));
                     }
                 }
             }

@@ -320,16 +320,16 @@ public class Factory {
         m.addProcess(Functions.FN_READBIOTICXML, Functions.FN_READBIOTICXML).
                 setFileOutput(false);
 
-        m.addProcess(Functions.FN_DEFINEINDMEASUREUNIT, Functions.FN_DEFINEINDMEASUREUNIT).
-                setParameterProcessValue(Functions.PM_DEFINEINDMEASUREUNIT_BIOTICDATA, Functions.FN_READBIOTICXML).
+        m.addProcess(Functions.FN_DEFINELENGTHCENTIMETER, Functions.FN_DEFINELENGTHCENTIMETER).
+                setParameterProcessValue(Functions.PM_DEFINELENGTHCENTIMETER_BIOTICDATA, Functions.FN_READBIOTICXML).
                 setFileOutput(false);
         
-        m.addProcess(Functions.FN_DEFINEINDAGE, Functions.FN_DEFINEINDAGE).
-                setParameterProcessValue(Functions.PM_DEFINEINDAGE_BIOTICDATA, Functions.FN_DEFINEINDMEASUREUNIT).
+        m.addProcess(Functions.FN_MERGEAGEDETERMINATIONTOINDIVIDUAL, Functions.FN_MERGEAGEDETERMINATIONTOINDIVIDUAL).
+                setParameterProcessValue(Functions.PM_MERGEAGEDETERMINATIONTOINDIVIDUAL_BIOTICDATA, Functions.FN_DEFINELENGTHCENTIMETER).
                 setFileOutput(false);
 
         m.addProcess(Functions.FN_DEFINESPECCAT, Functions.FN_DEFINESPECCAT).
-                setParameterProcessValue(Functions.PM_DEFINESPECCAT_BIOTICDATA, Functions.FN_DEFINEINDAGE).
+                setParameterProcessValue(Functions.PM_DEFINESPECCAT_BIOTICDATA, Functions.FN_MERGEAGEDETERMINATIONTOINDIVIDUAL).
                 setParameterValue(Functions.PM_DEFINESPECCAT_SPECCATMETHOD, Functions.SPECCATMETHOD_SELECTVAR).
                 setParameterValue(Functions.PM_DEFINESPECCAT_SPECVARBIOTIC, "commonname").
                 setFileOutput(false);
@@ -638,7 +638,7 @@ public class Factory {
 
         m.addProcess(Functions.FN_WRITEACOUSTICDATATOXML, Functions.FN_WRITEACOUSTICDATATOXML).
                 setParameterProcessValue(Functions.PM_WRITEACOUSTICDATATOXML_ACOUSTICDATA, Functions.FN_NASCTOACOUSTICDATA).
-                setParameterValue(Functions.PM_WRITEACOUSTICDATATOXML_FILENAME, "output/baseline/acoustic.xml");
+                setParameterValue(Functions.PM_WRITEACOUSTICDATATOXML_DIRECTORY, "output/baseline");
     }
 
     private static void createECAProject(IModel m) {

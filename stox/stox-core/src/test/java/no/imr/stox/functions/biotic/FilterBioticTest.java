@@ -84,8 +84,8 @@ public class FilterBioticTest {
         individ22.setLengthCM(3d);
         individ23.setLengthCM(6d);
 
-        List<MissionBO> missions = new BioticData();
-        missions.add(ms);
+        BioticData missions = new BioticData();
+        missions.getMissions().add(ms);
         String stationExpr = "gearcondition eq 1 and trawlquality eq 1";
         String catchExpr = "species eq 'SILD'";
         String sampleExpr = "group eq '1' and sampletype eq 5";
@@ -98,8 +98,8 @@ public class FilterBioticTest {
         input.put(Functions.PM_FILTERBIOTIC_INDEXPR, individualExpr);
         input.put(Functions.PM_FILTERBIOTIC_BIOTICDATA, missions);
 
-        List l = (List) instance.perform(input);
+        BioticData l = (BioticData) instance.perform(input);
 
-        assertTrue(!l.isEmpty());
+        assertTrue(!l.getMissions().isEmpty());
     }
 }

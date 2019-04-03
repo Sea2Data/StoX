@@ -136,14 +136,14 @@ public final class Functions {
     public static final String PM_FILTERBIOTIC_SAMPLEEXPR = "SampleExpr";
     public static final String PM_FILTERBIOTIC_INDEXPR = "IndExpr";
 
-    public static final String FN_DEFINEINDMEASUREUNIT = "DefineIndMeasureUnit";
-    public static final String PM_DEFINEINDMEASUREUNIT_BIOTICDATA = "BioticData";
-    public static final String PM_DEFINEINDMEASUREUNIT_LENGTHCM = "LengthCM";
-    public static final String PM_DEFINEINDMEASUREUNIT_INDIVIDUALWEIGHTG = "IndividualWeightG";
+    public static final String FN_DEFINELENGTHCENTIMETER = "DefineLengthCentimeter";
+    public static final String PM_DEFINELENGTHCENTIMETER_BIOTICDATA = "BioticData";
     
-    public static final String FN_DEFINEINDAGE = "DefineIndAge";
-    public static final String PM_DEFINEINDAGE_BIOTICDATA = "BioticData";
-    public static final String PM_DEFINEINDAGE_AGE = "Age";
+    public static final String FN_DEFINEINDIVIDUALWEIGHTGRAM = "DefineIndividualWeightGram";
+    public static final String PM_DEFINEINDIVIDUALWEIGHTGRAM_BIOTICDATA = "BioticData";
+
+    public static final String FN_MERGEAGEDETERMINATIONTOINDIVIDUAL = "MergeAgeDeterminationToIndividual";
+    public static final String PM_MERGEAGEDETERMINATIONTOINDIVIDUAL_BIOTICDATA = "BioticData";
 
     public static final String FN_READLANDINGXML = "ReadLandingXML";
     public static final String PM_READLANDINGXML_FILENAME1 = "FileName1";
@@ -217,7 +217,7 @@ public final class Functions {
 
     public static final String FN_WRITEACOUSTICDATATOXML = "WriteAcousticDataToXML";
     public static final String PM_WRITEACOUSTICDATATOXML_ACOUSTICDATA = "AcousticData";
-    public static final String PM_WRITEACOUSTICDATATOXML_FILENAME = "FileName";
+    public static final String PM_WRITEACOUSTICDATATOXML_DIRECTORY = "Directory";
 
     public static final String FN_STATIONLENGTHDIST = "StationLengthDist";
     public static final String PM_STATIONLENGTHDIST_BIOTICDATA = "BioticData";

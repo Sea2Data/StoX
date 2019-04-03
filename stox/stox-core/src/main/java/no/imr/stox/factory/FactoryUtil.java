@@ -204,21 +204,18 @@ public final class FactoryUtil {
             IProcess readB = prj.getBaseline().findProcessByFunction(Functions.FN_READBIOTICXML);
             if (readB != null) {
                 int idxReadB = prj.getBaseline().getProcessList().indexOf(readB);
-                IProcess defInd = prj.getBaseline().insertProcess(Functions.FN_DEFINEINDMEASUREUNIT, Functions.FN_DEFINEINDMEASUREUNIT, idxReadB + 1)
-                        .setParameterProcessValue(Functions.PM_DEFINEINDMEASUREUNIT_BIOTICDATA, readB.getName())
-                        .setParameterValue(Functions.PM_DEFINEINDMEASUREUNIT_LENGTHCM, true)
-                        .setParameterValue(Functions.PM_DEFINEINDMEASUREUNIT_INDIVIDUALWEIGHTG, true);
-                defInd.setFileOutput(false);
-                IProcess defAge = prj.getBaseline().insertProcess(Functions.FN_DEFINEINDAGE, Functions.FN_DEFINEINDAGE, idxReadB + 2)
-                        .setParameterProcessValue(Functions.PM_DEFINEINDAGE_BIOTICDATA, defInd.getName())
-                        .setParameterValue(Functions.PM_DEFINEINDAGE_AGE, true);
-                defAge.setFileOutput(false);
-                IProcess defSpecCat = prj.getBaseline().insertProcess(Functions.FN_DEFINESPECCAT, Functions.FN_DEFINESPECCAT, idxReadB + 3)
+                IProcess defLength = prj.getBaseline().insertProcess(Functions.FN_DEFINELENGTHCENTIMETER, Functions.FN_DEFINELENGTHCENTIMETER, idxReadB + 1)
+                        .setParameterProcessValue(Functions.PM_DEFINELENGTHCENTIMETER_BIOTICDATA, readB.getName()).setFileOutput(false);
+                IProcess defWeight = prj.getBaseline().insertProcess(Functions.FN_DEFINEINDIVIDUALWEIGHTGRAM, Functions.FN_DEFINEINDIVIDUALWEIGHTGRAM, idxReadB + 2)
+                        .setParameterProcessValue(Functions.PM_DEFINEINDIVIDUALWEIGHTGRAM_BIOTICDATA, defLength.getName()).setFileOutput(false);
+                IProcess defAge = prj.getBaseline().insertProcess(Functions.FN_MERGEAGEDETERMINATIONTOINDIVIDUAL, Functions.FN_MERGEAGEDETERMINATIONTOINDIVIDUAL, idxReadB + 3)
+                        .setParameterProcessValue(Functions.PM_MERGEAGEDETERMINATIONTOINDIVIDUAL_BIOTICDATA, defWeight.getName()).setFileOutput(false);
+                IProcess defSpecCat = prj.getBaseline().insertProcess(Functions.FN_DEFINESPECCAT + "Var", Functions.FN_DEFINESPECCAT, idxReadB + 4)
                         .setParameterProcessValue(Functions.PM_DEFINESPECCAT_BIOTICDATA, defAge.getName())
                         .setParameterValue(Functions.PM_DEFINESPECCAT_SPECCATMETHOD, Functions.SPECCATMETHOD_SELECTVAR)
                         .setParameterValue(Functions.PM_DEFINESPECCAT_SPECVARBIOTIC, "commonname");
                 defSpecCat.setFileOutput(false);
-                for (int i = idxReadB + 4; i < prj.getBaseline().getProcessList().size(); i++) {
+                for (int i = idxReadB + 5; i < prj.getBaseline().getProcessList().size(); i++) {
                     IProcess pr = prj.getBaseline().getProcessList().get(i);
                     if (pr.getMetaFunction() != null && pr.getMetaFunction().getName().equals(Functions.FN_READBIOTICXML)) {
                         continue;

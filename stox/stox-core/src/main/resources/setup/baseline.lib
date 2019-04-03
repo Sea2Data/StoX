@@ -97,23 +97,29 @@ DataStorage:no.imr.stox.datastorage.BioticDataStorage
 Output: BioticData
 
 [Function]
-Name: DefineIndMeasureUnit
-Description: <I>DefineIndMeasureUnit</I> defines and converts existing fields to new units 
-Class: no.imr.stox.functions.biotic.DefineIndMeasureUnit
+Name: DefineLengthCentimeter
+Description: <I>DefineLengthCentimeter</I> defines and converts length in centimeter at biotic data individuals
+Class: no.imr.stox.functions.biotic.DefineLengthCentimeter
 Respondable:true
 Parameter: Name=BioticData, Alias=FishStations, Required=true, DataType=BioticData, Description=The <I>BioticData</I> parameter is used to specify which previous process has generated the <U>BioticData</U> input data.
-Parameter: Name=LengthCM, Required=true, DefaultValue=false, DataType=Boolean, Description=The <I>LengthCM</I> parameter is a boolean which determine whether or not to include length in cm
-Parameter: Name=IndividualWeightG, Required=true, DefaultValue=false, DataType=Boolean, Description=The <I>IndividualWeightG</I> parameter is a boolean which determine whether or not to include individual weight in grams.
 DataStorage:no.imr.stox.datastorage.BioticDataStorage
 Output: BioticData
 
 [Function]
-Name: DefineIndAge
-Description: <I>DefineIndAge</I> defines age from agereading to individual
-Class: no.imr.stox.functions.biotic.DefineIndAge
+Name: DefineIndividualWeightGram
+Description: <I>DefineIndividualWeightGram</I> defines and converts individual weight in gram at biotic data individuals
+Class: no.imr.stox.functions.biotic.DefineIndividualWeightGram
 Respondable:true
 Parameter: Name=BioticData, Alias=FishStations, Required=true, DataType=BioticData, Description=The <I>BioticData</I> parameter is used to specify which previous process has generated the <U>BioticData</U> input data.
-Parameter: Name=Age, Required=true, DefaultValue=false, DataType=Boolean, Description=The <I>Age</I> parameter is a boolean which determine whether or not to include age from agedetermination
+DataStorage:no.imr.stox.datastorage.BioticDataStorage
+Output: BioticData
+
+[Function]
+Name: MergeAgeDeterminationToIndividual
+Description: <I>MergeAgeDeterminationToIndividual</I> merges age determination fields to individual at biotic data. if more than one agereadings exists - the preferred one is marked at preferredagereading at individual.
+Class: no.imr.stox.functions.biotic.MergeAgeDeterminationToIndividual
+Respondable:true
+Parameter: Name=BioticData, Alias=FishStations, Required=true, DataType=BioticData, Description=The <I>BioticData</I> parameter is used to specify which previous process has generated the <U>BioticData</U> input data.
 DataStorage:no.imr.stox.datastorage.BioticDataStorage
 Output: BioticData
 
@@ -180,7 +186,7 @@ Parameter: Name=BioticData, Alias=FishStations, Required=true, DataType=BioticDa
 Parameter: Name=SpecCatMethod, DataType=String, DefaultValue=Expression, Values=Expression;SelectVar;ResourceFile, Description=The <I>SpecCatType</I> The type of method to define specat. This can be an expression entered as a parameter, or a mapping to a column in a csv file
 Parameter: Name=SpecCat, Required=false, DataType=String, ParentTag=SpecCatMethod.Expression, Description=The species category to append to catches. 
 Parameter: Name=FileName, Required=false, DataType=String, ParentTag=SpecCatMethod.ResourceFile, Description=The reference file with the one column giving the species and one giving the species categories to use.
-Parameter: Name=SpecVarBiotic, Required=false, DataType=String, DefaultValue=commonname, Values=catchcategory~species;commonname~noname;aphia, Description=The name of the column in BioticData defining species. To be linked with SpecVarRef
+Parameter: Name=SpecVarBiotic, Required=false, DataType=String, DefaultValue=commonname, Values=catchcategory~species;commonname~noname;aphia;scientificname, Description=The name of the column in BioticData defining species. To be linked with SpecVarRef
 Parameter: Name=SpecVarRef, Required=false, DataType=String, ParentTag=SpecCatMethod.ResourceFile, Description=The name of the column in the reference file defining species. To be linked with SpecVarStoX.
 Parameter: Name=SpecCatRef, Required=false, DataType=String, ParentTag=SpecCatMethod.ResourceFile, Description= The name of the column in the reference file defining (new) species category. Will be renamed to SpecCat in StoX.
 DataStorage:no.imr.stox.datastorage.BioticDataStorage
@@ -328,7 +334,7 @@ Alias: WriteAcousticXML
 Description: The <I>WriteAcousticDataToXML</I> function writes the content of an <U>AcousticData</U> object &#40;NASC by species category and frequency&#41; to an XML file. Refer to LSSS documentation for details on the file &#34;ListUser20.xml&#34; format.
 Class: no.imr.stox.functions.acoustic.WriteAcousticDataToXML
 Parameter: Name=AcousticData, DataType=AcousticData, Description=The <I>AcousticData</I> parameter is used to specify which previous process has generated the <U>AcousticData</U> input data that is to be written to an XML file.
-Parameter: Name=FileName, DataType=String, Description=The <I>FileName</I> parameter is used to identify the name and path of the output XML file. The format of the file is the same as &#34;ListUser20.xml&#34; from LSSS. 
+Parameter: Name=Directory, DataType=String, Required=false, Description=The <I>Directory</I> parameter is used to identify the relative path of the output XML file. The format of the file is the same as &#34;ListUser20.xml&#34; from LSSS. 
 
 [Function]
 Name: BioStationAssignment
