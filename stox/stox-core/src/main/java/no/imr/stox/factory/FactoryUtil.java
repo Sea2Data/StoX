@@ -210,7 +210,8 @@ public final class FactoryUtil {
                         .setParameterProcessValue(Functions.PM_DEFINEINDIVIDUALWEIGHTGRAM_BIOTICDATA, defLength.getName()).setFileOutput(false);
                 IProcess defAge = prj.getBaseline().insertProcess(Functions.FN_MERGEAGEDETERMINATIONTOINDIVIDUAL, Functions.FN_MERGEAGEDETERMINATIONTOINDIVIDUAL, idxReadB + 3)
                         .setParameterProcessValue(Functions.PM_MERGEAGEDETERMINATIONTOINDIVIDUAL_BIOTICDATA, defWeight.getName()).setFileOutput(false);
-                IProcess defSpecCat = prj.getBaseline().insertProcess(Functions.FN_DEFINESPECCAT + "Var", Functions.FN_DEFINESPECCAT, idxReadB + 4)
+                IProcess spec = prj.getBaseline().findProcess(Functions.FN_DEFINESPECCAT);
+                IProcess defSpecCat = prj.getBaseline().insertProcess(Functions.FN_DEFINESPECCAT + (spec == null ? "" : "Var"), Functions.FN_DEFINESPECCAT, idxReadB + 4)
                         .setParameterProcessValue(Functions.PM_DEFINESPECCAT_BIOTICDATA, defAge.getName())
                         .setParameterValue(Functions.PM_DEFINESPECCAT_SPECCATMETHOD, Functions.SPECCATMETHOD_SELECTVAR)
                         .setParameterValue(Functions.PM_DEFINESPECCAT_SPECVARBIOTIC, "commonname");

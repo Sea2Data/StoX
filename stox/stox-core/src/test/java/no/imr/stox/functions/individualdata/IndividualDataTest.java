@@ -59,8 +59,8 @@ public class IndividualDataTest {
         s.bo().setCatchpartnumber(Integer.SIZE);
         IndividualBO i = s.addIndividual();
         i.bo().setSpecimenid(1);
-        i.setLengthCM(10d);
-        i.setIndividualWeightG(0.5d);
+        i.setLengthCentimeter(10d);
+        i.setIndividualWeightGram(0.5d);
         BioticData missions = new BioticData();
         missions.getMissions().add(mt);
         return missions;

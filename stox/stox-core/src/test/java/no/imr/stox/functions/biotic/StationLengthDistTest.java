@@ -80,9 +80,9 @@ public class StationLengthDistTest {
         s.bo().setLengthsampleweight(50.0);
         s.bo().setCatchpartnumber(1);
         IndividualBO i = s.addIndividual();
-        i.setLengthCM(10d);
+        i.setLengthCentimeter(10d);
         i = s.addIndividual();
-        i.setLengthCM(11d);
+        i.setLengthCentimeter(11d);
         BioticData missions = new BioticData();
         missions.getMissions().add(m);
         return missions;
@@ -99,9 +99,9 @@ public class StationLengthDistTest {
         s.bo().setCatchweight(100.0);
         s.bo().setCatchpartnumber(1);
         IndividualBO i = s.addIndividual();
-        i.setLengthCM(10d);
+        i.setLengthCentimeter(10d);
         i = s.addIndividual();
-        i.setLengthCM(11d);
+        i.setLengthCentimeter(11d);
         return Arrays.asList(ms);
     }
 
@@ -119,9 +119,9 @@ public class StationLengthDistTest {
         s.bo().setLengthsampleweight(50.0);
         s.bo().setCatchpartnumber(Integer.SIZE);
         IndividualBO i = s.addIndividual();
-        i.setLengthCM(10d);
+        i.setLengthCentimeter(10d);
         i = s.addIndividual();
-        i.setLengthCM(11d);
+        i.setLengthCentimeter(11d);
         
         f = ms.addFishstation();
         f.bo().setSerialnumber(1001);
@@ -132,9 +132,9 @@ public class StationLengthDistTest {
         s.bo().setLengthsampleweight(50.0);
         s.bo().setCatchpartnumber(Integer.SIZE);
         i = s.addIndividual();
-        i.setLengthCM(10d);
+        i.setLengthCentimeter(10d);
         i = s.addIndividual();
-        i.setLengthCM(11d);
+        i.setLengthCentimeter(11d);
         return Arrays.asList(ms);
     }
 }

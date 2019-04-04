@@ -13,10 +13,12 @@ import no.imr.stox.model.IProject;
 public class ProjectFileNameEditor extends PropertyEditorSupport {
     IProject project;
     String defPath;
+    Boolean dirOnly;
 
-    public ProjectFileNameEditor(IProject project, String defPath) {
+    public ProjectFileNameEditor(IProject project, String defPath, Boolean dirOnly) {
         this.project = project;
         this.defPath = defPath;
+        this.dirOnly = dirOnly;
     }
     
     @Override
@@ -84,7 +86,7 @@ public class ProjectFileNameEditor extends PropertyEditorSupport {
 
     @Override
     public Component getCustomEditor() {
-        return new SelectFileDlg(project, defPath, this);
+        return new SelectFileDlg(project, defPath, this, dirOnly);
     }
 
 }

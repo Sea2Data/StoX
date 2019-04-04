@@ -91,10 +91,10 @@ public class FilterBiotic extends AbstractFunction {
                         FilterUtils.resolveContext(ctx, in);
                         // Individual fields.
                         if (bdata.isLengthCMAdded()) {
-                            ctx.set("lengthcm", in.getLengthCM());
+                            ctx.set("lengthcm", in.getLengthCentimeter());
                         }
                         if (bdata.isIndividualWeightGAdded()) {
-                            ctx.set("individualweightg", in.getIndividualWeightG());
+                            ctx.set("individualweightg", in.getIndividualWeightGram());
                         }
                         if (bdata.isAgeMerged()) {
                             ctx.set("age", in.getAge());
@@ -103,8 +103,8 @@ public class FilterBiotic extends AbstractFunction {
                             continue;
                         }
                         IndividualBO inF = sampleF.addIndividual(new IndividualBO(sampleF, in));
-                        inF.setIndividualWeightG(in.getIndividualWeightG());
-                        inF.setLengthCM(in.getLengthCM());
+                        inF.setIndividualWeightGram(in.getIndividualWeightGram());
+                        inF.setLengthCentimeter(in.getLengthCentimeter());
                         for (AgeDeterminationBO aBO : in.getAgeDeterminationBOs()) {
                             inF.addAgeDetermination(new AgeDeterminationBO(inF, aBO));
                         }

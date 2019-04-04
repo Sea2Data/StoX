@@ -32,7 +32,7 @@ public class DefineLengthCentimeter extends AbstractFunction {
             for (FishstationBO fs : ms.getFishstationBOs()) {
                 for (CatchSampleBO cb : fs.getCatchSampleBOs()) {
                     for (IndividualBO i : cb.getIndividualBOs()) {
-                        i.setLengthCM(Calc.roundTo(StoXMath.mToCM(i.bo().getLength()), 8));
+                        i.setLengthCentimeter(Calc.roundTo(StoXMath.mToCM(i.bo().getLength()), 8));
                     }
                 }
             }

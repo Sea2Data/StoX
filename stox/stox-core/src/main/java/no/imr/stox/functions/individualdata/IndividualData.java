@@ -66,7 +66,7 @@ public class IndividualData extends AbstractFunction {
                             String specCatKey = s.getSpecCat();
                             // To do: check species against SpeciesDef in resolution if available. Otherwise this relies on filterbiotic.
                             for (IndividualBO i : s.getIndividualBOs()) {
-                                String lenGrpKey = BioticUtils.getLenGrp(i.getLengthCM(), lenInterval);
+                                String lenGrpKey = BioticUtils.getLenGrp(i.getLengthCentimeter(), lenInterval);
                                 List<IndividualBO> indList = (List<IndividualBO>) result.getData().getGroupRowColCellValue(specCatKey, stratumKey, estLayerKey, lenGrpKey);
                                 if (indList == null) {
                                     indList = new ArrayList<>();

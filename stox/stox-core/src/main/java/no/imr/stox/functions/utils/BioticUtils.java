@@ -109,9 +109,9 @@ public final class BioticUtils {
             case Functions.COL_IND_NO:
                 return i.bo().getSpecimenid();
             case Functions.COL_IND_WEIGHT:
-                return i.getIndividualWeightG();
+                return i.getIndividualWeightGram();
             case Functions.COL_IND_LENGTH:
-                return i.getLengthCM();
+                return i.getLengthCentimeter();
             case Functions.COL_IND_AGE:
                 return i.getAge();
             case Functions.COL_IND_SEX:
@@ -311,8 +311,8 @@ public final class BioticUtils {
                         cs.setSpecCat(c.getSpecCat());
                         c.getIndividualBOs().forEach((i) -> {
                             IndividualBO ii = cs.addIndividual(new IndividualBO(cs, i));
-                            ii.setIndividualWeightG(i.getIndividualWeightG());
-                            ii.setLengthCM(i.getLengthCM());
+                            ii.setIndividualWeightGram(i.getIndividualWeightGram());
+                            ii.setLengthCentimeter(i.getLengthCentimeter());
                             i.getAgeDeterminationBOs().forEach((aBO) -> {
                                 ii.addAgeDetermination(new AgeDeterminationBO(ii, aBO));
                             });

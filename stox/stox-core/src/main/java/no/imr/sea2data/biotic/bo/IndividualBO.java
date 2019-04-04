@@ -11,7 +11,7 @@ public class IndividualBO extends BaseBO implements Serializable {
 
     private List<AgeDeterminationBO> ageDeterminationBOs = new ArrayList<>();
     Double lengthCM;
-    Double individualWeightG;
+    Double individualWeightGram;
 
     public IndividualBO(CatchSampleBO sampleF, IndividualType i) {
         super(sampleF, i);
@@ -29,20 +29,20 @@ public class IndividualBO extends BaseBO implements Serializable {
         return (CatchSampleBO) getParent();
     }
 
-    public Double getLengthCM() {
+    public Double getLengthCentimeter() {
         return lengthCM;
     }
 
-    public void setLengthCM(Double lengthCM) {
-        this.lengthCM = lengthCM;
+    public void setLengthCentimeter(Double lengthCentimeter) {
+        this.lengthCM = lengthCentimeter;
     }
 
-    public Double getIndividualWeightG() {
-        return individualWeightG;
+    public Double getIndividualWeightGram() {
+        return individualWeightGram;
     }
 
-    public void setIndividualWeightG(Double individualWeightG) {
-        this.individualWeightG = individualWeightG;
+    public void setIndividualWeightGram(Double individualWeightGram) {
+        this.individualWeightGram = individualWeightGram;
     }
 
     public Integer getAgeDeterminationId() {

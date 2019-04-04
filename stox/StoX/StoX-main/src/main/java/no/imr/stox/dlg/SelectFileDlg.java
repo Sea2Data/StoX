@@ -15,16 +15,20 @@ public class SelectFileDlg extends javax.swing.JDialog {
     private final PropertyEditor ed;
     IProject project;
     String defPath;
+    Boolean dirOnly = false;
 
     /**
      * Creates new form SelectFileDlg
      */
-    public SelectFileDlg(IProject project, String defPath, PropertyEditor ed) {
+    public SelectFileDlg(IProject project, String defPath, PropertyEditor ed, Boolean dirOnly) {
         super((java.awt.Frame) null, true);
         this.project = project;
         this.defPath = defPath;
+        this.dirOnly = dirOnly;
         initComponents();
-        setTitle("Select file");
+        String select = dirOnly ? "directory" : "file";
+        setTitle("Select " + select);
+        jLabel1.setText("Select " + select + ":");
         setLocationRelativeTo(null);
         getRootPane().setDefaultButton(jButton1);
         jFile.setText(ed.getAsText());
@@ -118,7 +122,7 @@ public class SelectFileDlg extends javax.swing.JDialog {
             f = new File(defPath);
         }
         fc.setCurrentDirectory(f);
-
+        fc.setFileSelectionMode(dirOnly ? JFileChooser.DIRECTORIES_ONLY : JFileChooser.FILES_ONLY);
         int returnVal = fc.showOpenDialog(SelectFileDlg.this);
         if (returnVal == JFileChooser.APPROVE_OPTION) {
             String path = fc.getSelectedFile().getPath().replace("\\", "/");

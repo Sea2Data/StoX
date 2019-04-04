@@ -32,7 +32,7 @@ public class DefineIndividualWeightGram extends AbstractFunction {
             for (FishstationBO fs : ms.getFishstationBOs()) {
                 for (CatchSampleBO cb : fs.getCatchSampleBOs()) {
                     for (IndividualBO i : cb.getIndividualBOs()) {
-                        i.setIndividualWeightG(Calc.roundTo(StoXMath.kgToGrams(i.bo().getIndividualweight()), 8));
+                        i.setIndividualWeightGram(Calc.roundTo(StoXMath.kgToGrams(i.bo().getIndividualweight()), 8));
 
                     }
                 }

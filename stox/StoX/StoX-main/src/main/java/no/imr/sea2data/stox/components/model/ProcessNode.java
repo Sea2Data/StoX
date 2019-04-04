@@ -131,7 +131,7 @@ public class ProcessNode extends AbstractNode {
                     });
                 }
                 if (p.size() > 1) {
-                    res.add(new AbstractAction("All files") {
+                    res.add(new AbstractAction("All") {
                         @Override
                         public void actionPerformed(ActionEvent e) {
                             viewer.openProcess(modelChildFactory.getActiveProcess(), true, -1);
@@ -315,9 +315,10 @@ public class ProcessNode extends AbstractNode {
                     && (mp.getName().equals(Functions.PM_CATCHABILITY_PARLENGTHDEPENDENTSWEEPWIDTH) || mp.getName().equals(Functions.PM_CATCHABILITY_PARLENGTHDEPENDENTSELECTIVITY))) {
                 return new CatchabilityPropertyEditor((String) process.getActualValue(Functions.PM_CATCHABILITY_PARLENGTHDEPENDENTSWEEPWIDTH));
             }
-            if (mp.getName().toLowerCase().startsWith("filename")) {
+            if (mp.getName().toLowerCase().startsWith("filename") || mp.getName().toLowerCase().startsWith("directory")) {
                 String defPath = process.getModel().getProject().getProjectFolder() + "/"
                         + ProjectUtils.PROJECT_INPUT_FOLDER;
+                Boolean dirOnly = false;
                 switch (process.getMetaFunction().getName()) {
                     case Functions.FN_DEFINESTRATA:
                         defPath = ProjectUtils.getSystemStratumFolder();
@@ -329,8 +330,12 @@ public class ProcessNode extends AbstractNode {
                     case Functions.FN_DEFINEAGEERRORMATRIX:
                         defPath = ProjectUtils.getSystemReferenceFolder();
                         break;
+                    case Functions.FN_WRITEACOUSTICDATATOXML:
+                        defPath = process.getModel().getProject().getProjectFolder();
+                        dirOnly = true;
+                        break;
                 }
-                return new ProjectFileNameEditor(process.getModel().getProject(), defPath);
+                return new ProjectFileNameEditor(process.getModel().getProject(), defPath, dirOnly);
             } else if (mp.getValues() != null && !mp.getValues().isEmpty()) {
                 return new ListPropertyEditor(mp.getValues());
             } else if (mp.getMetaDataType().isReference() || isReferencingBaselineFromR()) {
