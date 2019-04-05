@@ -46,7 +46,7 @@ public class AbndFillMissingWeights {
                 // Give error
                 continue;
             }
-            Double weight = abnByIndData.getRowColValueAsDouble(row, Functions.COL_IND_WEIGHT);
+            Double weight = abnByIndData.getRowColValueAsDouble(row, Functions.COL_IND_INDIVIDUALWEIGHTGRAM);
             String specCatKey = (String) abnByIndData.getRowColValue(row, Functions.COL_ABNDBYIND_SPECCAT);
             String stratum = (String) abnByIndData.getRowColValue(row, Functions.COL_ABNDBYIND_STRATUM);
             String estLayer = (String) abnByIndData.getRowColValue(row, Functions.COL_ABNDBYIND_ESTLAYER);
@@ -93,11 +93,11 @@ public class AbndFillMissingWeights {
         // Fill in missing weights in super individual matrix:
         for (String row : abnByIndData.getRowKeys()) {
             String lenGrp = (String) abnByIndData.getRowColValue(row, Functions.COL_ABNDBYIND_LENGRP);
-            Double weight = abnByIndData.getRowColValueAsDouble(row, Functions.COL_IND_WEIGHT);
+            Double weight = abnByIndData.getRowColValueAsDouble(row, Functions.COL_IND_INDIVIDUALWEIGHTGRAM);
             if (weight == null) {
                 switch (method) {
                     case Functions.FILLWEIGHT_MANUALLY: {
-                        String species = (String) abnByIndData.getRowColValue(row, Functions.COL_IND_SPECIES);
+                        String species = (String) abnByIndData.getRowColValue(row, Functions.COL_IND_CATCHCATEGORY);
                         weight = getMeanWeightFromStandard(lenGrp, lenIntv, a, b, species);
                         break;
                     }
@@ -124,7 +124,7 @@ public class AbndFillMissingWeights {
                     }
                 }
                 if (weight != null) {
-                    abnByIndData.setRowColValue(row, Functions.COL_IND_WEIGHT, weight);
+                    abnByIndData.setRowColValue(row, Functions.COL_IND_INDIVIDUALWEIGHTGRAM, weight);
                 }
             }
         }
@@ -160,7 +160,7 @@ public class AbndFillMissingWeights {
         List<MatrixBO> indList = new ArrayList<>();
         for (String rowKey : abnByIndData.getRowKeys()) {
             MatrixBO row = abnByIndData.getRowValueAsMatrix(rowKey);
-            Double weight = row.getValueAsDouble(Functions.COL_IND_WEIGHT);
+            Double weight = row.getValueAsDouble(Functions.COL_IND_INDIVIDUALWEIGHTGRAM);
             if (weight != null && weight > 0d) {
                 indList.add(row);
             }
@@ -170,8 +170,8 @@ public class AbndFillMissingWeights {
             Double[] wInGrams = new Double[indList.size()];
             for (int i = 0; i < indList.size(); i++) {
                 MatrixBO row = indList.get(i);
-                lenInCM[i] = row.getValueAsDouble(Functions.COL_IND_LENGTH);
-                wInGrams[i] = row.getValueAsDouble(Functions.COL_IND_WEIGHT);
+                lenInCM[i] = row.getValueAsDouble(Functions.COL_IND_LENGTHCENTIMETER);
+                wInGrams[i] = row.getValueAsDouble(Functions.COL_IND_INDIVIDUALWEIGHTGRAM);
             }
             LWRelationship lwr = LWRelationship.getLWRelationship(lenInCM, wInGrams);
             Double length = StoXMath.getLength(Conversion.safeStringtoDoubleNULL(lenGrp), lenIntv);

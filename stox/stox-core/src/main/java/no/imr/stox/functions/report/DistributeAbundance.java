@@ -45,7 +45,7 @@ public class DistributeAbundance {
         Collection<String> abndRowKeys = sortedAbundance ? abnd.getSortedRowKeys() : abnd.getRowKeys();
         Collection<String> specList = abndRowKeys.stream().parallel().map(rowKey -> {
             MatrixBO row = abnd.getRowValueAsMatrix(rowKey);
-            String species = (String) row.getValue(Functions.COL_IND_SPECIES);
+            String species = (String) row.getValue(Functions.COL_IND_CATCHCATEGORY);
             return species;
         }).collect(Collectors.toSet());
         // Separated imputes must be done inside each species
@@ -59,7 +59,7 @@ public class DistributeAbundance {
             }
             for (String rowKey : abndRowKeys) {
                 MatrixBO row = abnd.getRowValueAsMatrix(rowKey);
-                String species = (String) row.getValue(Functions.COL_IND_SPECIES);
+                String species = (String) row.getValue(Functions.COL_IND_CATCHCATEGORY);
                 if (!species.equals(spec)) {
                     continue;
                 }
@@ -85,14 +85,14 @@ public class DistributeAbundance {
                 String strata = (String) row.getValue(Functions.COL_ABNDBYIND_STRATUM);
                 String lenGrp = (String) row.getValue(Functions.COL_ABNDBYIND_LENGRP);
                 String cruise = (String) row.getValue(Functions.COL_IND_CRUISE);
-                String serialno = (String) row.getValue(Functions.COL_IND_SERIALNO);
+                String serialno = (String) row.getValue(Functions.COL_IND_SERIALNUMBER);
                 // Pick known data from different imputation levels
                 for (int impLevel = 0; impLevel < MAXLEVELS; impLevel++) {
                     for (MatrixBO rowK : abndDistrKnown) {
                         String strataK = (String) rowK.getValue(Functions.COL_ABNDBYIND_STRATUM);
                         String lenGrpK = (String) rowK.getValue(Functions.COL_ABNDBYIND_LENGRP);
                         String cruiseK = (String) rowK.getValue(Functions.COL_IND_CRUISE);
-                        String serialnoK = (String) rowK.getValue(Functions.COL_IND_SERIALNO);
+                        String serialnoK = (String) rowK.getValue(Functions.COL_IND_SERIALNUMBER);
                         Boolean skipStationCheck = impLevel >= 1;
                         Boolean skipStrataCheck = impLevel >= 2;
                         boolean match = (skipStrataCheck || strataK.equals(strata))

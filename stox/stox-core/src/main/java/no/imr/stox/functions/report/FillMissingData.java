@@ -79,19 +79,19 @@ public class FillMissingData extends AbstractFunction {
                         String var = hdr[j];
                         switch (var) {
                             case "station":
-                                var = Functions.COL_IND_SERIALNO;
+                                var = Functions.COL_IND_SERIALNUMBER;
                         }
                         Object val = s[j];
                         switch (var) {
                             case Functions.COL_IND_GONADWEIGHT:
                             case Functions.COL_IND_LIVERWEIGHT:
-                            case Functions.COL_IND_WEIGHT:
-                            case Functions.COL_IND_LENGTH:
+                            case Functions.COL_IND_INDIVIDUALWEIGHTGRAM:
+                            case Functions.COL_IND_LENGTHCENTIMETER:
                             case Functions.COL_IND_STOMACHWEIGHT:
                                 val = Conversion.safeStringtoDoubleNULL(s[j]);
                                 break;
                             case Functions.COL_IND_AGE:
-                            case Functions.COL_IND_VERTEBRAE:
+                            case Functions.COL_IND_VERTEBRAECOUNT:
                                 val = Conversion.safeStringtoIntegerNULL(s[j]);
                         }
                         res.getData().setRowColValue(s[0], var, val);

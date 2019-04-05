@@ -125,9 +125,9 @@ public class AbundanceByPopulationCategory extends AbstractFunction {
             if (abundance == null || abundance == 0) {
                 logger.error("Super individual cannot contain zero abundance", null);
             }
-            Double length = abnd.getRowColValueAsDouble(row, Functions.COL_IND_LENGTH);
+            Double length = abnd.getRowColValueAsDouble(row, Functions.COL_IND_LENGTHCENTIMETER);
             Double sumL = length != null ? abundance * length : null;
-            Double weight = abnd.getRowColValueAsDouble(row, Functions.COL_IND_WEIGHT);
+            Double weight = abnd.getRowColValueAsDouble(row, Functions.COL_IND_INDIVIDUALWEIGHTGRAM);
             Double biomass = ImrMath.safeMult(abundance, StoXMath.gramsToKg(weight));
             //String reportKey = byStation ? ExportUtil.separated('~', reportType, cruise, station) : reportType;
             // Aggregate superindividual variables

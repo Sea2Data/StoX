@@ -27,7 +27,7 @@ public class BioticCovDataStorage extends FileDataStorage {
         BioticCovDataMatrix indData = (BioticCovDataMatrix) data;
         List<String> indFields = Stream.concat(
                 // Add trawlquality, group and sampletype to standard full  individual field list
-                Stream.of(Functions.COL_IND_TRAWLQUALITY, Functions.COL_IND_GROUP, Functions.COL_IND_SAMPLETYPE), 
+Stream.of(Functions.COL_IND_SAMPLEQUALITY, Functions.COL_IND_GROUP, Functions.COL_IND_SAMPLETYPE), 
                 Functions.INDIVIDUALS_FULL.stream()).collect(Collectors.toList());
         ImrIO.write(wr, ExportUtil.carrageReturnLineFeed(ExportUtil.tabbed("Temporal", "GearFactor", "Spatial", "PlatformFactor", ExportUtil.tabbed(indFields))));
         // GROUP: For each temporal 

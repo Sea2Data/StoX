@@ -560,11 +560,11 @@ public final class Functions {
     public static final String COL_ABNDBYIND_INCLUDEINTOTAL = COL_POLVAR_INCLUDEINTOTAL;
 
     public static final String COL_IND_CRUISE = "cruise";
-    public static final String COL_IND_PLATFORM = "platform";
-    public static final String COL_IND_STARTDATE = "startdate";
-    public static final String COL_IND_STARTTIME = "starttime";
-    public static final String COL_IND_SERIALNO = "serialno";
-    public static final String COL_IND_FISHSTATIONTYPE = "fishstationtype";
+    public static final String COL_IND_CATCHPLATFORM = "catchplatform";
+    public static final String COL_IND_STATIONSTARTDATE = "stationstartdate";
+    public static final String COL_IND_STATIONSTARTTIME = "stationstarttime";
+    public static final String COL_IND_SERIALNUMBER = "serialnumber";
+    public static final String COL_IND_STATIONTYPE = "stationtype";
     public static final String COL_IND_LATITUDESTART = "latitudestart";
     public static final String COL_IND_LONGITUDESTART = "longitudestart";
     public static final String COL_IND_SYSTEM = "system";
@@ -572,36 +572,34 @@ public final class Functions {
     public static final String COL_IND_LOCATION = "location";
     public static final String COL_IND_GEAR = "gear";
     public static final String COL_IND_SPECCAT = COL_ABNDBYIND_SPECCAT;
-    public static final String COL_IND_SPECIES = "species";
-    public static final String COL_IND_NONAME = "noname";
+    public static final String COL_IND_CATCHCATEGORY = "catchcategory";
+    public static final String COL_IND_COMMONNAME = "commonname";
     public static final String COL_IND_APHIA = "aphia";
     public static final String COL_IND_CATCHWEIGHT = "catchweight";
     public static final String COL_IND_CATCHCOUNT = "catchcount";
-    public static final String COL_IND_SAMPLENUMBER = "samplenumber";
+    public static final String COL_IND_CATCHPARTNUMBER = "catchpartnumber";
     public static final String COL_IND_LENGTHSAMPLEWEIGHT = "lengthsampleweight";
     public static final String COL_IND_LENGTHSAMPLECOUNT = "lengthsamplecount";
-    public static final String COL_IND_FREQUENCY = "frequency";
-    public static final String COL_IND_NO = "no";
-    public static final String COL_IND_TRAWLQUALITY = "trawlquality";
+    public static final String COL_IND_SPECIMENID = "specimenid";
+    public static final String COL_IND_SAMPLEQUALITY = "samplequality";
     public static final String COL_IND_GROUP = "group";
     public static final String COL_IND_SAMPLETYPE = "sampletype";
 
-    public static final String COL_IND_WEIGHT = "weight";
-    public static final String COL_IND_LENGTH = "length";
+    public static final String COL_IND_INDIVIDUALWEIGHTGRAM = "IndividualWeightGram";
+    public static final String COL_IND_LENGTHCENTIMETER = "LengthCentimeter";
     public static final String COL_IND_AGE = "age";
     public static final String COL_IND_SEX = "sex";
-    public static final String COL_IND_DEVELOPMENTALSTAGE = "developmentalstage";
-    public static final String COL_IND_STAGE = "stage";
+    public static final String COL_IND_MATURATIONSTAGE = "maturationstage";
     public static final String COL_IND_SPECIALSTAGE = "specialstage";
-    public static final String COL_IND_DIGESTDEG = "digestdeg";
+    public static final String COL_IND_DIGESTION = "digestion";
     public static final String COL_IND_FAT = "fat";
     public static final String COL_IND_LIVER = "liver";
     public static final String COL_IND_LIVERWEIGHT = "liverweight";
     public static final String COL_IND_GONADWEIGHT = "gonadweight";
     public static final String COL_IND_STOMACHWEIGHT = "stomachweight";
-    public static final String COL_IND_VERTEBRAE = "vertebrae";
-    public static final String COL_IND_LENGTHUNIT = "lengthunit";
-    public static final String COL_IND_WEIGHTMETHOD = "weightmethod";
+    public static final String COL_IND_VERTEBRAECOUNT = "vertebraecount";
+    public static final String COL_IND_LENGTHRESOLUTION = "lengthresolution";
+    public static final String COL_IND_INDIVIDUALPRODUCTTYPE = "individualproducttype";
     public static final String COL_IND_STOMACHFILLFIELD = "stomachfillfield";
     public static final String COL_IND_LIVERPARASITE = "liverparasite";
     public static final String COL_IND_SPAWNINGAGE = "spawningage";
@@ -613,30 +611,29 @@ public final class Functions {
     public static final String COL_IND_CALIBRATION = "calibration";
 
     public static List<String> INDIVIDUALS = Arrays.asList(COL_IND_CRUISE,
-            COL_IND_SERIALNO,
-            COL_IND_PLATFORM,
+            COL_IND_SERIALNUMBER,
+            COL_IND_CATCHPLATFORM,
             COL_IND_SPECCAT,
-            COL_IND_SPECIES,
-            COL_IND_NONAME,
+            COL_IND_CATCHCATEGORY,
+            COL_IND_COMMONNAME,
             COL_IND_APHIA,
-            COL_IND_SAMPLENUMBER,
-            COL_IND_NO,
-            COL_IND_WEIGHT,
-            COL_IND_LENGTH,
+            COL_IND_CATCHPARTNUMBER,
+            COL_IND_SPECIMENID,
+            COL_IND_INDIVIDUALWEIGHTGRAM,
+            COL_IND_LENGTHCENTIMETER,
             COL_IND_AGE,
             COL_IND_SEX,
-            COL_IND_DEVELOPMENTALSTAGE,
-            COL_IND_STAGE,
+            COL_IND_MATURATIONSTAGE,
             COL_IND_SPECIALSTAGE,
-            COL_IND_DIGESTDEG,
+            COL_IND_DIGESTION,
             COL_IND_FAT,
             COL_IND_LIVER,
             COL_IND_LIVERWEIGHT,
             COL_IND_GONADWEIGHT,
             COL_IND_STOMACHWEIGHT,
-            COL_IND_VERTEBRAE,
-            COL_IND_LENGTHUNIT,
-            COL_IND_WEIGHTMETHOD,
+            COL_IND_VERTEBRAECOUNT,
+            COL_IND_LENGTHRESOLUTION,
+            COL_IND_INDIVIDUALPRODUCTTYPE,
             COL_IND_STOMACHFILLFIELD,
             COL_IND_LIVERPARASITE,
             COL_IND_SPAWNINGAGE,
@@ -646,13 +643,13 @@ public final class Functions {
             COL_IND_OTOLITHEDGE,
             COL_IND_OTOLITHCENTRE,
             COL_IND_CALIBRATION);
-
+        
     public static List<String> INDIVIDUALS_FULL = Arrays.asList(COL_IND_CRUISE,
-            COL_IND_SERIALNO,
-            COL_IND_PLATFORM,
-            COL_IND_STARTDATE,
-            COL_IND_STARTTIME,
-            COL_IND_FISHSTATIONTYPE,
+            COL_IND_SERIALNUMBER,
+            COL_IND_CATCHPLATFORM,
+            COL_IND_STATIONSTARTDATE,
+            COL_IND_STATIONSTARTTIME,
+            COL_IND_STATIONTYPE,
             COL_IND_LATITUDESTART,
             COL_IND_LONGITUDESTART,
             COL_IND_SYSTEM,
@@ -660,32 +657,30 @@ public final class Functions {
             COL_IND_LOCATION,
             COL_IND_GEAR,
             COL_IND_SPECCAT,
-            COL_IND_SPECIES,
-            COL_IND_NONAME,
+            COL_IND_CATCHCATEGORY,
+            COL_IND_COMMONNAME,
             COL_IND_APHIA,
             COL_IND_CATCHWEIGHT,
             COL_IND_CATCHCOUNT,
-            COL_IND_SAMPLENUMBER,
+            COL_IND_CATCHPARTNUMBER,
             COL_IND_LENGTHSAMPLEWEIGHT,
             COL_IND_LENGTHSAMPLECOUNT,
-            COL_IND_FREQUENCY,
-            COL_IND_NO,
-            COL_IND_WEIGHT,
-            COL_IND_LENGTH,
+            COL_IND_SPECIMENID,
+            COL_IND_INDIVIDUALWEIGHTGRAM,
+            COL_IND_LENGTHCENTIMETER,
             COL_IND_AGE,
             COL_IND_SEX,
-            COL_IND_DEVELOPMENTALSTAGE,
-            COL_IND_STAGE,
+            COL_IND_MATURATIONSTAGE,
             COL_IND_SPECIALSTAGE,
-            COL_IND_DIGESTDEG,
+            COL_IND_DIGESTION,
             COL_IND_FAT,
             COL_IND_LIVER,
             COL_IND_LIVERWEIGHT,
             COL_IND_GONADWEIGHT,
             COL_IND_STOMACHWEIGHT,
-            COL_IND_VERTEBRAE,
-            COL_IND_LENGTHUNIT,
-            COL_IND_WEIGHTMETHOD,
+            COL_IND_VERTEBRAECOUNT,
+            COL_IND_LENGTHRESOLUTION,
+            COL_IND_INDIVIDUALPRODUCTTYPE,
             COL_IND_STOMACHFILLFIELD,
             COL_IND_LIVERPARASITE,
             COL_IND_SPAWNINGAGE,
