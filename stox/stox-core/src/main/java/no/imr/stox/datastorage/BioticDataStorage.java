@@ -175,6 +175,14 @@ public class BioticDataStorage extends FileDataStorage {
                         ExportUtil.getObj("IndividualWeightGram", ml.isIndividualWeightGAdded(), notIncluded),
                         "individualvolume", "lengthresolution",
                         "length",
+                        "fat",
+                        "fatpercent", "sex", "maturationstage", "specialstage", "eggstage", "moultingstage", "spawningfrequency",
+                        "stomachfillfield", "stomachfilllab", "digestion", "liver", "liverparasite", "gillworms", "swollengills",
+                        "fungusheart", "fungusspores", "fungusouter", "blackspot", "vertebraecount", "gonadweight", "liverweight",
+                        "stomachweight", "diameter", "mantlelength", "carapacelength", "headlength", "snouttoendoftail", "snouttoendsqueezed",
+                        "snouttoanalfin", "snouttodorsalfin", "forklength", "snouttoboneknob", "lengthwithouthead", "carapacewidth", "rightclawwidth",
+                        "rightclawlength", "meroswidth", "meroslength", "japanesecut", "abdomenwidth", "tissuesamplenumber", "individualcomment",
+                        "preferredagereading",
                         ExportUtil.getObj("LengthCentimeter", ml.isLengthCMAdded(), notIncluded),
                         ExportUtil.getObj("agedeterminationid", ml.isAgeMerged(), notIncluded),
                         ExportUtil.getObj("age", ml.isAgeMerged(), notIncluded),
@@ -184,15 +192,7 @@ public class BioticDataStorage extends FileDataStorage {
                         ExportUtil.getObj("otolithtype", ml.isAgeMerged(), notIncluded),
                         ExportUtil.getObj("otolithedge", ml.isAgeMerged(), notIncluded),
                         ExportUtil.getObj("otolithcentre", ml.isAgeMerged(), notIncluded),
-                        ExportUtil.getObj("calibration", ml.isAgeMerged(), notIncluded),
-                        "fat",
-                        "fatpercent", "sex", "maturationstage", "specialstage", "eggstage", "moultingstage", "spawningfrequency",
-                        "stomachfillfield", "stomachfilllab", "digestion", "liver", "liverparasite", "gillworms", "swollengills",
-                        "fungusheart", "fungusspores", "fungusouter", "blackspot", "vertebraecount", "gonadweight", "liverweight",
-                        "stomachweight", "diameter", "mantlelength", "carapacelength", "headlength", "snouttoendoftail", "snouttoendsqueezed",
-                        "snouttoanalfin", "snouttodorsalfin", "forklength", "snouttoboneknob", "lengthwithouthead", "carapacewidth", "rightclawwidth",
-                        "rightclawlength", "meroswidth", "meroslength", "japanesecut", "abdomenwidth", "tissuesamplenumber", "individualcomment",
-                        "preferredagereading"
+                        ExportUtil.getObj("calibration", ml.isAgeMerged(), notIncluded)
                 )));
                 for (MissionBO ms : ml.getMissions()) {
                     MissionType m = ms.bo();
@@ -212,6 +212,14 @@ public class BioticDataStorage extends FileDataStorage {
                                         ExportUtil.getObj(ii.getIndividualWeightGram(), ml.isIndividualWeightGAdded(), notIncluded),
                                         i.getIndividualvolume(), i.getLengthresolution(),
                                         i.getLength(),
+                                        i.getFat(),
+                                        i.getFatpercent(), i.getSex(), i.getMaturationstage(), i.getSpecialstage(), i.getEggstage(), i.getMoultingstage(), i.getSpawningfrequency(),
+                                        i.getStomachfillfield(), i.getStomachfilllab(), i.getDigestion(), i.getLiver(), i.getLiverparasite(), i.getGillworms(), i.getSwollengills(),
+                                        i.getFungusheart(), i.getFungusspores(), i.getFungusouter(), i.getBlackspot(), i.getVertebraecount(), i.getGonadweight(), i.getLiverweight(),
+                                        i.getStomachweight(), i.getDiameter(), i.getMantlelength(), i.getCarapacelength(), i.getHeadlength(), i.getSnouttoendoftail(), i.getSnouttoendsqueezed(),
+                                        i.getSnouttoanalfin(), i.getSnouttodorsalfin(), i.getForklength(), i.getSnouttoboneknob(), i.getLengthwithouthead(), i.getCarapacewidth(), i.getRightclawwidth(),
+                                        i.getRightclawlength(), i.getMeroswidth(), i.getMeroslength(), i.getJapanesecut(), i.getAbdomenwidth(), i.getTissuesamplenumber(), i.getIndividualcomment(),
+                                        i.getPreferredagereading(),
                                         ExportUtil.getObj(ii.getLengthCentimeter(), ml.isLengthCMAdded(), notIncluded),
                                         ExportUtil.getObj(ii.getAgeDeterminationId(), ml.isAgeMerged(), notIncluded),
                                         ExportUtil.getObj(ii.getAge(), ml.isAgeMerged(), notIncluded),
@@ -221,15 +229,7 @@ public class BioticDataStorage extends FileDataStorage {
                                         ExportUtil.getObj(ii.getOtolithtype(), ml.isAgeMerged(), notIncluded),
                                         ExportUtil.getObj(ii.getOtolithedge(), ml.isAgeMerged(), notIncluded),
                                         ExportUtil.getObj(ii.getOtolithcentre(), ml.isAgeMerged(), notIncluded),
-                                        ExportUtil.getObj(ii.getCalibration(), ml.isAgeMerged(), notIncluded),
-                                        i.getFat(),
-                                        i.getFatpercent(), i.getSex(), i.getMaturationstage(), i.getSpecialstage(), i.getEggstage(), i.getMoultingstage(), i.getSpawningfrequency(),
-                                        i.getStomachfillfield(), i.getStomachfilllab(), i.getDigestion(), i.getLiver(), i.getLiverparasite(), i.getGillworms(), i.getSwollengills(),
-                                        i.getFungusheart(), i.getFungusspores(), i.getFungusouter(), i.getBlackspot(), i.getVertebraecount(), i.getGonadweight(), i.getLiverweight(),
-                                        i.getStomachweight(), i.getDiameter(), i.getMantlelength(), i.getCarapacelength(), i.getHeadlength(), i.getSnouttoendoftail(), i.getSnouttoendsqueezed(),
-                                        i.getSnouttoanalfin(), i.getSnouttodorsalfin(), i.getForklength(), i.getSnouttoboneknob(), i.getLengthwithouthead(), i.getCarapacewidth(), i.getRightclawwidth(),
-                                        i.getRightclawlength(), i.getMeroswidth(), i.getMeroslength(), i.getJapanesecut(), i.getAbdomenwidth(), i.getTissuesamplenumber(), i.getIndividualcomment(),
-                                        i.getPreferredagereading()
+                                        ExportUtil.getObj(ii.getCalibration(), ml.isAgeMerged(), notIncluded)
                                 )));
                             }
                         }
