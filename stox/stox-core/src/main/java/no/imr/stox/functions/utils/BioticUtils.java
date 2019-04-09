@@ -318,9 +318,7 @@ public final class BioticUtils {
             });
         }
         missions.setSpecCatAdded(data.isSpecCatAdded());
-        missions.setLengthCMAdded(data.isLengthCMAdded());
-        missions.setIndividualWeightGAdded(data.isIndividualWeightGAdded());
-        missions.setAgeMerged(data.isAgeMerged());
+        missions.setIndvars(data.getIndvars());;
         return missions;
     }
 }

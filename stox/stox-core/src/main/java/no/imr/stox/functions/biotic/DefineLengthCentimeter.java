@@ -27,7 +27,7 @@ public class DefineLengthCentimeter extends AbstractFunction {
     public Object perform(Map<String, Object> input) {
         BioticData origMissions = (BioticData) input.get(Functions.PM_DEFINELENGTHCENTIMETER_BIOTICDATA);
         BioticData missions = BioticUtils.copyBioticData(origMissions, BioticUtils.BIOTICDATA_COPY_FLAGS_USEEXISTINGDATA);
-        missions.setLengthCMAdded(true);
+        missions.addLengthCM();
         for (MissionBO ms : missions.getMissions()) {
             for (FishstationBO fs : ms.getFishstationBOs()) {
                 for (CatchSampleBO cb : fs.getCatchSampleBOs()) {

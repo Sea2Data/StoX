@@ -108,9 +108,8 @@ public class IndividualBO extends BaseBO implements Serializable {
         if (ageDeterminationBOs.size() == 1) {
             return ageDeterminationBOs.get(0);
         } else {
-            if (getParent() != null) {
-                IndividualBO i = ((IndividualBO) getParent());
-                Integer pref = i.bo().getPreferredagereading();
+            if (bo() != null) {
+                Integer pref = bo().getPreferredagereading();
                 if (pref == null) {
                     pref = ageDeterminationBOs.stream().mapToInt(a -> a.bo().getAgedeterminationid()).min().orElse(1);
                 }

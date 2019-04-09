@@ -132,47 +132,50 @@ public class BioticDataStorage extends FileDataStorage {
                 break;
             case 3:
                 // todo add spec cat
-                ImrIO.write(wr, ExportUtil.carrageReturnLineFeed(ExportUtil.tabbed(
+                String s = ExportUtil.tabbed(
                         "missiontype", "startyear", "platform", "missionnumber",
                         "serialnumber",
                         "catchsampleid",
-                        ExportUtil.getObj("SpecCat", ml.isSpecCatAdded(), notIncluded),
                         "commonname", "catchcategory", "catchpartnumber", "aphia", "scientificname", "identification", "foreignobject",
                         "sampletype", "group", "conservation", "catchproducttype", "raisingfactor", "catchweight", "catchvolume", "catchcount",
                         "abundancecategory", "sampleproducttype", "lengthmeasurement", "lengthsampleweight", "lengthsamplevolume",
                         "lengthsamplecount", "specimensamplecount", "agesamplecount", "agingstructure", "parasite", "stomach", "intestine",
-                        "tissuesample", "samplerecipient", "catchcomment"
-                )));
+                        "tissuesample", "samplerecipient", "catchcomment");
+                if (ml.isSpecCatAdded()) {
+                    s = ExportUtil.tabbed(s, "SpecCat");
+                }
+                ImrIO.write(wr, ExportUtil.carrageReturnLineFeed(s));
                 for (MissionBO ms : ml.getMissions()) {
                     MissionType m = ms.bo();
                     for (FishstationBO fs : ms.getFishstationBOs()) {
                         FishstationType f = fs.bo();
                         for (CatchSampleBO cs : fs.getCatchSampleBOs()) {
                             CatchsampleType c = cs.bo();
-                            ImrIO.write(wr, ExportUtil.carrageReturnLineFeed(ExportUtil.tabbed(
+                            s = ExportUtil.tabbed(
                                     m.getMissiontype(), m.getStartyear(), m.getPlatform(), m.getMissionnumber(),
                                     f.getSerialnumber(),
                                     c.getCatchsampleid(),
-                                    ExportUtil.getObj(cs.getSpecCat(), ml.isSpecCatAdded(), notIncluded),
                                     c.getCommonname(), c.getCatchcategory(), c.getCatchpartnumber(), c.getAphia(), c.getScientificname(), c.getIdentification(), c.getForeignobject(),
                                     c.getSampletype(), c.getGroup(), c.getConservation(), c.getCatchproducttype(), c.getRaisingfactor(), c.getCatchweight(), c.getCatchvolume(), c.getCatchcount(),
                                     c.getAbundancecategory(), c.getSampleproducttype(), c.getLengthmeasurement(), c.getLengthsampleweight(), c.getLengthsamplevolume(),
                                     c.getLengthsamplecount(), c.getSpecimensamplecount(), c.getAgesamplecount(), c.getAgingstructure(), c.getParasite(), c.getStomach(), c.getIntestine(),
-                                    c.getTissuesample(), c.getSamplerecipient(), c.getCatchcomment()
-                            )));
+                                    c.getTissuesample(), c.getSamplerecipient(), c.getCatchcomment());
+                            if (ml.isSpecCatAdded()) {
+                                s = ExportUtil.tabbed(s, cs.getSpecCat());
+                            }
+                            ImrIO.write(wr, ExportUtil.carrageReturnLineFeed(s));
                         }
                     }
                 }
                 break;
             case 4:
-                ImrIO.write(wr, ExportUtil.carrageReturnLineFeed(ExportUtil.tabbed(
+                s = ExportUtil.tabbed(
                         "missiontype", "startyear", "platform", "missionnumber",
                         "serialnumber",
                         "catchsampleid",
                         "specimenid",
                         "individualproducttype",
                         "individualweight",
-                        ExportUtil.getObj("IndividualWeightGram", ml.isIndividualWeightGAdded(), notIncluded),
                         "individualvolume", "lengthresolution",
                         "length",
                         "fat",
@@ -182,18 +185,30 @@ public class BioticDataStorage extends FileDataStorage {
                         "stomachweight", "diameter", "mantlelength", "carapacelength", "headlength", "snouttoendoftail", "snouttoendsqueezed",
                         "snouttoanalfin", "snouttodorsalfin", "forklength", "snouttoboneknob", "lengthwithouthead", "carapacewidth", "rightclawwidth",
                         "rightclawlength", "meroswidth", "meroslength", "japanesecut", "abdomenwidth", "tissuesamplenumber", "individualcomment",
-                        "preferredagereading",
-                        ExportUtil.getObj("LengthCentimeter", ml.isLengthCMAdded(), notIncluded),
-                        ExportUtil.getObj("agedeterminationid", ml.isAgeMerged(), notIncluded),
-                        ExportUtil.getObj("age", ml.isAgeMerged(), notIncluded),
-                        ExportUtil.getObj("spawningage", ml.isAgeMerged(), notIncluded),
-                        ExportUtil.getObj("spawningzones", ml.isAgeMerged(), notIncluded),
-                        ExportUtil.getObj("readability", ml.isAgeMerged(), notIncluded),
-                        ExportUtil.getObj("otolithtype", ml.isAgeMerged(), notIncluded),
-                        ExportUtil.getObj("otolithedge", ml.isAgeMerged(), notIncluded),
-                        ExportUtil.getObj("otolithcentre", ml.isAgeMerged(), notIncluded),
-                        ExportUtil.getObj("calibration", ml.isAgeMerged(), notIncluded)
-                )));
+                        "preferredagereading");
+                for (Integer var : ml.getIndvars()) {
+                    switch (var) {
+                        case BioticData.VAR_INDIVIDUALWEIGHTGRAM:
+                            s = ExportUtil.tabbed(s, "IndividualWeightGram");
+                            break;
+                        case BioticData.VAR_LENGHTCM:
+                            s = ExportUtil.tabbed(s, "LengthCentimeter");
+                            break;
+                        case BioticData.VAR_AGE:
+                            s = ExportUtil.tabbed(s,
+                                    "agedeterminationid",
+                                    "age",
+                                    "spawningage",
+                                    "spawningzones",
+                                    "readability",
+                                    "otolithtype",
+                                    "otolithedge",
+                                    "otolithcentre",
+                                    "calibration");
+                            break;
+                    }
+                }
+                ImrIO.write(wr, ExportUtil.carrageReturnLineFeed(s));
                 for (MissionBO ms : ml.getMissions()) {
                     MissionType m = ms.bo();
                     for (FishstationBO fs : ms.getFishstationBOs()) {
@@ -202,14 +217,13 @@ public class BioticDataStorage extends FileDataStorage {
                             CatchsampleType c = cs.bo();
                             for (IndividualBO ii : cs.getIndividualBOs()) {
                                 IndividualType i = ii.bo();
-                                ImrIO.write(wr, ExportUtil.carrageReturnLineFeed(ExportUtil.tabbed(
+                                s = ExportUtil.tabbed(
                                         m.getMissiontype(), m.getStartyear(), m.getPlatform(), m.getMissionnumber(),
                                         f.getSerialnumber(),
                                         c.getCatchsampleid(),
                                         i.getSpecimenid(),
                                         i.getIndividualproducttype(),
                                         i.getIndividualweight(),
-                                        ExportUtil.getObj(ii.getIndividualWeightGram(), ml.isIndividualWeightGAdded(), notIncluded),
                                         i.getIndividualvolume(), i.getLengthresolution(),
                                         i.getLength(),
                                         i.getFat(),
@@ -219,18 +233,30 @@ public class BioticDataStorage extends FileDataStorage {
                                         i.getStomachweight(), i.getDiameter(), i.getMantlelength(), i.getCarapacelength(), i.getHeadlength(), i.getSnouttoendoftail(), i.getSnouttoendsqueezed(),
                                         i.getSnouttoanalfin(), i.getSnouttodorsalfin(), i.getForklength(), i.getSnouttoboneknob(), i.getLengthwithouthead(), i.getCarapacewidth(), i.getRightclawwidth(),
                                         i.getRightclawlength(), i.getMeroswidth(), i.getMeroslength(), i.getJapanesecut(), i.getAbdomenwidth(), i.getTissuesamplenumber(), i.getIndividualcomment(),
-                                        i.getPreferredagereading(),
-                                        ExportUtil.getObj(ii.getLengthCentimeter(), ml.isLengthCMAdded(), notIncluded),
-                                        ExportUtil.getObj(ii.getAgeDeterminationId(), ml.isAgeMerged(), notIncluded),
-                                        ExportUtil.getObj(ii.getAge(), ml.isAgeMerged(), notIncluded),
-                                        ExportUtil.getObj(ii.getSpawningage(), ml.isAgeMerged(), notIncluded),
-                                        ExportUtil.getObj(ii.getSpawningzones(), ml.isAgeMerged(), notIncluded),
-                                        ExportUtil.getObj(ii.getReadability(), ml.isAgeMerged(), notIncluded),
-                                        ExportUtil.getObj(ii.getOtolithtype(), ml.isAgeMerged(), notIncluded),
-                                        ExportUtil.getObj(ii.getOtolithedge(), ml.isAgeMerged(), notIncluded),
-                                        ExportUtil.getObj(ii.getOtolithcentre(), ml.isAgeMerged(), notIncluded),
-                                        ExportUtil.getObj(ii.getCalibration(), ml.isAgeMerged(), notIncluded)
-                                )));
+                                        i.getPreferredagereading());
+                                for (Integer var : ml.getIndvars()) {
+                                    switch (var) {
+                                        case BioticData.VAR_INDIVIDUALWEIGHTGRAM:
+                                            s = ExportUtil.tabbed(s, ii.getIndividualWeightGram());
+                                            break;
+                                        case BioticData.VAR_LENGHTCM:
+                                            s = ExportUtil.tabbed(s, ii.getLengthCentimeter());
+                                            break;
+                                        case BioticData.VAR_AGE:
+                                            s = ExportUtil.tabbed(s,
+                                                    ii.getAgeDeterminationId(),
+                                                    ii.getAge(),
+                                                    ii.getSpawningage(),
+                                                    ii.getSpawningzones(),
+                                                    ii.getReadability(),
+                                                    ii.getOtolithtype(),
+                                                    ii.getOtolithedge(),
+                                                    ii.getOtolithcentre(),
+                                                    ii.getCalibration());
+                                            break;
+                                    }
+                                }
+                                ImrIO.write(wr, ExportUtil.carrageReturnLineFeed(s));
                             }
                         }
                     }

@@ -27,7 +27,7 @@ public class DefineIndividualWeightGram extends AbstractFunction {
     public Object perform(Map<String, Object> input) {
         BioticData data = (BioticData) input.get(Functions.PM_DEFINELENGTHCENTIMETER_BIOTICDATA);
         BioticData newdata = BioticUtils.copyBioticData(data, BioticUtils.BIOTICDATA_COPY_FLAGS_USEEXISTINGDATA);
-        newdata.setIndividualWeightGAdded(true);
+        newdata.addIndividualWeightG();
         for (MissionBO ms : newdata.getMissions()) {
             for (FishstationBO fs : ms.getFishstationBOs()) {
                 for (CatchSampleBO cb : fs.getCatchSampleBOs()) {

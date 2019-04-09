@@ -21,7 +21,7 @@ public class MergeAgeDeterminationToIndividual extends AbstractFunction {
     public Object perform(Map<String, Object> input) {
         BioticData origMissions = (BioticData) input.get(Functions.PM_MERGEAGEDETERMINATIONTOINDIVIDUAL_BIOTICDATA);
         BioticData missions = BioticUtils.copyBioticData(origMissions, BioticUtils.BIOTICDATA_COPY_FLAGS_USEEXISTINGDATA);
-        missions.setAgeMerged(true);
+        missions.addAge();
         return missions;
     }
 }
