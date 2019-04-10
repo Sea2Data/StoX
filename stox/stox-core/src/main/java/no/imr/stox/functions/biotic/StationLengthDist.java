@@ -47,7 +47,7 @@ public class StationLengthDist extends AbstractFunction {
         LengthDistMatrix result = new LengthDistMatrix();
         // Set the resolution matrix as Observation type and length interval
         String lengthDistType = (String) input.get(Functions.PM_STATIONLENGTHDIST_LENGTHDISTTYPE);
-        Double lengthInterval = BioticUtils.getLengthInterval(missions.getMissions());
+        Double lengthInterval = BioticUtils.getLengthInterval(missions);
         result.getResolutionMatrix().setRowValue(Functions.RES_OBSERVATIONTYPE, Functions.OBSERVATIONTYPE_STATION);
         result.getResolutionMatrix().setRowValue(Functions.RES_LENGTHINTERVAL, lengthInterval);
         result.getResolutionMatrix().setRowValue(Functions.RES_LENGTHDISTTYPE, lengthDistType);

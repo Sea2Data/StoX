@@ -28,6 +28,7 @@ import no.imr.sea2data.echosounderbo.DistanceBO;
 import no.imr.sea2data.imrbase.map.ILatLonEvent;
 import no.imr.sea2data.imrbase.matrix.MatrixBO;
 import no.imr.sea2data.imrmap.utils.JTSUtils;
+import no.imr.stox.bo.BioticData;
 import no.imr.stox.bo.ProcessDataBO;
 import static no.imr.stox.factory.FactoryUtil.acquireProject;
 import no.imr.stox.functions.utils.AbndEstProcessDataUtil;
@@ -182,7 +183,7 @@ public class ConvertBarentsHavTransects {
             suAsg.clear();
             bAsg.clear();
             List<DistanceBO> distList = bl.getProcessByFunctionName(Functions.FN_FILTERACOUSTIC).getDataStorage().getData();
-            List<MissionBO> mList = bl.getProcessByFunctionName(Functions.FN_READBIOTICXML).getDataStorage().getData();
+            BioticData mList = bl.getProcessByFunctionName(Functions.FN_READBIOTICXML).getDataStorage().getData();
             Map<String, Set<Transect>> trgrp = tlist.stream().
                     collect(Collectors.groupingBy(Transect::getTransectKey, Collectors.toSet()));
 
