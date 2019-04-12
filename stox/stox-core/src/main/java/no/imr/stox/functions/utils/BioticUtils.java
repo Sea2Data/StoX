@@ -178,11 +178,11 @@ public final class BioticUtils {
         return null;
     }
 
-    public static FishstationBO findStationBySerialNo(BioticData biotic, Integer serialNo) {
-        if (biotic == null) {
+    public static FishstationBO findStationBySerialNo(List<MissionBO> mList, Integer serialNo) {
+        if (mList == null) {
             return null;
         }
-        return biotic.getMissions().stream()
+        return mList.stream()
                 .flatMap(m -> m.getFishstationBOs().stream())
                 .filter(s -> Objects.equals(s.bo().getSerialnumber(), serialNo)).findFirst().orElse(null);
     }
@@ -250,9 +250,9 @@ public final class BioticUtils {
 
     }
 
-    public static double getLengthInterval(BioticData biotic) {
+    public static double getLengthInterval(List<MissionBO> missions) {
         Set<Integer> units = new HashSet<>();
-        for (MissionBO ms : biotic.getMissions()) {
+        for (MissionBO ms : missions) {
             for (FishstationBO fs : ms.getFishstationBOs()) {
                 for (CatchSampleBO s : fs.getCatchSampleBOs()) {
                     for (IndividualBO i : s.getIndividualBOs()) {

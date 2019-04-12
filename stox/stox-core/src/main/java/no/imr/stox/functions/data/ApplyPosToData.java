@@ -13,7 +13,6 @@ import java.util.Map;
 import no.imr.sea2data.biotic.bo.FishstationBO;
 import no.imr.sea2data.biotic.bo.MissionBO;
 import no.imr.sea2data.imrbase.matrix.MatrixBO;
-import no.imr.stox.bo.BioticData;
 import no.imr.stox.bo.LandingData;
 import no.imr.stox.bo.landing.LandingsdataBO;
 import no.imr.stox.bo.landing.SeddellinjeBO;
@@ -21,7 +20,6 @@ import no.imr.stox.datastorage.BioticDataStorage;
 import no.imr.stox.datastorage.IDataStorage;
 import no.imr.stox.datastorage.LandingDataStorage;
 import no.imr.stox.functions.AbstractFunction;
-import no.imr.stox.functions.utils.BioticUtils;
 import no.imr.stox.functions.utils.Functions;
 import no.imr.stox.functions.utils.ProjectUtils;
 import no.imr.stox.functions.utils.StratumUtils;
@@ -51,7 +49,7 @@ public class ApplyPosToData extends AbstractFunction {
             return null;
         }
         LandingData landing = (LandingData) input.get(Functions.PM_APPLYPOSTODATA_LANDINGDATA);
-        BioticData biotic = (BioticData) input.get(Functions.PM_APPLYPOSTODATA_BIOTICDATA);
+        List<MissionBO> biotic = (List) input.get(Functions.PM_APPLYPOSTODATA_BIOTICDATA);
         switch (dataSource) {
             case Functions.SOURCETYPE_LANDING:
                 LandingData landing2 = landing;//LandingUtils.copyLandingData(landing);
@@ -71,8 +69,8 @@ public class ApplyPosToData extends AbstractFunction {
                 }
                 return landing2;
             case Functions.SOURCETYPE_BIOTIC:
-                BioticData biotic2 = biotic;//BioticUtils.copyBioticData(biotic, BioticUtils.BIOTICDATA_COPY_FLAGS_COPYDATA); //cannot copy data 
-                for (MissionBO ms : biotic2.getMissions()) {
+                List<MissionBO> biotic2 = biotic;//BioticUtils.copyBioticData(biotic); cannot copy data 
+                for (MissionBO ms : biotic2) {
                     for (FishstationBO fs : ms.getFishstationBOs()) {
                         String stratum = StratumUtils.getStratumName(areaCoding, fs.bo().getArea(), fs.bo().getLocation());
                         Point2D.Double pt = (Point2D.Double) posMap.getRowValue(stratum);

@@ -18,7 +18,6 @@ import no.imr.sea2data.biotic.bo.MissionBO;
 import no.imr.sea2data.imrbase.matrix.MatrixBO;
 import no.imr.sea2data.imrbase.util.Conversion;
 import no.imr.sea2data.imrbase.util.IMRdate;
-import no.imr.stox.bo.BioticData;
 import no.imr.stox.bo.LandingData;
 import no.imr.stox.bo.ProcessDataBO;
 import no.imr.stox.bo.landing.LandingsdataBO;
@@ -54,7 +53,7 @@ public class DefineTemporal extends AbstractFunction {
         String timeInterval = (String) input.get(Functions.PM_DEFINETEMPORAL_TIMEINTERVAL);
         Boolean seasonal = Conversion.safeObjectToBoolean((Boolean) input.get(Functions.PM_DEFINETEMPORAL_SEASONAL));
         LandingData landingData = (LandingData) input.get(Functions.PM_DEFINETEMPORAL_LANDINGDATA);
-        BioticData bioticData = (BioticData) input.get(Functions.PM_DEFINETEMPORAL_BIOTICDATA);
+        List<MissionBO> bioticData = (List) input.get(Functions.PM_DEFINETEMPORAL_BIOTICDATA);
         String covariateType = (String) input.get(Functions.PM_DEFINETEMPORAL_COVARIATETYPE);
 
         // Cov param
@@ -121,7 +120,7 @@ public class DefineTemporal extends AbstractFunction {
                 }
             } else if (sourceType.equals(Functions.SOURCETYPE_BIOTIC)) {
                 if (bioticData != null) {
-                    for (MissionBO ms : bioticData.getMissions()) {
+                    for (MissionBO ms : bioticData) {
                         for (FishstationBO fs : ms.getFishstationBOs()) {
                             String cov = getCovariateFromDate(fs.bo().getStationstartdate(), timeInterval, seasonal);
                             if (cov != null) {
