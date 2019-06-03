@@ -12,6 +12,7 @@ import java.util.Set;
 import no.imr.sea2data.biotic.bo.FishstationBO;
 import no.imr.sea2data.biotic.bo.MissionBO;
 import no.imr.sea2data.imrbase.matrix.MatrixBO;
+import no.imr.stox.bo.BioticData;
 import no.imr.stox.bo.ProcessDataBO;
 import no.imr.stox.functions.AbstractFunction;
 import no.imr.stox.functions.utils.AbndEstProcessDataUtil;
@@ -32,7 +33,7 @@ public class DefinePlatform extends AbstractFunction {
     @Override
     public Object perform(Map<String, Object> input) {
         ProcessDataBO pd = (ProcessDataBO) input.get(Functions.PM_DEFINESPATIAL_PROCESSDATA);
-        List<MissionBO> biotic = (List) input.get(Functions.PM_DEFINESPATIAL_BIOTICDATA);
+        BioticData biotic = (BioticData) input.get(Functions.PM_DEFINESPATIAL_BIOTICDATA);
         String defMethod = (String) input.get(Functions.PM_DEFINESPATIAL_DEFINITIONMETHOD);
         // Apply transient dimension info to process data about spatial dimensions (used in cell translation/aggregation):
         // Default handling (by data)
@@ -67,7 +68,7 @@ public class DefinePlatform extends AbstractFunction {
                 if (biotic == null) {
                     return pd;
                 }
-                biotic.stream().flatMap(ms -> ms.getFishstationBOs().stream()).map((fs) -> {
+                biotic.getMissions().stream().flatMap(ms -> ms.getFishstationBOs().stream()).map((fs) -> {
                     //fs.
                     return fs.bo().getCatchplatform();
                 }).filter((def) -> (def != null)).forEach((def) -> {

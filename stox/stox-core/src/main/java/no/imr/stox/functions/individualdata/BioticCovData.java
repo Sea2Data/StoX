@@ -17,6 +17,7 @@ import no.imr.sea2data.biotic.bo.MissionBO;
 import no.imr.sea2data.imrbase.matrix.MatrixBO;
 import no.imr.sea2data.imrbase.util.ExportUtil;
 import no.imr.stox.bo.BioticCovDataMatrix;
+import no.imr.stox.bo.BioticData;
 import no.imr.stox.bo.ProcessDataBO;
 import no.imr.stox.functions.AbstractFunction;
 import no.imr.stox.functions.utils.AbndEstProcessDataUtil;
@@ -42,11 +43,11 @@ public class BioticCovData extends AbstractFunction {
         //String var2 = (String) pd.getMatrix(Functions.TABLE_SPATIALVAR).getRowValue(Functions.PM_VAR2);
         BioticCovDataMatrix indData = new BioticCovDataMatrix();
         // Default handling (Define by given time interval:
-        List<MissionBO> bioticData = (List) input.get(Functions.PM_BIOTICCOVDATA_BIOTICDATA);
+        BioticData bioticData = (BioticData) input.get(Functions.PM_BIOTICCOVDATA_BIOTICDATA);
         MatrixBO tempM = AbndEstProcessDataUtil.getTemporal(pd);
         MatrixBO gearM = AbndEstProcessDataUtil.getGear(pd);
         MatrixBO spatialM = AbndEstProcessDataUtil.getSpatial(pd);
-        for (MissionBO ms : bioticData) {
+        for (MissionBO ms : bioticData.getMissions()) {
             for (FishstationBO fs : ms.getFishstationBOs()) {
                 // Filter station against covariates
                 LocalDate d = fs.bo().getStationstartdate();

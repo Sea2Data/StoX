@@ -14,6 +14,7 @@ import no.imr.sea2data.biotic.bo.FishstationBO;
 import no.imr.sea2data.biotic.bo.MissionBO;
 import no.imr.sea2data.imrbase.matrix.MatrixBO;
 import no.imr.sea2data.imrmap.utils.JTSUtils;
+import no.imr.stox.bo.BioticData;
 import no.imr.stox.bo.LandingData;
 import no.imr.stox.bo.ProcessDataBO;
 import no.imr.stox.bo.landing.LandingsdataBO;
@@ -44,7 +45,7 @@ public class AssignDataToStratum extends AbstractFunction {
             return null;
         }
         LandingData landing = (LandingData) input.get(Functions.PM_ASSIGNDATATOSTRATUM_LANDINGDATA);
-        List<MissionBO> biotic = (List) input.get(Functions.PM_ASSIGNDATATOSTRATUM_BIOTICDATA);
+        BioticData biotic = (BioticData) input.get(Functions.PM_ASSIGNDATATOSTRATUM_BIOTICDATA);
         switch (dataSource) {
             case Functions.SOURCETYPE_LANDING:
                 for (LandingsdataBO l : landing) {
@@ -57,7 +58,7 @@ public class AssignDataToStratum extends AbstractFunction {
                 }
                 return landing;
             case Functions.SOURCETYPE_BIOTIC:
-                for (MissionBO ms : biotic) {
+                for (MissionBO ms : biotic.getMissions()) {
                     for (FishstationBO fs : ms.getFishstationBOs()) {
                         if (fs.bo().getLatitudestart() == null || fs.bo().getLongitudestart() == null) {
                             continue;
