@@ -42,7 +42,7 @@ public class FillMissingData extends AbstractFunction {
         String b = (String) input.get(Functions.PM_FILLMISSINGDATA_B);
         String fileNameLengthWeight = ProjectUtils.resolveParameterFileName((String) input.get(Functions.PM_FILLMISSINGDATA_FILENAME),
                 (String) input.get(Functions.PM_PROJECTFOLDER));
-        
+
         Integer seed = (Integer) input.get(Functions.PM_FILLMISSINGDATA_SEED);
         Boolean imputeByAge = fillVariables != null && fillVariables.equals(Functions.FILLVARIABLES_IMPUTEBYAGE);
         // Fill in missing weights
@@ -53,7 +53,12 @@ public class FillMissingData extends AbstractFunction {
             DistributeAbundance.distributeAbundance(abnd, seed, isSortedAbundance());
         }
         if (fillWeight != null) {
-            AbndFillMissingWeights.fillMissingWeights(abnd, fillWeight, a, b, fileNameLengthWeight);
+            if (fillWeight.equals(Functions.FILLWEIGHT_FROMFILE)) {
+                if (fileNameLengthWeight == null || !(new File(fileNameLengthWeight)).exists()) {
+                    logger.error("Filename FromFile is not properly given.", null);
+                }
+                AbndFillMissingWeights.fillMissingWeights(abnd, fillWeight, a, b, fileNameLengthWeight);
+            }
         }
 
         return abnByInd;

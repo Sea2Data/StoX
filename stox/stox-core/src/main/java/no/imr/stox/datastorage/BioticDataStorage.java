@@ -50,31 +50,33 @@ public class BioticDataStorage extends FileDataStorage {
 
     @Override
     public String getStorageFileNamePostFix(Integer idxFile) {
-        Class cls = getClass(idxFile);
-        String str = cls.getSimpleName();
-        return str.substring(0, str.length() - 4); // remove Type
+        switch (idxFile) {
+            case 1:
+                return "mission";
+            case 2:
+                return "fishstation";
+            case 3:
+                return "catchsample";
+            case 4:
+                return "individual";
+            case 5:
+                return "agedetermination";
+            case 6:
+                return "tag";
+            case 7:
+                return "prey";
+            case 8:
+                return "preylengthfrequencytable";
+            case 9:
+                return "copepodedevstagefrequencytable";
+        }
+        return null;
     }
 
-    private static Class getClass(Integer idx) {
-        switch (idx) {
-            case 1:
-                return MissionType.class;
-            case 2:
-                return FishstationType.class;
-            case 3:
-                return CatchsampleType.class;
-            case 4:
-                return IndividualType.class;
-            case 5:
-                return AgedeterminationType.class;
-            case 6:
-                return TagType.class;
-            case 7:
-                return PreyType.class;
-            case 8:
-                return PreylengthType.class;
-            case 9:
-                return CopepodedevstageType.class;
+    // replace tab and line shift with 
+    public static String stripws(String s) {
+        if (s != null) {
+            return s.replace("\t", "  ").replace("\r\n", "  ").replace("\n", "  ");
         }
         return null;
     }
@@ -92,7 +94,7 @@ public class BioticDataStorage extends FileDataStorage {
                     ImrIO.write(wr, ExportUtil.carrageReturnLineFeed(ExportUtil.tabbed(
                             m.getMissiontype(), m.getStartyear(), m.getPlatform(), m.getMissionnumber(), m.getMissiontypename(),
                             m.getCallsignal(), m.getPlatformname(), m.getCruise(), m.getMissionstartdate(), m.getMissionstopdate(),
-                            m.getPurpose())));
+                            stripws(m.getPurpose()))));
                 }
                 break;
             case 2:
@@ -125,7 +127,7 @@ public class BioticDataStorage extends FileDataStorage {
                                 f.getTrawldoorarea(), f.getTrawldoorweight(), f.getTrawldoorspread(), f.getTrawldoorspreadsd(), f.getWingspread(), f.getWingspreadsd(), f.getWirelength(),
                                 f.getWirediameter(), f.getWiredensity(), f.getSoaktime(), f.getTripno(), f.getFishabundance(), f.getFishdistribution(), f.getLandingsite(), f.getFishingground(),
                                 f.getVesselcount(), f.getDataquality(), f.getHaulvalidity(), f.getFlora(), f.getVegetationcover(), f.getVisibility(), f.getWaterlevel(), f.getWinddirection(),
-                                f.getWindspeed(), f.getClouds(), f.getSea(), f.getWeather(), f.getStationcomment()
+                                f.getWindspeed(), f.getClouds(), f.getSea(), f.getWeather(), stripws(f.getStationcomment())
                         )));
                     }
                 }
@@ -159,7 +161,7 @@ public class BioticDataStorage extends FileDataStorage {
                                     c.getSampletype(), c.getGroup(), c.getConservation(), c.getCatchproducttype(), c.getRaisingfactor(), c.getCatchweight(), c.getCatchvolume(), c.getCatchcount(),
                                     c.getAbundancecategory(), c.getSampleproducttype(), c.getLengthmeasurement(), c.getLengthsampleweight(), c.getLengthsamplevolume(),
                                     c.getLengthsamplecount(), c.getSpecimensamplecount(), c.getAgesamplecount(), c.getAgingstructure(), c.getParasite(), c.getStomach(), c.getIntestine(),
-                                    c.getTissuesample(), c.getSamplerecipient(), c.getCatchcomment());
+                                    c.getTissuesample(), c.getSamplerecipient(), stripws(c.getCatchcomment()));
                             if (ml.isSpecCatAdded()) {
                                 s = ExportUtil.tabbed(s, cs.getSpecCat());
                             }
@@ -232,7 +234,7 @@ public class BioticDataStorage extends FileDataStorage {
                                         i.getFungusheart(), i.getFungusspores(), i.getFungusouter(), i.getBlackspot(), i.getVertebraecount(), i.getGonadweight(), i.getLiverweight(),
                                         i.getStomachweight(), i.getDiameter(), i.getMantlelength(), i.getCarapacelength(), i.getHeadlength(), i.getSnouttoendoftail(), i.getSnouttoendsqueezed(),
                                         i.getSnouttoanalfin(), i.getSnouttodorsalfin(), i.getForklength(), i.getSnouttoboneknob(), i.getLengthwithouthead(), i.getCarapacewidth(), i.getRightclawwidth(),
-                                        i.getRightclawlength(), i.getMeroswidth(), i.getMeroslength(), i.getJapanesecut(), i.getAbdomenwidth(), i.getTissuesamplenumber(), i.getIndividualcomment(),
+                                        i.getRightclawlength(), i.getMeroswidth(), i.getMeroslength(), i.getJapanesecut(), i.getAbdomenwidth(), i.getTissuesamplenumber(), stripws(i.getIndividualcomment()),
                                         i.getPreferredagereading());
                                 for (Integer var : ml.getIndvars()) {
                                     switch (var) {

@@ -68,6 +68,9 @@ public class LengthWeightRelationship extends AbstractFunction {
             });
         }
         Map<String, List<IndividualBO>> inds = getIndividuals(totalStations, bioticData);
+        if(inds.size() < 2) {
+            logger.error("No individuals assigned, length weight relationship not performed.", null);
+        }
         inds.entrySet().forEach(es -> {
             appendCoefficients(es.getKey(), "TOTAL", es.getValue(), result);
         });
