@@ -328,14 +328,14 @@ public class Factory {
                 setParameterProcessValue(Functions.PM_MERGEAGEDETERMINATIONTOINDIVIDUAL_BIOTICDATA, Functions.FN_DEFINELENGTHCENTIMETER).
                 setFileOutput(false);
         
-        m.addProcess(Functions.FN_DEFINESPECCAT, Functions.FN_DEFINESPECCAT).
-                setParameterProcessValue(Functions.PM_DEFINESPECCAT_BIOTICDATA, Functions.FN_MERGEAGEDETERMINATIONTOINDIVIDUAL).
-                setParameterValue(Functions.PM_DEFINESPECCAT_SPECCATMETHOD, Functions.SPECCATMETHOD_SELECTVAR).
-                setParameterValue(Functions.PM_DEFINESPECCAT_SPECVARBIOTIC, "commonname").
+        m.addProcess(Functions.FN_REDEFINESPECCAT, Functions.FN_REDEFINESPECCAT).
+                setParameterProcessValue(Functions.PM_REDEFINESPECCAT_BIOTICDATA, Functions.FN_MERGEAGEDETERMINATIONTOINDIVIDUAL).
+                setParameterValue(Functions.PM_REDEFINESPECCAT_SPECCATMETHOD, Functions.SPECCATMETHOD_SELECTVAR).
+                setParameterValue(Functions.PM_REDEFINESPECCAT_SPECVARBIOTIC, "commonname").
                 setFileOutput(false);
         */
         m.addProcess(Functions.FN_FILTERBIOTIC, Functions.FN_FILTERBIOTIC).
-                setParameterProcessValue(Functions.PM_FILTERBIOTIC_BIOTICDATA, Functions.FN_DEFINESPECCAT).
+                setParameterProcessValue(Functions.PM_FILTERBIOTIC_BIOTICDATA, Functions.FN_REDEFINESPECCAT).
                 setRespondInGUI(true);
     }
     /**

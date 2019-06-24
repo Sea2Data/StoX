@@ -36,7 +36,7 @@ public class DefineSpecCat extends AbstractFunction {
      */
     public static List<String> getHeader(IProcess pr) {
         try {
-            String fileName = ProjectUtils.resolveParameterFileName((String) pr.getParameterValue(Functions.PM_DEFINESPECCAT_FILENAME),
+            String fileName = ProjectUtils.resolveParameterFileName((String) pr.getParameterValue(Functions.PM_REDEFINESPECCAT_FILENAME),
                     (String) pr.getModel().getProject().getProjectFolder());
             if (fileName == null) {
                 return null;
@@ -62,14 +62,14 @@ public class DefineSpecCat extends AbstractFunction {
     @Override
     public Object perform(Map<String, Object> input) {
         ILogger logger = (ILogger) input.get(Functions.PM_LOGGER);
-        BioticData mList = (BioticData) input.get(Functions.PM_DEFINESPECCAT_BIOTICDATA);
+        BioticData mList = (BioticData) input.get(Functions.PM_REDEFINESPECCAT_BIOTICDATA);
         BioticData missions = BioticUtils.copyBioticData(mList, BioticUtils.BIOTICDATA_COPY_FLAGS_COPYDATA);
-        String specCat = (String) input.get(Functions.PM_DEFINESPECCAT_SPECCAT);
-        String specCatMethod = (String) input.get(Functions.PM_DEFINESPECCAT_SPECCATMETHOD);
-        String specVarBiotic = (String) input.get(Functions.PM_DEFINESPECCAT_SPECVARBIOTIC);
-        String fileName = (String) input.get(Functions.PM_DEFINESPECCAT_FILENAME);
-        String specVarRef = (String) input.get(Functions.PM_DEFINESPECCAT_SPECVARREF);
-        String specCatRef = (String) input.get(Functions.PM_DEFINESPECCAT_SPECCATREF);
+        String specCat = (String) input.get(Functions.PM_REDEFINESPECCAT_SPECCAT);
+        String specCatMethod = (String) input.get(Functions.PM_REDEFINESPECCAT_SPECCATMETHOD);
+        String specVarBiotic = (String) input.get(Functions.PM_REDEFINESPECCAT_SPECVARBIOTIC);
+        String fileName = (String) input.get(Functions.PM_REDEFINESPECCAT_FILENAME);
+        String specVarRef = (String) input.get(Functions.PM_REDEFINESPECCAT_SPECVARREF);
+        String specCatRef = (String) input.get(Functions.PM_REDEFINESPECCAT_SPECCATREF);
         if (specVarBiotic == null) {
             specVarBiotic = "commonname";
         }

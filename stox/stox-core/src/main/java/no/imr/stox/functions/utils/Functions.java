@@ -170,14 +170,14 @@ public final class Functions {
     public static final String FN_READACOUSTICXML = "ReadAcousticXML";
     public static final String PM_READACOUSTICXML_FILENAME = "FileName";
 
-    public static final String FN_DEFINESPECCAT = "DefineSpecCat";
-    public static final String PM_DEFINESPECCAT_BIOTICDATA = "BioticData";
-    public static final String PM_DEFINESPECCAT_SPECCAT = "SpecCat";
-    public static final String PM_DEFINESPECCAT_SPECCATMETHOD = "SpecCatMethod";
-    public static final String PM_DEFINESPECCAT_FILENAME = "FileName";
-    public static final String PM_DEFINESPECCAT_SPECVARBIOTIC = "SpecVarBiotic";
-    public static final String PM_DEFINESPECCAT_SPECVARREF = "SpecVarRef";
-    public static final String PM_DEFINESPECCAT_SPECCATREF = "SpecCatRef";
+    public static final String FN_REDEFINESPECCAT = "RedefineSpecCat";
+    public static final String PM_REDEFINESPECCAT_BIOTICDATA = "BioticData";
+    public static final String PM_REDEFINESPECCAT_SPECCAT = "SpecCat";
+    public static final String PM_REDEFINESPECCAT_SPECCATMETHOD = "SpecCatMethod";
+    public static final String PM_REDEFINESPECCAT_FILENAME = "FileName";
+    public static final String PM_REDEFINESPECCAT_SPECVARBIOTIC = "SpecVarBiotic";
+    public static final String PM_REDEFINESPECCAT_SPECVARREF = "SpecVarRef";
+    public static final String PM_REDEFINESPECCAT_SPECCATREF = "SpecCatRef";
 
     public static final String FN_FILTERACOUSTIC = "FilterAcoustic";
     public static final String PM_FILTERACOUSTIC_ACOUSTICDATA = "AcousticData";

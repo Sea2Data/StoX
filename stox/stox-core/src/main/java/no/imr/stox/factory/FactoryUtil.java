@@ -210,11 +210,11 @@ public final class FactoryUtil {
                         .setParameterProcessValue(Functions.PM_DEFINEINDIVIDUALWEIGHTGRAM_BIOTICDATA, defLength.getName()).setFileOutput(false);
                 IProcess defAge = prj.getBaseline().insertProcess(Functions.FN_MERGEAGEDETERMINATIONTOINDIVIDUAL, Functions.FN_MERGEAGEDETERMINATIONTOINDIVIDUAL, idxReadB + 3)
                         .setParameterProcessValue(Functions.PM_MERGEAGEDETERMINATIONTOINDIVIDUAL_BIOTICDATA, defWeight.getName()).setFileOutput(false);
-                IProcess spec = prj.getBaseline().findProcess(Functions.FN_DEFINESPECCAT);
-                IProcess defSpecCat = prj.getBaseline().insertProcess(Functions.FN_DEFINESPECCAT + (spec == null ? "" : "Var"), Functions.FN_DEFINESPECCAT, idxReadB + 4)
-                        .setParameterProcessValue(Functions.PM_DEFINESPECCAT_BIOTICDATA, defAge.getName())
-                        .setParameterValue(Functions.PM_DEFINESPECCAT_SPECCATMETHOD, Functions.SPECCATMETHOD_SELECTVAR)
-                        .setParameterValue(Functions.PM_DEFINESPECCAT_SPECVARBIOTIC, "commonname");
+                IProcess spec = prj.getBaseline().findProcess(Functions.FN_REDEFINESPECCAT);
+                IProcess defSpecCat = prj.getBaseline().insertProcess(Functions.FN_REDEFINESPECCAT + (spec == null ? "" : "Var"), Functions.FN_REDEFINESPECCAT, idxReadB + 4)
+                        .setParameterProcessValue(Functions.PM_REDEFINESPECCAT_BIOTICDATA, defAge.getName())
+                        .setParameterValue(Functions.PM_REDEFINESPECCAT_SPECCATMETHOD, Functions.SPECCATMETHOD_SELECTVAR)
+                        .setParameterValue(Functions.PM_REDEFINESPECCAT_SPECVARBIOTIC, "commonname");
                 defSpecCat.setFileOutput(false);
                 for (int i = idxReadB + 5; i < prj.getBaseline().getProcessList().size(); i++) {
                     IProcess pr = prj.getBaseline().getProcessList().get(i);
@@ -228,6 +228,12 @@ public final class FactoryUtil {
                     }
                 }
             }*/
+        }
+        if (prj.getResourceVersion() == 1.89) {
+            IProcess readB = prj.getBaseline().findProcessByFunction(Functions.FN_REDEFINESPECCAT);
+            if (readB != null) {
+                readB.setParameterProcessValue(Functions.PM_REDEFINESPECCAT_BIOTICDATA, defAge.getName());
+            }
         }
         // Remove processes not pointing to functions
         for (IModel m : prj.getModels().values()) {
