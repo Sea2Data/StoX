@@ -201,9 +201,9 @@ public final class FactoryUtil {
             replaceParameter(prj.getBaseline(), Functions.FN_FILTERBIOTIC, Functions.PM_FILTERBIOTIC_INDEXPR, "lengthunit", "tinuhtgnel"); // avoid replacinging length in lengthunit by trick
             replaceParameter(prj.getBaseline(), Functions.FN_FILTERBIOTIC, Functions.PM_FILTERBIOTIC_INDEXPR, "length", "lengthcm"); // use lengthcm instead of length
             replaceParameter(prj.getBaseline(), Functions.FN_FILTERBIOTIC, Functions.PM_FILTERBIOTIC_INDEXPR, "tinuhtgnel", "lengthunit"); // restore lengthunit by trick
-            IProcess readB = prj.getBaseline().findProcessByFunction(Functions.FN_READBIOTICXML);
+            /*IProcess readB = prj.getBaseline().findProcessByFunction(Functions.FN_READBIOTICXML);
             if (readB != null) {
-                int idxReadB = prj.getBaseline().getProcessList().indexOf(readB);
+                xint idxReadB = prj.getBaseline().getProcessList().indexOf(readB);
                 IProcess defLength = prj.getBaseline().insertProcess(Functions.FN_DEFINELENGTHCENTIMETER, Functions.FN_DEFINELENGTHCENTIMETER, idxReadB + 1)
                         .setParameterProcessValue(Functions.PM_DEFINELENGTHCENTIMETER_BIOTICDATA, readB.getName()).setFileOutput(false);
                 IProcess defWeight = prj.getBaseline().insertProcess(Functions.FN_DEFINEINDIVIDUALWEIGHTGRAM, Functions.FN_DEFINEINDIVIDUALWEIGHTGRAM, idxReadB + 2)
@@ -227,7 +227,7 @@ public final class FactoryUtil {
                         pr.setParameterProcessValue(mep.getName(), defSpecCat.getName());
                     }
                 }
-            }
+            }*/
         }
         // Remove processes not pointing to functions
         for (IModel m : prj.getModels().values()) {

@@ -41,9 +41,6 @@ public class ConvertLengthAndWeight extends AbstractFunction {
     public Object perform(Map<String, Object> input) {
         BioticData bioticData = (BioticData) input.get(Functions.PM_CONVERTLENGTHANDWEIGHT_BIOTICDATA);
         ILogger logger = (ILogger) input.get(Functions.PM_LOGGER);
-        if (bioticData != null && !(bioticData.isLengthCMAdded() || bioticData.isIndividualWeightGAdded())) {
-            logger.error("LengthCM not defined. Add DefineIndMeasurement to model.", null);
-        }
         // product type 3 = Gutted without head
         // product type 4 = Gutted with head
         Double hCutFacA = (Double) input.get(Functions.PM_CONVERTLENGTHANDWEIGHT_HEADCUTFACA); // product type 3

@@ -320,20 +320,20 @@ public class Factory {
         m.addProcess(Functions.FN_READBIOTICXML, Functions.FN_READBIOTICXML).
                 setFileOutput(false);
 
-        m.addProcess(Functions.FN_DEFINELENGTHCENTIMETER, Functions.FN_DEFINELENGTHCENTIMETER).
+    /*    m.addProcess(Functions.FN_DEFINELENGTHCENTIMETER, Functions.FN_DEFINELENGTHCENTIMETER).
                 setParameterProcessValue(Functions.PM_DEFINELENGTHCENTIMETER_BIOTICDATA, Functions.FN_READBIOTICXML).
                 setFileOutput(false);
         
         m.addProcess(Functions.FN_MERGEAGEDETERMINATIONTOINDIVIDUAL, Functions.FN_MERGEAGEDETERMINATIONTOINDIVIDUAL).
                 setParameterProcessValue(Functions.PM_MERGEAGEDETERMINATIONTOINDIVIDUAL_BIOTICDATA, Functions.FN_DEFINELENGTHCENTIMETER).
                 setFileOutput(false);
-
+        
         m.addProcess(Functions.FN_DEFINESPECCAT, Functions.FN_DEFINESPECCAT).
                 setParameterProcessValue(Functions.PM_DEFINESPECCAT_BIOTICDATA, Functions.FN_MERGEAGEDETERMINATIONTOINDIVIDUAL).
                 setParameterValue(Functions.PM_DEFINESPECCAT_SPECCATMETHOD, Functions.SPECCATMETHOD_SELECTVAR).
                 setParameterValue(Functions.PM_DEFINESPECCAT_SPECVARBIOTIC, "commonname").
                 setFileOutput(false);
-
+        */
         m.addProcess(Functions.FN_FILTERBIOTIC, Functions.FN_FILTERBIOTIC).
                 setParameterProcessValue(Functions.PM_FILTERBIOTIC_BIOTICDATA, Functions.FN_DEFINESPECCAT).
                 setRespondInGUI(true);

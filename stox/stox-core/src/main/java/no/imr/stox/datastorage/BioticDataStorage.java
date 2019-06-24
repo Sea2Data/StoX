@@ -143,9 +143,7 @@ public class BioticDataStorage extends FileDataStorage {
                         "abundancecategory", "sampleproducttype", "lengthmeasurement", "lengthsampleweight", "lengthsamplevolume",
                         "lengthsamplecount", "specimensamplecount", "agesamplecount", "agingstructure", "parasite", "stomach", "intestine",
                         "tissuesample", "samplerecipient", "catchcomment");
-                if (ml.isSpecCatAdded()) {
-                    s = ExportUtil.tabbed(s, "SpecCat");
-                }
+                s = ExportUtil.tabbed(s, "SpecCat");
                 ImrIO.write(wr, ExportUtil.carrageReturnLineFeed(s));
                 for (MissionBO ms : ml.getMissions()) {
                     MissionType m = ms.bo();
@@ -162,9 +160,7 @@ public class BioticDataStorage extends FileDataStorage {
                                     c.getAbundancecategory(), c.getSampleproducttype(), c.getLengthmeasurement(), c.getLengthsampleweight(), c.getLengthsamplevolume(),
                                     c.getLengthsamplecount(), c.getSpecimensamplecount(), c.getAgesamplecount(), c.getAgingstructure(), c.getParasite(), c.getStomach(), c.getIntestine(),
                                     c.getTissuesample(), c.getSamplerecipient(), stripws(c.getCatchcomment()));
-                            if (ml.isSpecCatAdded()) {
-                                s = ExportUtil.tabbed(s, cs.getSpecCat());
-                            }
+                            s = ExportUtil.tabbed(s, cs.getSpecCat());
                             ImrIO.write(wr, ExportUtil.carrageReturnLineFeed(s));
                         }
                     }
@@ -188,28 +184,15 @@ public class BioticDataStorage extends FileDataStorage {
                         "snouttoanalfin", "snouttodorsalfin", "forklength", "snouttoboneknob", "lengthwithouthead", "carapacewidth", "rightclawwidth",
                         "rightclawlength", "meroswidth", "meroslength", "japanesecut", "abdomenwidth", "tissuesamplenumber", "individualcomment",
                         "preferredagereading");
-                for (Integer var : ml.getIndvars()) {
-                    switch (var) {
-                        case BioticData.VAR_INDIVIDUALWEIGHTGRAM:
-                            s = ExportUtil.tabbed(s, "IndividualWeightGram");
-                            break;
-                        case BioticData.VAR_LENGHTCM:
-                            s = ExportUtil.tabbed(s, "LengthCentimeter");
-                            break;
-                        case BioticData.VAR_AGE:
-                            s = ExportUtil.tabbed(s,
-                                    "agedeterminationid",
-                                    "age",
-                                    "spawningage",
-                                    "spawningzones",
-                                    "readability",
-                                    "otolithtype",
-                                    "otolithedge",
-                                    "otolithcentre",
-                                    "calibration");
-                            break;
-                    }
-                }
+                s = ExportUtil.tabbed(s, "IndividualWeightGram", "LengthCentimeter", "agedeterminationid",
+                        "age",
+                        "spawningage",
+                        "spawningzones",
+                        "readability",
+                        "otolithtype",
+                        "otolithedge",
+                        "otolithcentre",
+                        "calibration");
                 ImrIO.write(wr, ExportUtil.carrageReturnLineFeed(s));
                 for (MissionBO ms : ml.getMissions()) {
                     MissionType m = ms.bo();
@@ -236,28 +219,15 @@ public class BioticDataStorage extends FileDataStorage {
                                         i.getSnouttoanalfin(), i.getSnouttodorsalfin(), i.getForklength(), i.getSnouttoboneknob(), i.getLengthwithouthead(), i.getCarapacewidth(), i.getRightclawwidth(),
                                         i.getRightclawlength(), i.getMeroswidth(), i.getMeroslength(), i.getJapanesecut(), i.getAbdomenwidth(), i.getTissuesamplenumber(), stripws(i.getIndividualcomment()),
                                         i.getPreferredagereading());
-                                for (Integer var : ml.getIndvars()) {
-                                    switch (var) {
-                                        case BioticData.VAR_INDIVIDUALWEIGHTGRAM:
-                                            s = ExportUtil.tabbed(s, ii.getIndividualWeightGram());
-                                            break;
-                                        case BioticData.VAR_LENGHTCM:
-                                            s = ExportUtil.tabbed(s, ii.getLengthCentimeter());
-                                            break;
-                                        case BioticData.VAR_AGE:
-                                            s = ExportUtil.tabbed(s,
-                                                    ii.getAgeDeterminationId(),
-                                                    ii.getAge(),
-                                                    ii.getSpawningage(),
-                                                    ii.getSpawningzones(),
-                                                    ii.getReadability(),
-                                                    ii.getOtolithtype(),
-                                                    ii.getOtolithedge(),
-                                                    ii.getOtolithcentre(),
-                                                    ii.getCalibration());
-                                            break;
-                                    }
-                                }
+                                s = ExportUtil.tabbed(s, ii.getIndividualWeightGram(), ii.getLengthCentimeter(), ii.getAgeDeterminationId(),
+                                        ii.getAge(),
+                                        ii.getSpawningage(),
+                                        ii.getSpawningzones(),
+                                        ii.getReadability(),
+                                        ii.getOtolithtype(),
+                                        ii.getOtolithedge(),
+                                        ii.getOtolithcentre(),
+                                        ii.getCalibration());
                                 ImrIO.write(wr, ExportUtil.carrageReturnLineFeed(s));
                             }
                         }

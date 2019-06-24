@@ -96,32 +96,32 @@ Parameter: Name=IndExpr, Required=false, DataType=String, Description=The <I>Ind
 DataStorage:no.imr.stox.datastorage.BioticDataStorage
 Output: BioticData
 
-[Function]
-Name: DefineLengthCentimeter
-Description: <I>DefineLengthCentimeter</I> defines and converts length in centimeter at biotic data individuals
-Class: no.imr.stox.functions.biotic.DefineLengthCentimeter
-Respondable:true
-Parameter: Name=BioticData, Alias=FishStations, Required=true, DataType=BioticData, Description=The <I>BioticData</I> parameter is used to specify which previous process has generated the <U>BioticData</U> input data.
-DataStorage:no.imr.stox.datastorage.BioticDataStorage
-Output: BioticData
+#[Function]
+#Name: DefineLengthCentimeter
+#Description: <I>DefineLengthCentimeter</I> defines and converts length in centimeter at biotic data individuals
+#Class: no.imr.stox.functions.biotic.DefineLengthCentimeter
+#Respondable:true
+#Parameter: Name=BioticData, Alias=FishStations, Required=true, DataType=BioticData, Description=The <I>BioticData</I> parameter is used to specify which previous process has generated the <U>BioticData</U> input data.
+#DataStorage:no.imr.stox.datastorage.BioticDataStorage
+#Output: BioticData
 
-[Function]
-Name: DefineIndividualWeightGram
-Description: <I>DefineIndividualWeightGram</I> defines and converts individual weight in gram at biotic data individuals
-Class: no.imr.stox.functions.biotic.DefineIndividualWeightGram
-Respondable:true
-Parameter: Name=BioticData, Alias=FishStations, Required=true, DataType=BioticData, Description=The <I>BioticData</I> parameter is used to specify which previous process has generated the <U>BioticData</U> input data.
-DataStorage:no.imr.stox.datastorage.BioticDataStorage
-Output: BioticData
+#[Function]
+#Name: DefineIndividualWeightGram
+#Description: <I>DefineIndividualWeightGram</I> defines and converts individual weight in gram at biotic data individuals
+#Class: no.imr.stox.functions.biotic.DefineIndividualWeightGram
+#Respondable:true
+#Parameter: Name=BioticData, Alias=FishStations, Required=true, DataType=BioticData, Description=The <I>BioticData</I> parameter is used to specify which previous process has generated the <U>BioticData</U> input data.
+#DataStorage:no.imr.stox.datastorage.BioticDataStorage
+#Output: BioticData
 
-[Function]
-Name: MergeAgeDeterminationToIndividual
-Description: <I>MergeAgeDeterminationToIndividual</I> merges age determination fields to individual at biotic data. if more than one agereadings exists - the preferred one is marked at preferredagereading at individual.
-Class: no.imr.stox.functions.biotic.MergeAgeDeterminationToIndividual
-Respondable:true
-Parameter: Name=BioticData, Alias=FishStations, Required=true, DataType=BioticData, Description=The <I>BioticData</I> parameter is used to specify which previous process has generated the <U>BioticData</U> input data.
-DataStorage:no.imr.stox.datastorage.BioticDataStorage
-Output: BioticData
+#[Function]
+#Name: MergeAgeDeterminationToIndividual
+#Description: <I>MergeAgeDeterminationToIndividual</I> merges age determination fields to individual at biotic data. if more than one agereadings exists - the preferred one is marked at preferredagereading at individual.
+#Class: no.imr.stox.functions.biotic.MergeAgeDeterminationToIndividual
+#Respondable:true
+#Parameter: Name=BioticData, Alias=FishStations, Required=true, DataType=BioticData, Description=The <I>BioticData</I> parameter is used to specify which previous process has generated the <U>BioticData</U> input data.
+#DataStorage:no.imr.stox.datastorage.BioticDataStorage
+#Output: BioticData
 
 [Function]
 Name: ConvertLengthAndWeight
@@ -178,8 +178,8 @@ Parameter: Name=BioticData, Required=false, DataType=BioticData, ParentTag=Sourc
 
 
 [Function]
-Name: DefineSpecCat
-Alias: AppendSpecCat
+Name: RedefineSpecCat
+Alias: DefineSpecCat;AppendSpecCat
 Description: <I>FilterBiotic</I> filters an input dataset of data type <U>BioticData</U> based on several filtration expressions and output a subset of the input data.<BR><BR>Output data is of format <U>BioticData</U>.
 Class: no.imr.stox.functions.biotic.DefineSpecCat
 Parameter: Name=BioticData, Alias=FishStations, Required=true, DataType=BioticData, Description=The <I>BioticData</I> parameter is used to specify which previous process has generated the <U>BioticData</U> input data.

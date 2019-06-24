@@ -64,7 +64,6 @@ public class DefineSpecCat extends AbstractFunction {
         ILogger logger = (ILogger) input.get(Functions.PM_LOGGER);
         BioticData mList = (BioticData) input.get(Functions.PM_DEFINESPECCAT_BIOTICDATA);
         BioticData missions = BioticUtils.copyBioticData(mList, BioticUtils.BIOTICDATA_COPY_FLAGS_COPYDATA);
-        missions.setSpecCatAdded(true);
         String specCat = (String) input.get(Functions.PM_DEFINESPECCAT_SPECCAT);
         String specCatMethod = (String) input.get(Functions.PM_DEFINESPECCAT_SPECCATMETHOD);
         String specVarBiotic = (String) input.get(Functions.PM_DEFINESPECCAT_SPECVARBIOTIC);

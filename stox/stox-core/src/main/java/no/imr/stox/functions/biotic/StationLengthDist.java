@@ -41,9 +41,6 @@ public class StationLengthDist extends AbstractFunction {
     public Object perform(Map<String, Object> input) {
         ILogger logger = (ILogger) input.get(Functions.PM_LOGGER);
         BioticData missions = (BioticData) input.get(Functions.PM_STATIONLENGTHDIST_BIOTICDATA);
-        if (logger != null && missions != null && !(missions.isLengthCMAdded())) {
-            logger.error("LengthCM and IndividualWeight is not defined. Add DefineIndMeasurement to model.", null);
-        }
         LengthDistMatrix result = new LengthDistMatrix();
         // Set the resolution matrix as Observation type and length interval
         String lengthDistType = (String) input.get(Functions.PM_STATIONLENGTHDIST_LENGTHDISTTYPE);

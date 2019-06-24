@@ -307,8 +307,6 @@ public final class BioticUtils {
                         cs.setSpecCat(c.getSpecCat());
                         c.getIndividualBOs().forEach((i) -> {
                             IndividualBO ii = cs.addIndividual(new IndividualBO(cs, i));
-                            ii.setIndividualWeightGram(i.getIndividualWeightGram());
-                            ii.setLengthCentimeter(i.getLengthCentimeter());
                             i.getAgeDeterminationBOs().forEach((aBO) -> {
                                 ii.addAgeDetermination(new AgeDeterminationBO(ii, aBO));
                             });
@@ -317,8 +315,6 @@ public final class BioticUtils {
                 });
             });
         }
-        missions.setSpecCatAdded(data.isSpecCatAdded());
-        missions.setIndvars(data.getIndvars());;
         return missions;
     }
 }

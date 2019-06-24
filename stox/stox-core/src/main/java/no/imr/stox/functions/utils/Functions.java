@@ -136,7 +136,7 @@ public final class Functions {
     public static final String PM_FILTERBIOTIC_SAMPLEEXPR = "SampleExpr";
     public static final String PM_FILTERBIOTIC_INDEXPR = "IndExpr";
 
-    public static final String FN_DEFINELENGTHCENTIMETER = "DefineLengthCentimeter";
+    /*public static final String FN_DEFINELENGTHCENTIMETER = "DefineLengthCentimeter";
     public static final String PM_DEFINELENGTHCENTIMETER_BIOTICDATA = "BioticData";
     
     public static final String FN_DEFINEINDIVIDUALWEIGHTGRAM = "DefineIndividualWeightGram";
@@ -144,7 +144,7 @@ public final class Functions {
 
     public static final String FN_MERGEAGEDETERMINATIONTOINDIVIDUAL = "MergeAgeDeterminationToIndividual";
     public static final String PM_MERGEAGEDETERMINATIONTOINDIVIDUAL_BIOTICDATA = "BioticData";
-
+    */
     public static final String FN_READLANDINGXML = "ReadLandingXML";
     public static final String PM_READLANDINGXML_FILENAME1 = "FileName1";
     public static final String PM_READLANDINGXML_FILENAME2 = "FileName2";

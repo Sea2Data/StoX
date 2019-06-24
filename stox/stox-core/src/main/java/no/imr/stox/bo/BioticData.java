@@ -15,11 +15,11 @@ import no.imr.sea2data.biotic.bo.MissionBO;
  */
 public class BioticData {
 
-    public static final int VAR_LENGHTCM = 1;
+  /*  public static final int VAR_LENGHTCM = 1;
     public static final int VAR_INDIVIDUALWEIGHTGRAM = 2;
     public static final int VAR_AGE = 3;
 
-    List<Integer> indvars = new ArrayList<>();
+    List<Integer> indvars = new ArrayList<>();*/
     List<MissionBO> missions;
 
     public BioticData() {
@@ -34,13 +34,13 @@ public class BioticData {
         return missions;
     }
 
-    boolean specCatAdded = false;
+   // boolean specCatAdded = false;
 
     /*    boolean lengthCMAdded = false;
     boolean individualWeightGAdded = false;
     boolean ageMerged = false;*/
 
-    public boolean isSpecCatAdded() {
+    /*public boolean isSpecCatAdded() {
         return specCatAdded;
     }
 
@@ -78,5 +78,5 @@ public class BioticData {
 
     public void setIndvars(List<Integer> indvars) {
         this.indvars = new ArrayList<>(indvars);
-    }
+    }*/
 }

@@ -93,7 +93,7 @@ public class ReadBioticXML extends AbstractFunction {
                     sbo.bo().setCommonname(commonName);
 
                     // Initially set the speccat
-                    //sbo.setSpecCat(sbo.getSpeciesKey());
+                    sbo.setSpecCat(sbo.getSpeciesKey());
                 }
                 // catchplatform=platform if null
                 if (fbo.bo().getCatchplatform() == null) {

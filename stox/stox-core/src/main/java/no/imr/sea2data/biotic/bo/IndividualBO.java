@@ -6,12 +6,12 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
+import no.imr.sea2data.imrbase.math.Calc;
+import no.imr.stox.functions.utils.StoXMath;
 
 public class IndividualBO extends BaseBO implements Serializable {
 
     private List<AgeDeterminationBO> ageDeterminationBOs = new ArrayList<>();
-    Double lengthCM;
-    Double individualWeightGram;
 
     public IndividualBO(CatchSampleBO sampleF, IndividualType i) {
         super(sampleF, i);
@@ -30,25 +30,25 @@ public class IndividualBO extends BaseBO implements Serializable {
     }
 
     public Double getLengthCentimeter() {
-        return lengthCM;
+        return Calc.roundTo(StoXMath.mToCM(bo().getLength()), 8);
     }
 
     public void setLengthCentimeter(Double lengthCentimeter) {
-        this.lengthCM = lengthCentimeter;
-    }
-
-    public Double getIndividualWeightGram() {
-        return individualWeightGram;
+        bo().setLength(lengthCentimeter != null ? lengthCentimeter * 0.01 : null);;
     }
 
     public void setIndividualWeightGram(Double individualWeightGram) {
-        this.individualWeightGram = individualWeightGram;
+        bo().setIndividualweight(individualWeightGram != null ? individualWeightGram * 0.001 : null);
+    }
+
+    public Double getIndividualWeightGram() {
+        return Calc.roundTo(StoXMath.kgToGrams(bo().getIndividualweight()), 8);
     }
 
     public Integer getAgeDeterminationId() {
         return getAgeDet() != null ? getAgeDet().bo().getAgedeterminationid() : null;
     }
-    
+
     public Integer getAge() {
         return getAgeDet() != null ? getAgeDet().bo().getAge() : null;
     }
