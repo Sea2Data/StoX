@@ -340,12 +340,12 @@ public class ProcessNode extends AbstractNode {
                 return new ListPropertyEditor(mp.getValues());
             } else if (mp.getMetaDataType().isReference() || isReferencingBaselineFromR()) {
                 return new ListPropertyEditor(getBackwardCompatibleProcesses(process, mp));
-            } else if (process.getMetaFunction().getName().equals(Functions.FN_DEFINESPECCAT)) {
+            } else if (process.getMetaFunction().getName().equals(Functions.FN_REDEFINESPECCAT)) {
                 switch (mp.getName()) {
-                    /*case Functions.PM_DEFINESPECCAT_SPECVARBIOTIC:
+                    /*case Functions.PM_REDEFINESPECCAT_SPECVARBIOTIC:
                         return new ListPropertyEditor(ReflectionUtil.getFieldNames(CatchsampleType.class));*/
-                    case Functions.PM_DEFINESPECCAT_SPECVARREF:
-                    case Functions.PM_DEFINESPECCAT_SPECCATREF: {
+                    case Functions.PM_REDEFINESPECCAT_SPECVARREF:
+                    case Functions.PM_REDEFINESPECCAT_SPECCATREF: {
                         List<String> ls = DefineSpecCat.getHeader(process);
                         if (ls != null) {
                             return new ListPropertyEditor(ls);

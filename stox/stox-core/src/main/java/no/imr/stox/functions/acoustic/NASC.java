@@ -28,8 +28,8 @@ public class NASC extends AbstractFunction {
             return null;
         }
         ILogger logger = (ILogger) input.get(Functions.PM_LOGGER);
-        List<DistanceBO> distances = (List<DistanceBO>) input.get(Functions.PM_NASC_ACOUSTICDATA);
-        String layerType = (String) input.get(Functions.PM_NASC_LAYERTYPE);
+        List<DistanceBO> distances = (List<DistanceBO>) input.get(Functions.PM_SUMNASC_ACOUSTICDATA);
+        String layerType = (String) input.get(Functions.PM_SUMNASC_LAYERTYPE);
         Boolean asPChannel = layerType.equalsIgnoreCase(Functions.LAYERTYPE_PCHANNEL); // Support 3 types: PCHANNEL, LAYER, WATERCOLUMN
         Boolean asDepthLayer = layerType.equalsIgnoreCase(Functions.LAYERTYPE_DEPTHLAYER); // Support 3 types: PCHANNEL, LAYER, WATERCOLUMN
         Boolean asWaterColumn = layerType.equalsIgnoreCase(Functions.LAYERTYPE_WATERCOLUMN); // Support 3 types: PCHANNEL, LAYER, WATERCOLUMN

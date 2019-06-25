@@ -43,9 +43,9 @@ DataStorage: no.imr.stox.datastorage.EchoDataStorage
 Output: AcousticData
 
 [Function]
-Name: NASC
-Alias: SA
-Description: The <I>LayerNASC</I> function creates a matrix of NASC values by EDSU from an <U>AcousticData</U> data set by layer of a specified LayerTypes.<BR><BR>Output data is of format <U>NASC</U>.  
+Name: SumNASC
+Alias: SA;NASC
+Description: The <I>SumNASC</I> function creates a matrix of NASC values by EDSU from an <U>AcousticData</U> data set by layer of a specified LayerTypes.<BR><BR>Output data is of format <U>NASC</U>.  
 Class: no.imr.stox.functions.acoustic.NASC
 Parameter: Name=AcousticData, DataType=AcousticData, Description=The <I>AcousticData</I> parameter is used to specify which previous process has generated the <U>AcousticData</U> input data.
 Parameter: Name=LayerType, Alias=AcousticLayerType;ChannelLayerType, Required=false, DefaultValue=WaterColumn, DataType=String, Values=PChannel;DepthLayer;WaterColumn, Description=The <I>LayerType</I> parameter will determine the vertical resolution of NASC by EDSU in the output <U>NASC</U> data.<BR> LayerType can be&#58; <BR><BR><U>PChannel</U><BR> &#34;Pelagic channels&#34; as defined in ListUser20.xml from LSSS. PChannels exist from the sea surface to the sea bed.<BR><BR><U>DepthLayer</U><BR>The NASC values are aggregated into two layers&#58;<BR><B>PEL</B>&#58; Total NASC from sea surface down to the bottom layer BOT.<BR><B>BOT</B>&#58; Total NASC starting from the lower part of PEL and down to the sea bed.<BR><BR><U>WaterColumn</U><BR><B>PELBOT</B>&#58; Sum of NASC from the sea surface to the sea bed.

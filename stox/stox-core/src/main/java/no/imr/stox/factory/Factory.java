@@ -187,7 +187,7 @@ public class Factory {
                 setParameterProcessValue(Functions.PM_DEFINEACOUSTICPSU_PROCESSDATA, Functions.FN_READPROCESSDATA).
                 setParameterProcessValue(Functions.PM_DEFINEACOUSTICPSU_ACOUSTICDATA, Functions.FN_FILTERACOUSTIC);
         m.addProcess(Functions.FN_MEANNASC, Functions.FN_MEANNASC).
-                setParameterProcessValue(Functions.PM_MEANNASC_NASC, Functions.FN_NASC).
+                setParameterProcessValue(Functions.PM_MEANNASC_NASC, Functions.FN_SUMNASC).
                 setParameterProcessValue(Functions.PM_MEANNASC_PROCESSDATA, Functions.FN_READPROCESSDATA).
                 setParameterValue(Functions.PM_MEANNASC_SAMPLEUNITTYPE, Functions.SAMPLEUNIT_PSU);
         m.addProcess(Functions.FN_BIOSTATIONASSIGNMENT, Functions.FN_BIOSTATIONASSIGNMENT).
@@ -255,7 +255,7 @@ public class Factory {
                 setParameterValue(Functions.PM_DEFINERECTANGLE_WIDTH, 2.0).
                 setParameterValue(Functions.PM_DEFINERECTANGLE_HEIGHT, 1.0);
         m.addProcess(Functions.FN_MEANNASC, Functions.FN_MEANNASC).
-                setParameterProcessValue(Functions.PM_MEANNASC_NASC, Functions.FN_NASC).
+                setParameterProcessValue(Functions.PM_MEANNASC_NASC, Functions.FN_SUMNASC).
                 setParameterProcessValue(Functions.PM_MEANNASC_PROCESSDATA, Functions.FN_READPROCESSDATA).
                 setParameterValue(Functions.PM_MEANNASC_SAMPLEUNITTYPE, Functions.SAMPLEUNIT_PSU);
         m.addProcess(Functions.FN_RECTANGLEAREA, Functions.FN_RECTANGLEAREA).
@@ -310,9 +310,9 @@ public class Factory {
                 setParameterValue(Functions.PM_FILTERACOUSTIC_NASCEXPR, "acocat == 12 and chtype == 'P'").
                 setRespondInGUI(true);
 
-        m.addProcess(Functions.FN_NASC, Functions.FN_NASC).
-                setParameterProcessValue(Functions.PM_NASC_ACOUSTICDATA, Functions.FN_FILTERACOUSTIC).
-                setParameterValue(Functions.PM_NASC_LAYERTYPE, Functions.LAYERTYPE_WATERCOLUMN);
+        m.addProcess(Functions.FN_SUMNASC, Functions.FN_SUMNASC).
+                setParameterProcessValue(Functions.PM_SUMNASC_ACOUSTICDATA, Functions.FN_FILTERACOUSTIC).
+                setParameterValue(Functions.PM_SUMNASC_LAYERTYPE, Functions.LAYERTYPE_WATERCOLUMN);
 
     }
 
@@ -407,7 +407,7 @@ public class Factory {
                 setParameterProcessValue(Functions.PM_BIOSTATIONWEIGHTING_BIOTICDATA, Functions.FN_FILTERBIOTIC).
                 setParameterProcessValue(Functions.PM_BIOSTATIONWEIGHTING_ACOUSTICDATA, Functions.FN_FILTERACOUSTIC).
                 setParameterProcessValue(Functions.PM_BIOSTATIONWEIGHTING_LENGTHDIST, Functions.FN_REGROUPLENGTHDIST).
-                setParameterProcessValue(Functions.PM_BIOSTATIONWEIGHTING_NASC, Functions.FN_NASC).
+                setParameterProcessValue(Functions.PM_BIOSTATIONWEIGHTING_NASC, Functions.FN_SUMNASC).
                 setParameterValue(Functions.PM_BIOSTATIONWEIGHTING_WEIGHTINGMETHOD, Functions.WEIGHTINGMETHOD_EQUAL).
                 setParameterValue(Functions.PM_BIOSTATIONWEIGHTING_M, 20).
                 setParameterValue(Functions.PM_BIOSTATIONWEIGHTING_MAXNUMLENGTHSAMPLES, 100);
@@ -579,9 +579,9 @@ public class Factory {
                 setParameterProcessValue(Functions.PM_FILTERACOUSTIC_ACOUSTICDATA, Functions.FN_READACOUSTICXML).
                 setParameterValue(Functions.PM_FILTERACOUSTIC_FREQEXPR, "frequency == 38000 and transceiver == 2");
 
-        m.addProcess(Functions.FN_NASC, Functions.FN_NASC).
-                setParameterProcessValue(Functions.PM_NASC_ACOUSTICDATA, Functions.FN_FILTERACOUSTIC).
-                setParameterValue(Functions.PM_NASC_LAYERTYPE, Functions.LAYERTYPE_PCHANNEL);
+        m.addProcess(Functions.FN_SUMNASC, Functions.FN_SUMNASC).
+                setParameterProcessValue(Functions.PM_SUMNASC_ACOUSTICDATA, Functions.FN_FILTERACOUSTIC).
+                setParameterValue(Functions.PM_SUMNASC_LAYERTYPE, Functions.LAYERTYPE_PCHANNEL);
 
         createBioticXML(m);
 
@@ -606,26 +606,26 @@ public class Factory {
                 setParameterProcessValue(Functions.PM_SPLITNASC_PROCESSDATA, Functions.FN_SPLITNASCASSIGNMENT).
                 setParameterProcessValue(Functions.PM_SPLITNASC_ACOUSTICDATA, Functions.FN_FILTERACOUSTIC).
                 setParameterProcessValue(Functions.PM_SPLITNASC_LENGTHDIST, Functions.FN_TOTALLENGTHDIST).
-                setParameterProcessValue(Functions.PM_SPLITNASC_NASC, Functions.FN_NASC).
+                setParameterProcessValue(Functions.PM_SPLITNASC_NASC, Functions.FN_SUMNASC).
                 setParameterValue(Functions.PM_SPLITNASC_SPECIESTS, "2;22;SEI;20.0;-67.0;0.0/2;18;HVITTING;20.0;-67.0;0.0/2;31;TORSK;20.0;-66.0;0.0/2;30;HYSE;20.0;-65.0;0.0/2;28;ØYEPÅL;20.0;-67.0;0.0/2;24;KOLMULE;20.0;-67.0;0.0");
 
         m.addProcess(Functions.FN_SPLITNASC + "_BUNN2", Functions.FN_SPLITNASC).
                 setParameterProcessValue(Functions.PM_SPLITNASC_PROCESSDATA, Functions.FN_SPLITNASCASSIGNMENT).
                 setParameterProcessValue(Functions.PM_SPLITNASC_ACOUSTICDATA, Functions.FN_FILTERACOUSTIC).
                 setParameterProcessValue(Functions.PM_SPLITNASC_LENGTHDIST, Functions.FN_TOTALLENGTHDIST).
-                setParameterProcessValue(Functions.PM_SPLITNASC_NASC, Functions.FN_NASC).
+                setParameterProcessValue(Functions.PM_SPLITNASC_NASC, Functions.FN_SUMNASC).
                 setParameterValue(Functions.PM_SPLITNASC_SPECIESTS, "52;22;SEI;20.0;-67.0;0.0/52;18;HVITTING;20.0;-67.0;0.0/52;31;TORSK;20.0;-66.0;0.0/52;30;HYSE;20.0;-65.0;0.0/52;28;ØYEPÅL;20.0;-67.0;0.0");
 
         m.addProcess(Functions.FN_COMBINENASC + "_SEI", Functions.FN_COMBINENASC).
                 setParameterProcessValue(Functions.PM_COMBINENASC_NASC1, Functions.FN_SPLITNASC + "_BUNN").
                 setParameterProcessValue(Functions.PM_COMBINENASC_NASC2, Functions.FN_SPLITNASC + "_BUNN2").
-                setParameterProcessValue(Functions.PM_COMBINENASC_NASC3, Functions.FN_NASC).
+                setParameterProcessValue(Functions.PM_COMBINENASC_NASC3, Functions.FN_SUMNASC).
                 setParameterValue(Functions.PM_COMBINENASC_TARGETACOCAT, 22);
 
         m.addProcess(Functions.FN_COMBINENASC + "_TORSK", Functions.FN_COMBINENASC).
                 setParameterProcessValue(Functions.PM_COMBINENASC_NASC1, Functions.FN_SPLITNASC + "_BUNN").
                 setParameterProcessValue(Functions.PM_COMBINENASC_NASC2, Functions.FN_SPLITNASC + "_BUNN2").
-                setParameterProcessValue(Functions.PM_COMBINENASC_NASC3, Functions.FN_NASC).
+                setParameterProcessValue(Functions.PM_COMBINENASC_NASC3, Functions.FN_SUMNASC).
                 setParameterValue(Functions.PM_COMBINENASC_TARGETACOCAT, 31);
 
         m.addProcess(Functions.FN_COMBINENASC, Functions.FN_COMBINENASC).

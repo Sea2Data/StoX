@@ -185,9 +185,9 @@ public final class Functions {
     public static final String PM_FILTERACOUSTIC_NASCEXPR = "NASCExpr";
     public static final String PM_FILTERACOUSTIC_FREQEXPR = "FreqExpr";
 
-    public static final String FN_NASC = "NASC";
-    public static final String PM_NASC_ACOUSTICDATA = "AcousticData";
-    public static final String PM_NASC_LAYERTYPE = "LayerType";
+    public static final String FN_SUMNASC = "SumNASC";
+    public static final String PM_SUMNASC_ACOUSTICDATA = "AcousticData";
+    public static final String PM_SUMNASC_LAYERTYPE = "LayerType";
 
     public static final String FN_MEANNASC = "MeanNASC";
     public static final String PM_MEANNASC_NASC = "NASC";

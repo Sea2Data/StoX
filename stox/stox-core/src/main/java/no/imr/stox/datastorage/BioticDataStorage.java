@@ -184,7 +184,7 @@ public class BioticDataStorage extends FileDataStorage {
                         "snouttoanalfin", "snouttodorsalfin", "forklength", "snouttoboneknob", "lengthwithouthead", "carapacewidth", "rightclawwidth",
                         "rightclawlength", "meroswidth", "meroslength", "japanesecut", "abdomenwidth", "tissuesamplenumber", "individualcomment",
                         "preferredagereading");
-                s = ExportUtil.tabbed(s, "IndividualWeightGram", "LengthCentimeter", "agedeterminationid",
+                s = ExportUtil.tabbed(s, "agedeterminationid",
                         "age",
                         "spawningage",
                         "spawningzones",
@@ -192,7 +192,9 @@ public class BioticDataStorage extends FileDataStorage {
                         "otolithtype",
                         "otolithedge",
                         "otolithcentre",
-                        "calibration");
+                        "calibration", 
+                        "LengthCentimeter", 
+                        "IndividualWeightGram");
                 ImrIO.write(wr, ExportUtil.carrageReturnLineFeed(s));
                 for (MissionBO ms : ml.getMissions()) {
                     MissionType m = ms.bo();
@@ -219,7 +221,7 @@ public class BioticDataStorage extends FileDataStorage {
                                         i.getSnouttoanalfin(), i.getSnouttodorsalfin(), i.getForklength(), i.getSnouttoboneknob(), i.getLengthwithouthead(), i.getCarapacewidth(), i.getRightclawwidth(),
                                         i.getRightclawlength(), i.getMeroswidth(), i.getMeroslength(), i.getJapanesecut(), i.getAbdomenwidth(), i.getTissuesamplenumber(), stripws(i.getIndividualcomment()),
                                         i.getPreferredagereading());
-                                s = ExportUtil.tabbed(s, ii.getIndividualWeightGram(), ii.getLengthCentimeter(), ii.getAgeDeterminationId(),
+                                s = ExportUtil.tabbed(s, ii.getAgeDeterminationId(),
                                         ii.getAge(),
                                         ii.getSpawningage(),
                                         ii.getSpawningzones(),
@@ -227,7 +229,8 @@ public class BioticDataStorage extends FileDataStorage {
                                         ii.getOtolithtype(),
                                         ii.getOtolithedge(),
                                         ii.getOtolithcentre(),
-                                        ii.getCalibration());
+                                        ii.getCalibration(), 
+                                        ii.getLengthCentimeter(), ii.getIndividualWeightGram());
                                 ImrIO.write(wr, ExportUtil.carrageReturnLineFeed(s));
                             }
                         }

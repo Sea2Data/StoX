@@ -39,8 +39,8 @@ public class NASCTest {
 
     private Map<String, Object> getInput(String layerType) {
         Map<String, Object> input = new HashMap<>();
-        input.put(Functions.PM_NASC_ACOUSTICDATA, getEchoDS());
-        input.put(Functions.PM_NASC_LAYERTYPE, layerType);
+        input.put(Functions.PM_SUMNASC_ACOUSTICDATA, getEchoDS());
+        input.put(Functions.PM_SUMNASC_LAYERTYPE, layerType);
         return input;
     }
 

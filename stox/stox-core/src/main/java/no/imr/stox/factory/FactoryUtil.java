@@ -230,9 +230,10 @@ public final class FactoryUtil {
             }*/
         }
         if (prj.getResourceVersion() == 1.89) {
-            IProcess readB = prj.getBaseline().findProcessByFunction(Functions.FN_REDEFINESPECCAT);
-            if (readB != null) {
-                readB.setParameterProcessValue(Functions.PM_REDEFINESPECCAT_BIOTICDATA, Functions.PM_REDEFINESPECCAT_BIOTICDATA);
+            IProcess reDef = prj.getBaseline().findProcessByFunction(Functions.FN_REDEFINESPECCAT);
+            IProcess readB = prj.getBaseline().findProcessByFunction(Functions.FN_READBIOTICXML);
+            if (reDef != null && readB != null) {
+                reDef.setParameterProcessValue(Functions.PM_REDEFINESPECCAT_BIOTICDATA, readB.getName());
             }
         }
         // Remove processes not pointing to functions
