@@ -85,9 +85,10 @@
         <repository>
             <id>nexus-thirdparty</id>
             <name>Nexus third party repository for IMR</name>
-            <url>https://build.imr.no/nexus/content/repositories/thirdparty/</url>
+            <url>https://raw.githubusercontent.com/Sea2Data/maven_repositories/thirdparty/</url>
+            <!--<url>https://build.imr.no/nexus/repository/thirdparty</url>-->
         </repository>     
-        <!-- <repository>
+              <!-- <repository>
             <id>geomatys</id>
             <name>Geomatys releases</name>
             <url>http://maven.geomatys.com</url>
