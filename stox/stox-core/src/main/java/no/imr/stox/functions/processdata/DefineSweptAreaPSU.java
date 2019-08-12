@@ -12,7 +12,7 @@ import java.util.Map;
 import no.imr.sea2data.biotic.bo.FishstationBO;
 import no.imr.sea2data.biotic.bo.MissionBO;
 import no.imr.sea2data.imrmap.utils.JTSUtils;
-import no.imr.sea2data.imrbase.matrix.MatrixBO;
+import no.imr.stox.util.matrix.MatrixBO;
 import no.imr.stox.bo.BioticData;
 import no.imr.stox.bo.ProcessDataBO;
 import no.imr.stox.functions.AbstractFunction;

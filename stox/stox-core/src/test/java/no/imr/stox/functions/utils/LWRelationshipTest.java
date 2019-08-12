@@ -5,7 +5,7 @@
  */
 package no.imr.stox.functions.utils;
 
-import no.imr.sea2data.imrbase.math.LWRelationship;
+import no.imr.stox.util.math.LWRelationship;
 import org.junit.Test;
 import static org.junit.Assert.assertEquals;
 

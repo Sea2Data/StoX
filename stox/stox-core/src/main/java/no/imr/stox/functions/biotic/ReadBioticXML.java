@@ -16,7 +16,7 @@ import no.imr.sea2data.biotic.bo.FishstationBO;
 import no.imr.sea2data.biotic.bo.IndividualBO;
 import no.imr.sea2data.biotic.bo.CatchSampleBO;
 import no.imr.sea2data.biotic.bo.MissionBO;
-import no.imr.sea2data.imrbase.math.Calc;
+import no.imr.stox.util.math.Calc;
 import no.imr.stox.bo.BioticData;
 import no.imr.stox.functions.utils.Functions;
 import no.imr.stox.functions.AbstractFunction;

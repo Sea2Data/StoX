@@ -11,8 +11,8 @@ import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 import no.imr.sea2data.biotic.bo.IndividualBO;
-import no.imr.sea2data.imrbase.util.ExportUtil;
-import no.imr.sea2data.imrbase.util.ImrIO;
+import no.imr.stox.util.base.ExportUtil;
+import no.imr.stox.util.base.ImrIO;
 import no.imr.stox.bo.BioticCovDataMatrix;
 import no.imr.stox.functions.utils.Functions;
 

@@ -6,7 +6,7 @@
 package no.imr.stox.functions.utils;
 
 import java.io.File;
-import no.imr.sea2data.imrbase.util.Workspace;
+import no.imr.stox.util.base.Workspace;
 
 /**
  *

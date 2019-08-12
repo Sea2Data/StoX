@@ -13,9 +13,9 @@ import java.math.RoundingMode;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import no.imr.sea2data.biotic.bo.BaseBO;
-import no.imr.sea2data.imrbase.util.Conversion;
-import no.imr.sea2data.imrbase.util.ExportUtil;
-import no.imr.sea2data.imrbase.util.ImrIO;
+import no.imr.stox.util.base.Conversion;
+import no.imr.stox.util.base.ExportUtil;
+import no.imr.stox.util.base.ImrIO;
 import org.junit.Ignore;
 import org.junit.Test;
 

@@ -10,8 +10,8 @@ import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 import javax.swing.table.DefaultTableModel;
-import no.imr.sea2data.imrbase.util.Conversion;
-import no.imr.sea2data.imrbase.util.ExportUtil;
+import no.imr.stox.util.base.Conversion;
+import no.imr.stox.util.base.ExportUtil;
 import no.imr.stox.bo.CatchabilityParam;
 import no.imr.stox.bo.SpeciesTSMix;
 

@@ -7,7 +7,7 @@ import java.util.List;
 import java.util.Map;
 import no.imr.guibase.node.INodeProvider;
 import no.imr.sea2data.echosounderbo.DistanceBO;
-import no.imr.sea2data.imrbase.util.ImrSort;
+import no.imr.stox.util.base.ImrSort;
 import no.imr.stox.api.IChildFactorySite;
 import no.imr.stox.api.IProcessDataListener;
 import no.imr.stox.api.IProjectProvider;

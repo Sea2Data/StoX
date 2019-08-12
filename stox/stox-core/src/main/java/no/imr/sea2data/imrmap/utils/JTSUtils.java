@@ -19,7 +19,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import no.imr.sea2data.imrbase.map.LatLonUtil;
+import no.imr.stox.util.map.LatLonUtil;
 
 /**
  * JTS utilities - a class for light adaption to JTS functions.

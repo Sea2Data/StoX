@@ -35,8 +35,8 @@ Name: Abundance
 Description: Abundance as numbers of fish estimated
 
 [Datatype]
-Name: LengthWeightCoefficients
-Description: Abundance as numbers of fish estimated
+Name: LengthWeightRelationship
+Description: Length weight relationship
 
 [Datatype]
 Name: IndividualDataStations

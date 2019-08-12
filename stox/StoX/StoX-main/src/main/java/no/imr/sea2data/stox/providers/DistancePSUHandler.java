@@ -8,7 +8,7 @@ package no.imr.sea2data.stox.providers;
 import java.util.ArrayList;
 import java.util.List;
 import no.imr.sea2data.echosounderbo.DistanceBO;
-import no.imr.sea2data.imrbase.matrix.MatrixBO;
+import no.imr.stox.util.matrix.MatrixBO;
 import no.imr.stox.bo.ProcessDataBO;
 import no.imr.stox.functions.utils.AbndEstProcessDataUtil;
 import org.openide.util.Lookup;

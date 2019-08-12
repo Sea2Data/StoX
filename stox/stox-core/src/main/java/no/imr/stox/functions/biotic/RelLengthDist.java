@@ -6,7 +6,7 @@
 package no.imr.stox.functions.biotic;
 
 import java.util.Map;
-import no.imr.sea2data.imrbase.matrix.MatrixBO;
+import no.imr.stox.util.matrix.MatrixBO;
 import no.imr.stox.bo.LengthDistMatrix;
 import no.imr.stox.functions.AbstractFunction;
 import no.imr.stox.functions.utils.BioticUtils;

@@ -18,7 +18,7 @@ import no.imr.stoxmap.style.Cursors;
 import no.imr.stoxmap.utils.MapUtils;
 import no.imr.sea2data.stox.providers.LFQProvider;
 import no.imr.sea2data.stox.providers.ProcessDataProvider;
-import no.imr.sea2data.imrbase.matrix.MatrixBO;
+import no.imr.stox.util.matrix.MatrixBO;
 import no.imr.stox.bo.ProcessDataBO;
 import no.imr.stox.exception.UserErrorException;
 import no.imr.stox.functions.utils.AbndEstProcessDataUtil;

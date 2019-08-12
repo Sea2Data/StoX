@@ -23,8 +23,8 @@ import no.imr.sea2data.biotic.bo.FishstationBO;
 import no.imr.sea2data.biotic.bo.IndividualBO;
 import no.imr.sea2data.biotic.bo.MissionBO;
 import no.imr.stox.functions.utils.BioticUtils;
-import no.imr.sea2data.imrbase.util.ExportUtil;
-import no.imr.sea2data.imrbase.util.ImrIO;
+import no.imr.stox.util.base.ExportUtil;
+import no.imr.stox.util.base.ImrIO;
 import no.imr.stox.bo.BioticData;
 import no.imr.stox.functions.utils.Functions;
 

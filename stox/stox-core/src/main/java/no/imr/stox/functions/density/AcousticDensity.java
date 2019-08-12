@@ -9,7 +9,7 @@ import no.imr.stox.functions.AbstractFunction;
 import no.imr.sea2data.echosounderbo.DistanceBO;
 import no.imr.stox.bo.DensityMatrix;
 import no.imr.stox.bo.LengthDistMatrix;
-import no.imr.sea2data.imrbase.matrix.MatrixBO;
+import no.imr.stox.util.matrix.MatrixBO;
 import no.imr.stox.bo.ProcessDataBO;
 import no.imr.stox.bo.NASCMatrix;
 import no.imr.stox.functions.utils.AbndEstProcessDataUtil;

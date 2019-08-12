@@ -10,9 +10,9 @@ import no.imr.sea2data.biotic.bo.FishstationBO;
 import no.imr.sea2data.biotic.bo.IndividualBO;
 import no.imr.sea2data.biotic.bo.CatchSampleBO;
 import no.imr.sea2data.biotic.bo.MissionBO;
-import no.imr.sea2data.imrbase.util.Conversion;
-import no.imr.sea2data.imrbase.util.IMRdate;
-import no.imr.sea2data.imrbase.util.XMLReader;
+import no.imr.stox.util.base.Conversion;
+import no.imr.stox.util.base.IMRdate;
+import no.imr.stox.util.base.XMLReader;
 import no.imr.stox.model.IProject;
 
 /**

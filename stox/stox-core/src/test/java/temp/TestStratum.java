@@ -7,9 +7,9 @@ package temp;
 
 import com.vividsolutions.jts.geom.MultiPolygon;
 import com.vividsolutions.jts.geom.Point;
-import no.imr.sea2data.imrbase.math.Calc;
-import no.imr.sea2data.imrbase.matrix.MatrixBO;
-import no.imr.sea2data.imrbase.util.ImrSort;
+import no.imr.stox.util.math.Calc;
+import no.imr.stox.util.matrix.MatrixBO;
+import no.imr.stox.util.base.ImrSort;
 import no.imr.stox.functions.utils.StratumUtils;
 import org.junit.Ignore;
 import org.junit.Test;

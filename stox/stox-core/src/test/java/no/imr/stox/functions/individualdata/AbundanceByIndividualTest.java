@@ -15,7 +15,7 @@ import no.imr.sea2data.imrmap.utils.JTSUtils;
 import no.imr.stox.bo.AbundanceIndividualsMatrix;
 import no.imr.stox.bo.AbundanceMatrix;
 import no.imr.stox.bo.IndividualDataMatrix;
-import no.imr.sea2data.imrbase.matrix.MatrixBO;
+import no.imr.stox.util.matrix.MatrixBO;
 import no.imr.stox.bo.ProcessDataBO;
 import no.imr.stox.functions.utils.AbndEstProcessDataUtil;
 import no.imr.stox.functions.utils.Functions;

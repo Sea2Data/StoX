@@ -12,7 +12,7 @@ import java.util.List;
 import java.util.Set;
 import java.util.function.Supplier;
 import java.util.stream.Stream;
-import no.imr.sea2data.imrbase.util.Conversion;
+import no.imr.stox.util.base.Conversion;
 import no.imr.stox.functions.utils.JDOMUtils;
 import org.jdom2.Attribute;
 import org.jdom2.Document;

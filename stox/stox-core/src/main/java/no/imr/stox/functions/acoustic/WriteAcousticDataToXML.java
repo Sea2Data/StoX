@@ -11,7 +11,7 @@ import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
 import no.imr.sea2data.echosounderbo.DistanceBO;
-import no.imr.sea2data.imrbase.util.Workspace;
+import no.imr.stox.util.base.Workspace;
 import no.imr.stox.functions.AbstractFunction;
 import no.imr.stox.functions.utils.Functions;
 

@@ -4,9 +4,9 @@ import java.io.Writer;
 import java.util.List;
 import no.imr.sea2data.biotic.bo.IndividualBO;
 import no.imr.stox.bo.IndividualDataMatrix;
-import no.imr.sea2data.imrbase.matrix.MatrixBO;
-import no.imr.sea2data.imrbase.util.ExportUtil;
-import no.imr.sea2data.imrbase.util.ImrIO;
+import no.imr.stox.util.matrix.MatrixBO;
+import no.imr.stox.util.base.ExportUtil;
+import no.imr.stox.util.base.ImrIO;
 import no.imr.stox.functions.utils.Functions;
 
 /**

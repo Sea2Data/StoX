@@ -1,6 +1,6 @@
 package no.imr.sea2data.stox;
 
-import no.imr.sea2data.imrbase.util.VersionUtil;
+import no.imr.stox.util.base.VersionUtil;
 import org.jfree.chart.ChartFactory;
 import org.jfree.chart.StandardChartTheme;
 import org.openide.modules.ModuleInstall;

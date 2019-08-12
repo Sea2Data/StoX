@@ -9,7 +9,7 @@ import java.util.Map;
 import no.imr.stox.bo.AbundanceMatrix;
 import no.imr.stox.bo.DensityMatrix;
 import no.imr.stox.functions.AbstractFunction;
-import no.imr.sea2data.imrbase.matrix.MatrixBO;
+import no.imr.stox.util.matrix.MatrixBO;
 import no.imr.stox.bo.PolygonAreaMatrix;
 import no.imr.stox.functions.utils.Functions;
 import no.imr.stox.functions.utils.StoXMath;

@@ -5,7 +5,7 @@
  */
 package no.imr.stox.bo;
 
-import no.imr.sea2data.imrbase.matrix.MatricesBO;
+import no.imr.stox.util.matrix.MatricesBO;
 import java.util.Arrays;
 import java.util.List;
 import no.imr.stox.functions.utils.Functions; 

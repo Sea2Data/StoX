@@ -13,7 +13,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import no.imr.sea2data.echosounderbo.DistanceBO;
-import no.imr.sea2data.imrbase.exceptions.XMLReaderException;
+import no.imr.stox.util.exceptions.XMLReaderException;
 import no.imr.stox.functions.AbstractFunction;
 import no.imr.stox.functions.utils.Functions;
 import no.imr.stox.log.ILogger;

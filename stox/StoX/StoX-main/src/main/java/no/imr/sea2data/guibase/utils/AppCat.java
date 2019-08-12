@@ -16,8 +16,8 @@ import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
-import no.imr.sea2data.imrbase.http.URLUtil;
-import no.imr.sea2data.imrbase.util.Workspace;
+import no.imr.stox.util.http.URLUtil;
+import no.imr.stox.util.base.Workspace;
 import org.openide.util.Exceptions;
 
 /**

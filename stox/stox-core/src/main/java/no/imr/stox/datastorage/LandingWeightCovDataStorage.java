@@ -6,10 +6,10 @@
 package no.imr.stox.datastorage;
 
 import java.io.Writer;
-import no.imr.sea2data.imrbase.matrix.MatrixBO;
-import no.imr.sea2data.imrbase.util.Conversion;
-import no.imr.sea2data.imrbase.util.ExportUtil;
-import no.imr.sea2data.imrbase.util.ImrIO;
+import no.imr.stox.util.matrix.MatrixBO;
+import no.imr.stox.util.base.Conversion;
+import no.imr.stox.util.base.ExportUtil;
+import no.imr.stox.util.base.ImrIO;
 import no.imr.stox.bo.LandingWeightCovDataMatrix;
 import no.imr.stox.functions.utils.AbndEstProcessDataUtil;
 import no.imr.stox.functions.utils.CovariateUtils;

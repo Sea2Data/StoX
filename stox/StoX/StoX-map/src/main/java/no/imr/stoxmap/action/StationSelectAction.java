@@ -4,7 +4,7 @@ import java.awt.event.ActionEvent;
 import static javax.swing.Action.SHORT_DESCRIPTION;
 import static javax.swing.Action.SMALL_ICON;
 import javax.swing.ImageIcon;
-import no.imr.sea2data.imrbase.util.ImageUtil;
+import no.imr.stox.util.base.ImageUtil;
 import no.imr.sea2data.stox.mapgui.StoXMapSetup;
 import no.imr.stoxmap.handler.StationSelectHandler;
 import org.geotoolkit.gui.swing.render2d.control.AbstractMapAction;

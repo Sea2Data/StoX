@@ -1,6 +1,6 @@
 package no.imr.stoxmap.utils;
 
-import no.imr.sea2data.imrbase.map.ILatLonEvent;
+import no.imr.stox.util.map.ILatLonEvent;
 import com.vividsolutions.jts.geom.Coordinate;
 import com.vividsolutions.jts.geom.Geometry;
 import com.vividsolutions.jts.geom.GeometryFactory;
@@ -23,7 +23,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Set;
 import no.imr.sea2data.imrmap.utils.JTSUtils;
-import no.imr.sea2data.imrbase.matrix.MatrixBO;
+import no.imr.stox.util.matrix.MatrixBO;
 import no.imr.stox.functions.utils.RectangleUtil;
 import org.apache.sis.storage.DataStoreException;
 import org.geotoolkit.data.FeatureCollection;

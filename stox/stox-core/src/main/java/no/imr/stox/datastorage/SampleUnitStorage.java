@@ -6,8 +6,8 @@
 package no.imr.stox.datastorage;
 
 import java.io.Writer;
-import no.imr.sea2data.imrbase.util.ExportUtil;
-import no.imr.sea2data.imrbase.util.ImrIO;
+import no.imr.stox.util.base.ExportUtil;
+import no.imr.stox.util.base.ImrIO;
 import no.imr.stox.bo.SampleUnitBO;
 import no.imr.stox.functions.utils.Functions;
 

@@ -7,9 +7,9 @@ import java.io.OutputStreamWriter;
 import java.io.StringWriter;
 import java.io.UncheckedIOException;
 import java.io.Writer;
-import no.imr.sea2data.imrbase.matrix.MatrixBO;
+import no.imr.stox.util.matrix.MatrixBO;
 import no.imr.stox.functions.utils.Functions;
-import no.imr.sea2data.imrbase.matrix.IMetaMatrix;
+import no.imr.stox.util.matrix.IMetaMatrix;
 import no.imr.stox.model.IProcess;
 
 /**

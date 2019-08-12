@@ -31,9 +31,9 @@ import java.util.stream.Stream;
 import no.imr.sea2data.echosounderbo.DistanceBO;
 import no.imr.sea2data.echosounderbo.FrequencyBO;
 import no.imr.sea2data.echosounderbo.SABO;
-import no.imr.sea2data.imrbase.math.ImrMath;
-import no.imr.sea2data.imrbase.util.Conversion;
-import no.imr.sea2data.imrbase.util.IMRdate;
+import no.imr.stox.util.math.ImrMath;
+import no.imr.stox.util.base.Conversion;
+import no.imr.stox.util.base.IMRdate;
 import no.imr.stox.functions.utils.StoXMath;
 import org.apache.commons.lang.StringUtils;
 

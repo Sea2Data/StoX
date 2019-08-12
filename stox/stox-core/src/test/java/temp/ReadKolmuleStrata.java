@@ -14,7 +14,7 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import no.imr.sea2data.imrbase.util.Conversion;
+import no.imr.stox.util.base.Conversion;
 import no.imr.sea2data.imrmap.utils.JTSUtils;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.LineIterator;

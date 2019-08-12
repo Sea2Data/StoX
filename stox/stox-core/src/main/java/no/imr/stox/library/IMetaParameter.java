@@ -5,7 +5,7 @@
  */
 package no.imr.stox.library;
 
-import no.imr.sea2data.imrbase.matrix.IMetaMatrix;
+import no.imr.stox.util.matrix.IMetaMatrix;
 import java.util.List;
 
 /**

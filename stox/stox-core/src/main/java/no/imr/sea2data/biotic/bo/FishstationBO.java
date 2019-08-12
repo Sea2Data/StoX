@@ -5,7 +5,7 @@ import BioticTypes.v3.FishstationType;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Function;
-import no.imr.sea2data.imrbase.map.ILatLonEvent;
+import no.imr.stox.util.map.ILatLonEvent;
 
 public class FishstationBO extends BaseBO implements ILatLonEvent {
 

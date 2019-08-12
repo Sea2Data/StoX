@@ -5,8 +5,8 @@
  */
 package no.imr.stox.bo;
 
-import no.imr.sea2data.imrbase.matrix.MatricesBO;
-import no.imr.sea2data.imrbase.matrix.MatrixBO; 
+import no.imr.stox.util.matrix.MatricesBO;
+import no.imr.stox.util.matrix.MatrixBO; 
 
 /**
  *

@@ -10,10 +10,10 @@ import java.util.List;
 import no.imr.sea2data.echosounderbo.DistanceBO;
 import no.imr.sea2data.echosounderbo.FrequencyBO;
 import no.imr.sea2data.echosounderbo.SABO;
-import no.imr.sea2data.imrbase.math.Calc;
-import no.imr.sea2data.imrbase.util.IMRdate;
-import no.imr.sea2data.imrbase.util.ExportUtil;
-import no.imr.sea2data.imrbase.util.ImrIO;
+import no.imr.stox.util.math.Calc;
+import no.imr.stox.util.base.IMRdate;
+import no.imr.stox.util.base.ExportUtil;
+import no.imr.stox.util.base.ImrIO;
 
 /**
  * TODO: waht does this class do?

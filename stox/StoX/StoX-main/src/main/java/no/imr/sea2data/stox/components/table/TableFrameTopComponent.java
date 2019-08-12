@@ -8,7 +8,7 @@ import javax.swing.JScrollPane;
 import javax.swing.JTabbedPane;
 import javax.swing.JTextArea;
 import no.imr.guibase.controls.ImagePanel;
-import no.imr.sea2data.imrbase.util.Workspace;
+import no.imr.stox.util.base.Workspace;
 import no.imr.stox.functions.utils.Functions;
 import no.imr.stox.functions.utils.ProjectUtils;
 import no.imr.stox.model.IModel;

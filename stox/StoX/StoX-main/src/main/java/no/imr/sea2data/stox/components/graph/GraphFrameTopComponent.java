@@ -6,7 +6,7 @@ import java.util.Collections;
 import java.util.List;
 import no.imr.sea2data.guibase.chart.IXYBarChart;
 import no.imr.sea2data.guibase.chart.XYBarChart;
-import no.imr.sea2data.imrbase.util.ImrSort;
+import no.imr.stox.util.base.ImrSort;
 import no.imr.stox.api.ILFQ;
 import no.imr.stox.functions.utils.Functions;
 import org.netbeans.api.settings.ConvertAsProperties;

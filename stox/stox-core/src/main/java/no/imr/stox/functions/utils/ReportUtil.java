@@ -5,7 +5,7 @@
  */
 package no.imr.stox.functions.utils;
 
-import no.imr.sea2data.imrbase.util.ExportUtil;
+import no.imr.stox.util.base.ExportUtil;
 
 /**
  *

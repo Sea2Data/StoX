@@ -21,10 +21,10 @@ import java.util.stream.Stream;
 import no.imr.sea2data.echosounderbo.DistanceBO;
 import no.imr.sea2data.echosounderbo.FrequencyBO;
 import no.imr.sea2data.echosounderbo.SABO;
-import no.imr.sea2data.imrbase.map.LatLonUtil;
-import no.imr.sea2data.imrbase.math.Calc;
-import no.imr.sea2data.imrbase.util.Conversion;
-import no.imr.sea2data.imrbase.util.IMRdate;
+import no.imr.stox.util.map.LatLonUtil;
+import no.imr.stox.util.math.Calc;
+import no.imr.stox.util.base.Conversion;
+import no.imr.stox.util.base.IMRdate;
 
 /**
  * Method to read the LUF5 into Acoustic data

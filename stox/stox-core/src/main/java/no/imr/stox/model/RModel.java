@@ -7,8 +7,8 @@ package no.imr.stox.model;
 
 import java.io.PrintWriter;
 import java.util.Date;
-import no.imr.sea2data.imrbase.util.Conversion;
-import no.imr.sea2data.imrbase.util.IMRdate;
+import no.imr.stox.util.base.Conversion;
+import no.imr.stox.util.base.IMRdate;
 import no.imr.stox.functions.utils.ProjectUtils;
 import no.imr.stox.functions.utils.RUtils;
 import no.imr.stox.library.IMetaFunction;

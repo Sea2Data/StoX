@@ -12,7 +12,7 @@ import javax.swing.AbstractAction;
 import javax.swing.Action;
 import javax.swing.GrayFilter;
 import no.imr.sea2data.guibase.utils.IMRtooltip;
-import no.imr.sea2data.imrbase.util.Conversion;
+import no.imr.stox.util.base.Conversion;
 import no.imr.sea2data.stox.actions.ActionPopup;
 import no.imr.sea2data.stox.editor.CatchabilityPropertyEditor;
 import no.imr.sea2data.stox.editor.ProjectFileNameEditor;

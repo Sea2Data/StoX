@@ -6,7 +6,7 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
-import no.imr.sea2data.imrbase.math.Calc;
+import no.imr.stox.util.math.Calc;
 import no.imr.stox.functions.utils.StoXMath;
 
 public class IndividualBO extends BaseBO implements Serializable {

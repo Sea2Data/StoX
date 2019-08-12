@@ -1,7 +1,7 @@
 package no.imr.stox.library;
 
-import no.imr.sea2data.imrbase.matrix.IMetaMatrix;
-import no.imr.sea2data.imrbase.matrix.MetaMatrix;
+import no.imr.stox.util.matrix.IMetaMatrix;
+import no.imr.stox.util.matrix.MetaMatrix;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
@@ -13,7 +13,7 @@ import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.stream.Collectors;
-import no.imr.sea2data.imrbase.util.ImrSort;
+import no.imr.stox.util.base.ImrSort;
 
 /**
  * Process setup object for a beam process.. This class is responsible for

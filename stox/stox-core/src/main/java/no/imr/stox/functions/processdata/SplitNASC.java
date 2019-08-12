@@ -12,7 +12,7 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 import no.imr.sea2data.echosounderbo.DistanceBO;
 import no.imr.stox.bo.LengthDistMatrix;
-import no.imr.sea2data.imrbase.matrix.MatrixBO;
+import no.imr.stox.util.matrix.MatrixBO;
 import no.imr.stox.bo.NASCMatrix;
 import no.imr.stox.bo.ProcessDataBO;
 import no.imr.stox.bo.SpeciesTSMix;

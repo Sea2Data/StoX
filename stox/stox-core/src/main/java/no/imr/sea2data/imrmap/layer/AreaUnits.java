@@ -12,8 +12,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import no.imr.sea2data.imrbase.util.Conversion;
-import no.imr.sea2data.imrbase.util.Workspace;
+import no.imr.stox.util.base.Conversion;
+import no.imr.stox.util.base.Workspace;
 import no.imr.sea2data.imrmap.utils.JTSUtils;
 
 /**

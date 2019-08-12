@@ -8,7 +8,7 @@ package convert;
 import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
-import no.imr.sea2data.imrbase.util.Conversion;
+import no.imr.stox.util.base.Conversion;
 
 /**
  *

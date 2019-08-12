@@ -5,7 +5,7 @@ import java.util.Collections;
 import java.util.List;
 import no.imr.stox.api.LFQ;
 import no.imr.stox.bo.LengthDistMatrix; 
-import no.imr.sea2data.imrbase.matrix.MatrixBO;
+import no.imr.stox.util.matrix.MatrixBO;
 import no.imr.stox.bo.ProcessDataBO;
 import no.imr.stox.exception.UserErrorException;
 import no.imr.stox.functions.utils.AbndEstProcessDataUtil;

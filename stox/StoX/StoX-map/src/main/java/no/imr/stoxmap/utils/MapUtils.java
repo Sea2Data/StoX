@@ -11,7 +11,7 @@ import java.util.List;
 import java.util.Set;
 import no.imr.sea2data.stox.mapgui.StoXMapSetup;
 import no.imr.sea2data.stox.providers.ProcessDataProvider;
-import no.imr.sea2data.imrbase.matrix.MatrixBO;
+import no.imr.stox.util.matrix.MatrixBO;
 import no.imr.stox.functions.utils.Functions;
 import no.imr.stox.model.IModel;
 import no.imr.stox.model.IProcess;

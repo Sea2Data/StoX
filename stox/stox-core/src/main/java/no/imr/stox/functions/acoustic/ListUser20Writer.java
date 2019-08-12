@@ -13,11 +13,11 @@ import javax.xml.stream.XMLStreamWriter;
 import no.imr.sea2data.echosounderbo.DistanceBO;
 import no.imr.sea2data.echosounderbo.FrequencyBO;
 import no.imr.sea2data.echosounderbo.SABO;
-import no.imr.sea2data.imrbase.math.Calc;
-import no.imr.sea2data.imrbase.math.ImrMath;
-import no.imr.sea2data.imrbase.util.Conversion;
-import no.imr.sea2data.imrbase.util.IMRdate;
-import no.imr.sea2data.imrbase.util.ImrSort;
+import no.imr.stox.util.math.Calc;
+import no.imr.stox.util.math.ImrMath;
+import no.imr.stox.util.base.Conversion;
+import no.imr.stox.util.base.IMRdate;
+import no.imr.stox.util.base.ImrSort;
 
 /**
  * A List20Writer to export BO structure to list user 20. This function is

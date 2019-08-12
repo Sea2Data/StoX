@@ -9,7 +9,7 @@ import no.imr.sea2data.biotic.bo.CatchSampleBO;
 import no.imr.sea2data.echosounderbo.DistanceBO;
 import no.imr.sea2data.echosounderbo.FrequencyBO;
 import no.imr.sea2data.echosounderbo.SABO;
-import no.imr.sea2data.imrbase.util.IMRdate;
+import no.imr.stox.util.base.IMRdate;
 import no.imr.stox.bo.landing.SeddellinjeBO;
 import org.apache.commons.jexl2.Expression;
 import org.apache.commons.jexl2.JexlContext;

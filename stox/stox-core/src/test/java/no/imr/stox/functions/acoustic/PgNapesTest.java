@@ -5,7 +5,7 @@
  */
 package no.imr.stox.functions.acoustic;
 
-import no.imr.sea2data.imrbase.util.Conversion;
+import no.imr.stox.util.base.Conversion;
 import org.junit.Test;
 
 /**

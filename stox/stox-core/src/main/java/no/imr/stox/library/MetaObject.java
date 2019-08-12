@@ -2,7 +2,7 @@ package no.imr.stox.library;
 
 import java.util.ArrayList;
 import java.util.List;
-import no.imr.sea2data.imrbase.util.StrUtils;
+import no.imr.stox.util.base.StrUtils;
 
 /**
  * TODO: what is this?

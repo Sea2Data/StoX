@@ -3,7 +3,7 @@ package temp;
 import java.util.List;
 import java.util.stream.Collectors;
 import no.imr.sea2data.echosounderbo.DistanceBO;
-import no.imr.sea2data.imrbase.util.IMRdate;
+import no.imr.stox.util.base.IMRdate;
 import no.imr.stox.functions.acoustic.ReadAcousticXML;
 import no.imr.stox.functions.utils.EchosounderUtils;
 import org.junit.Test;

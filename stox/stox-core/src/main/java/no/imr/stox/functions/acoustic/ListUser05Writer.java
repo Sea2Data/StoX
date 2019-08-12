@@ -11,8 +11,8 @@ import java.util.*;
 import no.imr.sea2data.echosounderbo.DistanceBO;
 import no.imr.sea2data.echosounderbo.FrequencyBO;
 import no.imr.sea2data.echosounderbo.SABO;
-import no.imr.sea2data.imrbase.util.IMRdate;
-import no.imr.sea2data.imrbase.util.ImrIO;
+import no.imr.stox.util.base.IMRdate;
+import no.imr.stox.util.base.ImrIO;
 
 /**
  * Writes to the ListUserFile05 format

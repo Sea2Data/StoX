@@ -1,11 +1,11 @@
 package no.imr.stox.functions.utils;
 
-import no.imr.sea2data.imrbase.math.ImrMath;
-import static no.imr.sea2data.imrbase.math.ImrMath.safeDivide;
-import static no.imr.sea2data.imrbase.math.ImrMath.safeMinus;
-import static no.imr.sea2data.imrbase.math.ImrMath.safeMult;
-import no.imr.sea2data.imrbase.util.Conversion;
-import no.imr.sea2data.imrbase.matrix.MatrixBO;
+import no.imr.stox.util.math.ImrMath;
+import static no.imr.stox.util.math.ImrMath.safeDivide;
+import static no.imr.stox.util.math.ImrMath.safeMinus;
+import static no.imr.stox.util.math.ImrMath.safeMult;
+import no.imr.stox.util.base.Conversion;
+import no.imr.stox.util.matrix.MatrixBO;
 
 /**
  * Contains safe math operations. The idea is that a sequence of operations can

@@ -1,7 +1,7 @@
 package no.imr.stox.functions.utils;
 
-import no.imr.sea2data.imrbase.util.Conversion;
-import no.imr.sea2data.imrbase.matrix.MatrixBO;
+import no.imr.stox.util.base.Conversion;
+import no.imr.stox.util.matrix.MatrixBO;
 
 /**
  * Utility class for abundance estimation parameters

@@ -10,7 +10,7 @@ import java.util.Collection;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import no.imr.sea2data.jts.FeaturePojo;
+import no.imr.stox.util.jts.FeaturePojo;
 import org.apache.sis.storage.DataStoreException;
 import org.apache.sis.util.NullArgumentException;
 import org.geotoolkit.data.FeatureCollection;

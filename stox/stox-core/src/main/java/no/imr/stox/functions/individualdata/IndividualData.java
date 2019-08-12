@@ -10,7 +10,7 @@ import no.imr.sea2data.biotic.bo.CatchSampleBO;
 import no.imr.sea2data.biotic.bo.MissionBO;
 import no.imr.stox.bo.IndividualDataMatrix;
 import no.imr.stox.bo.IndividualDataStationsMatrix;
-import no.imr.sea2data.imrbase.matrix.MatrixBO;
+import no.imr.stox.util.matrix.MatrixBO;
 import no.imr.stox.bo.BioticData;
 import no.imr.stox.functions.utils.BioticUtils;
 import no.imr.stox.functions.utils.Functions;

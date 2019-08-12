@@ -11,10 +11,10 @@ import no.imr.sea2data.biotic.bo.FishstationBO;
 import no.imr.sea2data.biotic.bo.IndividualBO;
 import no.imr.sea2data.biotic.bo.CatchSampleBO;
 import no.imr.sea2data.biotic.bo.MissionBO;
-import no.imr.sea2data.imrbase.math.ImrMath;
-import no.imr.sea2data.imrbase.matrix.MatrixBO;
-import no.imr.sea2data.imrbase.util.Conversion;
-import no.imr.sea2data.imrbase.util.IMRdate;
+import no.imr.stox.util.math.ImrMath;
+import no.imr.stox.util.matrix.MatrixBO;
+import no.imr.stox.util.base.Conversion;
+import no.imr.stox.util.base.IMRdate;
 import no.imr.stox.bo.BioticData;
 import no.imr.stox.bo.LengthDistMatrix;
 

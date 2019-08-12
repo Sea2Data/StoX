@@ -14,7 +14,7 @@ import java.util.Map;
 import no.imr.sea2data.echosounderbo.DistanceBO;
 import no.imr.sea2data.echosounderbo.FrequencyBO;
 import no.imr.sea2data.echosounderbo.SABO;
-import no.imr.sea2data.imrbase.util.IMRdate;
+import no.imr.stox.util.base.IMRdate;
 import no.imr.stox.bo.NASCMatrix;
 import no.imr.stox.functions.utils.Functions;
 import static org.junit.Assert.assertEquals;

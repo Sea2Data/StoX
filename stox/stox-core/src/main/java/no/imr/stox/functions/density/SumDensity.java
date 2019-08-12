@@ -3,7 +3,7 @@ package no.imr.stox.functions.density;
 import java.util.Map;
 import no.imr.stox.bo.DensityMatrix;
 import no.imr.stox.functions.AbstractFunction;
-import no.imr.sea2data.imrbase.matrix.MatrixBO;
+import no.imr.stox.util.matrix.MatrixBO;
 import no.imr.stox.functions.utils.AbndEstParamUtil;
 import no.imr.stox.functions.utils.Functions;
 import no.imr.stox.log.ILogger;

@@ -12,14 +12,14 @@ import java.util.Set;
 import java.util.TreeMap;
 import javax.xml.stream.XMLStreamException;
 import javax.xml.stream.XMLStreamWriter;
-import no.imr.sea2data.imrbase.matrix.MatrixBO;
-import no.imr.sea2data.imrbase.util.XMLWriter;
+import no.imr.stox.util.matrix.MatrixBO;
+import no.imr.stox.util.base.XMLWriter;
 import no.imr.sea2data.imrmap.utils.JTSUtils;
 import no.imr.stox.bo.PSUAssignmentBO;
 import no.imr.stox.bo.PSUStratumBO;
 import no.imr.stox.bo.PolygonAreaMatrix;
 import no.imr.stox.bo.ProcessDataBO;
-import no.imr.sea2data.imrbase.matrix.IMetaMatrix;
+import no.imr.stox.util.matrix.IMetaMatrix;
 
 /**
  * A class to handle process data io operations.

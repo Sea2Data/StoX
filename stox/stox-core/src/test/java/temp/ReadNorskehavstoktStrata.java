@@ -12,7 +12,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import no.imr.sea2data.imrbase.util.Conversion;
+import no.imr.stox.util.base.Conversion;
 import no.imr.sea2data.imrmap.utils.JTSUtils;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.LineIterator;

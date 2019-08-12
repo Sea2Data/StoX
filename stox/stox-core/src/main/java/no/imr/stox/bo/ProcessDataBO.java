@@ -1,15 +1,15 @@
 package no.imr.stox.bo;
 
-import no.imr.sea2data.imrbase.matrix.MatricesBO;
-import no.imr.sea2data.imrbase.matrix.MatrixBO;
+import no.imr.stox.util.matrix.MatricesBO;
+import no.imr.stox.util.matrix.MatrixBO;
 import com.vividsolutions.jts.geom.MultiPolygon;
 import com.vividsolutions.jts.io.WKTWriter;
 import java.io.Writer;
 import java.util.Arrays;
 import java.util.List;
 import no.imr.stox.functions.utils.AbndEstProcessDataUtil;
-import no.imr.sea2data.imrbase.util.ExportUtil;
-import no.imr.sea2data.imrbase.util.ImrIO;
+import no.imr.stox.util.base.ExportUtil;
+import no.imr.stox.util.base.ImrIO;
 import no.imr.stox.functions.utils.Functions;
 
 /**

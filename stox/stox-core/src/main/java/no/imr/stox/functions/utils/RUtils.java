@@ -24,8 +24,8 @@ import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.stream.Collectors;
-import no.imr.sea2data.imrbase.matrix.MatrixBO;
-import no.imr.sea2data.imrbase.util.Conversion;
+import no.imr.stox.util.matrix.MatrixBO;
+import no.imr.stox.util.base.Conversion;
 import no.imr.stox.bo.PolygonAreaMatrix;
 import org.apache.commons.lang.StringUtils;
 

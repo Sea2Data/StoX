@@ -9,7 +9,7 @@ import java.util.List;
 import javax.swing.event.CellEditorListener;
 import javax.swing.event.ChangeEvent;
 import javax.swing.table.DefaultTableModel;
-import no.imr.sea2data.imrbase.matrix.MatrixBO;
+import no.imr.stox.util.matrix.MatrixBO;
 import no.imr.stox.api.IProjectProvider;
 import no.imr.stox.bo.ProcessDataBO;
 import no.imr.stox.functions.utils.AbndEstProcessDataUtil;

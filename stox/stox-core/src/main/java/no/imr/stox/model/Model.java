@@ -10,7 +10,7 @@ import java.util.stream.Collectors;
 import javax.swing.SwingWorker;
 import javax.xml.stream.XMLStreamException;
 import javax.xml.stream.XMLStreamWriter;
-import no.imr.sea2data.imrbase.util.XMLWriter;
+import no.imr.stox.util.base.XMLWriter;
 import no.imr.stox.functions.utils.Functions;
 import no.imr.stox.functions.utils.ProjectUtils;
 import no.imr.stox.library.ILibrary;

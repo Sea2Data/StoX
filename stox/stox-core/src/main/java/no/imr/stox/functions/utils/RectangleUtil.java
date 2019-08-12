@@ -5,8 +5,8 @@ import com.vividsolutions.jts.geom.Geometry;
 import com.vividsolutions.jts.geom.GeometryFactory;
 import com.vividsolutions.jts.geom.MultiPolygon;
 import com.vividsolutions.jts.geom.Polygon;
-import no.imr.sea2data.imrbase.map.LatLonUtil;
-import no.imr.sea2data.imrbase.util.Conversion;
+import no.imr.stox.util.map.LatLonUtil;
+import no.imr.stox.util.base.Conversion;
 import no.imr.sea2data.imrmap.utils.JTSUtils;
 
 /**

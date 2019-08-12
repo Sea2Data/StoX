@@ -2,8 +2,8 @@ package no.imr.stox.factory;
 
 import java.util.List;
 import java.util.stream.Collectors;
-import no.imr.sea2data.imrbase.matrix.MatrixBO;
-import no.imr.sea2data.imrbase.util.Workspace;
+import no.imr.stox.util.matrix.MatrixBO;
+import no.imr.stox.util.base.Workspace;
 import no.imr.stox.bo.CatchabilityParam;
 import no.imr.stox.bo.SpeciesTSMix;
 import no.imr.stox.functions.utils.AbndEstProcessDataUtil;

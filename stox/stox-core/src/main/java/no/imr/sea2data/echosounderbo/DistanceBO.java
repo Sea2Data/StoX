@@ -8,10 +8,10 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-import no.imr.sea2data.imrbase.map.ILatLonEvent;
-import no.imr.sea2data.imrbase.math.Calc;
-import no.imr.sea2data.imrbase.util.IMRdate;
-import no.imr.sea2data.jts.FeaturePojo;
+import no.imr.stox.util.map.ILatLonEvent;
+import no.imr.stox.util.math.Calc;
+import no.imr.stox.util.base.IMRdate;
+import no.imr.stox.util.jts.FeaturePojo;
 
 /**
  * Business object containing information about acoustic distances. Usually

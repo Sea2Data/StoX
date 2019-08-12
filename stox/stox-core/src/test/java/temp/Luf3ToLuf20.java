@@ -24,7 +24,7 @@ import java.util.logging.Logger;
 import no.imr.sea2data.echosounderbo.DistanceBO;
 import no.imr.sea2data.echosounderbo.FrequencyBO;
 import no.imr.sea2data.echosounderbo.SABO;
-import no.imr.sea2data.imrbase.util.Conversion;
+import no.imr.stox.util.base.Conversion;
 import no.imr.stox.functions.acoustic.AcousticConverter;
 import no.imr.stox.functions.acoustic.ListUser20Writer;
 import no.imr.stox.functions.acoustic.ReadAcousticLUF3;

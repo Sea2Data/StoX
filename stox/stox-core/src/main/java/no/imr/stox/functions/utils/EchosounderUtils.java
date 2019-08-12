@@ -5,8 +5,8 @@ import java.util.Collection;
 import java.util.List;
 import no.imr.sea2data.echosounderbo.DistanceBO;
 import no.imr.sea2data.echosounderbo.FrequencyBO;
-import no.imr.sea2data.imrbase.util.Conversion;
-import no.imr.sea2data.imrbase.matrix.MatrixBO;
+import no.imr.stox.util.base.Conversion;
+import no.imr.stox.util.matrix.MatrixBO;
 import no.imr.stox.bo.ProcessDataBO;
 import no.imr.stox.bo.NASCMatrix;
 
