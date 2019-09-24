@@ -39,7 +39,7 @@ public class TestModel {
             ProjectUtils.BASELINE_REPORT,
             ProjectUtils.R_REPORT};
 
-        System.out.println("stoxTemplates <- list(");
+        System.out.print("stoxTemplates <- list(");
         String str2
                 = Factory.getAvailableTemplates().stream().map(a -> {
                     String as = a;
@@ -47,8 +47,8 @@ public class TestModel {
                         as += "Template";
                     }
                     String res = "\n    #### " + as + ": " + Factory.getTemplateDescription(a)
-                            + "\n    " + as + " = list("+
-                    "\n        description <- \"" + Factory.getTemplateDescription(a) + "\",";
+                            + "\n    " + as + " <- list("
+                            + "\n        description <- \"" + Factory.getTemplateDescription(a) + "\",";
                     IProject p = Factory.getTemplateProject(a);
                     String str1 = Arrays.stream(newmodelNames).map(m -> {
                         List<IProcess> procList = null;
@@ -108,7 +108,7 @@ public class TestModel {
                         return str;
                     }).filter(s -> !s.isEmpty())
                             .collect(Collectors.joining(","));
-                    return res + str1;
+                    return res + str1 + "\n    )";
                 }).collect(Collectors.joining(","));
         System.out.println(str2);
         System.out.println(")");
