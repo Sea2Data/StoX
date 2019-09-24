@@ -40,72 +40,77 @@ public class TestModel {
             ProjectUtils.R_REPORT};
 
         System.out.println("stoxTemplates <- list(");
+        String str2
+                = Factory.getAvailableTemplates().stream().map(a -> {
+                    String as = a;
+                    if (!as.endsWith("Template")) {
+                        as += "Template";
+                    }
+                    String res = "\n    #### " + as + ": " + Factory.getTemplateDescription(a)
+                            + "\n    " + as + " = list("+
+                    "\n        description <- \"" + Factory.getTemplateDescription(a) + "\",";
+                    IProject p = Factory.getTemplateProject(a);
+                    String str1 = Arrays.stream(newmodelNames).map(m -> {
+                        List<IProcess> procList = null;
+                        switch (m) {
+                            case "Baseline":
+                                procList = p.getModel(m.toLowerCase()).getProcessList();
+                                break;
+                            case "Statistics":
+                                procList = p.getModel(ProjectUtils.R).getProcessList();
+                                break;
+                            case "Report": {
+                                procList = new ArrayList(p.getModel(ProjectUtils.BASELINE_REPORT).getProcessList());
+                                procList.addAll(p.getModel(ProjectUtils.R_REPORT).getProcessList());
+                                break;
+                            }
+                        }
+                        String str = procList.stream().map(pr -> {
+                            String proParams = "\n                ProcessParameters <- list("
+                                    + "\n                    FileOutput = " + (pr.getFileOutput() + "").toUpperCase() + ","
+                                    + "\n                    BreakInGUI = " + (pr.isBreakInGUI() + "").toUpperCase()
+                                    + "\n                )";
+                            String funInputs = pr.getMetaFunction().getMetaParameters().stream()
+                                    .filter(mp -> mp.getMetaDataType().isReference() && pr.getProcessNameFromParameter(mp) != null)
+                                    .map(mp -> "\n                    " + mp.getName() + " = \"" + pr.getProcessNameFromParameter(mp) + "\"")
+                                    .collect(Collectors.joining(","));
+                            if (!funInputs.isEmpty()) {
+                                funInputs = "\n                FunctionInputs <- list(" + funInputs + "\n                )";
+                            }
+                            String funParams = pr.getMetaFunction().getMetaParameters().stream()
+                                    .filter(mp -> !mp.getMetaDataType().isReference() && pr.getParameterValue(mp.getName()) != null)
+                                    .map(mp -> {
 
-        Factory.getAvailableTemplates().forEach(a -> {
-            System.out.println("    #### " + a + "Template: " + Factory.getTemplateDescription(a));
-            System.out.println("    " + a + "Template = list(");
-            System.out.println("        description <- \"" + Factory.getTemplateDescription(a) + "\"");
-            IProject p = Factory.getTemplateProject(a);
-            String str1 = Arrays.stream(newmodelNames).map(m -> {
-                List<IProcess> procList = null;
-                switch (m) {
-                    case "Baseline":
-                        procList = p.getModel(m.toLowerCase()).getProcessList();
-                        break;
-                    case "Statistics":
-                        procList = p.getModel(ProjectUtils.R).getProcessList();
-                        break;
-                    case "Report": {
-                        procList = new ArrayList(p.getModel(ProjectUtils.BASELINE_REPORT).getProcessList());
-                        procList.addAll(p.getModel(ProjectUtils.R_REPORT).getProcessList());
-                        break;
-                    }
-                }
-                String str = procList.stream().map(pr -> {
-                    String proParams = "\n                ProcessParameters <- list("
-                            + "\n                    FileOutput = " + (pr.getFileOutput() + "").toUpperCase()
-                            + "\n                    BreakInGUI = " + (pr.isBreakInGUI() + "").toUpperCase()
-                            + "\n                )";
-                    String funInputs = pr.getMetaFunction().getMetaParameters().stream()
-                            .filter(mp -> mp.getMetaDataType().isReference() && pr.getProcessNameFromParameter(mp) != null)
-                            .map(mp -> "\n                    " + mp.getName() + " = \"" + pr.getProcessNameFromParameter(mp) + "\"")
+                                        String val = Objects.toString(pr.getParameterValue(mp.getName()));
+                                        if (mp.getDataTypeName().equalsIgnoreCase("string")) {
+                                            val = "\"" + val + "\"";
+                                        }
+                                        return "\n                    " + mp.getName() + " = " + val;
+                                    })
+                                    .collect(Collectors.joining(","));
+                            if (!funParams.isEmpty()) {
+                                funParams = "\n                FunctionParameters <- list("
+                                        + funParams
+                                        + "\n                )";
+                            }
+                            String params = Stream.of(proParams, funInputs, funParams).filter(s -> !s.isEmpty()).collect(Collectors.joining(","));
+                            String s
+                                    = "\n            " + pr.getName() + " <- list("
+                                    + "\n                ProcessName = \"" + pr.getName() + "\","
+                                    + "\n                FunctionName = \"" + pr.getMetaFunction().getName() + "\","
+                                    + params
+                                    + "\n            )";
+                            return s;
+                        }).collect(Collectors.joining(","));
+                        if (!str.isEmpty()) {
+                            str = "\n        " + m + " <- list(" + str + "\n        )";
+                        }
+                        return str;
+                    }).filter(s -> !s.isEmpty())
                             .collect(Collectors.joining(","));
-                    if (!funInputs.isEmpty()) {
-                        funInputs = "\n                FunctionInputs <- list(" + funInputs + "\n                )";
-                    }
-                    String funParams = pr.getMetaFunction().getMetaParameters().stream()
-                            .filter(mp -> !mp.getMetaDataType().isReference() && pr.getParameterValue(mp.getName()) != null)
-                            .map(mp -> {
-
-                                String val = Objects.toString(pr.getParameterValue(mp.getName()));
-                                if (mp.getDataTypeName().equalsIgnoreCase("string")) {
-                                    val = "\"" + val + "\"";
-                                }
-                                return "\n                    " + mp.getName() + " = " + val;
-                            })
-                            .collect(Collectors.joining(","));
-                    if (!funParams.isEmpty()) {
-                        funParams = "\n                FunctionParameters <- list("
-                                + funParams
-                                + "\n                )";
-                    }
-                    String params = Stream.of(proParams, funInputs, funParams).filter(s -> !s.isEmpty()).collect(Collectors.joining(","));
-                    String s
-                            = "\n            " + pr.getName() + " <- list("
-                            + "\n                ProcessName = \"" + pr.getName() + "\","
-                            + "\n                FunctionName = \"" + pr.getMetaFunction().getName() + "\","
-                            + params
-                            + "\n            )";
-                    return s;
+                    return res + str1;
                 }).collect(Collectors.joining(","));
-                if (!str.isEmpty()) {
-                    str = "\n        " + m + " <- list(" + str + "\n        )";
-                }
-                return str;
-            }).filter(s -> !s.isEmpty())
-                    .collect(Collectors.joining(","));
-            System.out.println(str1);
-        });
+        System.out.println(str2);
         System.out.println(")");
     }
 
