@@ -8,7 +8,7 @@ package no.imr.stox.factory;
 import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Stream;
-import no.imr.stox.functions.utils.Functions;
+import no.imr.stox.functions.utils.Functions;   
 import no.imr.stox.model.IModel;
 import no.imr.stox.model.IProcess;
 import no.imr.stox.model.IProject;
