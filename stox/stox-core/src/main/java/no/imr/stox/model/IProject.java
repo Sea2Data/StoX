@@ -71,6 +71,10 @@ public interface IProject {
 
     String getRFolder();
 
+    void setRVersion(String rVersion);
+
+    void setRStoxVersion(String rStoxVersion);
+
     void setStoxVersion(String implementationBuild);
 
     String getStoxVersion();

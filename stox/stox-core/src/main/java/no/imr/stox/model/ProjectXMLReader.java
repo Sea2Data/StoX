@@ -74,12 +74,11 @@ public class ProjectXMLReader extends XMLReader {
     protected Object getObject(final Object current, final String elmName) {
         Object result = null;
         if (current == null && elmName.equals("project")) {
-            String ver = getCurrentAttributeValue("version");
-            if (ver == null) {
-                ver = getCurrentAttributeValue("resourceversion");
-            }
-            Double resver = Conversion.safeStringtoDouble(ver);
-            project.setResourceVersion(resver);
+            project.setResourceVersion(Conversion.safeStringtoDouble(getCurrentAttributeValue("resourceversion")));
+            project.setTemplate(getCurrentAttributeValue("template"));
+            project.setStoxVersion(getCurrentAttributeValue("stoxversion"));
+            project.setRStoxVersion(getCurrentAttributeValue("rstoxversion"));
+            project.setRVersion(getCurrentAttributeValue("rversion"));
             return project;
         } else if (current instanceof IProject) {
             switch (elmName) {
