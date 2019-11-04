@@ -342,6 +342,14 @@ public class Project implements IProject {
         return template;
     }
 
+    public String getRVersion() {
+        return rVersion;
+    }
+
+    public String getRStoxVersion() {
+        return rStoxVersion;
+    }
+
     @Override
     public void setTemplate(String template) {
         this.template = template;

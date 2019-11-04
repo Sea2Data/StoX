@@ -79,6 +79,10 @@ public interface IProject {
 
     String getStoxVersion();
 
+    String getRVersion();
+
+    String getRStoxVersion();
+
     String getTemplate();
 
     void setTemplate(String template);
