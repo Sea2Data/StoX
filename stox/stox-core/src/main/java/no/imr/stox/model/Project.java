@@ -36,7 +36,7 @@ public class Project implements IProject {
 
     private String rootFolder;
     private String projectName;
-    public static final double RESOURCE_VERSION = 1.91; // System version at current program
+    public static final double RESOURCE_VERSION = 1.92; // System version at current program
     private Double resourceVersion = 1.00;                   // System version at program used to create the project file
     private final Map<String, IModel> models = new HashMap<>();
     private final ILibrary library;
@@ -191,11 +191,19 @@ public class Project implements IProject {
                 attr.put("xmlns", "http://www.imr.no/formats/stox/v1");
                 //attr.put("xmlversion", String.valueOf(SYSTEM_VERSION));     1.0
                 //attr.put("rstoxversion", String.valueOf(SYSTEM_VERSION));   2
-                attr.put("template", template);
-                attr.put("stoxversion", stoxVersion);
+                if (template != null) {
+                    attr.put("template", template);
+                }
+                if (stoxVersion != null) {
+                    attr.put("stoxversion", stoxVersion);
+                }
                 attr.put("resourceversion", String.valueOf(RESOURCE_VERSION));
-                attr.put("rversion", rVersion);
-                attr.put("rstoxversion", rStoxVersion);
+                if (rVersion != null) {
+                    attr.put("rversion", rVersion);
+                }
+                if (rStoxVersion != null) {
+                    attr.put("rstoxversion", rStoxVersion);
+                }
                 DateTimeFormatter formatter = DateTimeFormatter.ofLocalizedDateTime(FormatStyle.SHORT).withLocale(Locale.UK).withZone(ZoneOffset.UTC);
                 attr.put("lastmodified", formatter.format(Instant.now()));
                 XMLWriter.writeXMLElementStart(level++, xmlw, "project", attr);
