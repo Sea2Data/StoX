@@ -43,7 +43,7 @@ import org.apache.commons.lang.StringUtils;
  */
 public class PgNapesIO {
 
-    public static void convertLuf20ToPgNapes(String luf20FileName, String outFilePrefix) {
+    public static void convertLuf20ToPgNapes(String luf20FileName, String outFilePrefix, Integer frequency) {
         File f = new File(luf20FileName);
         List<DistanceBO> dList = ReadAcousticXML.perform(luf20FileName);
         if (dList.isEmpty()) {
@@ -53,7 +53,7 @@ public class PgNapesIO {
         String cruise = d.getCruise();
         String nation = d.getNation();
         String pl = d.getPlatform();
-        PgNapesIO.export2(cruise, nation, pl, f.getParent(), outFilePrefix, dList, 10d, null, null, false);
+        PgNapesIO.export2(cruise, nation, pl, f.getParent(), outFilePrefix, dList, 10d, frequency, null, false);
 
     }
 
