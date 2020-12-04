@@ -128,6 +128,8 @@ public class DATRASDataStorage extends FileDataStorage {
                 return 110;
             case "3198":
                 return 60;
+            case "3199":
+                return 60;
         }
         return null;
     }
