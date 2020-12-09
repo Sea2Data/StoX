@@ -46,9 +46,22 @@ public class Luf3ToLuf20 {
         //String path = "\\\\ces.imr.no\\cruise_data\\2017\\S2017113_PGOSARS_4174\\ACOUSTIC_DATA\\LSSS\\Reports\\ListComScatter_F038000_T2_L2040.0-2124.0.txt";
 //        String path = "E:\\SigbjørnMehl\\Vintertokt 2000-2016\\2016_Nansen.luf3";
 //        AcousticConverter.convertAcousticCSVFileToLuf20(path, "E:\\SigbjørnMehl\\Vintertokt 2000-2016\\2016_Nansen.luf3.xml");
-        List<DistanceBO> d = ReadAcousticLUF3.perform("E:\\SigbjørnMehl\\2004704\\lcs1-2004-jm.dat");
-        ListUser20Writer.export("2004704", "58", "1173", "E:\\SigbjørnMehl\\2004704\\2004704" + ".xml", d);
-            }
+        /*     List<DistanceBO> d = ReadAcousticLUF3.perform("E:\\SigbjørnMehl\\2004704\\lcs1-2004-jm.dat");
+        ListUser20Writer.export("2004704", "58", "1173", "E:\\SigbjørnMehl\\2004704\\2004704" + ".xml", d);*/
+        List<DistanceBO> d = null;
+        /*ReadAcousticLUF3.perform("E:\\users\\harald\\convert\\LCS-1-1997.TXT");
+        ListUser20Writer.export("1997115", "58", "1008", "E:\\users\\harald\\convert\\1997115" + ".xml", d);
+        d = ReadAcousticLUF3.perform("E:\\users\\harald\\convert\\LCS-1-1998.TXT");
+        ListUser20Writer.export("1998950", "58", "1173", "E:\\users\\harald\\convert\\1998950" + ".xml", d);
+        d = ReadAcousticLUF3.perform("E:\\users\\harald\\convert\\LCS-1-1999.TXT");
+        ListUser20Writer.export("1999011", "58", "1173", "E:\\users\\harald\\convert\\1999011" + ".xml", d);
+        d = ReadAcousticLUF3.perform("E:\\users\\harald\\convert\\LCS-1-2000.TXT");
+        ListUser20Writer.export("2000010", "58", "1173", "E:\\users\\harald\\convert\\2000010" + ".xml", d);
+        d = ReadAcousticLUF3.perform("E:\\users\\harald\\convert\\LCS-1-2001.TXT");
+        ListUser20Writer.export("2001010", "58", "1173", "E:\\users\\harald\\convert\\2001010" + ".xml", d);*/
+        d = ReadAcousticLUF3.perform("E:\\users\\harald\\convert\\LCS-1-2002.TXT");
+        ListUser20Writer.export("2002101", "58", "1173", "E:\\users\\harald\\convert\\2002101" + ".xml", d);
+    }
 
 //  @Test
     public void convertComScatterForNansis() {
